@@ -20,7 +20,7 @@ npm start // starts the local react app
 ```
 Then open a browser and navigate to either or both:
 a. for express server:
-localhost:5000 
+localhost:5000
 
 b. for react app:
 localhost:3000

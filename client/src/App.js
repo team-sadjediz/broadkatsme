@@ -1,35 +1,15 @@
-// import React from 'react';
-// import logo from './logo.svg';
-// import './App.css';
+import React, { Component } from "react";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import LoginRegisterPage from "./pages/login-register-page/login-register-page.component";
+import LobbyPage from "./pages/lobby-page/lobby-page.component";
+import RoomPage from "./pages/room-page/room-page.component";
+import "./App.scss";
 
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
-// export default App;
-import React, { Component } from 'react';
-import './App.scss';
+import { Link } from "react-router-dom";
 
 class App extends Component {
   // Initialize state
-  state = { name: "", age: "" }
+  state = { name: "", age: "" };
 
   // Fetch passwords after first mount
   componentDidMount() {
@@ -38,16 +18,35 @@ class App extends Component {
 
   getPasswords = () => {
     // Get the passwords and store them in state
-    fetch('/api/passwords')
+    fetch("/test")
       .then(res => res.json())
       .then(obj => this.setState({ name: obj.name, age: obj.age }));
-  }
+  };
 
   render() {
     return (
       <div className="App">
-        <h1>hello</h1>
         {console.log(this.state)}
+        <BrowserRouter>
+          {/* <NavBar /> */}
+          <Link to="/">
+            <h3>HOME</h3>
+          </Link>
+          <Link to="/login">
+            <h3>LOGIN</h3>
+          </Link>
+          <Link to="/lobby">
+            <h3>LOBBY</h3>
+          </Link>
+          <Link to="/room">
+            <h3>ROOM</h3>
+          </Link>
+          <Switch>
+            <Route exact path="/login" component={LoginRegisterPage} />
+            <Route path="/lobby" component={LobbyPage} />
+            <Route path="/room" component={RoomPage} />
+          </Switch>
+        </BrowserRouter>
       </div>
     );
   }
