@@ -8,7 +8,7 @@ Currently not working:
 https://www.broadkats.me
 
 #### To download and run locally:
-
+1. Open a cli, navigate to desired directory, and then enter:
 ```
 git clone https://github.com/team-sadjediz/broadkatsme.git
 
@@ -21,39 +21,29 @@ npm ci     // installs react frontend dependencies
 npm start  // starts the local react app
 ```
 
-Then open a browser and navigate to either or both:
+2. Then open a browser and navigate to either or both:
 
-a. for express server:  
-[localhost:5000/test](localhost:5000/test) (havent configured root path yet)
+  - Express server: [localhost:5000/test](http://localhost:5000/test) (havent configured root path yet)
 
-b. for react app:  
-[localhost:3000](localhost:3000)
+  - React app: [localhost:3000](http://localhost:3000)
 
 #### To deploy:
 
-Download and install Heroku:  
-https://devcenter.heroku.com/articles/heroku-cli
-
-Restart your computer.
-
-Open a CLI:
-
+1. Download and install [Heroku](https://devcenter.heroku.com/articles/heroku-cli):
+2. Restart your computer.
+3. Open a CLI and enter:
 ```
 cd <into project directory>
 heroku login
 ```
-
-Login to our shared heroku account.
-
-...some steps to link the project on heroku to this git repo (will edit this step soon).
-
+4. Login to our shared heroku account.
+5. Add a remote ref to the heroku project:
 ```
 git remote add heroku https://git.heroku.com/broadkatsme.git
 ```
-
-Now everytime you commit something using `git commit -m "exmaple"`, it will be ready to deploy.  
-And when you actually want to deploy:
-
+6. To deploy:
 ```
 git push heroku master
 ```
+
+NOTE: Everything you commit locally to the master branch will be deployed once you do step #6.
