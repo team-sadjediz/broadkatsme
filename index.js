@@ -7,8 +7,7 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 // Put all API endpoints under '/api'
-app.get('/api/passwords', (req, res) => {
-
+app.get('/test', (req, res) => {
 
   // Return them as json
   res.json({name: "testname", age: "nothing"});
@@ -24,4 +23,4 @@ app.get('*', (req, res) => {
 const port = process.env.PORT || 5000;
 app.listen(port);
 
-console.log(`Password generator listening on ${port}`);
+console.log(`Express server listening on port: ${port}`);
