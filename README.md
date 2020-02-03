@@ -35,14 +35,18 @@ Restart your computer.
 
 Open a CLI:  
 ```
+cd <into project directory>
 heroku login
 ```
 
 Login to our shared heroku account.  
 
 ...some steps to link the project on heroku to this git repo (will edit this step soon).  
-
-Everytime you want to deploy:  
+```
+git remote add heroku https://git.heroku.com/broadkatsme.git
+```
+Now everytime you commit something using `git commit -m "exmaple"`, it will be ready to deploy.  
+And when you actually want to deploy:  
 ```
 git push heroku master
 ```
