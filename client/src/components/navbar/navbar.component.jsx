@@ -2,7 +2,7 @@ import React, { useReducer } from "react";
 import { Link } from "react-router-dom";
 
 import CircleBtn from "../circle-btn/circle-btn.component";
-// import LogoHorizontal from "../logo/logo-horizontal.component";
+import Poppity from "../poppity/poppity.component";
 
 import { ReactComponent as NineDotIcon } from "../../assets/icons/nine-dots-solid.svg";
 import { ReactComponent as SearchIcon } from "../../assets/icons/search-solid.svg";
@@ -55,12 +55,12 @@ const NavBar = () => (
           icon={<SearchIcon />}
         />
       </Link>
-      <Link to="/create">
+      <Poppity arrowGap="48" alignArrow="center" content={<div>hello</div>}>
         <CircleBtn
           className="room-nav-btn create-room-btn circle-hover"
           icon={<PlusIcon />}
         ></CircleBtn>
-      </Link>
+      </Poppity>
 
       {rooms.map(room => (
         <Link to={`/room/id/${room.id}`}>
