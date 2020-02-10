@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import CircleBtn from "../circle-btn/circle-btn.component";
 import Poppity from "../poppity/poppity.component";
+import NewRoom from "../new-room/new-room.component";
 
 import { ReactComponent as NineDotIcon } from "../../assets/icons/nine-dots-solid.svg";
 import { ReactComponent as SearchIcon } from "../../assets/icons/search-solid.svg";
@@ -55,7 +56,7 @@ const NavBar = () => (
           icon={<SearchIcon />}
         />
       </Link>
-      <Poppity arrowGap="48" alignArrow="center" content={<div>hello</div>}>
+      <Poppity arrowGap="48" alignArrow="center" content={<NewRoom></NewRoom>}>
         <CircleBtn
           className="room-nav-btn create-room-btn circle-hover"
           icon={<PlusIcon />}
