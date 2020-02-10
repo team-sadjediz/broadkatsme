@@ -2,7 +2,7 @@ const admin = require("firebase-admin");
 
 admin.initializeApp({
   credential: admin.credential.cert({
-    projectId: process.env.FIREBASE_PROJECT_ID,
+    project_id: process.env.FIREBASE_PROJECT_ID,
     private_key: process.env.FIREBASE_PRIVATE_KEY,
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL
   }),
@@ -20,4 +20,4 @@ admin.initializeApp({
 //       return res.status(401).send("Unauthorized access.");
 //     });
 
-moddule.exports = admin;
+module.exports = admin;
