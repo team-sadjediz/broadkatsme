@@ -1,0 +1,25 @@
+// naming convention:
+// with underscore "_" because its easier to double click and delete and is more readable
+
+// background gradient (temporary; will not be used later on)
+$bg_gradient: linear-gradient(
+  60deg,
+  rgba(143, 185, 168, 1) 0%,
+  rgba(118, 93, 105, 1) 100%
+);
+
+$bg_color: #ffffff; // not decided yet
+$hightlight_color: #50d19e;
+$white: #f6f6f6; // prefer a white thats a tint darker
+
+// default colors for the circle-btn component
+$circle_btn_bg_color: #f5f5f5;
+$circle_btn_hover_color: $white;
+
+// default color for the navbar component
+$navbar_color: #2e2e31;
+
+// default colors for the component colors
+$more_pages_btn_color: #50d19e;
+$user_settings_btn_color: #ffe96f;
+$logout_btn_color: #e9524a;
