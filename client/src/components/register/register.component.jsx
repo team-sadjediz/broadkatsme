@@ -2,7 +2,9 @@ import React from "react";
 
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
+import ShowHide from "../show-hide-input/show-hide-input.component";
 import axios from "axios";
+import { useForm } from 'react-hook-form'
 import "./register.style.scss";
 
 class Register extends React.Component {
@@ -20,7 +22,7 @@ class Register extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-
+    event.useForm();
     const user = {
       "uid": this.state.uid,
       "username": this.state.username,
@@ -68,9 +70,9 @@ class Register extends React.Component {
             handleChange={this.handleChange}
             value={this.state.email}
             label="email"
+            pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
             required
           />
-
           <FormInput
             className="password-field"
             name="password"
@@ -78,16 +80,28 @@ class Register extends React.Component {
             handleChange={this.handleChange}
             value={this.state.password}
             label="password"
+            minlength="8"
+            pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$"
             required
           />
+          {/* <ShowHide
+            className="password-field"
+            name="password"
+            handleChange={this.handleChange}
+            label="password"
+            minlength="8"
+            pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$"
+            required
+          /> */}
 
           <FormInput
             className="password-field2"
             name="verf_password"
             type="password"
             handleChange={this.handleChange}
-            value={this.state.password2}
+            value={this.state.verf_password}
             label="confirm password"
+            pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$"
             required
           />
 
