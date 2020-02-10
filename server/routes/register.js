@@ -6,6 +6,7 @@ const UserProps = require("../models/userprops.model");
 const User = require("../models/user.model");
 
 router.post("/new-user", async function(req, res) {
+  console.log(req);
   let userID = req.body.uid;
   let username = req.body.username;
   let email = req.body.email;
