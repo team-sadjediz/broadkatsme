@@ -1,12 +1,15 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 
 const Room = require("../models/room.model");
 
-router.get("/:roomname", async function(req, res) {
+router.get("/findroom", async function(req, res) {
   let roomID = req.body.roomID;
-  await Room.findById(roomID, function(error, room) {});
-  res.send("Room info returned");
+  await Room.findById(roomID, function(error, room) {
+    console.log(JSON.stringify(room));
+    res.send(room);
+  });
+  // res.send("Room info returned");
 });
 
 router.post("/createroom", async function(req, res) {

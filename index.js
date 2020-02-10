@@ -49,19 +49,19 @@ app.use(express.static(path.join(__dirname, "client/build")));
 
 // --------------------------------- M O D E L S ---------------------------------
 
-const UserProfile = require("./server/models/userprofile.model");
-const UserProps = require("./server/models/userprops.model");
+// const UserProfile = require("./server/models/userprofile.model");
+// const UserProps = require("./server/models/userprops.model");
 
-const Room = require("./server/models/room.model");
-const Chat = require("./server/models/chat.model");
+// const Room = require("./server/models/room.model");
+// const Chat = require("./server/models/chat.model");
 
-const RoomReport = require("./server/models/roomreport.model");
-const UserReport = require("./server/models/userreport.model");
+// const RoomReport = require("./server/models/roomreport.model");
+// const UserReport = require("./server/models/userreport.model");
 
 // --------------------------------- Q U E R I E S ---------------------------------
 
 const home = require("./server/routes/home");
-const profile = require("./server/routes/profile");
+const userProfile = require("./server/routes/userprofile");
 const register = require("./server/routes/register");
 const room = require("./server/routes/room");
 const search = require("./server/routes/search");
@@ -109,7 +109,7 @@ const verifyAuthToken = async function(req, res, next) {
 // app.use("", );
 // app.use("/", verifyAuthToken);
 app.use("/home", home);
-app.use("/profile", profile);
+app.use("/userprofile", userProfile);
 app.use("/register", register);
 app.use("/room", room);
 app.use("/search", search);
