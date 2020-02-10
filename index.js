@@ -39,6 +39,9 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+// app.use(express.urlencoded());
+// app.use(express.json());
+
 const port = process.env.PORT || 5000;
 
 // Serve static files from the React app
