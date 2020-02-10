@@ -3,6 +3,7 @@ import React from "react";
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
 import { ReactComponent as GoogleLogoColorful } from "../../assets/icons/google-logo-colorful.svg";
+import axios from "axios";
 // import { ReactComponent as GoogleLogo } from "../../assets/icons/google-logo-solid.svg";
 
 import "./login.style.scss";
@@ -12,9 +13,28 @@ class LogIn extends React.Component {
     super(props);
 
     this.state = {
-      email: "",
-      password: ""
-    };
+      // hardcoded for testing
+      uid: "s2A4hxdIP1WjqtwmCSsyDNBtvQA2",
+      email: "test@test.com",
+      password: "hello",
+  }
+  
+  onSubmit = e => {
+      e.preventDefault();
+  
+      const user = {
+          "uid": this.state.uid,
+          "email": this.state.email,
+          "password": this.state.password
+      };
+    
+      axios
+          .post("http://localhost:5000/register/new-user", user)
+          .then(() => console.log("User posted to backend/created."))
+          .catch(error => {
+                      console.error(error);
+          });
+  };
   }
 
   handleSubmit = event => {
