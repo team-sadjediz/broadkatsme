@@ -13,28 +13,9 @@ class LogIn extends React.Component {
     super(props);
 
     this.state = {
-      // hardcoded for testing
-      uid: "s2A4hxdIP1WjqtwmCSsyDNBtvQA2",
-      email: "test@test.com",
-      password: "hello",
-  }
-  
-  onSubmit = e => {
-      e.preventDefault();
-  
-      const user = {
-          "uid": this.state.uid,
-          "email": this.state.email,
-          "password": this.state.password
-      };
-    
-      axios
-          .post("http://localhost:5000/register/new-user", user)
-          .then(() => console.log("User posted to backend/created."))
-          .catch(error => {
-                      console.error(error);
-          });
-  };
+      email: "",
+      password: ""
+    };
   }
 
   handleSubmit = event => {
