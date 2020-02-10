@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
@@ -15,7 +16,7 @@ class NewRoom extends React.Component {
     super(props);
 
     this.state = {
-      ui: "WrMNfw2Z3oU232Ztl8jTxuRTFmE2",
+      uid: "WrMNfw2Z3oU232Ztl8jTxuRTFmE2",
       room_name: "",
       tags: "",
       room_size: "",
@@ -26,8 +27,22 @@ class NewRoom extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
 
+    const room = {
+      uid: this.state.uid,
+      room_name: this.state.room_name,
+      tags: this.state.tags,
+      room_size: this.state.room_size,
+      privacy: this.state.privacy
+    };
+
+    axios
+      .post("http://localhost:5000/room/createroom", JSON.stringify(room))
+      .then(() => console.log("Room posted to backend/created."))
+      .catch(error => {
+        console.error(error);
+      });
+
     this.setState({
-      uid: "",
       room_name: "",
       tags: "",
       room_size: "",
