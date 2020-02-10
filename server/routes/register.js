@@ -4,8 +4,8 @@ var router = express.Router();
 const UserProfile = require("../models/userprofile.model");
 const UserProps = require("../models/userprops.model");
 
-router.get("/new-user", function(req, res) {
-  var userID = req.body.userID;
+router.get("/new-user", async function(req, res) {
+  var userID = req.body.uid;
   let userProfile = new UserProfile({
     user_ID: userID,
     biography: "",
@@ -21,7 +21,7 @@ router.get("/new-user", function(req, res) {
     favorited_rooms: [],
     notifications: []
   });
-  
+
   await userProfile
     .save()
     .then(document => console.log(document))
