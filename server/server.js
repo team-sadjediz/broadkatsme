@@ -22,6 +22,12 @@ const UserReport = require("./models/userreport.model");
 
 // --------------------------------- Q U E R I E S ---------------------------------
 
+const home = require("./routes/home");
+const profile = require("./routes/profile");
+const register = require("./routes/register");
+const room = require("./routes/room");
+const search = require("./routes/search");
+
 // --------------------------------- D B - C O N N ---------------------------------
 
 // Inquire @ Julie for hard-coded configuration of database access (hidden in config
@@ -40,6 +46,11 @@ connection.once("open", () => {
 // --------------------------------- A P P C O N F ---------------------------------
 
 // app.use("", );
+app.use("/home", home);
+app.use("/profile", profile);
+app.use("/register", register);
+app.use("/room", room);
+app.use("/search", search);
 
 // --------------------------------- A P P C O N F ---------------------------------
 

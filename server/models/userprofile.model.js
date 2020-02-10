@@ -7,8 +7,8 @@ const UserProfile = new mongoose.Schema({
   user_ID: String,
   //   profile_picture: String,
   biography: String,
-  tags: [{ type: String }],
-  favorites: [{ movies: String, music: String, websites: String }],
+  tags: [String],
+  favorites: { movies: String, music: String, websites: String },
   privacy: Boolean
 });
 
