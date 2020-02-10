@@ -1,23 +1,21 @@
-const express = require('express');
-const path = require('path');
+const express = require("express");
+const path = require("path");
 
 const app = express();
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, "client/build")));
 
 // Put all API endpoints under '/api'
-app.get('/test', (req, res) => {
-
+app.get("/test", (req, res) => {
   // Return them as json
-  res.json({name: "testname", age: "nothing"});
-
+  res.json({ name: "testname", age: "nothing" });
 });
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname+'/client/build/index.html'));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
 
 const port = process.env.PORT || 5000;

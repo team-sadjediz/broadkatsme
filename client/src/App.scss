@@ -1,38 +1,42 @@
+@import "./assets/colors";
+@import "./assets/dimensions";
+@import "./assets/fonts";
+
 .App {
-  text-align: center;
-}
+  // only one of these work at a time:
+  background-color: #3d3e44;
+  background-image: $bg_gradient;
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
+  // our base font styles (subject to change):
+  // font-family: "Lato", sans-serif;
+  @include main_font_stack;
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
+  // ensures full width and height of the view with scroll support:
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: auto;
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  // ensures that each page extends fully and solves navigation issues:
+  // this solution is better than using calc() and a navheight var
+  // but might have issues when see have a side panel
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  flex-flow: column;
+  height: 100%;
+  & > *:not(.navbar-container) {
+    flex-grow: 1;
+  }
+}
+
+// removes dotted outline from link tags and other visual issues:
+a,
+a:link,
+a:visited,
+a:hover,
+a:active {
+  outline: 0;
+  text-decoration: none;
   color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
