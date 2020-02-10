@@ -9,8 +9,8 @@ const User = new mongoose.Schema({
   user_ID: String,
   username: String,
   email: String,
-  photo_URL: String,
-  verified_email: String
+  photo_URL: String
+  // verified_email: String
   // ...
 });
 
