@@ -2,6 +2,29 @@
 // with underscore "_" because its easier to double click and delete and is more readable
 
 // background gradient (temporary; will not be used later on)
+$green-main: #50d19e;
+$green_main: #50d19e;
+$black-main: #353744;
+
+$black: #000000;
+$black-thunder: #231f20; //black-thunder
+
+$gray: #353c4a;
+$gray-nobel: #b7b7b7; //gray-nobel
+$gray-alto: #d9d9d9; //gray-alto
+$gray-jaguar: #26262b;
+$white: #ffffff;
+$white-wildsand: #f5f5f5; //wild sand
+
+$red: #bf616a;
+$red-cinnabar: #e9524a; //vibrant
+
+$yellow: #ebcb8b;
+$yellow-kournikova: #ffe96f; //vibrant
+
+$green: #a3be8c;
+$green-shamrock: #50d19e; //vibrant
+
 $bg_gradient: linear-gradient(
   60deg,
   rgba(143, 185, 168, 1) 0%,
@@ -19,7 +42,14 @@ $circle_btn_hover_color: $white;
 // default color for the navbar component
 $navbar_color: #2e2e31;
 
+//default colors for the register component
+
 // default colors for the component colors
 $more_pages_btn_color: #50d19e;
 $user_settings_btn_color: #ffe96f;
 $logout_btn_color: #e9524a;
+$btngradient: linear-gradient(
+  60deg,
+  rgb(0, 255, 153) 0%,
+  rgb(5, 228, 161) 100%
+);
