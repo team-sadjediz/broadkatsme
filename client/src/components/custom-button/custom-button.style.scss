@@ -1,0 +1,43 @@
+@import "../../assets/_colors.scss";
+@import "../../assets/_dimensions.scss";
+
+.custom-button {
+  background-color: $black-thunder;
+  // background-image: $btngradient;
+  min-width: 5em;
+  width: auto;
+  height: $btn_height;
+  padding: 0;
+  box-sizing: border-box;
+
+  font-family: "Open Sans Condensed";
+  font-weight: bold;
+  color: white;
+  font-size: 0.7em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: $edge_radius;
+
+  border: none;
+  cursor: pointer;
+
+  transition-duration: 200ms;
+  transition-property: box-shadow;
+
+  &:focus {
+    outline: 0;
+  }
+
+  &:hover {
+    // border-bottom: 5px solid $greenmain;
+    // box-shadow: 0 5px 0 0px $greenmain;
+    box-shadow: inset 0 -5px 0 0 $green-main;
+    // background-color: white;
+    // color: black;
+  }
+}
