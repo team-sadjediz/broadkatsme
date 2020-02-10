@@ -1,10 +1,13 @@
 import React, { useReducer } from "react";
 import { Link } from "react-router-dom";
 
+// components:
 import CircleBtn from "../circle-btn/circle-btn.component";
 import Poppity from "../poppity/poppity.component";
 import NewRoom from "../new-room/new-room.component";
+import PageDropdown from "../page-dropdown/page-dropdown.component";
 
+// icons:
 import { ReactComponent as NineDotIcon } from "../../assets/icons/nine-dots-solid.svg";
 import { ReactComponent as SearchIcon } from "../../assets/icons/search-solid.svg";
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus-solid.svg";
@@ -75,7 +78,10 @@ const NavBar = () => (
 
     {/* SITE NAV */}
     <div className="site-nav">
-      <CircleBtn className="more-pages-btn" icon={<BarsIcon />} />
+      <Poppity arrowGap="48" alignArrow="right" content={<PageDropdown />}>
+        <CircleBtn className="more-pages-btn" icon={<BarsIcon />} />
+      </Poppity>
+
       <CircleBtn className="user-settings-btn" icon={<PeopleIcon />} />
       <CircleBtn className="logout-btn" icon={<XIcon />} />
     </div>
