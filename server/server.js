@@ -4,12 +4,13 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
 const admin = require("./firebase-config/admin");
+const uri = require("./mongo-config/uri-credentials");
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 5000;
 
 // --------------------------------- M O D E L S ---------------------------------
 
@@ -35,7 +36,8 @@ const search = require("./routes/search");
 // Inquire @ Julie for hard-coded configuration of database access (hidden in config
 // var to avoid release of private database credentials)
 
-const databaseURI = process.env.MONGODB_URI;
+// const databaseURI = process.env.MONGODB_URI;
+const databaseURI = uri;
 
 mongoose.connect(databaseURI, { useNewUrlParser: true });
 
