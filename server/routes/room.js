@@ -3,14 +3,14 @@ var router = express.Router();
 
 const Room = require("../models/room.model");
 
-// router.get("/:roomname", function(req, res) {
-//   let roomID = req.body.roomID;
-//   res.send("Room info returned");
-// });
+router.get("/:roomname", async function(req, res) {
+  let roomID = req.body.roomID;
+  await Room.findById(roomID, function(error, room) {});
+  res.send("Room info returned");
+});
 
 router.post("/createroom", async function(req, res) {
-  console.log("bruh");
-  console.log(req);
+  // json.stringify(req)
   let name = req.body.room_name;
   let owner_ID = req.body.uid;
   let subscribers = [];

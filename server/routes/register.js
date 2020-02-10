@@ -3,9 +3,18 @@ var router = express.Router();
 
 const UserProfile = require("../models/userprofile.model");
 const UserProps = require("../models/userprops.model");
+const User = require("../models/user.model");
 
-router.get("/new-user", async function(req, res) {
-  var userID = req.body.uid;
+router.post("/new-user", async function(req, res) {
+  let userID = req.body.uid;
+  let username = req.body.username;
+  let password = req.body.password;
+
+  let user = new User({
+    user_ID: userID,
+    username: username,
+    password: password
+  });
   let userProfile = new UserProfile({
     user_ID: userID,
     biography: "",
@@ -22,6 +31,11 @@ router.get("/new-user", async function(req, res) {
     notifications: []
   });
 
+  await user
+    .save()
+    .then(document => console.log(document))
+    .catch(error => res.status(400).send("User insert failed."));
+
   await userProfile
     .save()
     .then(document => console.log(document))
@@ -32,7 +46,7 @@ router.get("/new-user", async function(req, res) {
     .then(document => console.log(document))
     .catch(error => res.status(400).send("User Props insert failed."));
 
-  res.send("User profile & props created.");
+  // res.send("User profile & props created.");
 });
 
 module.exports = router;
