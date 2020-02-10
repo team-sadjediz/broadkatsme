@@ -2,7 +2,7 @@ import React from "react";
 
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
-
+import axios from "axios";
 import "./register.style.scss";
 
 class Register extends React.Component {
@@ -10,17 +10,31 @@ class Register extends React.Component {
     super(props);
 
     this.state = {
+      uid: "s2A4hxdIP1WjqtwmCSsyDNBtvQA2",
       username: "",
       email: "",
       password: "",
-      password2: ""
+      verf_password: ""
     };
   }
 
   handleSubmit = event => {
     event.preventDefault();
 
-    this.setState({ email: "", password: "" });
+    const user = {
+      "uid": this.state.uid,
+      "username": this.state.username,
+      "email": this.state.email,
+      "password": this.state.password,
+      "vpassword": this.state.verf_password
+  };
+
+  axios
+      .post("http://localhost:5000/register/new-user", user)
+      .then(() => console.log("User posted to backend/created."))
+      .catch(error => {
+                  console.error(error);
+      });
   };
 
   handleChange = event => {
@@ -69,7 +83,7 @@ class Register extends React.Component {
 
           <FormInput
             className="password-field2"
-            name="password2"
+            name="verf_password"
             type="password"
             handleChange={this.handleChange}
             value={this.state.password2}
