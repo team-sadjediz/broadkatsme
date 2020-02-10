@@ -1,1 +1,3 @@
 /node_modules
+/server/mongo-config/
+/server/firebase-config/admin-credentials.js
