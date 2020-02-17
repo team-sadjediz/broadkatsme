@@ -49,7 +49,7 @@ class LogIn extends React.Component {
           this.props.className ? this.props.className : ""
         }`}
       >
-        <form className="form-container" onSubmit={this.handleSubmit}>
+        <form className="form-container">
           <FormInput
             className="email-field"
             name="email"
@@ -74,7 +74,7 @@ class LogIn extends React.Component {
             login
           </CustomButton>
 
-          <CustomButton className="google-login-btn" onClick={signInWithGoogle}>
+          <CustomButton className="google-login-btn" type="submit" onClick={signInWithGoogle}>
             <GoogleLogoColorful />
             Google Login
           </CustomButton>
