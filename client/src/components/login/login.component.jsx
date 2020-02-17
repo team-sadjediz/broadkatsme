@@ -5,6 +5,8 @@ import CustomButton from "../custom-button/custom-button.component";
 import { ReactComponent as GoogleLogoColorful } from "../../assets/icons/google-logo-colorful.svg";
 import axios from "axios";
 // import { ReactComponent as GoogleLogo } from "../../assets/icons/google-logo-solid.svg";
+import {auth, signInWithGoogle } from "../../firebase/firebase.utils";
+
 
 import "./login.style.scss";
 
@@ -18,10 +20,19 @@ class LogIn extends React.Component {
     };
   }
 
-  handleSubmit = event => {
+  handleSubmit = async event => {
     event.preventDefault();
+    const { email, password } = this.state;
 
-    this.setState({ email: "", password: "" });
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      this.setState({ email: "", password: "" });
+
+    } catch(error){
+      console.log("log in error:", error)
+    }
+
+    
   };
 
   handleChange = event => {
@@ -61,11 +72,11 @@ class LogIn extends React.Component {
           <CustomButton className="login-btn" type="submit">
             login
           </CustomButton>
-          
-          {/* <CustomButton className="google-login-btn" type="submit">
+
+          <CustomButton className="google-login-btn" onClick={signInWithGoogle}>
             <GoogleLogoColorful />
             Google Login
-          </CustomButton> */}
+          </CustomButton>
 
           <a className="forgot-pw" href="/login">
             forgot password?

@@ -1,5 +1,6 @@
 import React, { useReducer } from "react";
 import { Link } from "react-router-dom";
+import { auth } from "../../firebase/firebase.utils";
 
 // components:
 import CircleBtn from "../circle-btn/circle-btn.component";
@@ -36,14 +37,15 @@ let rooms = [
   }
 ];
 
-const NavBar = () => (
+const NavBar = ({ currentUser }) => (
   <div className="navbar-container">
     {/* LOGO: */}
-    {/* <div className="logo-section">
-      <Link to="/login">
+    <div className="logo-section">
+    <div>{`${currentUser.uid} ${currentUser.email}`}</div>
+      {/* <Link to="/login">
         <LogoHorizontal />
-      </Link>
-    </div> */}
+      </Link> */}
+    </div>
 
     {/* ROOM NAV */}
     <div className="room-nav">
@@ -83,7 +85,11 @@ const NavBar = () => (
       </Poppity>
 
       <CircleBtn className="user-settings-btn" icon={<PeopleIcon />} />
-      <CircleBtn className="logout-btn" icon={<XIcon />} />
+      <CircleBtn
+        className="logout-btn"
+        icon={<XIcon />}
+        onClick={() => auth.signOut()}
+      />
     </div>
   </div>
 );

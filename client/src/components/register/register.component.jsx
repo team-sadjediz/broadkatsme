@@ -4,44 +4,71 @@ import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
 import ShowHide from "../show-hide-input/show-hide-input.component";
 import axios from "axios";
-import { useForm } from 'react-hook-form'
-import "./register.style.scss";
+import { useForm } from "react-hook-form";
+import { auth } from "../../firebase/firebase.utils";
 
+import "./register.style.scss";
 class Register extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      uid: "s2A4hxdIP1WjqtwmCSsyDNBtvQA2",
+      uid: "",
       username: "",
       email: "",
       password: "",
-      verf_password: ""
+      confirmPassword: ""
     };
   }
 
-  handleSubmit = event => {
+  handleSubmit = async event => {
     event.preventDefault();
-    event.useForm();
-    const user = {
-      "uid": this.state.uid,
-      "username": this.state.username,
-      "email": this.state.email,
-      "password": this.state.password,
-      "vpassword": this.state.verf_password
-  };
 
-  axios
-      .post("http://localhost:5000/register/new-user", user)
-      .then(() => console.log("User posted to backend/created."))
-      .catch(error => {
-                  console.error(error);
+    const { username, email, password, confirmPassword } = this.state;
+
+    console.log(password, confirmPassword);
+
+    if (password != confirmPassword) {
+      alert("passwords don't match");
+      return;
+    }
+
+    try {
+      const { user } = await auth.createUserWithEmailAndPassword(
+        email,
+        password
+      );
+
+      this.setState({
+        uid: "",
+        username: "",
+        email: "",
+        password: "",
+        verf_password: ""
       });
+    } catch (error) {
+      console.log("register error:", error);
+    }
+
+    // const user = {
+    //   "uid": this.state.uid,
+    //   "username": this.state.username,
+    //   "email": this.state.email,
+    //   "password": this.state.password,
+    //   "vpassword": this.state.verf_password
+    // };
+
+    // axios
+    //   .post("http://localhost:5000/register/new-user", user)
+    //   .then(() => console.log("User posted to backend/created."))
+    //   .catch(error => {
+    //               console.error(error);
+    //   });
   };
 
   handleChange = event => {
     const { value, name } = event.target;
-    console.log("a:", event.target.name);
+    console.log("reg:", event.target.name);
     this.setState({ [name]: value });
   };
 
@@ -70,9 +97,10 @@ class Register extends React.Component {
             handleChange={this.handleChange}
             value={this.state.email}
             label="email"
-            pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
+            // pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
             required
           />
+
           <FormInput
             className="password-field"
             name="password"
@@ -81,7 +109,7 @@ class Register extends React.Component {
             value={this.state.password}
             label="password"
             minlength="8"
-            pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$"
+            // pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$"
             required
           />
           {/* <ShowHide
@@ -96,12 +124,12 @@ class Register extends React.Component {
 
           <FormInput
             className="password-field2"
-            name="verf_password"
+            name="confirmPassword"
             type="password"
             handleChange={this.handleChange}
-            value={this.state.verf_password}
+            value={this.state.confirmPassword}
             label="confirm password"
-            pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$"
+            // pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$"
             required
           />
 
