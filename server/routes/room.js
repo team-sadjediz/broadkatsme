@@ -31,7 +31,7 @@ router.post("/createroom", async function(req, res) {
   let operator = [req.body.uid];
   let invitation = [req.body.uid];
   let banned = [];
-  build models to push
+  // build models to push
 
   // let name = params.room_name;
   // let owner_ID,
