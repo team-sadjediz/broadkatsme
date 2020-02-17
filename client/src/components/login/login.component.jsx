@@ -74,7 +74,7 @@ class LogIn extends React.Component {
             login
           </CustomButton>
 
-          <CustomButton className="google-login-btn" type="submit" onClick={signInWithGoogle}>
+          <CustomButton className="google-login-btn" type="button" onClick={signInWithGoogle}>
             <GoogleLogoColorful />
             Google Login
           </CustomButton>
