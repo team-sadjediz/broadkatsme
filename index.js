@@ -33,9 +33,9 @@ const mongoose = require("mongoose");
 
 const bodyParser = require("body-parser");
 
-// const admin = require("./server/firebase-config/admin");
-const admin = require("./server/firebase-config/admin-credentials");
-const uri = require("./server/mongo-config/uri-credentials");
+const admin = require("./server/firebase-config/admin");
+// const admin = require("./server/firebase-config/admin-credentials");
+// const uri = require("./server/mongo-config/uri-credentials");
 
 const app = express();
 app.use(cors());
@@ -73,8 +73,8 @@ const search = require("./server/routes/search");
 // Inquire @ Julie for hard-coded configuration of database access (hidden in config
 // var to avoid release of private database credentials)
 
-// const databaseURI = process.env.MONGODB_URI;
-const databaseURI = uri;
+const databaseURI = process.env.MONGODB_URI;
+// const databaseURI = uri;
 
 mongoose.connect(databaseURI, { useNewUrlParser: true });
 

@@ -17,13 +17,13 @@ const path = require("path");
 //   AWS_REGION
 // } = require("../aws-config/aws-credentials");
 
-const config = require("../aws-config/aws-credentials");
+// const config = require("../aws-config/aws-credentials");
 
 aws.config.update({
-  secretAccessKey: config.AWS_SECRET_ACCES_KEY,
-  accessKeyId: config.AWS_ACCESS_KEY_ID,
-  Bucket: config.AWS_BUCKET,
-  region: config.AWS_REGION
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  Bucket: process.env.AWS_BUCKET,
+  region: process.env.AWS_REGION
 });
 
 const s3 = new aws.S3({
