@@ -1,9 +1,15 @@
 import React, { useReducer } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { auth } from "../../firebase/firebase.utils";
 
+// components:
 import CircleBtn from "../circle-btn/circle-btn.component";
-// import LogoHorizontal from "../logo/logo-horizontal.component";
+import Poppity from "../poppity/poppity.component";
+import NewRoom from "../new-room/new-room.component";
+import PageDropdown from "../page-dropdown/page-dropdown.component";
 
+// icons:
 import { ReactComponent as NineDotIcon } from "../../assets/icons/nine-dots-solid.svg";
 import { ReactComponent as SearchIcon } from "../../assets/icons/search-solid.svg";
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus-solid.svg";
@@ -32,14 +38,15 @@ let rooms = [
   }
 ];
 
-const NavBar = () => (
+const NavBar = ({ currentUser }) => (
   <div className="navbar-container">
     {/* LOGO: */}
-    {/* <div className="logo-section">
-      <Link to="/login">
+    <div className="logo-section">
+      <div>{`${currentUser.uid} ${currentUser.email}`}</div>
+      {/* <Link to="/login">
         <LogoHorizontal />
-      </Link>
-    </div> */}
+      </Link> */}
+    </div>
 
     {/* ROOM NAV */}
     <div className="room-nav">
@@ -55,12 +62,12 @@ const NavBar = () => (
           icon={<SearchIcon />}
         />
       </Link>
-      <Link to="/create">
+      <Poppity arrowGap="48" alignArrow="center" content={<NewRoom/>}>
         <CircleBtn
           className="room-nav-btn create-room-btn circle-hover"
           icon={<PlusIcon />}
         ></CircleBtn>
-      </Link>
+      </Poppity>
 
       {rooms.map(room => (
         <Link to={`/room/id/${room.id}`}>
@@ -74,11 +81,22 @@ const NavBar = () => (
 
     {/* SITE NAV */}
     <div className="site-nav">
-      <CircleBtn className="more-pages-btn" icon={<BarsIcon />} />
+      <Poppity arrowGap="48" alignArrow="right" content={<PageDropdown />}>
+        <CircleBtn className="more-pages-btn" icon={<BarsIcon />} />
+      </Poppity>
+
       <CircleBtn className="user-settings-btn" icon={<PeopleIcon />} />
-      <CircleBtn className="logout-btn" icon={<XIcon />} />
+      <CircleBtn
+        className="logout-btn"
+        icon={<XIcon />}
+        onClick={() => auth.signOut()}
+      />
     </div>
   </div>
 );
 
-export default NavBar;
+const mapStateToProps = state => ({
+  currentUser: state.user.currentUser
+});
+
+export default connect(mapStateToProps)(NavBar);

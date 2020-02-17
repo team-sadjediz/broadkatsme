@@ -1,0 +1,72 @@
+@import "../../assets/dimensions";
+@import "../../assets/colors";
+
+.poppity-container {
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: flex-end;
+  // align-items: flex-start;
+  // background-color: #fff;
+
+  .btn {
+    width: 50px;
+    height: 1em;
+    background-color: blue;
+  }
+  .pop-up-container {
+    .triangle {
+      position: absolute;
+      width: 0;
+      border-bottom: 15px solid $hightlight_color;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      // opacity: 80%;
+      z-index: 20;
+
+      .dropdown-container {
+        position: absolute;
+        // width: 200px;
+        // height: 200px;
+        box-sizing: border-box;
+        // padding: 0.3em;
+        border-top: 4px solid $hightlight_color;
+        width: auto;
+        height: auto;
+        background: $white;
+        top: 10px;
+        // box-shadow: 4px 4px 0 0 $black5;
+        // box-shadow: 5px 5px 1000px 500px $black5;
+
+        z-index: 20;
+        border-radius: 2px;
+      }
+
+      .shadow {
+        position: fixed;
+        opacity: 30%;
+        top: 0;
+        left: 0;
+        background-color: black;
+        width: 100%;
+        height: 100%;
+        z-index: -200;
+      }
+
+      .align-left {
+        left: -1em;
+      }
+
+      .align-right {
+        right: -1em;
+      }
+
+      .align-center {
+        transform: translate(-50%, 0);
+      }
+    }
+  }
+
+  .disabled {
+    display: none;
+  }
+}

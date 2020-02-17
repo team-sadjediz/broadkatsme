@@ -1,0 +1,57 @@
+@import "../../assets/colors.scss";
+@import "../../assets/dimensions.scss";
+
+.login-container {
+  .form-container {
+    background-color: $lr_color;
+    height: auto;
+    width: 15em;
+
+    display: grid;
+    grid-template-columns: minmax(100%, 20em);
+    grid-template-rows: repeat(5, auto);
+    // grid-gap: 1em;
+
+    grid-template-areas:
+      "email"
+      "password"
+      "loginbtn"
+      "glogin-btn"
+      "forgot-pw";
+
+    .email-field {
+      grid-area: email;
+      margin-bottom: 1em;
+    }
+
+    .password-field {
+      grid-area: password;
+      margin-bottom: 2em;
+    }
+
+    .login-btn {
+      grid-area: loginbtn;
+      margin-bottom: 1em;
+    }
+
+    .google-login-btn {
+      grid-area: glogin-btn;
+      margin-bottom: 1em;
+
+      svg {
+        width: 1.5em;
+        margin-right: 0.5em;
+      }
+    }
+
+    .forgot-pw {
+      grid-area: forgot-pw;
+      text-decoration: upper-case;
+      color: white;
+      font-size: 0.8em;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-align: center;
+    }
+  }
+}
