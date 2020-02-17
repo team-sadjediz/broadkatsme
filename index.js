@@ -110,11 +110,11 @@ const verifyAuthToken = async function(req, res, next) {
 
 // app.use("", );
 // app.use("/", verifyAuthToken);
-app.use("/home", home);
-app.use("/userprofile", userProfile);
-app.use("/register", register);
-app.use("/room", room);
-app.use("/search", search);
+app.use("/api/home", home);
+app.use("/api/userprofile", userProfile);
+app.use("/api/register", register);
+app.use("/api/room", room);
+app.use("/api/search", search);
 
 // --------------------------------- A P P C O N F ---------------------------------
 
