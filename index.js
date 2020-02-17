@@ -26,10 +26,12 @@
 // console.log(`Express server listening on port: ${port}`);
 
 const express = require("express");
+const path = require("path");
+
 const cors = require("cors");
 const mongoose = require("mongoose");
+
 const bodyParser = require("body-parser");
-const path = require("path");
 
 // const admin = require("./server/firebase-config/admin");
 const admin = require("./server/firebase-config/admin-credentials");
