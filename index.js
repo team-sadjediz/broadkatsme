@@ -9,11 +9,12 @@ const bodyParser = require("body-parser");
 const admin = require("./server/firebase-config/admin");
 
 // Local Deployment
-// const uri = require("./server/mongo-config/uri-credentials");
+const uri = require("./server/mongo-config/uri-credentials");
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // app.use(express.urlencoded());
 // app.use(express.json());
@@ -37,10 +38,10 @@ const search = require("./server/routes/search");
 // var to avoid release of private database credentials)
 
 // Heroku Deployment
-const databaseURI = process.env.MONGODB_URI;
+// const databaseURI = process.env.MONGODB_URI;
 
 // Local Deployment
-// const databaseURI = process.env.MONGODB_URI || uri;
+const databaseURI = process.env.MONGODB_URI || uri;
 
 mongoose.connect(databaseURI, { useNewUrlParser: true });
 
