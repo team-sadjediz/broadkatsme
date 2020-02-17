@@ -62,7 +62,7 @@ const NavBar = ({ currentUser }) => (
           icon={<SearchIcon />}
         />
       </Link>
-      <Poppity arrowGap="48" alignArrow="center" content={<NewRoom></NewRoom>}>
+      <Poppity arrowGap="48" alignArrow="center" content={<NewRoom/>}>
         <CircleBtn
           className="room-nav-btn create-room-btn circle-hover"
           icon={<PlusIcon />}
