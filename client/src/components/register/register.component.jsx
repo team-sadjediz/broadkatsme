@@ -4,7 +4,6 @@ import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
 import ShowHide from "../show-hide-input/show-hide-input.component";
 import axios from "axios";
-import { useForm } from "react-hook-form";
 import { auth } from "../../firebase/firebase.utils";
 
 import "./register.style.scss";
@@ -71,7 +70,7 @@ class Register extends React.Component {
     console.log("reg:", event.target.name);
     this.setState({ [name]: value });
   };
- 
+
   render() {
     return (
       <div
@@ -112,7 +111,7 @@ class Register extends React.Component {
             // pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$"
             required
           />
-          
+
           {/* <ShowHide
             className="password-field"
             name="password"
@@ -135,7 +134,11 @@ class Register extends React.Component {
             required
           />
 
-          <CustomButton className="register-btn" type="submit" onClick={this.handleSubmit}>
+          <CustomButton
+            className="register-btn"
+            type="submit"
+            onClick={this.handleSubmit}
+          >
             register
           </CustomButton>
         </form>
