@@ -2,6 +2,7 @@ import React from "react";
 
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
+import ShowHide from "../show-hide-input/show-hide-input.component";
 import { ReactComponent as GoogleLogoColorful } from "../../assets/icons/google-logo-colorful.svg";
 import axios from "axios";
 // import { ReactComponent as GoogleLogo } from "../../assets/icons/google-logo-solid.svg";
@@ -59,7 +60,7 @@ class LogIn extends React.Component {
             required
           />
 
-          <FormInput
+          <ShowHide
             className="password-field"
             name="password"
             type="password"
@@ -78,7 +79,7 @@ class LogIn extends React.Component {
             Google Login
           </CustomButton>
 
-          <a className="forgot-pw" href="/login">
+          <a className="forgot-pw" href="/reset">
             forgot password?
           </a>
         </form>

@@ -1,44 +1,70 @@
 import React, { Component } from "react";
+import CustomButton from "../custom-button/custom-button.component";
+import FormInput from "../form-input/form-input.component";
+import CircleBtn from "../circle-btn/circle-btn.component";
 
-class ShowHide extends Component {
+import { ReactComponent as EyeDefault } from "../../assets/icons/eye-solid.svg";
+import { ReactComponent as EyeHidden } from "../../assets/icons/eye-slash-solid.svg";
+
+import "./show-hide-input.style.scss";
+class ShowHideInput extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       hidden: true,
-      password: ""
+      button: <EyeDefault/>,
+      text: ""
     };
 
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.toggleShow = this.toggleShow.bind(this);
+    this.buttonShow = this.buttonShow.bind(this);
   }
 
-  handlePasswordChange(e) {
-    this.setState({ password: e.target.value });
+ handleChange(e) {
+    this.setState({ text: e.target.value });
   }
 
-  toggleShow() {
+ toggleShow() {
     this.setState({ hidden: !this.state.hidden });
+    this.buttonShow();
+  }
+
+  buttonShow() {
+    if (!this.state.hidden){
+      this.setState({button: <EyeHidden/>});
+    }
+    else {
+      this.setState({button: <EyeDefault/>});
+    }
   }
 
   componentDidMount() {
-    if (this.props.password) {
-      this.setState({ password: this.props.password });
+    if (this.props.text) {
+      this.setState({ text: this.props.text });
     }
   }
 
   render() {
     return (
       <div>
-        <input
+        <div className="show-hide-field">
+        <FormInput
+          className="password-field"
           type={this.state.hidden ? "password" : "text"}
-          value={this.state.password}
-          onChange={this.handlePasswordChange}
+          value={this.state.text}
+          label="password"
+          handleChange={this.handleChange}
         />
-        <button onClick={this.toggleShow}>Show / Hide</button>
+        </div>
+        <div className="show-hide-button">
+        <CircleBtn type="button" onClick={this.toggleShow} icon={this.state.button}></CircleBtn>
+        </div>
       </div>
     );
   }
+  
 }
 
-export default ShowHide;
+export default ShowHideInput;

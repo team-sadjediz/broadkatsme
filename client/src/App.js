@@ -19,6 +19,7 @@ import AboutPage from "./pages/about-page/about-page.component";
 import CodeOfConductPage from "./pages/code-of-conduct-page/code-of-conduct-page.component";
 import ContactPage from "./pages/contact-page/contact-page.component";
 
+import ResetPassPage from "./pages/reset-password-page/reset-password-page.component";
 import "./App.scss";
 
 class App extends React.Component {
@@ -52,7 +53,13 @@ class App extends React.Component {
             </Switch>
           </BrowserRouter>
         ) : (
-          <LoginRegisterPage></LoginRegisterPage>
+          <BrowserRouter>
+            <Switch>
+              <Route exact path="/" component={LoginRegisterPage} />
+              <Route exact path="/login" component={LoginRegisterPage} />
+              <Route path="/reset" component={ResetPassPage} />
+            </Switch>
+          </BrowserRouter>
         )}
       </div>
     );

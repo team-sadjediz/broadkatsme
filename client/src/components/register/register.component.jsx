@@ -71,7 +71,7 @@ class Register extends React.Component {
     console.log("reg:", event.target.name);
     this.setState({ [name]: value });
   };
-
+ 
   render() {
     return (
       <div
@@ -79,7 +79,7 @@ class Register extends React.Component {
           this.props.className ? this.props.className : ""
         }`}
       >
-        <form className="form-container" onSubmit={this.handleSubmit}>
+        <form className="form-container">
           <FormInput
             className="username-field"
             name="username"
@@ -112,10 +112,12 @@ class Register extends React.Component {
             // pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$"
             required
           />
+          
           {/* <ShowHide
             className="password-field"
             name="password"
             handleChange={this.handleChange}
+            value={this.state.password}
             label="password"
             minlength="8"
             pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$"
@@ -133,7 +135,7 @@ class Register extends React.Component {
             required
           />
 
-          <CustomButton className="register-btn" type="submit">
+          <CustomButton className="register-btn" type="submit" onClick={this.handleSubmit}>
             register
           </CustomButton>
         </form>
