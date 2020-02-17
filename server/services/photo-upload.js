@@ -3,10 +3,28 @@ const multer = require("multer");
 const multerS3 = require("multer-s3");
 const path = require("path");
 
+// const AWS_SECRET_ACCES_KEY = require("../aws-config/aws-credentials")
+//   .AWS_SECRET_ACCES_KEY;
+// const AWS_ACCESS_KEY_ID = require("../aws-config/aws-credentials")
+//   .AWS_ACCESS_KEY_ID;
+// const AWS_BUCKET = require("../aws-config/aws-credentials").AWS_BUCKET;
+// const AWS_REGION = require("../aws-config/aws-credentials").AWS_REGION;
+
+// const {
+//   AWS_SECRET_ACCES_KEY,
+//   AWS_ACCESS_KEY_ID,
+//   AWS_BUCKET,
+//   AWS_REGION
+// } = require("../aws-config/aws-credentials");
+
 const config = require("../aws-config/aws-credentials");
 
-// ignore this
-aws.config.update({});
+aws.config.update({
+  secretAccessKey: config.AWS_SECRET_ACCES_KEY,
+  accessKeyId: config.AWS_ACCESS_KEY_ID,
+  Bucket: config.AWS_BUCKET,
+  region: config.AWS_REGION
+});
 
 const s3 = new aws.S3({
   /* ... */
@@ -26,11 +44,16 @@ const upload = multer({
     s3,
     bucket: "broadkats.me",
     acl: "public-read",
+    contentType: multerS3.AUTO_CONTENT_TYPE,
     metadata: function(req, file, cb) {
-      cb(null, { fieldName: "bssssss" });
+      cb(null, { fieldName: file.fieldname });
     },
     key: function(req, file, cb) {
-      cb(null, Date.now().toString() + file.mimetype);
+      //   var newFilename = Date.now().toString() + "-" + file.originalname;
+      var newFilename = req.body.uid;
+      var fullPath =
+        req.body.folder + newFilename + path.extname(file.originalname);
+      cb(null, fullPath);
     },
     limits: { fileSize: 2000000 }
   })

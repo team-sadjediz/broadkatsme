@@ -15,7 +15,10 @@ router.get("/user", async function(req, res) {
   // res.send("User profile & props returned");
 });
 
+// send json with: { folder: ..., uid: ..., image: ...}
+// order is required
 router.post("/upload-prof-img", function(req, res, next) {
+  // do a check to see if the UID exists as either png or jpg
   singleUpload(req, res, error => {
     if (error) {
       console.log(error);
@@ -32,25 +35,6 @@ router.post("/upload-prof-img", function(req, res, next) {
       }
     }
   });
-  // const file = req.file;
-  // if (!file) {
-  //   const error = new Error("Upload Error: missing file");
-  //   error.httpStatusCode = 400;
-  //   return next(error);
-  // }
-  // res.send(file);
-  // singleUpload(
-  //   (req,
-  //   res,
-  //   function(error) {
-  // if (error) {
-  //   return res
-  //     .status(422)
-  //     .send({ errors: [{ title: "Upload Error", detail: error.message }] });
-  // }
-  // return res.json({ imageURL: req.file.location });
-  //   })
-  // );
 });
 
 module.exports = router;
