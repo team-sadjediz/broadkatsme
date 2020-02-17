@@ -1,0 +1,46 @@
+@import "../../assets/colors.scss";
+
+.register-container {
+  .form-container {
+    background-color: $navbar_color;
+    height: auto;
+    width: 15em;
+
+    display: grid;
+    grid-template-columns: minmax(100%, 20em);
+    grid-template-rows: repeat(5, auto);
+    // grid-gap: 1em;
+
+    grid-template-areas:
+      "username"
+      "email"
+      "password1"
+      "password2"
+      "registerbtn";
+
+    .username-field {
+      grid-area: username;
+      margin-bottom: 1em;
+    }
+
+    .email-field {
+      grid-area: email;
+      margin-bottom: 1em;
+    }
+
+    .password-field {
+      grid-area: password1;
+      margin-bottom: 1em;
+    }
+
+    .password-field2 {
+      grid-area: password2;
+      margin-bottom: 2em;
+    }
+
+    .register-btn {
+      grid-area: registerbtn;
+      margin-bottom: 1em;
+    }
+  }
+}
