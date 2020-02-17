@@ -1,6 +1,12 @@
 import React, { Component } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { auth } from "./firebase/firebase.utils";
+import { Link } from "react-router-dom";
+
+
+// redux stuff:
+import { connect } from "react-redux";
+import { setCurrentUser } from "./redux/user/user.actions";
 
 // components:
 import NavBar from "./components/navbar/navbar.component";
@@ -15,39 +21,29 @@ import ContactPage from "./pages/contact-page/contact-page.component";
 
 import "./App.scss";
 
-import { Link } from "react-router-dom";
-
 class App extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      currentUser: null
-    };
-  }
-
   unsubscribeFromAuth = null;
 
   componentDidMount() {
     this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-      this.setState({ currentUser: user });
-      console.log("componentDidMount/logged in:", this.state.currentUser);
+      this.props.setCurrentUser(user);
+      console.log("componentDidMount - logged in1:", this.props.currentUser);
     });
   }
 
   componentWillUnmount() {
     this.unsubscribeFromAuth();
-    console.log("logged out")
+    console.log("logged out");
   }
 
   render() {
     return (
       <div className="App">
-        {this.state.currentUser ? (
+        {this.props.currentUser ? (
           <BrowserRouter>
-            <NavBar currentUser={this.state.currentUser} />
+            <NavBar />
             <Switch>
-              <Route exact path="/login" component={LoginRegisterPage} />
+              <Route exact path="/login" render={() => this.props.currentUser ? (<Redirect to="/"/>) : (<LoginRegisterPage/>)} />
               <Route path="/lobby" component={LobbyPage} />
               <Route path="/room" component={RoomPage} />
               <Route path="/about" component={AboutPage} />
@@ -63,4 +59,12 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
+});
+
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

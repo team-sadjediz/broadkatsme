@@ -1,5 +1,6 @@
 import React, { useReducer } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import { auth } from "../../firebase/firebase.utils";
 
 // components:
@@ -41,7 +42,7 @@ const NavBar = ({ currentUser }) => (
   <div className="navbar-container">
     {/* LOGO: */}
     <div className="logo-section">
-    <div>{`${currentUser.uid} ${currentUser.email}`}</div>
+      <div>{`${currentUser.uid} ${currentUser.email}`}</div>
       {/* <Link to="/login">
         <LogoHorizontal />
       </Link> */}
@@ -94,4 +95,8 @@ const NavBar = ({ currentUser }) => (
   </div>
 );
 
-export default NavBar;
+const mapStateToProps = state => ({
+  currentUser: state.user.currentUser
+});
+
+export default connect(mapStateToProps)(NavBar);
