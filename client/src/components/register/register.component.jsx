@@ -4,7 +4,6 @@ import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
 import ShowHide from "../show-hide-input/show-hide-input.component";
 import axios from "axios";
-import { useForm } from 'react-hook-form'
 import "./register.style.scss";
 
 class Register extends React.Component {
@@ -22,7 +21,6 @@ class Register extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    event.useForm();
     const user = {
       "uid": this.state.uid,
       "username": this.state.username,
@@ -41,10 +39,10 @@ class Register extends React.Component {
 
   handleChange = event => {
     const { value, name } = event.target;
-    console.log("a:", event.target.name);
+    // console.log("a:", event.target.name);
     this.setState({ [name]: value });
   };
-
+ 
   render() {
     return (
       <div
@@ -52,7 +50,7 @@ class Register extends React.Component {
           this.props.className ? this.props.className : ""
         }`}
       >
-        <form className="form-container" onSubmit={this.handleSubmit}>
+        <form className="form-container">
           <FormInput
             className="username-field"
             name="username"
@@ -80,14 +78,16 @@ class Register extends React.Component {
             handleChange={this.handleChange}
             value={this.state.password}
             label="password"
-            minlength="8"
+            minLength="8"
             pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$"
             required
           />
+          
           {/* <ShowHide
             className="password-field"
             name="password"
             handleChange={this.handleChange}
+            value={this.state.password}
             label="password"
             minlength="8"
             pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$"
@@ -101,11 +101,12 @@ class Register extends React.Component {
             handleChange={this.handleChange}
             value={this.state.verf_password}
             label="confirm password"
+            minLength="8"
             pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$"
             required
           />
 
-          <CustomButton className="register-btn" type="submit">
+          <CustomButton className="register-btn" type="submit" onClick={this.handleSubmit}>
             register
           </CustomButton>
         </form>
