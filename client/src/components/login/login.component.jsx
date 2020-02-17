@@ -66,18 +66,22 @@ class LogIn extends React.Component {
             required
           />
 
-          <CustomButton className="login-btn" type="submit">
+          <CustomButton
+            className="login-btn"
+            type="submit"
+            onClick={this.handleSubmit}
+          >
             login
           </CustomButton>
-        </form>
-        <CustomButton className="google-login-btn" onClick={signInWithGoogle}>
-          <GoogleLogoColorful />
-          Google Login
-        </CustomButton>
+          <CustomButton className="google-login-btn" onClick={signInWithGoogle}>
+            <GoogleLogoColorful />
+            Google Login
+          </CustomButton>
 
-        <a className="forgot-pw" href="/reset">
-          forgot password?
-        </a>
+          <a className="forgot-pw" href="/reset">
+            forgot password?
+          </a>
+        </form>
       </div>
     );
   }
