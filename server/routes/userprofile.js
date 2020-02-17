@@ -12,13 +12,12 @@ router.get("/user", async function(req, res) {
     console.log(JSON.stringify(userprofile));
     res.send(userprofile);
   });
-  // res.send("User profile & props returned");
 });
 
 // send json with: { folder: ..., uid: ..., image: ...}
 // order is required
 router.post("/upload-prof-img", function(req, res, next) {
-  // do a check to see if the UID exists as either png or jpg
+  // to-do: do a check to see if the UID exists as either png or jpg
   singleUpload(req, res, error => {
     if (error) {
       console.log(error);

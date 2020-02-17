@@ -3,27 +3,16 @@ const multer = require("multer");
 const multerS3 = require("multer-s3");
 const path = require("path");
 
-// const AWS_SECRET_ACCES_KEY = require("../aws-config/aws-credentials")
-//   .AWS_SECRET_ACCES_KEY;
-// const AWS_ACCESS_KEY_ID = require("../aws-config/aws-credentials")
-//   .AWS_ACCESS_KEY_ID;
-// const AWS_BUCKET = require("../aws-config/aws-credentials").AWS_BUCKET;
-// const AWS_REGION = require("../aws-config/aws-credentials").AWS_REGION;
+// Local Deploymenet
+const config = require("../aws-config/aws-credentials");
 
-// const {
-//   AWS_SECRET_ACCES_KEY,
-//   AWS_ACCESS_KEY_ID,
-//   AWS_BUCKET,
-//   AWS_REGION
-// } = require("../aws-config/aws-credentials");
-
-// const config = require("../aws-config/aws-credentials");
-
+// Heroku Deployment
 aws.config.update({
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  Bucket: process.env.AWS_BUCKET,
-  region: process.env.AWS_REGION
+  secretAccessKey:
+    process.env.AWS_SECRET_ACCESS_KEY || config.AWS_SECRET_ACCESS_KEY,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID || config.AWS_ACCESS_KEY_ID,
+  Bucket: process.env.AWS_BUCKET || config.AWS_BUCKET,
+  region: process.env.AWS_REGION || config.AWS_REGION
 });
 
 const s3 = new aws.S3({
@@ -49,7 +38,6 @@ const upload = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key: function(req, file, cb) {
-      //   var newFilename = Date.now().toString() + "-" + file.originalname;
       var newFilename = req.body.uid;
       var fullPath =
         req.body.folder + newFilename + path.extname(file.originalname);
