@@ -4,6 +4,7 @@ import NavBar from "./components/navbar/navbar.component";
 import LoginRegisterPage from "./pages/login-register-page/login-register-page.component";
 import LobbyPage from "./pages/lobby-page/lobby-page.component";
 import RoomPage from "./pages/room-page/room-page.component";
+import ResetPassPage from "./pages/reset-password-page/reset-password-page.component";
 import "./App.scss";
 
 import { Link } from "react-router-dom";
@@ -17,6 +18,7 @@ function App() {
           <Route exact path="/login" component={LoginRegisterPage} />
           <Route path="/lobby" component={LobbyPage} />
           <Route path="/room" component={RoomPage} />
+          <Route path="/reset" component={ResetPassPage} />
         </Switch>
       </BrowserRouter>
     </div>
