@@ -22,7 +22,7 @@ import ContactPage from "./pages/contact-page/contact-page.component";
 import ResetPassPage from "./pages/reset-password-page/reset-password-page.component";
 import "./App.scss";
 
-class App extends React.Component {
+class App extends Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
