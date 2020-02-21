@@ -42,55 +42,55 @@ const NavBar = ({ currentUser }) => (
   <div className="navbar-container">
     {/* LOGO: */}
     <div className="logo-section">
-      <div>{`${currentUser.uid} ${currentUser.email}`}</div>
+      {/* <div>{`${currentUser.uid} ${currentUser.email}`}</div> */}
       {/* <Link to="/login">
         <LogoHorizontal />
       </Link> */}
+
+      <p>broadkats</p>
+      <CircleBtn text="me"></CircleBtn>
     </div>
 
     {/* ROOM NAV */}
     <div className="room-nav">
       <Link to="/lobby">
-        <CircleBtn
-          className="room-nav-btn home-btn circle-hover"
-          icon={<NineDotIcon />}
-        />
+        <CircleBtn className="room-nav-btn home-btn" icon={<NineDotIcon />} />
       </Link>
       <Link to="/search">
-        <CircleBtn
-          className="room-nav-btn search-btn circle-hover"
-          icon={<SearchIcon />}
-        />
+        <CircleBtn className="room-nav-btn search-btn" icon={<SearchIcon />} />
       </Link>
-      <Poppity arrowGap="48" alignArrow="center" content={<NewRoom/>}>
+      <Poppity arrowGap="48" alignArrow="center" content={<NewRoom />}>
         <CircleBtn
-          className="room-nav-btn create-room-btn circle-hover"
+          className="room-nav-btn create-room-btn"
           icon={<PlusIcon />}
         ></CircleBtn>
       </Poppity>
 
-      {rooms.map(room => (
-        <Link to={`/room/id/${room.id}`}>
-          <CircleBtn
-            className="room-nav-btn room-btn circle-hover"
-            bgImageUrl={room.pic}
-          />
-        </Link>
-      ))}
+      <div className="room-list-container">
+        {rooms.map(room => (
+          <Link to={`/room/id/${room.id}`}>
+            <CircleBtn
+              className="room-item-btn room-btn"
+              bgImageUrl={room.pic}
+            />
+          </Link>
+        ))}
+      </div>
     </div>
 
     {/* SITE NAV */}
     <div className="site-nav">
-      <Poppity arrowGap="48" alignArrow="right" content={<PageDropdown />}>
-        <CircleBtn className="more-pages-btn" icon={<BarsIcon />} />
+      <Poppity arrowGap="60" alignArrow="right" content={<PageDropdown />}>
+        {/* <CircleBtn className="more-pages-btn" icon={<BarsIcon />} /> */}
+        <CircleBtn className="" icon={<BarsIcon />} />
       </Poppity>
 
-      <CircleBtn className="user-settings-btn" icon={<PeopleIcon />} />
+      {/* <CircleBtn className="user-settings-btn" icon={<PeopleIcon />} />
       <CircleBtn
         className="logout-btn"
         icon={<XIcon />}
         onClick={() => auth.signOut()}
-      />
+      /> */}
     </div>
   </div>
 );
