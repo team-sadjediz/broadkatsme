@@ -8,28 +8,32 @@
   // align-items: flex-start;
   // background-color: #fff;
 
+
   .btn {
     width: 50px;
     height: 1em;
     background-color: blue;
   }
   .pop-up-container {
+
     .triangle {
       position: absolute;
       width: 0;
-      border-bottom: 15px solid $hightlight_color;
+      border-bottom: 15px solid $highlight1;
       border-left: 15px solid transparent;
       border-right: 15px solid transparent;
       // opacity: 80%;
-      z-index: 20;
+      z-index: 50;
 
       .dropdown-container {
+        box-shadow: $strong_box_shadow;
+
         position: absolute;
         // width: 200px;
         // height: 200px;
         box-sizing: border-box;
         // padding: 0.3em;
-        border-top: 4px solid $hightlight_color;
+        border-top: 8px solid $highlight1;
         width: auto;
         height: auto;
         background: $white;

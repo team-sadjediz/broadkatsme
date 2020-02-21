@@ -38,7 +38,7 @@ class Poppity extends React.Component {
     console.log(this.props.content);
     return (
       <div className="poppity-container">
-        <div className={`shadow ${this.state.enabled ? "" : "disabled"}`}></div>
+        {/* <div className={`shadow ${this.state.enabled ? "" : "disabled"}`}></div> */}
         {newChildWithOnClick}
 
         <div className="pop-up-container">

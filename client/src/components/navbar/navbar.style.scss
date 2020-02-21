@@ -25,7 +25,7 @@
 }
 
 .navbar-container {
-  box-shadow: 0 0 5px rgb(138, 138, 138);
+  box-shadow: 0 0 5px rgb(107, 107, 107);
 
   background-color: $navbar_color;
   min-width: -moz-fit-content;
@@ -43,7 +43,7 @@
 
     // temp logo:
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 
     cursor: pointer;
@@ -52,9 +52,11 @@
       font-family: "Alatsi";
       margin: 0 5px 0 0;
       // font-weight: bold;
-      font-size: 2.7em;
+      font-size: 1.2em;
       text-transform: uppercase;
-      // letter-spacing: -2px;
+      color: $white;
+      letter-spacing: 1px;
+      color: $highlight1;
     }
     
     .circle-btn {
@@ -62,7 +64,7 @@
       text-transform: uppercase;
 
       &:hover {
-        background-color: $french_laundry_blue;
+        background-color: $highlight1;
       }
     }
   }
@@ -79,7 +81,7 @@
       background-color: transparent;
       svg {
         path {
-          fill: $french_laundry_blue;
+          fill: $highlight1;
         }
       }
       &:hover {

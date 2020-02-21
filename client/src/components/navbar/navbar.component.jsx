@@ -22,19 +22,19 @@ import "./navbar.style.scss";
 let rooms = [
   {
     id: 86,
-    pic: "https://picsum.photos/id/1012/3973/2639"
+    pic: "https://i.picsum.photos/id/1049/3900/3120.jpg"
   },
   {
     id: 16,
-    pic: "https://picsum.photos/id/101/2621/1747"
+    pic: "https://i.picsum.photos/id/1049/3900/3120.jpg"
   },
   {
     id: 38,
-    pic: "https://picsum.photos/id/238/200/300"
+    pic: "https://i.picsum.photos/id/1049/3900/3120.jpg"
   },
   {
     id: 19,
-    pic: "https://picsum.photos/id/237/200/300"
+    pic: "https://i.picsum.photos/id/1049/3900/3120.jpg"
   }
 ];
 
@@ -59,7 +59,7 @@ const NavBar = ({ currentUser }) => (
       <Link to="/search">
         <CircleBtn className="room-nav-btn search-btn" icon={<SearchIcon />} />
       </Link>
-      <Poppity arrowGap="48" alignArrow="center" content={<NewRoom />}>
+      <Poppity arrowGap="58" alignArrow="center" content={<NewRoom />}>
         <CircleBtn
           className="room-nav-btn create-room-btn"
           icon={<PlusIcon />}
@@ -80,7 +80,7 @@ const NavBar = ({ currentUser }) => (
 
     {/* SITE NAV */}
     <div className="site-nav">
-      <Poppity arrowGap="60" alignArrow="right" content={<PageDropdown />}>
+      <Poppity arrowGap="58" alignArrow="right" content={<PageDropdown />}>
         {/* <CircleBtn className="more-pages-btn" icon={<BarsIcon />} /> */}
         <CircleBtn className="" icon={<BarsIcon />} />
       </Poppity>

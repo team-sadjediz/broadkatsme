@@ -27,25 +27,37 @@ $green-shamrock: #50d19e; //vibrant
 
 /////////////////////////////////////////////////////////////////////////////////////////
 $lg_tan: linear-gradient(135deg, rgba(195,173,151,1) 0%, rgba(148,121,95,1) 100%);
+$lg_blue: linear-gradient(45deg, rgb(93, 105, 136) 20%, rgba(107,144,187,1) 80%);
 $french_laundry_blue: #3a4660;
 $comfortably_tan: #c9af98;
 $peachy_kreme: #ed8a63;
 $brown_bonnet: #845007;
 $soft_red: #d44f4f;
+// $soft_red: #f04747;
+
+
 $white: #f6f6f6; // prefer a white thats a tint darker
-// $white: #f2f3f0;
-$white: #ffffff;
+$white: #f2f3f0;
+// $white: #fff8ef;
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
 $bg_gradient: linear-gradient(
-  60deg,
+  70deg,
   rgba(143, 185, 168, 1) 0%,
   rgba(118, 93, 105, 1) 100%
 );
 
-$bg_color: $lg_tan; // not decided yet
-$hightlight_color: #50d19e;
+
+// box shadow
+$default_box_shadow: 0 0 5px rgb(107, 107, 107);
+$strong_box_shadow: 0 0 5px rgb(65, 65, 65);
+
+
+// background
+$bg_color: $lg_blue;
+$highlight1: $french_laundry_blue;
+$highlight2: $soft_red;
 
 
 // default colors for the circle-btn component

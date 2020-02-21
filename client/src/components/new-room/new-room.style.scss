@@ -6,7 +6,7 @@
   justify-content: center;
 
   // font-weight: bold;
-  color: white;
+  color: $highlight1;
   font-size: 15px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -14,7 +14,12 @@
 
 .newroom-container {
   box-sizing: border-box;
-  background-color: $navbar_color;
+  // background-color: $navbar_color;
+  // background-color: $white;
+  
+  // border: 5px solid red;
+  // box-shadow: $default_box_shadow;
+
   width: 15em;
   padding: 1em;
 
@@ -33,7 +38,7 @@
     align-items: center;
 
     font-weight: bold;
-    color: white;
+    // color: white;
     font-size: 18px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
