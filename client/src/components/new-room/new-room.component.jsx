@@ -5,7 +5,7 @@ import { auth } from "../../firebase/firebase.utils";
 // redux:
 import { connect } from "react-redux";
 
-// components: 
+// components:
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
 
@@ -15,7 +15,6 @@ import { ReactComponent as RightArrowIcon } from "../../assets/icons/caret-right
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus-solid.svg";
 
 import "./new-room.style.scss";
-
 
 class NewRoom extends React.Component {
   constructor(props) {
@@ -32,11 +31,11 @@ class NewRoom extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
     const room = {
-      "uid": this.props.currentUser.uid,
-      "room_name": this.state.room_name,
-      "tags": this.state.tags,
-      "room_size": this.state.room_size,
-      "privacy": this.state.privacy
+      uid: this.props.currentUser.uid,
+      room_name: this.state.room_name,
+      tags: this.state.tags,
+      room_size: this.state.room_size,
+      privacy: this.state.privacy
     };
 
     axios
@@ -63,12 +62,10 @@ class NewRoom extends React.Component {
   render() {
     return (
       <div className="newroom-container">
-        <div className="header gap">Create Room</div>
-
-        {/* <div className="room-title">sdfsdfdsf</div> */}
+        <div className="header">Create Room</div>
         <form className="form-container" onSubmit={this.handleSubmit}>
           <FormInput
-            className="room-title gap"
+            className="room-title"
             name="room_name"
             handleChange={this.handleChange}
             value={this.state.room_name}
@@ -77,31 +74,36 @@ class NewRoom extends React.Component {
           />
 
           <FormInput
-            className="room-title gap"
-            name="tags"
-            handleChange={this.handleChange}
-            value={this.state.tags}
-            label="tags"
-            required
-          />
-
-          <FormInput
-            className="room-title gap"
+            className="room-size"
             name="room_size"
             handleChange={this.handleChange}
             value={this.state.room_size}
             label="room size"
+            type="number"
+            min="1"
+            max="5"
             required
           />
 
-          <FormInput
-            className="room-title gap"
+          {/* <FormInput
+            className="room-title"
             name="privacy"
             handleChange={this.handleChange}
             value={this.state.privacy}
             label="privacy"
+            type="select"
             required
-          />
+          /> */}
+
+          <div className="privacy">
+            <label for="privacy">
+              Privacy
+            </label>
+            <select id="privacy">
+              <option value="true">Invite Only</option>
+              <option value="false">Open Room</option>
+            </select>
+          </div>
 
           <CustomButton className="new-room-btn" type="submit">
             Create Room
