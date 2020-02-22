@@ -20,46 +20,59 @@
   margin-top: 1em;
 
   .form-input {
-    background-color: rgb(207, 207, 207);
+    background: $light_gray;
     height: 2em;
     width: 100%;
     box-sizing: border-box;
     padding: 0 0.5em;
 
-    // font-family: "Open Sans Condensed";
-    // font-weight: bold;
-    // color: $navbar_color;
+    font-family: "Karla", sans-serif;
+    font-weight: bold;
+    color: $highlight1;
     font-size: 0.9em;
 
     border: none;
     border-radius: 2px;
-    // border-bottom: 5px solid $soft_red;
 
     &:focus {
+      outline: none;
+      border: 1px solid lightgray;
+      background-color: white;
+      box-shadow: $light_box_shadow;
+    }
+
+    &:focus-within {
+      // background-color: white;
       outline: none;
     }
 
     &:focus ~ .form-input-label {
+      outline: none;
       @include shrinkLabel();
     }
 
     &:required {
-      box-shadow: none;
-      // border-bottom: 5px solid $redvibrant;
+      outline: none;
+      color: $soft_red;
     }
+
     &:invalid {
-      box-shadow: none;
-      // border-bottom: 5px solid $redvibrant;
+      outline: none;
+      color: $soft_red;
+    }
+
+    &:valid {
+      outline: none;
+      box-shadow: 0 0 5px $lg_lightblue;
+      color: $highlight1;
     }
   }
 
   input[type="password"] {
     letter-spacing: 0.1em;
-    // color: $french_laundry_blue;
   }
 
   .form-input-label {
-
     text-transform: uppercase;
     color: $highlight1;
 

@@ -1,12 +1,16 @@
 import React from "react";
+import axios from "axios";
+import { auth, signInWithGoogle } from "../../firebase/firebase.utils";
 
+// components:
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
 import ShowHide from "../show-hide-input/show-hide-input.component";
+
+// icons:
 import { ReactComponent as GoogleLogoColorful } from "../../assets/icons/google-logo-colorful.svg";
-import axios from "axios";
 // import { ReactComponent as GoogleLogo } from "../../assets/icons/google-logo-solid.svg";
-import { auth, signInWithGoogle } from "../../firebase/firebase.utils";
+
 
 import "./login.style.scss";
 

@@ -13,7 +13,7 @@ const CircleBtn = ({
   bgImageUrl,
   ...otherProps
 }) => (
-  <div onClick={onClick} className={`circle-btn ${className ? className : ""}`}>
+  <div onMouseEnter={otherProps.onMouseEnter} onClick={onClick} className={`circle-btn ${className ? className : ""}`}>
     {(() => {
       if (icon) {
         return icon;

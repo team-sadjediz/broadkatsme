@@ -1,10 +1,11 @@
 import React from "react";
+import axios from "axios";
+import { auth } from "../../firebase/firebase.utils";
 
+// components:
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
 import ShowHide from "../show-hide-input/show-hide-input.component";
-import axios from "axios";
-import { auth } from "../../firebase/firebase.utils";
 
 import "./register.style.scss";
 class Register extends React.Component {
@@ -27,8 +28,8 @@ class Register extends React.Component {
 
     console.log(password, confirmPassword);
 
-    if (password != confirmPassword) {
-      alert("passwords don't match");
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!");
       return;
     }
 
@@ -78,7 +79,7 @@ class Register extends React.Component {
           this.props.className ? this.props.className : ""
         }`}
       >
-        <form className="form-container">
+        <form className="form-container" onSubmit={this.handleSubmit}>
           <FormInput
             className="username-field"
             name="username"
@@ -86,6 +87,7 @@ class Register extends React.Component {
             handleChange={this.handleChange}
             value={this.state.username}
             label="username"
+            maxlength="16"
             required
           />
 
@@ -137,7 +139,6 @@ class Register extends React.Component {
           <CustomButton
             className="register-btn"
             type="submit"
-            onClick={this.handleSubmit}
           >
             register
           </CustomButton>

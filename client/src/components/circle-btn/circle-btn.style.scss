@@ -1,4 +1,6 @@
 @import "../../assets/colors";
+@import "../../assets/dimensions";
+
 
 @mixin circle-properties {
   box-sizing: border-box;
@@ -9,9 +11,9 @@
   align-items: center;
 
   // circle btn dimensions and color:
-  background-color: $circle_btn_bg_color;
-  width: 2em;
-  height: 2em;
+  background-color: $highlight1;
+  width: $circle_btn_dimension;
+  height: $circle_btn_dimension;
   border-radius: 50%;
 
   // icon dimensions and color:
@@ -19,14 +21,14 @@
     width: 0.7em;
     height: auto;
     path {
-      fill: $circle_btn_icon_color;
+      fill: $white;
     }
   }
 }
 
 @mixin hover-animation {
   &:hover {
-    background-color: $circle_btn_hover_color;
+    background-color: $highlight2;
     // opacity: 50%;
     // border: 3px solid rgb(255, 255, 255);
   }
@@ -84,7 +86,7 @@
     }
 
     &:hover .hover-overlay {
-      opacity: 90%;
+      opacity: 100%;
       transform: rotate(360deg);
     }
   }

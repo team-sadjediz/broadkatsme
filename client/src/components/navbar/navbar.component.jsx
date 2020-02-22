@@ -1,7 +1,7 @@
-import React, { useReducer } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { auth } from "../../firebase/firebase.utils";
+// import { auth } from "../../firebase/firebase.utils";
 
 // components:
 import CircleBtn from "../circle-btn/circle-btn.component";
@@ -14,8 +14,7 @@ import { ReactComponent as NineDotIcon } from "../../assets/icons/nine-dots-soli
 import { ReactComponent as SearchIcon } from "../../assets/icons/search-solid.svg";
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus-solid.svg";
 import { ReactComponent as BarsIcon } from "../../assets/icons/bars-solid.svg";
-import { ReactComponent as PeopleIcon } from "../../assets/icons/user-circle-solid.svg";
-import { ReactComponent as XIcon } from "../../assets/icons/times-solid.svg";
+
 
 import "./navbar.style.scss";
 
@@ -59,7 +58,7 @@ const NavBar = ({ currentUser }) => (
       <Link to="/search">
         <CircleBtn className="room-nav-btn search-btn" icon={<SearchIcon />} />
       </Link>
-      <Poppity arrowGap="58" alignArrow="center" content={<NewRoom />}>
+      <Poppity alignArrow="center" content={<NewRoom/>}>
         <CircleBtn
           className="room-nav-btn create-room-btn"
           icon={<PlusIcon />}
@@ -80,17 +79,9 @@ const NavBar = ({ currentUser }) => (
 
     {/* SITE NAV */}
     <div className="site-nav">
-      <Poppity arrowGap="58" alignArrow="right" content={<PageDropdown />}>
-        {/* <CircleBtn className="more-pages-btn" icon={<BarsIcon />} /> */}
+      <Poppity btnAction="hover" alignArrow="right" content={<PageDropdown />}>
         <CircleBtn className="" icon={<BarsIcon />} />
       </Poppity>
-
-      {/* <CircleBtn className="user-settings-btn" icon={<PeopleIcon />} />
-      <CircleBtn
-        className="logout-btn"
-        icon={<XIcon />}
-        onClick={() => auth.signOut()}
-      /> */}
     </div>
   </div>
 );
