@@ -82,17 +82,6 @@ app.use("/api/register", register);
 app.use("/api/room", room);
 app.use("/api/search", search);
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin,X-Requested-With,Content-Type,Accept,content-type,application/json"
-  );
-  next();
-});
-
 // --------------------------------- A P P C O N F ---------------------------------
 
 // The "catchall" handler: for any request that doesn't
