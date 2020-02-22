@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { auth } from "./firebase/firebase.utils";
-import { Link } from "react-router-dom";
-
 
 // redux stuff:
 import { connect } from "react-redux";
@@ -18,8 +16,8 @@ import RoomPage from "./pages/room-page/room-page.component";
 import AboutPage from "./pages/about-page/about-page.component";
 import CodeOfConductPage from "./pages/code-of-conduct-page/code-of-conduct-page.component";
 import ContactPage from "./pages/contact-page/contact-page.component";
-
 import ResetPassPage from "./pages/reset-password-page/reset-password-page.component";
+
 import "./App.scss";
 
 class App extends Component {

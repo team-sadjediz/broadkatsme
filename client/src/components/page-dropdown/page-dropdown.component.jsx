@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { auth } from "../../firebase/firebase.utils";
 
 // icons:
-import { ReactComponent as PeopleIcon } from "../../assets/icons/user-circle-solid.svg";
-import { ReactComponent as XIcon } from "../../assets/icons/times-solid.svg";
+// import { ReactComponent as PeopleIcon } from "../../assets/icons/user-circle-solid.svg";
+// import { ReactComponent as XIcon } from "../../assets/icons/times-solid.svg";
 
 import "./page-dropdown.styles.scss";
 

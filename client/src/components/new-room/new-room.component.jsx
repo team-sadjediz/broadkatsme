@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { auth } from "../../firebase/firebase.utils";
+// import { auth } from "../../firebase/firebase.utils";
 
 // redux:
 import { connect } from "react-redux";
@@ -8,11 +8,6 @@ import { connect } from "react-redux";
 // components:
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
-
-// icons:
-import { ReactComponent as LeftArrowIcon } from "../../assets/icons/caret-left-solid.svg";
-import { ReactComponent as RightArrowIcon } from "../../assets/icons/caret-right-solid.svg";
-import { ReactComponent as PlusIcon } from "../../assets/icons/plus-solid.svg";
 
 import "./new-room.style.scss";
 

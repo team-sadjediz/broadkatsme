@@ -89,6 +89,12 @@
         border: none;
         border-radius: 2px;
 
+        outline: none;
+
+        &:focus {
+          box-shadow: $default_box_shadow;
+        }
+
         option {
           font-family: "Karla", sans-serif;
           font-size: 1em;
