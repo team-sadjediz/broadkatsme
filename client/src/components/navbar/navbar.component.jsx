@@ -1,14 +1,13 @@
-import React, { useReducer } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { auth } from "../../firebase/firebase.utils";
+// import { auth } from "../../firebase/firebase.utils";
 
 // components:
 import CircleBtn from "../circle-btn/circle-btn.component";
 import Poppity from "../poppity/poppity.component";
 import NewRoom from "../new-room/new-room.component";
 import PageDropdown from "../page-dropdown/page-dropdown.component";
-import LoginRegisterPanel from "../login-register-panel/login-register-panel.component";
 
 // icons:
 import { ReactComponent as NineDotIcon } from "../../assets/icons/nine-dots-solid.svg";
@@ -59,7 +58,7 @@ const NavBar = ({ currentUser }) => (
       <Link to="/search">
         <CircleBtn className="room-nav-btn search-btn" icon={<SearchIcon />} />
       </Link>
-      <Poppity arrowGap="58" alignArrow="center" content={<NewRoom/>}>
+      <Poppity alignArrow="center" content={<NewRoom/>}>
         <CircleBtn
           className="room-nav-btn create-room-btn"
           icon={<PlusIcon />}
@@ -80,17 +79,9 @@ const NavBar = ({ currentUser }) => (
 
     {/* SITE NAV */}
     <div className="site-nav">
-      <Poppity arrowGap="58" alignArrow="right" content={<PageDropdown />}>
-        {/* <CircleBtn className="more-pages-btn" icon={<BarsIcon />} /> */}
+      <Poppity btnAction="hover" alignArrow="right" content={<PageDropdown />}>
         <CircleBtn className="" icon={<BarsIcon />} />
       </Poppity>
-
-      {/* <CircleBtn className="user-settings-btn" icon={<PeopleIcon />} />
-      <CircleBtn
-        className="logout-btn"
-        icon={<XIcon />}
-        onClick={() => auth.signOut()}
-      /> */}
     </div>
   </div>
 );

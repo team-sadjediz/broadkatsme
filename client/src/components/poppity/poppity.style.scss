@@ -29,20 +29,20 @@
 
     .dropdown-container {
       margin-top: 0.5em;
+
       box-shadow: $strong_box_shadow;
+      border-top: 8px solid $highlight1;
 
       position: absolute;
       box-sizing: border-box;
-      border-top: 8px solid $highlight1;
+
+      background: $white;
       width: auto;
       height: auto;
-      background: $white;
+      
       top: 10px;
-      // box-shadow: 4px 4px 0 0 $black5;
-      // box-shadow: 5px 5px 1000px 500px $black5;
-
       z-index: 10;
-      border-radius: 2px;
+      border-radius: 3px;
     }
 
     .align-center {

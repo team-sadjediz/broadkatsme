@@ -1,37 +1,24 @@
 // naming convention:
 // with underscore "_" because its easier to double click and delete and is more readable
 // if you have multiple of the same color call it green1, green2, green3, etc
-
-// background gradient (temporary; will not be used later on)
+///////////////////////////////////////////////////////////////
+// EXPERIMENTAL COLORS HERE (put all new colors here):
+///////////////////////////////////////////////////////////////
 $green-main: #50d19e;
 $green_main: #50d19e;
-$black-main: #353744;
-
-$black: #000000;
-$black-thunder: #231f20; //black-thunder
-
-$gray: #353c4a;
-$gray-nobel: #b7b7b7; //gray-nobel
-$gray-alto: #d9d9d9; //gray-alto
-$gray-jaguar: #26262b;
-$white-wildsand: #f5f5f5; //wild sand
 
 $red: #bf616a;
-$red-cinnabar: #e9524a; //vibrant
+$red-cinnabar: #e9524a;
 
 $yellow: #ebcb8b;
-$yellow-kournikova: #ffe96f; //vibrant
+$yellow-kournikova: #ffe96f;
 
 $green: #a3be8c;
-$green-shamrock: #50d19e; //vibrant
+$green-shamrock: #50d19e;
 
-/////////////////////////////////////////////////////////////////////////////////////////
-$lg_tan: linear-gradient(135deg, rgba(195,173,151,1) 0%, rgba(148,121,95,1) 100%);
-$lg_blue: linear-gradient(45deg, rgb(93, 105, 136) 20%, rgba(107,144,187,1) 80%);
-// $lg_blue: linear-gradient(45deg, #a3c8ff 20%, rgba(107,144,187,1) 80%);
-
-$lg_lightblue: linear-gradient(45deg, #c7ddfd 20%, #d7f9e7 80%);
-
+///////////////////////////////////////////////////////////////
+// CURRENT COLOR PALETTE HERE:
+///////////////////////////////////////////////////////////////
 $french_laundry_blue: #3a4660;
 $comfortably_tan: #c9af98;
 $peachy_kreme: #ed8a63;
@@ -39,47 +26,51 @@ $brown_bonnet: #845007;
 $soft_red: #d44f4f;
 // $soft_red: #f04747;
 
-
-$white: #f6f6f6; // prefer a white thats a tint darker
+///////////////////////////////////////////////////////////////
+// GRAYS, WHITES, BLACKS HERE:
+///////////////////////////////////////////////////////////////
 $white: #f2f3f0;
-$light_gray: rgba(0, 0, 0, 0.10);
-// $white: #fff8ef;
+$white-wildsand: #f5f5f5; //wild sand
+$light_gray: rgba(0, 0, 0, 0.1);
+$black: #000000;
+$black-thunder: #231f20; //black-thunder
+$gray: #353c4a;
+$gray-nobel: #b7b7b7; //gray-nobel
+$gray-alto: #d9d9d9; //gray-alto
+$gray-jaguar: #26262b;
 
-/////////////////////////////////////////////////////////////////////////////////////////
-
-$bg_gradient: linear-gradient(
-  70deg,
-  rgba(143, 185, 168, 1) 0%,
-  rgba(118, 93, 105, 1) 100%
+///////////////////////////////////////////////////////////////
+// LINEAR GRADIENTS HERE:
+///////////////////////////////////////////////////////////////
+$lg_tan: linear-gradient(
+  135deg,
+  rgba(195, 173, 151, 1) 0%,
+  rgba(148, 121, 95, 1) 100%
 );
+$lg_blue: linear-gradient(
+  45deg,
+  rgb(93, 105, 136) 20%,
+  rgba(107, 144, 187, 1) 80%
+);
+// $lg_blue: linear-gradient(45deg, #a3c8ff 20%, rgba(107,144,187,1) 80%);
+$lg_lightblue: linear-gradient(45deg, #c7ddfd 20%, #d7f9e7 80%);
+$lg_red: linear-gradient(60deg, #d44f4f 20%, #ec5353 80%);
 
+///////////////////////////////////////////////////////////////
+// DROP SHADOWS HERE:
+///////////////////////////////////////////////////////////////
+$light_box_shadow: 0 0 5px #c5c5c5;
+$default_box_shadow: 0 0 5px #6b6b6b;
+$strong_box_shadow: 0 0 5px #414141;
 
-// box shadow
-$default_box_shadow: 0 0 5px rgb(107, 107, 107);
-$strong_box_shadow: 0 0 5px rgb(65, 65, 65);
-
-
-// TRY TO USE THESE:
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+//////// USE THESE VARIABLES INSIDE YOUR COMPONENTS ///////////
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
 $bg_color: $lg_blue;
 $highlight1: $french_laundry_blue;
 $highlight2: $soft_red;
+// $highlight3: $; // room for ONE more color :)
 $foreground: $white;
-
-
-// default colors for the circle-btn component
-$circle_btn_bg_color: $french_laundry_blue;
-$circle_btn_hover_color: $soft_red;
-$circle_btn_icon_color: $white;
-
-//default colors for the register component
-$lr_color: #2e2e31;
-
-// default colors for the component colors
-$more_pages_btn_color: #50d19e;
-$user_settings_btn_color: #ffe96f;
-$logout_btn_color: #e9524a;
-$btngradient: linear-gradient(
-  60deg,
-  rgb(0, 255, 153) 0%,
-  rgb(5, 228, 161) 100%
-);
+///////////////////////////////////////////////////////////////
