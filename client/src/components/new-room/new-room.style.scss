@@ -30,7 +30,7 @@
   .header {
     grid-area: header;
 
-    background-color: $navbar_color;
+    background-color: $foreground;
     height: 2em;
 
     display: flex;
@@ -38,7 +38,6 @@
     align-items: center;
 
     font-weight: bold;
-    // color: white;
     font-size: 18px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -50,13 +49,13 @@
 
   .tags-container {
     grid-area: tags;
-    background-color: $navbar_color;
+    background-color: $foreground;
     @include font;
   }
 
   .settings {
     grid-area: privacy;
-    background-color: $navbar_color;
+    background-color: $foreground;
 
     @include font;
 
@@ -97,7 +96,7 @@
 
   .settings-room-type {
     grid-area: type;
-    background-color: $navbar_color;
+    background-color: $foreground;
     @include font;
   }
 

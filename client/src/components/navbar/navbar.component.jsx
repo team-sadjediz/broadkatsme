@@ -15,8 +15,7 @@ import { ReactComponent as NineDotIcon } from "../../assets/icons/nine-dots-soli
 import { ReactComponent as SearchIcon } from "../../assets/icons/search-solid.svg";
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus-solid.svg";
 import { ReactComponent as BarsIcon } from "../../assets/icons/bars-solid.svg";
-import { ReactComponent as PeopleIcon } from "../../assets/icons/user-circle-solid.svg";
-import { ReactComponent as XIcon } from "../../assets/icons/times-solid.svg";
+
 
 import "./navbar.style.scss";
 

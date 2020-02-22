@@ -20,7 +20,8 @@
   margin-top: 1em;
 
   .form-input {
-    background-color: rgb(207, 207, 207);
+    
+    background: $light_gray;
     height: 2em;
     width: 100%;
     box-sizing: border-box;

@@ -102,26 +102,6 @@ class NewRoom extends React.Component {
             label="privacy"
             required
           />
-          {/* 
-          <div className="tags-container gap">Add Tags</div>
-          <div className="toggle-container">
-            <PlusIcon />
-            <div className="values">nsfw</div>
-          </div>
-
-          <div className="settings gap">Privacy</div>
-          <div className="toggle-container">
-            <LeftArrowIcon />
-            <div className="values">Private</div>
-            <RightArrowIcon />
-          </div>
-
-          <div className="settings gap">Room Type</div>
-          <div className="toggle-container">
-            <LeftArrowIcon />
-            <div className="values">Theatre</div>
-            <RightArrowIcon />
-          </div> */}
 
           <CustomButton className="new-room-btn" type="submit">
             Create Room
