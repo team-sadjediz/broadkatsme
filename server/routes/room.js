@@ -12,9 +12,7 @@ router.get("/findroom", async function(req, res) {
   await Room.findById(roomID, function(error, room) {
     console.log(JSON.stringify(room));
     res.json(room);
-    // res.send(JSON.stringify(room));
   });
-  // res.send("Room info returned");
 });
 
 router.post("/createroom", async function(req, res) {
