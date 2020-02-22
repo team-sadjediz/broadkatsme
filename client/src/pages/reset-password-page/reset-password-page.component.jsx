@@ -8,11 +8,5 @@ const ResetPasswordPage = () => (
     <ResetPassword />
   </div>
 );
-let roomID = req.query.roomID;
-console.log(roomID);
-await Room.findById(roomID, function(error, room) {
-  console.log(JSON.stringify(room));
-  res.json(room);
-});
 
 export default ResetPasswordPage;
