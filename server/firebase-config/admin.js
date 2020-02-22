@@ -10,7 +10,7 @@ admin.initializeApp({
     private_key:
       // Heroku Deployment - Uncomment for heroku deployment!
       process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
-    // || config.FIREBASE_PRIVATE_KEY,
+    // config.FIREBASE_PRIVATE_KEY,
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL
     //  || config.FIREBASE_CLIENT_EMAIL
   }),

@@ -11,11 +11,11 @@ aws.config.update({
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   // || config.AWS_SECRET_ACCESS_KEY,
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  // || config.AWS_ACCESS_KEY_ID,
+  //  || config.AWS_ACCESS_KEY_ID,
   Bucket: process.env.AWS_BUCKET,
-  // || config.AWS_BUCKET,
+  //  || config.AWS_BUCKET,
   region: process.env.AWS_REGION
-  // || config.AWS_REGION
+  //  || config.AWS_REGION
 });
 
 const s3 = new aws.S3({
