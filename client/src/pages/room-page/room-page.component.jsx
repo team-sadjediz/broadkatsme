@@ -36,11 +36,16 @@ class RoomPage extends Component {
     console.log(roomID);
 
     await axios
-      //   .get("http://broadkatsme.herokuapp.com/api/room/findroom", roomID)
-      .get("http://localhost:5000/api/room/findroom", {
+      .get("http://broadkatsme.herokuapp.com/api/room/findroom", {
         params: roomID
       })
-      .then(res => this.fetchData(res.data))
+      //   .get("http://localhost:5000/api/room/findroom", {
+      //     params: roomID
+      //   })
+      .then(res =>
+        // this.fetchData(res.data)
+        console.log(res.data)
+      )
       .catch(error => {
         console.error(error);
       });
