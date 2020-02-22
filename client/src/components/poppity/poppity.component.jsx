@@ -1,6 +1,8 @@
 import React from "react";
 
 import "./poppity.style.scss";
+import { ReactComponent as CaretUp } from "../../assets/icons/caret-up-solid-flush.svg";
+
 
 // const Poppity = ({ children, arrowGap = 0, alignArrow }) => (
 
@@ -38,19 +40,17 @@ class Poppity extends React.Component {
     console.log(this.props.content);
     return (
       <div className="poppity-container">
-        {/* <div className={`shadow ${this.state.enabled ? "" : "disabled"}`}></div> */}
         {newChildWithOnClick}
 
         <div className="pop-up-container">
           <div
             className={`triangle ${this.state.enabled ? "" : "disabled"}`}
-            style={{ top: parseInt(this.props.arrowGap) }}
           >
-            <div className={`dropdown-container ${this.setAlignment()}`}>
+            <CaretUp></CaretUp>
+          </div>
+          <div className={`dropdown-container ${this.setAlignment()} ${this.state.enabled ? "" : "disabled"}`}>
               {this.props.content}
             </div>
-            {/* <div className="shadow"></div> */}
-          </div>
         </div>
       </div>
     );

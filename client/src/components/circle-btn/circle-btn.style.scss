@@ -1,4 +1,6 @@
 @import "../../assets/colors";
+@import "../../assets/dimensions";
+
 
 @mixin circle-properties {
   box-sizing: border-box;
@@ -10,8 +12,8 @@
 
   // circle btn dimensions and color:
   background-color: $circle_btn_bg_color;
-  width: 2em;
-  height: 2em;
+  width: $circle_btn_dimension;
+  height: $circle_btn_dimension;
   border-radius: 50%;
 
   // icon dimensions and color:

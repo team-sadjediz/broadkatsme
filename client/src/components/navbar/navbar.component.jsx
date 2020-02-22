@@ -8,6 +8,7 @@ import CircleBtn from "../circle-btn/circle-btn.component";
 import Poppity from "../poppity/poppity.component";
 import NewRoom from "../new-room/new-room.component";
 import PageDropdown from "../page-dropdown/page-dropdown.component";
+import LoginRegisterPanel from "../login-register-panel/login-register-panel.component";
 
 // icons:
 import { ReactComponent as NineDotIcon } from "../../assets/icons/nine-dots-solid.svg";
@@ -59,7 +60,7 @@ const NavBar = ({ currentUser }) => (
       <Link to="/search">
         <CircleBtn className="room-nav-btn search-btn" icon={<SearchIcon />} />
       </Link>
-      <Poppity arrowGap="58" alignArrow="center" content={<NewRoom />}>
+      <Poppity arrowGap="58" alignArrow="center" content={<NewRoom/>}>
         <CircleBtn
           className="room-nav-btn create-room-btn"
           icon={<PlusIcon />}
