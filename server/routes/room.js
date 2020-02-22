@@ -8,12 +8,12 @@ const Room = require("../models/room.model");
 const Chat = require("../models/chat.model");
 
 router.get("/find-room", async function(req, res) {
-  let room_ID = req.body.room_ID;
+  let roomID = req.query.roomID;
+  console.log(roomID);
   await Room.findById(roomID, function(error, room) {
-    // console.log(JSON.stringify(room));
-    res.send(room);
+    console.log(JSON.stringify(room));
+    res.json(room);
   });
-  // res.send("Room info returned");
 });
 
 router.post("/createroom", async function(req, res) {
