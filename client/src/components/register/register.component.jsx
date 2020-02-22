@@ -28,7 +28,7 @@ class Register extends React.Component {
     console.log(password, confirmPassword);
 
     if (password != confirmPassword) {
-      alert("passwords don't match");
+      alert("Passwords do not match!");
       return;
     }
 
@@ -78,7 +78,7 @@ class Register extends React.Component {
           this.props.className ? this.props.className : ""
         }`}
       >
-        <form className="form-container">
+        <form className="form-container" onSubmit={this.handleSubmit}>
           <FormInput
             className="username-field"
             name="username"
@@ -86,6 +86,7 @@ class Register extends React.Component {
             handleChange={this.handleChange}
             value={this.state.username}
             label="username"
+            maxlength="16"
             required
           />
 
@@ -137,7 +138,6 @@ class Register extends React.Component {
           <CustomButton
             className="register-btn"
             type="submit"
-            onClick={this.handleSubmit}
           >
             register
           </CustomButton>
