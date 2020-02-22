@@ -7,11 +7,13 @@ const singleUpload = upload.single("image");
 const Room = require("../models/room.model");
 
 router.get("/findroom", async function(req, res) {
-  let roomID = req.query.roomID;
-  console.log(roomID);
-  await Room.findById(roomID, function(error, room) {
-    console.log(JSON.stringify(room));
-    res.json(room);
+  router.get("/findroom", async function(req, res) {
+    let roomID = req.query.roomID;
+    console.log(roomID);
+    await Room.findById(roomID, function(error, room) {
+      console.log(JSON.stringify(room));
+      res.json(room);
+    });
   });
 });
 
