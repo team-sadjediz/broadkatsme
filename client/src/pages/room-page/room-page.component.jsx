@@ -3,7 +3,11 @@ import axios from "axios";
 
 import "./room-page.styles.scss";
 
+import Tag from "../../components/tag/tag.component";
+import RoomBar from "../../components/room-bar/room-bar.component";
+
 const initialState = {
+  isMouseMoving: false,
   roomName: "TestRoom",
   roomID: "5e4a4c5a86ae580017aa1a78",
   ownerID: "TestOwnerID",
@@ -36,15 +40,15 @@ class RoomPage extends Component {
     console.log(roomID);
 
     await axios
-      .get("http://broadkatsme.herokuapp.com/api/room/findroom", {
-        params: roomID
-      })
-      //   .get("http://localhost:5000/api/room/findroom", {
+      //   .get("http://broadkatsme.herokuapp.com/api/room/findroom", {
       //     params: roomID
       //   })
-      .then(res =>
-        // this.fetchData(res.data)
-        console.log(res.data)
+      .get("http://localhost:5000/api/room/findroom", {
+        params: roomID
+      })
+      .then(
+        res => this.fetchData(res.data)
+        // console.log(res.data)
       )
       .catch(error => {
         console.error(error);
@@ -86,17 +90,58 @@ class RoomPage extends Component {
     this.setState({ showSettings: !currentSettingsState });
   };
 
+  favoriteRoom = () => {
+    //
+  };
+
   exit = () => {
     const home = "/";
     this.props.history.push(home);
   };
 
+  handleMouseMove = e => {
+    e.preventDefault();
+    this.setState({ isMouseMoving: true });
+    let timer;
+    (() => {
+      clearTimeout(timer);
+      timer = setTimeout(() => this.setState({ isMouseMoving: false }), 3000);
+    })();
+  };
+
   render() {
+    console.log(this.state);
     return (
       <div className="room-page">
-        {/* Room Page & state = {this.state} */}
-        <div className="room-bar">Title, Buttons, etc.</div>
-        <div className="room-screen">Room Screen</div>
+        {/* Room Page {this.state.roomID} {this.state.roomName}
+        {this.state.subscribers[0]} {this.state.tags}
+        {this.state.settings.roomSize} {this.state.settings.access.roomAdmins} */}
+
+        {/* <div>
+          Tag Examples
+          <Tag type="add" />
+          <Tag type="remove" text="Youtube" />
+        </div> */}
+        <div className="room-bar-area">
+          {/* RoomBar w/Dynamic tags */}
+          <RoomBar
+            roomName={this.state.roomName}
+            tags={this.state.tags}
+            toggleSettingsModal={this.toggleSettingsModal}
+            favoriteRoom={this.favoriteRoom}
+          />
+        </div>
+        <div
+          className="room-screen-area"
+          onMouseMove={e => this.handleMouseMove(e)}
+        >
+          Room Screen
+          {this.state.isMouseMoving ? (
+            <div className="temp">VolumeControl</div>
+          ) : (
+            <div className="temp2" />
+          )}
+        </div>
       </div>
     );
   }

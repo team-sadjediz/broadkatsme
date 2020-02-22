@@ -1,2 +1,61 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
+
+.room-page {
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: min-content;
+  grid-template-rows: 2em min-content 2em max-content auto;
+  grid-template-areas:
+    "    .     "
+    " room-bar "
+    "    .     "
+    "room-screen"
+    "     .     ";
+}
+
+.room-bar-area {
+  grid-area: room-bar;
+}
+
+.temp {
+  color: white;
+}
+
+.temp2 {
+  height: 100%;
+  width: 100%;
+  cursor: none;
+}
+
+.room-screen-area {
+  grid-area: room-screen;
+  display: flex;
+  justify-self: center;
+  height: 720px;
+  width: 1280px;
+  //   height: 480px;
+  //   width: 854px;
+  background-color: $french_laundry_blue;
+}
+
+@media (max-width: 1480px) {
+  .room-screen-area {
+    height: 480px;
+    width: 854px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .room-screen-area {
+    height: 360px;
+    width: 640px;
+  }
+}
+
+@media (max-width: 800px) {
+  .room-screen-area {
+    height: 240px;
+    width: 426px;
+  }
+}
