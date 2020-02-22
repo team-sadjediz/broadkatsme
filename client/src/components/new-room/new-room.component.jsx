@@ -24,18 +24,18 @@ class NewRoom extends React.Component {
       room_name: "",
       tags: "",
       room_size: "",
-      privacy: ""
+      privacy: "true"
     };
   }
 
   handleSubmit = event => {
     event.preventDefault();
     const room = {
-      uid: this.props.currentUser.uid,
-      room_name: this.state.room_name,
-      tags: this.state.tags,
-      room_size: this.state.room_size,
-      privacy: this.state.privacy
+      "uid": this.props.currentUser.uid,
+      "room_name": this.state.room_name,
+      "tags": this.state.tags,
+      "room_size": this.state.room_size,
+      "privacy": this.state.privacy
     };
 
     axios
@@ -85,21 +85,14 @@ class NewRoom extends React.Component {
             required
           />
 
-          {/* <FormInput
-            className="room-title"
-            name="privacy"
-            handleChange={this.handleChange}
-            value={this.state.privacy}
-            label="privacy"
-            type="select"
-            required
-          /> */}
-
           <div className="privacy">
-            <label for="privacy">
-              Privacy
-            </label>
-            <select id="privacy">
+            <label for="privacy">Privacy</label>
+            <select
+              value={this.state.privacy}
+              onChange={this.handleChange}
+              name="privacy"
+              id="privacy"
+            >
               <option value="true">Invite Only</option>
               <option value="false">Open Room</option>
             </select>
