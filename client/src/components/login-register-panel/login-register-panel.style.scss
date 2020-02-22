@@ -54,6 +54,7 @@
       @include tab-properties;
       border-radius: 0 5px 0 0;
     }
+    
     .tabselected {
       background-color: $foreground;
       color: $highlight1;
