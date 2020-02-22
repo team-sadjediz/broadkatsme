@@ -8,7 +8,9 @@ import CircleBtn from "../circle-btn/circle-btn.component";
 import Poppity from "../poppity/poppity.component";
 import NewRoom from "../new-room/new-room.component";
 import PageDropdown from "../page-dropdown/page-dropdown.component";
-import LoginRegisterPanel from "../login-register-panel/login-register-panel.component";
+// import LoginRegisterPanel from "../login-register-panel/login-register-panel.component";
+import FormInput from "../form-input/form-input.component";
+
 
 // icons:
 import { ReactComponent as NineDotIcon } from "../../assets/icons/nine-dots-solid.svg";

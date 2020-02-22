@@ -31,6 +31,9 @@ $lg_blue: linear-gradient(45deg, rgb(93, 105, 136) 20%, rgba(107,144,187,1) 80%)
 // $lg_blue: linear-gradient(45deg, #a3c8ff 20%, rgba(107,144,187,1) 80%);
 
 $lg_lightblue: linear-gradient(45deg, #c7ddfd 20%, #d7f9e7 80%);
+// $lg_lightblue: linear-gradient(60deg, #d44f4f 20%, #f04747 80%);
+
+
 
 $french_laundry_blue: #3a4660;
 $comfortably_tan: #c9af98;
@@ -55,8 +58,9 @@ $bg_gradient: linear-gradient(
 
 
 // box shadow
-$default_box_shadow: 0 0 5px rgb(107, 107, 107);
-$strong_box_shadow: 0 0 5px rgb(65, 65, 65);
+$light_box_shadow: 0 0 5px #c5c5c5;
+$default_box_shadow: 0 0 5px #6b6b6b;
+$strong_box_shadow: 0 0 5px #414141;
 
 
 // TRY TO USE THESE:

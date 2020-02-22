@@ -9,7 +9,7 @@ import { ReactComponent as XIcon } from "../../assets/icons/times-solid.svg";
 import "./page-dropdown.styles.scss";
 
 const PageDropdown = ({ className, ...otherProps }) => (
-  <div className={`page-dropdown-container ${className ? className : ""}`} onMouseLeave={otherProps.onMouseLeave}>
+  <div {...otherProps} className={`page-dropdown-container ${className ? className : ""}`}>
     <Link to="/about">
       <div className="text gap">About</div>
     </Link>
