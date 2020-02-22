@@ -1,0 +1,21 @@
+@import "../../assets/_colors.scss";
+@import "../../assets/_dimensions.scss";
+
+.show-hide-field{
+    width: 80%;
+    display: inline-block;
+}
+
+.show-hide-button{
+    display: inline-block;
+    position: absolute;
+    padding: 23px;
+    .circle-btn{
+        background-color: red;
+        svg {
+            path {
+                fill: green;
+              }
+        }
+    }
+}

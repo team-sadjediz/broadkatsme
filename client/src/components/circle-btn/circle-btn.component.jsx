@@ -1,5 +1,7 @@
 import React from "react";
 
+import { ReactComponent as PlayIcon } from "../../assets/icons/play-solid.svg";
+
 import "./circle-btn.style.scss";
 
 const CircleBtn = ({
@@ -21,7 +23,7 @@ const CircleBtn = ({
         return (
           <div className="image-container">
             <img className="image-fill" src={bgImageUrl} alt="" />
-            <div className="hover-overlay"></div>
+        <div className="hover-overlay">{<PlayIcon/>}</div>
           </div>
         );
       }

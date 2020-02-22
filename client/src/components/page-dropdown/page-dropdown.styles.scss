@@ -1,0 +1,40 @@
+@import "../../assets/colors.scss";
+@import "../../assets/dimensions";
+
+.page-dropdown-container {
+  background-color: $navbar_color; // black5
+  width: 9em;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .text {
+    background-color: #36373b; // black6
+    box-sizing: border-box;
+    padding-right: 0.5em;
+
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+    // font-weight: bold;
+    color: $white;
+    font-size: 0.7em;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+    transition-duration: 300ms;
+    transition-property: border-right;
+
+    &:hover {
+      border-right: 3em solid $highlight1;
+    }
+  }
+
+  .gap {
+    margin-bottom: 0.5em;
+  }
+}

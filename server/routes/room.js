@@ -16,7 +16,9 @@ router.get("/find-room", async function(req, res) {
   // res.send("Room info returned");
 });
 
-router.post("/create-room", async function(req, res) {
+router.post("/createroom", async function(req, res) {
+  // let params = json.stringify(req.body);
+
   let name = req.body.room_name;
   let owner_ID,
     del = req.body.uid;
@@ -27,8 +29,25 @@ router.post("/create-room", async function(req, res) {
   let tags = req.body.tags;
   let room_size = req.body.room_size;
   let private = req.body.privacy;
+  // access
+  let del = req.body.uid;
+  let room_admins = [req.body.uid];
+  let operator = [req.body.uid];
+  let invitation = [req.body.uid];
   let banned = [];
   // build models to push
+
+  // let name = params.room_name;
+  // let owner_ID,
+  //   del = params.uid;
+  // let subscribers,
+  //   room_admins,
+  //   operator,
+  //   invitation = [params.uid];
+  // let tags = params.tags;
+  // let room_size = params.room_size;
+  // let private = params.privacy;
+  // let banned = [];
 
   let new_room = new Room({
     name: name,
