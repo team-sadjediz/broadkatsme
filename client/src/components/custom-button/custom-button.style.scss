@@ -2,8 +2,7 @@
 @import "../../assets/_dimensions.scss";
 
 .custom-button {
-  background-color: $french_laundry_blue;
-  // background: $lg_lightblue;
+  background-color: $highlight1;
 
   min-width: 5em;
   width: auto;
@@ -26,7 +25,7 @@
   border-radius: $edge_radius;
   border-radius: 3em;
 
-  box-shadow: $default_box_shadow;
+  // box-shadow: $default_box_shadow;
   // box-shadow: $strong_box_shadow;
 
   border: none;
@@ -40,8 +39,6 @@
   }
 
   &:hover {
-    // box-shadow: inset 0 -5px 0 0 $highlight2;
-    background: $highlight2;
-    // color: black;
+    background-color: $highlight2;
   }
 }

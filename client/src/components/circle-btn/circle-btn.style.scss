@@ -11,7 +11,7 @@
   align-items: center;
 
   // circle btn dimensions and color:
-  background-color: $circle_btn_bg_color;
+  background-color: $highlight1;
   width: $circle_btn_dimension;
   height: $circle_btn_dimension;
   border-radius: 50%;
@@ -21,14 +21,14 @@
     width: 0.7em;
     height: auto;
     path {
-      fill: $circle_btn_icon_color;
+      fill: $white;
     }
   }
 }
 
 @mixin hover-animation {
   &:hover {
-    background-color: $circle_btn_hover_color;
+    background-color: $highlight2;
     // opacity: 50%;
     // border: 3px solid rgb(255, 255, 255);
   }

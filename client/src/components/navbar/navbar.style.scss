@@ -85,7 +85,7 @@
         }
       }
       &:hover {
-        background-color: $circle_btn_hover_color;
+        background-color: $highlight2;
         svg {
           path {
             fill: $white;
@@ -112,27 +112,5 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-
-    .more-pages-btn {
-      background-color: $more_pages_btn_color;
-    }
-
-    .user-settings-btn {
-      background-color: $user_settings_btn_color;
-    }
-
-    .logout-btn {
-      background-color: $logout_btn_color;
-    }
-
-    .more-pages-btn,
-    .user-settings-btn,
-    .logout-btn {
-      margin: 0 0.15em;
-
-      &:hover {
-        opacity: 100%;
-      }
-    }
   }
 }
