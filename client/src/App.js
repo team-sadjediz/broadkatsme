@@ -8,6 +8,8 @@ import { setCurrentUser } from "./redux/user/user.actions";
 
 // components:
 import NavBar from "./components/navbar/navbar.component";
+import PersistentDrawerLeft from "./components/custom-drawer/customer-drawer.component";
+// import Drawer from "@material-ui/core/Drawer";
 
 // pages:
 import LoginRegisterPage from "./pages/login-register-page/login-register-page.component";
@@ -41,14 +43,26 @@ class App extends Component {
         {this.props.currentUser ? (
           <BrowserRouter>
             <NavBar />
-            <Switch>
-              <Route exact path="/login" render={() => this.props.currentUser ? (<Redirect to="/"/>) : (<LoginRegisterPage/>)} />
-              <Route path="/lobby" component={LobbyPage} />
-              <Route path="/room" component={RoomPage} />
-              <Route path="/about" component={AboutPage} />
-              <Route path="/contact" component={ContactPage} />
-              <Route path="/codeofconduct" component={CodeOfConductPage} />
-            </Switch>
+            <PersistentDrawerLeft>
+              <Switch>
+                <Route
+                  exact
+                  path="/login"
+                  render={() =>
+                    this.props.currentUser ? (
+                      <Redirect to="/" />
+                    ) : (
+                      <LoginRegisterPage />
+                    )
+                  }
+                />
+                <Route path="/lobby" component={LobbyPage} />
+                <Route path="/room" component={RoomPage} />
+                <Route path="/about" component={AboutPage} />
+                <Route path="/contact" component={ContactPage} />
+                <Route path="/codeofconduct" component={CodeOfConductPage} />
+              </Switch>
+            </PersistentDrawerLeft>
           </BrowserRouter>
         ) : (
           <BrowserRouter>
