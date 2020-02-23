@@ -26,11 +26,11 @@ class NewRoom extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
     const room = {
-      "uid": this.props.currentUser.uid,
-      "room_name": this.state.room_name,
-      "tags": this.state.tags,
-      "room_size": this.state.room_size,
-      "privacy": this.state.privacy
+      uid: this.props.currentUser.uid,
+      room_name: this.state.room_name,
+      tags: this.state.tags,
+      room_size: this.state.room_size,
+      privacy: this.state.privacy
     };
 
     axios

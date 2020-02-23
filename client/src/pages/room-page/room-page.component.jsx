@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 
+import { connect } from "react-redux";
+
 import "./room-page.styles.scss";
 
 import Tag from "../../components/tag/tag.component";
@@ -100,7 +102,7 @@ class RoomPage extends Component {
     this.setState({ showSettings: !currentSettingsState });
   };
 
-  favoriteRoom = () => {
+  favoriteRoom = e => {
     //
   };
 
@@ -108,6 +110,8 @@ class RoomPage extends Component {
     const home = "/";
     this.props.history.push(home);
   };
+
+  favoriteRoom = e => {};
 
   handleMouseMove = e => {
     e.preventDefault();
@@ -123,6 +127,7 @@ class RoomPage extends Component {
     console.log(this.state);
     return (
       <div className="room-page">
+        {this.props.currentUser.uid}
         {/* Room Page {this.state.roomID} {this.state.roomName}
         {this.state.subscribers[0]} {this.state.tags}
         {this.state.settings.roomSize} {this.state.settings.access.roomAdmins} */}
@@ -161,4 +166,8 @@ class RoomPage extends Component {
   }
 }
 
-export default RoomPage;
+const mapStateToProps = state => ({
+  currentUser: state.user.currentUser
+});
+
+export default connect(mapStateToProps)(RoomPage);
