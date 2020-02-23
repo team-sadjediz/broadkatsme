@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 
 import "./tag.style.scss";
 
@@ -19,14 +20,25 @@ class Tag extends Component {
 
   addOnClick = e => {
     e.preventDefault();
-    console.log("added");
-    return "Add";
+    let tag = this.state.input;
+    axios
+      .put("http://localhost:5000/api/room/add-tags", tag)
+      .then(res => console.log(res))
+      .catch(error => console.error(error));
+    // console.log("added");
+    // return "Add";
     //add to db
   };
 
-  removeOnClick = text => {
-    console.log("removed");
-    return "Remove";
+  removeOnClick = e => {
+    e.preventDefault();
+    let tag = this.props.text;
+    axios
+      .put("http://localhost:5000/api/room/remove-tags", tag)
+      .then(res => console.log(res))
+      .catch(error => console.error(error));
+    // console.log("removed");
+    // return "Remove";
     //remove from db
   };
 
@@ -53,6 +65,7 @@ class Tag extends Component {
               type="text"
               maxlength="8"
               value={this.state.input}
+              required
               onChange={this.handleChange}
             ></input>
           </form>
