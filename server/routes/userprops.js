@@ -48,4 +48,15 @@ router.put("/new-notification", async function(req, res) {
     .catch(error => res.status(400).send("New notification failed."));
 });
 
+router.put("/delete-notification", async function(req, res) {
+  let uid = req.body.uid;
+  let nid = req.body.nid;
+  await UserProps.findOneAndUpdate(
+    { user_ID: uid },
+    { $pull: { notifications: { _id: nid } } }
+  )
+    .then(document => res.send(document))
+    .catch(error => res.status(400).send("Delete notification failed."));
+});
+
 module.exports = router;
