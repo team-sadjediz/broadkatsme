@@ -1,2 +1,97 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
+
+.bigger-container{
+  display: flex;
+  flex-direction: row;
+}
+
+//To Do: Media
+.container{
+    order: 2;
+    text-align: center;
+    position: relative;
+    // overflow-x: hidden;
+    display: grid;
+    grid-template-columns: 1fr 4.5fr 1fr;
+    grid-template-rows: 80px 300px 600px;
+    // grid-template-columns: fit-content;
+    // grid-template-rows: 1fr 2fr 1fr;
+    background-color: $blackdark;
+    grid-template-areas:
+      ". active-header ."
+      "back-btn active next-btn"
+      ". featured .";
+}
+
+.active-container {
+  overflow-x: hidden;
+  overflow-y: hidden;
+  position: relative;
+  grid-area: active;
+  padding-top: 20px;
+  margin: 0;
+}
+
+.featured-container {
+    grid-area: featured;
+    overflow: hidden;
+}
+
+p{
+    padding: 0px;
+    margin: 0;
+}
+
+.next-btn{
+    grid-area: next-btn;
+    margin: auto;
+    width: 80px;
+    height: 90px;
+    padding-bottom: 60px;
+}
+
+.back-btn{
+    grid-area: back-btn;
+    margin: auto;
+    width: 80px;
+    height: 90px;
+    padding-bottom: 60px;
+}
+
+.button {
+    float: left;
+}
+
+.title {
+    text-align: left;
+    vertical-align: text-bottom;
+    padding-left: 30px;
+    margin: 0;
+}
+
+.header {
+    text-align: left;
+    vertical-align: text-bottom;
+    padding-left: 30px;
+    font-size: 30px;
+    font-weight: lighter;
+    color: $greenmain;
+    margin: 0;
+    border-bottom: 5px solid $greenmain;
+    // font-weight: bold;
+    // font-style: italic;
+}
+
+#active_header{
+    grid-area: active-header;
+    margin: 0;
+    padding-top: 20px;
+}
+
+#featured_header{
+    grid-area: featured-header;
+    margin: 0;
+
+}
+
