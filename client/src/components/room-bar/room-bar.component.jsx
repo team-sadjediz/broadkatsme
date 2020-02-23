@@ -26,7 +26,11 @@ class RoomBar extends Component {
 
     let options = (
       <div className="more-buttons">
-        <CircleBtn onClick={this.props.favoriteRoom} icon={<FavoriteIcon />} />
+        <CircleBtn
+          className={this.props.isFavorited ? "active-btn" : ""}
+          onClick={this.props.favoriteRoom}
+          icon={<FavoriteIcon />}
+        />
         <CircleBtn
           onClick={this.props.toggleSettingsModal}
           icon={<SettingsIcon />}
