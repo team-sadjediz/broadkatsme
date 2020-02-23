@@ -8,6 +8,7 @@ import RoomBar from "../../components/room-bar/room-bar.component";
 
 const initialState = {
   isMouseMoving: false,
+  image: null,
   roomName: "TestRoom",
   roomID: "5e4a4c5a86ae580017aa1a78",
   ownerID: "TestOwnerID",
@@ -81,6 +82,15 @@ class RoomPage extends Component {
     console.log(this.state);
   };
 
+  fetchPic = url => {
+    axios
+      .get(
+        "http://localhost:5000/api/room/get-thumbnail?thumbnail_url=default1.png"
+      )
+      .then(res => this.setState({ image: res }))
+      .catch(error => console.log(error));
+  };
+
   closeInitialModal = () => {
     this.setState({ showInitial: false });
   };
@@ -141,6 +151,10 @@ class RoomPage extends Component {
           ) : (
             <div className="temp2" />
           )}
+        </div>
+        <div onClick={this.fetchPic}>
+          stupid
+          {this.state.image}
         </div>
       </div>
     );
