@@ -4,9 +4,10 @@ const mongoose = require("mongoose");
 const UserProps = new mongoose.Schema({
   user_ID: String,
   friends: [String],
-  owned_rooms: [String],
-  subscribed_rooms: [String],
-  favorited_rooms: [String],
+  owned_rooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
+  // subscribed_rooms: [String],
+  subscribed_rooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
+  favorited_rooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
   notifications: [{ title: String, message: String }]
 });
 

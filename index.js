@@ -14,6 +14,7 @@ const bodyParser = require("body-parser");
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // app.use(express.urlencoded());
 // app.use(express.json());
@@ -27,9 +28,12 @@ app.use(express.static(path.join(__dirname, "client/build")));
 
 const home = require("./server/routes/home");
 const userProfile = require("./server/routes/userprofile");
+const userProps = require("./server/routes/userprops");
 const register = require("./server/routes/register");
 const room = require("./server/routes/room");
 const search = require("./server/routes/search");
+const roomSettings = require("./server/routes/roomsettings");
+const friends = require("./server/routes/friends");
 
 // --------------------------------- D B - C O N N ---------------------------------
 
@@ -81,6 +85,9 @@ app.use("/api/userprofile", userProfile);
 app.use("/api/register", register);
 app.use("/api/room", room);
 app.use("/api/search", search);
+app.use("/api/userprops", userProps);
+app.use("/api/roomsettings", roomSettings);
+app.use("/api/friends", friends);
 
 // --------------------------------- A P P C O N F ---------------------------------
 

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const random = require("mongoose-simple-random");
 
 const Access = new mongoose.Schema({
   delete: String, // Only room owner is allowed to delete a room / remove an operator / kick a subscriber (contains owner ID)
@@ -20,9 +21,12 @@ const Room = new mongoose.Schema({
   //   room_ID: String,
   name: String,
   owner_ID: String,
-  subscriber: [String],
-  tags: [String],
+  thumbnail_url: String,
+  subscriber: [{ type: String }],
+  tags: [{ type: String }],
   settings: Room_Settings
 });
+
+Room.plugin(random);
 
 module.exports = mongoose.model("Room", Room);

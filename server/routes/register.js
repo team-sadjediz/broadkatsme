@@ -14,26 +14,26 @@ router.post("/new-user", async function(req, res) {
   let vpassword = req.body.vpassword;
 
   let user = new User({
-    user_ID: userID,
-    username: username,
-    email: email,
-    password: password,
-    verf_password: vpassword
+    "user_ID": userID,
+    "username": username,
+    "email": email,
+    "password": password,
+    "verf_password": vpassword
   });
   let userProfile = new UserProfile({
-    user_ID: userID,
-    biography: "",
-    tags: [],
-    favorites: { movies: "", music: "", websites: "" },
-    privacy: true
+    "user_ID": userID,
+    "biography": "",
+    "tags": [],
+    "favorites": { movies: "", music: "", websites: "" },
+    "privacy": true
   });
   let userProps = new UserProps({
-    user_ID: userID,
-    friends: [],
-    owned_rooms: [],
-    subscribed_rooms: [],
-    favorited_rooms: [],
-    notifications: []
+    "user_ID": userID,
+    "friends": [],
+    "owned_rooms": [],
+    "subscribed_rooms": [],
+    "favorited_rooms": [],
+    "notifications": []
   });
 
   await user
