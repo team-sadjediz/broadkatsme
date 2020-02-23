@@ -21,6 +21,7 @@ const Room = new mongoose.Schema({
   //   room_ID: String,
   name: String,
   owner_ID: String,
+  thumbnail_url: String,
   subscriber: [{ type: String }],
   tags: [{ type: String }],
   settings: Room_Settings
