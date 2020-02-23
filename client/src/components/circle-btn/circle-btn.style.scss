@@ -1,7 +1,6 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
 
-
 @mixin circle-properties {
   box-sizing: border-box;
   cursor: pointer;
@@ -57,9 +56,10 @@
     width: 100%;
 
     .image-fill {
-      border-radius: 5em;
+      border-radius: 50%;
       height: 100%;
       width: 100%;
+      object-fit: cover;
     }
 
     .hover-overlay {
