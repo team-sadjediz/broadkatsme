@@ -70,6 +70,28 @@ class RoomPage extends Component {
     console.log(this.state);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    let isMouseMoving = this.state.isMouseMoving !== nextState.isMouseMoving;
+    let isFavorited = this.state.isFavorited !== nextState.isFavorited;
+    let roomName = this.state.roomName !== nextState.roomName;
+    let showInitial = this.state.showInitial !== nextState.showInitial;
+    let showSettings = this.state.showSettings !== nextState.showSettings;
+    let subscribers = this.state.subscribers !== nextState.subscribers;
+    let tags = this.state.tags !== nextState.tags;
+    let settings = this.state.settings !== nextState.settings;
+    return (
+      isMouseMoving ||
+      isFavorited ||
+      roomName ||
+      showInitial ||
+      showSettings ||
+      subscribers ||
+      subscribers ||
+      tags ||
+      settings
+    );
+  }
+
   fetchData = roomDetails => {
     this.setState({
       roomName: roomDetails.name,
@@ -80,20 +102,8 @@ class RoomPage extends Component {
       subscribers: roomDetails.subscriber,
       tags: roomDetails.tags,
       settings: roomDetails.settings
-      // the whole thing (but bad take in case we change it in the backend)
-      //   settings: {
-      //     roomSize: roomDetails.settings.room_size,
-      //     private: roomDetails.settings.private,
-      //     access: {
-      //       delete: roomDetails.settings.access.delete,
-      //       roomAdmins: roomDetails.settings.access.roomAdmins,
-      //       operators: roomDetails.settings.access.operator,
-      //       invitations: roomDetails.settings.access.invitation,
-      //       banneds: roomDetails.settings.access.banned
-      //     }
-      //   }
     });
-    console.log(this.state);
+    // console.log(this.state);
   };
 
   closeInitialModal = () => {
@@ -124,6 +134,11 @@ class RoomPage extends Component {
     console.log(this.state);
   };
 
+  onChangeTag = tags => {
+    this.setState(tags);
+    console.log(this.state);
+  };
+
   handleMouseMove = e => {
     e.preventDefault();
     this.setState({ isMouseMoving: true });
@@ -135,26 +150,37 @@ class RoomPage extends Component {
   };
 
   render() {
-    // console.log(this.state);
+    console.log(";=;");
     return (
       <div className="room-page">
-        {this.props.currentUser.uid}
+        {/* {this.props.currentUser.uid} */}
         {/* Room Page {this.state.roomID} {this.state.roomName}
         {this.state.subscribers[0]} {this.state.tags}
         {this.state.settings.roomSize} {this.state.settings.access.roomAdmins} */}
         {/* <div>
           Tag Examples
-          <Tag type="add" />
-          <Tag type="remove" text="Youtube" />
+          <Tag
+            type="add"
+            onChangeTag={this.onChangeTag}
+            roomID={this.state.roomID}
+          />
+          <Tag
+            type="remove"
+            onChangeTag={this.onChangeTag}
+            roomID={this.state.roomID}
+            text="chicken"
+          />
         </div> */}
         <div className="room-bar-area">
           {/* RoomBar w/Dynamic tags */}
           <RoomBar
             roomName={this.state.roomName}
+            roomID={this.state.roomID}
             tags={this.state.tags}
             toggleSettingsModal={this.toggleSettingsModal}
             favoriteRoom={this.favoriteRoom}
             isFavorited={this.state.isFavorited}
+            onChangeTag={this.onChangeTag}
           />
         </div>
         <div

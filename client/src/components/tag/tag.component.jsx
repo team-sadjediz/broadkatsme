@@ -8,12 +8,15 @@ import { ReactComponent as MinusIcon } from "../../assets/icons/minus.svg";
 
 // If type = add -> onClick = addOnClick, icon = addIcon
 // If type = remove -> onClick = removeOnClick, icon = removeIcon
-// If type = other -> onClick = onClick, icon = icon
+// REQUIRED PROPS: RoomID, text (if type == remove), onChangeTag
+// onChangeTag is a function from the parent tag (if you remove a tag, you want to setState to change which tags are being displayed)
 class Tag extends Component {
   constructor(props) {
     super(props);
+    console.log(this.props.roomID);
     this.state = {
       type: this.props.type,
+      roomID: this.props.roomID,
       input: null
     };
   }
@@ -21,25 +24,24 @@ class Tag extends Component {
   addOnClick = e => {
     e.preventDefault();
     let tag = this.state.input;
+    let roomID = this.state.roomID;
+    let request = { "new_tag": tag, "room_ID": roomID };
     axios
-      .put("http://localhost:5000/api/room/add-tags", tag)
-      .then(res => console.log(res))
+      .put("http://localhost:5000/api/room/add-tags", request)
+      .then(res => this.props.onChangeTag(res.data))
       .catch(error => console.error(error));
-    // console.log("added");
-    // return "Add";
-    //add to db
   };
 
   removeOnClick = e => {
     e.preventDefault();
     let tag = this.props.text;
+    let roomID = this.state.roomID;
+    let request = { "del_tag": tag, "room_ID": roomID };
+    console.log("removing " + tag);
     axios
-      .put("http://localhost:5000/api/room/remove-tags", tag)
-      .then(res => console.log(res))
+      .put("http://localhost:5000/api/room/remove-tags", request)
+      .then(res => this.props.onChangeTag(res.data))
       .catch(error => console.error(error));
-    // console.log("removed");
-    // return "Remove";
-    //remove from db
   };
 
   handleChange = e => {
@@ -79,10 +81,7 @@ class Tag extends Component {
           }`}
         >
           <div className="tag-properties-minus">
-            <div
-              onClick={this.removeOnClick(this.props.text)}
-              className="tag-button"
-            >
+            <div onClick={this.removeOnClick} className="tag-button">
               <MinusIcon />
             </div>
             <div className="tag-label">{this.props.text}</div>

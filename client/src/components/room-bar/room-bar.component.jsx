@@ -14,6 +14,7 @@ class RoomBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      roomID: this.props.roomID,
       showTags: false,
       showOptions: false
     };
@@ -21,9 +22,17 @@ class RoomBar extends Component {
 
   render() {
     let tags = this.props.tags.map(tag => {
-      return <Tag className="room-tag" type="remove" text={tag} />;
+      return (
+        <Tag
+          className="room-tag"
+          type="remove"
+          text={tag}
+          onChangeTag={this.props.onChangeTag}
+          roomID={this.state.roomID}
+        />
+      );
     });
-
+    console.log(this.state.roomID);
     let options = (
       <div className="more-buttons">
         <CircleBtn
