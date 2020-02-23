@@ -82,15 +82,6 @@ class RoomPage extends Component {
     console.log(this.state);
   };
 
-  fetchPic = url => {
-    axios
-      .get(
-        "http://localhost:5000/api/room/get-thumbnail?thumbnail_url=default1.png"
-      )
-      .then(res => this.setState({ image: res }))
-      .catch(error => console.log(error));
-  };
-
   closeInitialModal = () => {
     this.setState({ showInitial: false });
   };
@@ -120,13 +111,12 @@ class RoomPage extends Component {
   };
 
   render() {
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <div className="room-page">
         {/* Room Page {this.state.roomID} {this.state.roomName}
         {this.state.subscribers[0]} {this.state.tags}
         {this.state.settings.roomSize} {this.state.settings.access.roomAdmins} */}
-
         {/* <div>
           Tag Examples
           <Tag type="add" />
@@ -151,11 +141,12 @@ class RoomPage extends Component {
           ) : (
             <div className="temp2" />
           )}
-        </div>
-        <div onClick={this.fetchPic}>
-          stupid
-          {this.state.image}
-        </div>
+        </div>{" "}
+        <img
+          src={
+            "http://localhost:5000/api/room/get-thumbnail?thumbnail_url=default1.png"
+          }
+        />
       </div>
     );
   }

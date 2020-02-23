@@ -11,7 +11,7 @@ const Log = new mongoose.Schema({
 
 // Under the premise that chats are only available per room, each chat is associated per room ID.
 const Chat = new mongoose.Schema({
-  room_ID: String,
+  room_ID: { type: mongoose.Schema.Types.ObjectId, ref: "Room" },
   log: [{ type: Log }]
 });
 
