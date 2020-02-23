@@ -27,7 +27,7 @@
 .navbar-container {
   box-shadow: 0 0 5px rgb(107, 107, 107);
 
-  background-color: $navbar_color;
+  background-color: $foreground;
   min-width: -moz-fit-content;
   width: 100%;
   padding: 0 0.5em;
@@ -85,7 +85,7 @@
         }
       }
       &:hover {
-        background-color: $circle_btn_hover_color;
+        background-color: $highlight2;
         svg {
           path {
             fill: $white;
@@ -102,22 +102,8 @@
       .room-item-btn {
         box-sizing: border-box;
         margin: 0 0.2em;
-
-        &:hover {
-          // box-shadow: 0 0 5px rgb(138, 138, 138);
-
-        }
       }
-
-
     }
-
-    // this is how you disable the spin animation
-    // .search-btn {
-    //   svg {
-    //     transform: none;
-    //   }
-    // }
   }
 
   .site-nav {
@@ -126,27 +112,5 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-
-    .more-pages-btn {
-      background-color: $more_pages_btn_color;
-    }
-
-    .user-settings-btn {
-      background-color: $user_settings_btn_color;
-    }
-
-    .logout-btn {
-      background-color: $logout_btn_color;
-    }
-
-    .more-pages-btn,
-    .user-settings-btn,
-    .logout-btn {
-      margin: 0 0.15em;
-
-      &:hover {
-        opacity: 100%;
-      }
-    }
   }
 }

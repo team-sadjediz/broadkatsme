@@ -1,10 +1,7 @@
 import React from "react";
 
 import "./poppity.style.scss";
-
-// const Poppity = ({ children, arrowGap = 0, alignArrow }) => (
-
-// );
+import { ReactComponent as CaretUp } from "../../assets/icons/caret-up-solid-flush.svg";
 
 class Poppity extends React.Component {
   constructor(props) {
@@ -20,6 +17,14 @@ class Poppity extends React.Component {
     this.setState({ enabled: !this.state.enabled });
   };
 
+  onMouseEnter = event => {
+    this.setState({ enabled: true });
+  };
+
+  onMouseLeave = event => {
+    this.setState({ enabled: false });
+  };
+
   setAlignment = () => {
     if (this.props.alignArrow === "right") {
       return "align-right";
@@ -31,25 +36,44 @@ class Poppity extends React.Component {
   };
 
   render() {
-    let newChildWithOnClick = React.cloneElement(this.props.children, {
-      onClick: this.togglePoppity
-    });
+    let newChildWithOnClick;
+    let newContent;
+    let btnAction = this.props.btnAction;
 
-    console.log(this.props.content);
+    if (btnAction === "hover") {
+      newChildWithOnClick = React.cloneElement(this.props.children, {
+        onMouseEnter: this.onMouseEnter,
+        onMouseLeave: this.onMouseLeave,
+        onClick: this.togglePoppity
+      });
+
+      newContent = React.cloneElement(this.props.content, {
+        onMouseLeave: this.onMouseLeave
+      });
+    } else {
+      // also handles btnAction="click"
+      newChildWithOnClick = React.cloneElement(this.props.children, {
+        onClick: this.togglePoppity
+      });
+
+      newContent = React.cloneElement(this.props.content, {
+        onClick: this.togglePoppity
+      });
+    }
+    
     return (
       <div className="poppity-container">
-        {/* <div className={`shadow ${this.state.enabled ? "" : "disabled"}`}></div> */}
         {newChildWithOnClick}
-
         <div className="pop-up-container">
+          <div className={`triangle ${this.state.enabled ? "" : "disabled"}`}>
+            <CaretUp />
+          </div>
           <div
-            className={`triangle ${this.state.enabled ? "" : "disabled"}`}
-            style={{ top: parseInt(this.props.arrowGap) }}
+            className={`dropdown-container ${this.setAlignment()} ${
+              this.state.enabled ? "" : "disabled"
+            }`}
           >
-            <div className={`dropdown-container ${this.setAlignment()}`}>
-              {this.props.content}
-            </div>
-            {/* <div className="shadow"></div> */}
+            {newContent}
           </div>
         </div>
       </div>
