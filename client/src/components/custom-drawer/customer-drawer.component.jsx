@@ -17,9 +17,12 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
+
+// icons:
+
 import "./custom-drawer.styles.scss";
 
-const drawerWidth = 240;
+const drawerWidth = 350;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -50,13 +53,11 @@ const useStyles = makeStyles(theme => ({
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
-    zIndex: 0
+    whiteSpace: "nowrap" //
   },
   drawerPaper: {
     width: drawerWidth,
-    position: "static",
-    top: "none",
-    zIndex: 0
+    position: "static"
   },
   drawerHeader: {
     display: "flex",
@@ -65,14 +66,37 @@ const useStyles = makeStyles(theme => ({
     ...theme.mixins.toolbar,
     justifyContent: "flex-end"
   },
+  drawerOpen: {
+    width: drawerWidth,
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen
+    }),
+    position: "static",
+    backgroundColor: "#eceff1"
+  },
+  drawerClose: {
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    }),
+    overflowX: "hidden",
+    width: "3em",
+    // width: theme.spacing(7) + 1,
+    // [theme.breakpoints.up("sm")]: {
+    //   width: theme.spacing(9) + 1
+    // },
+    position: "static",
+    backgroundColor: "#eceff1"
+  },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
-    }),
-    marginLeft: -drawerWidth
+    })
+    // marginLeft: -drawerWidth
   },
   contentShift: {
     transition: theme.transitions.create("margin", {
@@ -96,39 +120,67 @@ const PersistentDrawerLeft = props => {
     setOpen(false);
   };
 
+  const toggleDrawer = () => {
+    setOpen(!open);
+  };
+
   return (
     <div className={classes.root}>
-      {/* <CssBaseline /> */}
-      <IconButton
-        color="inherit"
-        aria-label="open drawer"
-        onClick={handleDrawerOpen}
-        edge="start"
-        className={clsx(classes.menuButton, open && classes.hide)}
+      <CssBaseline />
+      {/* <div
+        className={`half-circle-btn ${open ? "hidden" : ""}`}
+        onClick={toggleDrawer}
       >
-        <MenuIcon />
-      </IconButton>
+        <ChevronRightIcon />
+      </div> */}
+
       <Drawer
         className={classes.drawer}
-        variant="persistent"
+        // variant="persistent"
+        variant="permanent"
         anchor="left"
         open={open}
+        // classes={{
+        //   paper: classes.drawerPaper,
+        //   className: "custom-drawer"
+        // }}
+        className={clsx(classes.drawer, {
+          [classes.drawerOpen]: open,
+          [classes.drawerClose]: !open
+        })}
         classes={{
-          paper: classes.drawerPaper,
-          className: "custom-drawer"
+          paper: clsx({
+            [classes.drawerOpen]: open,
+            [classes.drawerClose]: !open
+          })
         }}
       >
-        <div className={`${classes.toolbar} custom-drawer`} />
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
+        <div className="drawer-header-container">
+          <div className={`drawer-header ${open ? "" : "hidden"}`}>
+            my title
+          </div>
+          <IconButton
+            className={`close-btn outflow-top-right ${
+              open ? "position-right" : "position-center"
+            }`}
+            // className="close-btn position-right"
+            onClick={toggleDrawer}
+          >
+            {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          </IconButton>
+        </div>
+
+        {/* <div onClick={toggleDrawer} className={`${classes.drawerHeader}`}>
+          <IconButton onClick={toggleDrawer} className="close-btn">
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
             ) : (
               <ChevronRightIcon />
             )}
           </IconButton>
-        </div>
-        <Divider />
+        </div> */}
+
+        {/* <Divider /> */}
         <List>
           {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
             <ListItem button key={text}>
@@ -158,35 +210,6 @@ const PersistentDrawerLeft = props => {
         })}
       >
         {props.children}
-        {/* <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
-          dolor purus non enim praesent elementum facilisis leo vel. Risus at
-          ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum
-          quisque non tellus. Convallis convallis tellus id interdum velit
-          laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed
-          adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
-          integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
-          eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
-          quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
-          vivamus at augue. At augue eget arcu dictum varius duis at consectetur
-          lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien
-          faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-          ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-          elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse
-          sed nisi lacus sed viverra tellus. Purus sit amet volutpat consequat
-          mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis
-          risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas
-          purus viverra accumsan in. In hendrerit gravida rutrum quisque non
-          tellus orci ac. Pellentesque nec nam aliquam sem et tortor. Habitant
-          morbi tristique senectus et. Adipiscing elit duis tristique
-          sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography> */}
       </main>
     </div>
   );
