@@ -11,7 +11,6 @@ import ShowHide from "../show-hide-input/show-hide-input.component";
 import { ReactComponent as GoogleLogoColorful } from "../../assets/icons/google-logo-colorful.svg";
 // import { ReactComponent as GoogleLogo } from "../../assets/icons/google-logo-solid.svg";
 
-
 import "./login.style.scss";
 
 class LogIn extends React.Component {
