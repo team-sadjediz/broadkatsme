@@ -6,10 +6,10 @@ const mongoose = require("mongoose");
 
 const bodyParser = require("body-parser");
 
-const admin = require("./server/firebase-config/admin");
+// const admin = require("./server/firebase-config/admin");
 
 // Local Deployment
-const uri = require("./server/mongo-config/uri-credentials");
+// const uri = require("./server/mongo-config/uri-credentials");
 
 const app = express();
 app.use(cors());
@@ -37,10 +37,10 @@ const search = require("./server/routes/search");
 // var to avoid release of private database credentials)
 
 // Heroku Deployment
-// const databaseURI = process.env.MONGODB_URI;
+const databaseURI = process.env.MONGODB_URI;
 
 // Local Deployment
-const databaseURI = process.env.MONGODB_URI || uri;
+// const databaseURI = process.env.MONGODB_URI || uri;
 
 mongoose.connect(databaseURI, { useNewUrlParser: true });
 
@@ -52,25 +52,25 @@ connection.once("open", () => {
 
 // --------------------------------- - - - - - - ---------------------------------
 
-const verifyAuthToken = async function(req, res, next) {
-  const idToken = req.headers.authorization;
+// const verifyAuthToken = async function(req, res, next) {
+//   const idToken = req.headers.authorization;
 
-  try {
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
+//   try {
+//     const decodedToken = await admin.auth().verifyIdToken(idToken);
 
-    if (decodedToken) {
-      // appends uid for usage in other routes
-      req.body.uid = decodedToken.uid;
-      // middleware verification of correct user access to particular routes
-      return next();
-    } else {
-      return res.status(401).send("Unauthorized access.");
-    }
-  } catch (error) {
-    console.log(error);
-    return res.status(401).send("Unauthorized access.");
-  }
-};
+//     if (decodedToken) {
+//       // appends uid for usage in other routes
+//       req.body.uid = decodedToken.uid;
+//       // middleware verification of correct user access to particular routes
+//       return next();
+//     } else {
+//       return res.status(401).send("Unauthorized access.");
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(401).send("Unauthorized access.");
+//   }
+// };
 
 // --------------------------------- A P P C O N F ---------------------------------
 
