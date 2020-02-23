@@ -5,59 +5,58 @@ const UserProps = require("../models/userprops.model");
 
 // ---------------------------------------------------------- IN PROGRESS ----------------------------------------------------------
 
-router.put("/add-subscriber", async function(req, res) {
-  let room_ID = req.body.room_ID;
-  let new_subscriber = req.body.uid;
+router.put("/add-friend", async function(req, res) {
+  let user_ID = req.body.uid;
+  let friend_ID = req.body.friend_uid;
 
-  let room_document, userprops_document;
-  await Room.findOneAndUpdate(
-    { _id: room_ID },
-    { $addToSet: { subscriber: new_subscriber } }
+  let userprops_document, friendprops_document;
+  await UserProps.findOneAndUpdate(
+    { user_ID: user_ID },
+    { $addToSet: { friends: friend_ID } }
   )
-    .then(document => (room_document = document))
-    .catch(error => res.status(400).send("Add subscriber failed."));
+    .then(document => (userprops_document = document))
+    .catch(error => res.status(400).send("Add friend failed."));
 
-  if (room_document) {
+  if (userprops_document) {
     await UserProps.findOneAndUpdate(
-      { user_ID: new_subscriber },
-      { $addToSet: { subscribed_rooms: room_ID } }
+      { user_ID: friend_ID },
+      { $addToSet: { friends: user_ID } }
     )
-      .then(document => (userprops_document = document))
+      .then(document => (friendprops_document = document))
       .catch(error => res.status(400).send("Add subscriber failed."));
   }
   res.send({
-    room_document: room_document,
-    userprops_document: userprops_document
+    userprops_document: userprops_document,
+    friendprops_document: friendprops_document
   });
 });
 
-router.put("/remove-subscriber", async function(req, res) {
-  let room_ID = req.body.room_ID;
-  let del_subscriber = req.body.uid;
+router.put("/remove-friend", async function(req, res) {
+  let user_ID = req.body.uid;
+  let friend_ID = req.body.friend_uid;
 
-  let room_document, userprops_document;
+  let userprops_document, friendprops_document;
   await Room.findOneAndUpdate(
     {
-      _id: room_ID,
-      subscriber: { $in: del_subscriber },
-      owner_ID: { $nin: del_subscriber }
+      user_ID: user_ID,
+      friends: { $in: friend_ID }
     },
-    { $pull: { subscriber: del_subscriber } }
+    { $pull: { friends: friend_ID } }
   )
-    .then(document => (room_document = document))
-    .catch(error => res.status(400).send("Remove subscriber failed."));
+    .then(document => (userprops_document = document))
+    .catch(error => res.status(400).send("Remove friend failed."));
 
-  if (room_document) {
+  if (userprops_document) {
     await UserProps.findOneAndUpdate(
-      { user_ID: del_subscriber, owned_rooms: { $nin: room_ID } },
-      { $pull: { subscribed_rooms: room_ID } }
+      { user_ID: friend_ID, friends: { $nin: user_ID } },
+      { $pull: { friends: user_ID } }
     )
-      .then(document => (userprops_document = document))
+      .then(document => (friendprops_document = document))
       .catch(error => res.status(400).send("Add subscriber failed."));
   }
   res.send({
-    room_document: room_document,
-    userprops_document: userprops_document
+    userprops_document: userprops_document,
+    friendprops_document: friendprops_document
   });
 });
 
