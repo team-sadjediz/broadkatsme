@@ -5,7 +5,7 @@ import { auth } from "../../firebase/firebase.utils";
 // redux:
 import { connect } from "react-redux";
 
-// components: 
+// components:
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
 
@@ -15,7 +15,6 @@ import { ReactComponent as RightArrowIcon } from "../../assets/icons/caret-right
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus-solid.svg";
 
 import "./new-room.style.scss";
-
 
 class NewRoom extends React.Component {
   constructor(props) {
@@ -32,11 +31,11 @@ class NewRoom extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
     const room = {
-      "uid": this.props.currentUser.uid,
-      "room_name": this.state.room_name,
-      "tags": this.state.tags,
-      "room_size": this.state.room_size,
-      "privacy": this.state.privacy
+      uid: this.props.currentUser.uid,
+      room_name: this.state.room_name,
+      tags: this.state.tags,
+      room_size: this.state.room_size,
+      privacy: this.state.privacy
     };
 
     axios
