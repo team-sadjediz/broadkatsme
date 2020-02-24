@@ -120,7 +120,7 @@ class Tag extends Component {
         />
       );
     } else if (this.state.type === "label") {
-      return <Chip className={classes.root} />;
+      return <Chip className={classes.root} label={this.props.text} />;
     }
   }
 }

@@ -212,10 +212,10 @@ class RoomPage extends Component {
             )}
           </div>
           {/* <img
-          src={
-            "http://localhost:5000/api/room/get-thumbnail?thumbnail_url=default1.png"
-          }
-        /> */}
+            src={
+              "http://localhost:5000/api/room/get-thumbnail?thumbnail_url=default1.png"
+            }
+          /> */}
         </div>
       </div>
     );
