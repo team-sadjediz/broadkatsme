@@ -10,8 +10,9 @@ import React, {Component} from "react";
 import Card from "../../components/card/card.component";
 import data from "./data/data.js"
 import axios from "axios";
-import BackArrowIcon from "../../assets/icons/back-arrow.svg";
-import NextArrowIcon from "../../assets/icons/next-arrow.svg";
+import { connect } from "react-redux";
+import {ReactComponent as NextBtn} from "../../assets/icons/caret-right-solid.svg";
+import {ReactComponent as BackBtn} from "../../assets/icons/caret-left-solid.svg";
 
 import "./lobby-page.style.scss";
 
@@ -19,7 +20,7 @@ class LobbyPage extends React.Component{
  constructor(props){
     super(props);
     this.state = {
-    uid: "Hn3YsNVsdqczq7nBxtRQUTtDBzB2",
+    uid: this.props.currentUser.uid,
     properties: []
     }
  }
@@ -62,6 +63,7 @@ class LobbyPage extends React.Component{
             <div className="container">
                 <div className="active-container">
                     <div id='active_header' className='header'>FEATURED ROOMS</div>
+
                     <div className="cards-carousel-wrapper">
                     {
                             this.state.properties.map(property=> 
@@ -73,10 +75,12 @@ class LobbyPage extends React.Component{
                             )
                         }
                     </div>
+
+                    
                 </div>
-                {/* <img className="back-btn" src="https://image.flaticon.com/icons/svg/126/126492.svg" onClick={
-                            () => this.prevProperty()} disabled={this.state.property.index === 0}></img>
-                <img className="next-btn" src="https://image.flaticon.com/icons/svg/126/126490.svg" disabled={this.state.property.index === data.properties.length-3}
+                <BackBtn className="back-btn"/>
+                <NextBtn className="next-btn"/> 
+                {/* <img className="next-btn" src="https://image.flaticon.com/icons/svg/126/126490.svg" disabled={this.state.property.index === data.properties.length-3}
                  onClick={() => this.nextProperty()}></img> */}
                 {/* <button className='back-btn' onClick={() => this.prevProperty()} disabled={property.index === 0}>
                     Prev
@@ -102,5 +106,9 @@ class LobbyPage extends React.Component{
     }
 }
 
+const mapStateToProps = state => ({
+    currentUser: state.user.currentUser
+  });
+  
+export default connect(mapStateToProps)(LobbyPage);
 
-export default LobbyPage;

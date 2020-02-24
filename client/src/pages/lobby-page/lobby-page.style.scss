@@ -13,16 +13,17 @@
     position: relative;
     // overflow-x: hidden;
     display: grid;
-    grid-template-columns: minmax(100%, auto);
-    grid-template-rows: 300px 600px;
+    // grid-template-columns: minmax(100%, auto);
+    grid-template-columns: 1fr 4fr 1fr;
+    grid-template-rows: 400px 600px;
     // grid-template-columns: fit-content;
     // grid-template-rows: 1fr 2fr 1fr;
     // background-color: $french_laundry_blue;
     grid-template-areas:
-      "active"
-      "featured";
+      "back-btn featured next-btn"
+      ". active .";
 
-    .active-container {
+    .featured-container {
         grid-area: active;
         overflow-x: hidden;
         overflow-y: hidden;
@@ -30,10 +31,9 @@
         grid-area: active;
         padding-top: 20px;
         margin: 0;
-        
     }
 
-    .featured-container {
+    .active-container {
         grid-area: featured;
         overflow: hidden;
     }
@@ -43,7 +43,7 @@
         margin: auto;
         width: 80px;
         height: 90px;
-        padding-bottom: 60px;
+        // padding-bottom: 60px;
     }
     
     .back-btn{
@@ -51,7 +51,7 @@
         margin: auto;
         width: 80px;
         height: 90px;
-        padding-bottom: 60px;
+        // padding-bottom: 60px;
     }
     
     .button {
