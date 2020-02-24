@@ -7,7 +7,7 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 import VolumeUpIcon from "@material-ui/icons/VolumeUp";
 import VolumeDownIcon from "@material-ui/icons/VolumeDown";
 import VolumeOffIcon from "@material-ui/icons/VolumeOff";
-import { AutoScaling } from "aws-sdk";
+// import { AutoScaling } from "aws-sdk";
 
 const useStyles = makeStyles({
   root: {

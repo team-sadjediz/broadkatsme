@@ -76,7 +76,7 @@ class RoomPage extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     // console.log(this.state.isMouseMoving);
     // console.log(nextState.isMouseMoving);
-    console.log(this.state.isMouseMoving !== nextState.isMouseMoving);
+    // console.log(this.state.isMouseMoving !== nextState.isMouseMoving);
     let isMouseMoving = this.state.isMouseMoving !== nextState.isMouseMoving;
     let isFavorited = this.state.isFavorited !== nextState.isFavorited;
     let roomName = this.state.roomName !== nextState.roomName;
@@ -141,8 +141,7 @@ class RoomPage extends Component {
   };
 
   onChangeTag = tags => {
-    this.setState(tags);
-    console.log(this.state);
+    this.setState({ tags: tags });
   };
 
   handleMouseMove = e => {
@@ -162,7 +161,6 @@ class RoomPage extends Component {
   };
 
   render() {
-    console.log(";=;");
     return (
       <div className="center">
         <div className="room-page">
