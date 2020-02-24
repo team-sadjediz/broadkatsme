@@ -2,18 +2,18 @@
 @import "../../assets/_dimensions.scss";
 
 .custom-button {
-  background-color: $black-thunder;
-  // background-image: $btngradient;
+  background-color: $highlight1;
+
   min-width: 5em;
   width: auto;
   height: $btn_height;
   padding: 0;
   box-sizing: border-box;
 
-  // font-family: "Open Sans Condensed";
+  font-family: "Karla";
   font-weight: bold;
   color: white;
-  font-size: 0.7em;
+  font-size: 0.8em;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 
@@ -21,23 +21,24 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
+
   border-radius: $edge_radius;
+  border-radius: 3em;
+
+  // box-shadow: $default_box_shadow;
+  // box-shadow: $strong_box_shadow;
 
   border: none;
   cursor: pointer;
 
   transition-duration: 200ms;
-  transition-property: box-shadow;
+  transition-property: background-color;
 
   &:focus {
     outline: 0;
   }
 
   &:hover {
-    // border-bottom: 5px solid $greenmain;
-    // box-shadow: 0 5px 0 0px $greenmain;
-    box-shadow: inset 0 -5px 0 0 $green-main;
-    // background-color: white;
-    // color: black;
+    background-color: $highlight2;
   }
 }

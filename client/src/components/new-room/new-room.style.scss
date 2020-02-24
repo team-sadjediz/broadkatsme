@@ -6,7 +6,7 @@
   justify-content: center;
 
   // font-weight: bold;
-  color: white;
+  color: $highlight1;
   font-size: 15px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -14,18 +14,18 @@
 
 .newroom-container {
   box-sizing: border-box;
-  background-color: $navbar_color;
+  // background-color: $navbar_color;
+  background-color: $foreground;
+
+  // border: 5px solid red;
+  // box-shadow: $default_box_shadow;
+
   width: 15em;
   padding: 1em;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
   .header {
-    grid-area: header;
-
-    background-color: $navbar_color;
+    margin-bottom: 0.5em;
+    background-color: transparent;
     height: 2em;
 
     display: flex;
@@ -33,76 +33,109 @@
     align-items: center;
 
     font-weight: bold;
-    color: white;
     font-size: 18px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
 
-  .room-title {
-    grid-area: title;
-  }
+  .form-container {
+    // width: 100%;
 
-  .tags-container {
-    grid-area: tags;
-    background-color: $navbar_color;
-    @include font;
-  }
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 0.8em;
 
-  .settings {
-    grid-area: privacy;
-    background-color: $navbar_color;
+    grid-template-areas:
+      "room-title"
+      "room-size"
+      "privacy"
+      "new-room-submit-btn";
 
-    @include font;
+    .room-title {
+      grid-area: room-title;
+    }
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
+    .room-size {
+      grid-area: room-size;
+    }
 
-  .toggle-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 1em;
-    svg:nth-child(1) {
-      width: 10px;
-      path {
-        fill: $white;
+    .privacy {
+      grid-area: privacy;
+
+      display: flex;
+      flex-direction: column;
+
+      label {
+        margin-bottom: 4px;
+        text-transform: uppercase;
+
+        font-size: 13px;
+        font-weight: bold;
+        color: $highlight1;
+
+        letter-spacing: 0;
+      }
+
+      select {
+        background-color: $light_gray;
+        height: 2em;
+
+        font-family: "Karla", sans-serif;
+        font-weight: bold;
+        font-size: 0.9em;
+        color: $highlight1;
+
+        padding: 0 0.5em;
+        border: none;
+        border-radius: 2px;
+
+        outline: none;
+
+        &:focus {
+          box-shadow: $default_box_shadow;
+        }
+
+        option {
+          font-family: "Karla", sans-serif;
+          font-size: 1em;
+          font-weight: bold;
+        }
       }
     }
 
-    .values {
-      padding: 0 1em;
-      @include font;
-      font-size: 15px;
-      text-transform: lowercase;
-      font-weight: 100;
-    }
-
-    svg:nth-child(3) {
-      width: 10px;
-      path {
-        fill: $white;
-      }
+    .new-room-btn {
+      grid-area: new-room-submit-btn;
+      width: 100%;
+      margin-top: 1.5em;
     }
   }
 
-  .settings-room-type {
-    grid-area: type;
-    background-color: $navbar_color;
-    @include font;
-  }
+  // .toggle-container {
+  //   display: flex;
+  //   flex-direction: row;
+  //   justify-content: center;
+  //   align-items: center;
+  //   margin-bottom: 1em;
+  //   svg:nth-child(1) {
+  //     width: 10px;
+  //     path {
+  //       fill: $white;
+  //     }
+  //   }
 
-  .new-room-btn {
-    grid-area: btn;
-    width: 100%;
-    margin-top:1.5em;
-  }
+  //   .values {
+  //     padding: 0 1em;
+  //     @include font;
+  //     font-size: 15px;
+  //     text-transform: lowercase;
+  //     font-weight: 100;
+  //   }
 
-  .gap {
-    margin-bottom: 0.5em;
-  }
+  //   svg:nth-child(3) {
+  //     width: 10px;
+  //     path {
+  //       fill: $white;
+  //     }
+  //   }
+  // }
 }

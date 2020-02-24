@@ -6,14 +6,15 @@ const mongoose = require("mongoose");
 
 const bodyParser = require("body-parser");
 
-const admin = require("./server/firebase-config/admin");
+// const admin = require("./server/firebase-config/admin");
 
 // Local Deployment
-// const uri = require("./server/mongo-config/uri-credentials");
+const uri = require("./server/mongo-config/uri-credentials");
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // app.use(express.urlencoded());
 // app.use(express.json());
@@ -27,9 +28,12 @@ app.use(express.static(path.join(__dirname, "client/build")));
 
 const home = require("./server/routes/home");
 const userProfile = require("./server/routes/userprofile");
+const userProps = require("./server/routes/userprops");
 const register = require("./server/routes/register");
 const room = require("./server/routes/room");
 const search = require("./server/routes/search");
+const roomSettings = require("./server/routes/roomsettings");
+const friends = require("./server/routes/friends");
 
 // --------------------------------- D B - C O N N ---------------------------------
 
@@ -37,10 +41,10 @@ const search = require("./server/routes/search");
 // var to avoid release of private database credentials)
 
 // Heroku Deployment
-const databaseURI = process.env.MONGODB_URI;
+// const databaseURI = process.env.MONGODB_URI;
 
 // Local Deployment
-// const databaseURI = process.env.MONGODB_URI || uri;
+const databaseURI = process.env.MONGODB_URI || uri;
 
 mongoose.connect(databaseURI, { useNewUrlParser: true });
 
@@ -52,25 +56,25 @@ connection.once("open", () => {
 
 // --------------------------------- - - - - - - ---------------------------------
 
-const verifyAuthToken = async function(req, res, next) {
-  const idToken = req.headers.authorization;
+// const verifyAuthToken = async function(req, res, next) {
+//   const idToken = req.headers.authorization;
 
-  try {
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
+//   try {
+//     const decodedToken = await admin.auth().verifyIdToken(idToken);
 
-    if (decodedToken) {
-      // appends uid for usage in other routes
-      req.body.uid = decodedToken.uid;
-      // middleware verification of correct user access to particular routes
-      return next();
-    } else {
-      return res.status(401).send("Unauthorized access.");
-    }
-  } catch (error) {
-    console.log(error);
-    return res.status(401).send("Unauthorized access.");
-  }
-};
+//     if (decodedToken) {
+//       // appends uid for usage in other routes
+//       req.body.uid = decodedToken.uid;
+//       // middleware verification of correct user access to particular routes
+//       return next();
+//     } else {
+//       return res.status(401).send("Unauthorized access.");
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(401).send("Unauthorized access.");
+//   }
+// };
 
 // --------------------------------- A P P C O N F ---------------------------------
 
@@ -81,6 +85,9 @@ app.use("/api/userprofile", userProfile);
 app.use("/api/register", register);
 app.use("/api/room", room);
 app.use("/api/search", search);
+app.use("/api/userprops", userProps);
+app.use("/api/roomsettings", roomSettings);
+app.use("/api/friends", friends);
 
 // --------------------------------- A P P C O N F ---------------------------------
 

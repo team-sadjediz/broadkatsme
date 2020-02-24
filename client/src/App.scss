@@ -4,8 +4,8 @@
 
 .App {
   // only one of these work at a time:
-  background-color: #3d3e44;
-  background-image: $bg_gradient;
+  background: $bg_color;
+  // background-image: $bg_gradient;
 
   // our base font styles (subject to change):
   // font-family: "Lato", sans-serif;

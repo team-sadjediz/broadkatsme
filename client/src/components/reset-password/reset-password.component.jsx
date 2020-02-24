@@ -1,9 +1,15 @@
-import React, { Component } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
+<<<<<<< HEAD
 // import axios from "axios";
 import {auth, database} from "../../firebase/firebase.utils";
+=======
+
+>>>>>>> master
 import "./reset-password.style.scss";
 
 // const doPasswordReset = email => ;

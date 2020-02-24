@@ -1,0 +1,75 @@
+@import "../../assets/colors";
+@import "../../assets/dimensions";
+
+.room-bar-btn {
+  background-color: $white;
+  svg {
+    path {
+      fill: $highlight1;
+    }
+  }
+  &:hover {
+    svg {
+      path {
+        fill: $white;
+      }
+    }
+  }
+}
+
+.active-btn {
+  background-color: $highlight2;
+  svg {
+    path {
+      fill: $white;
+    }
+  }
+}
+
+.room-bar {
+  background-color: transparent;
+  display: grid;
+  grid-template-columns: max-content auto auto min-content min-content min-content;
+  grid-template-areas: "name tags . refresh-button more-buttons more-button ";
+  grid-gap: 5px;
+  align-content: center;
+}
+
+.room-name {
+  grid-area: name;
+  text-transform: uppercase;
+  font-size: 2em;
+  font-weight: bold;
+  color: white;
+}
+
+.room-tags {
+  grid-area: tags;
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  align-content: center;
+}
+
+.room-tag {
+  margin: 3px;
+}
+
+.refresh-button {
+  grid-area: refresh-button;
+  align-self: center;
+}
+
+.more-button {
+  grid-area: more-button;
+  align-self: center;
+}
+
+.more-buttons {
+  grid-area: more-buttons;
+  display: grid;
+  grid-template-columns: min-content min-content;
+  grid-template-areas: "favorite-button settings-button";
+  grid-gap: 5px;
+  align-content: center;
+}

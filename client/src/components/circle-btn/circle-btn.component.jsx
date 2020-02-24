@@ -1,5 +1,7 @@
 import React from "react";
 
+import { ReactComponent as PlayIcon } from "../../assets/icons/play-solid.svg";
+
 import "./circle-btn.style.scss";
 
 const CircleBtn = ({
@@ -11,7 +13,11 @@ const CircleBtn = ({
   bgImageUrl,
   ...otherProps
 }) => (
-  <div onClick={onClick} className={`circle-btn ${className ? className : ""}`}>
+  <div
+    onMouseEnter={otherProps.onMouseEnter}
+    onClick={onClick}
+    className={`circle-btn ${className ? className : ""}`}
+  >
     {(() => {
       if (icon) {
         return icon;
@@ -21,7 +27,7 @@ const CircleBtn = ({
         return (
           <div className="image-container">
             <img className="image-fill" src={bgImageUrl} alt="" />
-            <div className="hover-overlay"></div>
+            <div className="hover-overlay">{<PlayIcon />}</div>
           </div>
         );
       }

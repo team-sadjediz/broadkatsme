@@ -1,8 +1,9 @@
+@import "./assets/colors";
 // naming convention:
 // with underscore "_" because its easier to double click and delete and is more readable
 
 @mixin main_font_stack {
   font-family: "Karla", sans-serif;
   font-size: 18px;
-  color: white;
+  color: $french_laundry_blue;
 }

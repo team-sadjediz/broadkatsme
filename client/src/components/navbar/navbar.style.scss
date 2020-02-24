@@ -3,6 +3,7 @@
 
 @media (max-width: 679px) {
   .navbar-container {
+    // background-color: red;
     grid-template-columns:
       minmax(1fr, 3em) minmax(1fr, 3em) minmax(1fr, 3em) minmax(1fr, 3em)
       minmax(1fr, 3em);
@@ -16,13 +17,17 @@
 
 @media (min-width: 680px) {
   .navbar-container {
+    // background-color: blue;
+
     grid-template-columns: 1fr 4fr 1fr;
     grid-template-areas: "logo roomnav sitenav";
   }
 }
 
 .navbar-container {
-  background-color: $navbar_color;
+  box-shadow: 0 0 5px rgb(107, 107, 107);
+
+  background-color: $foreground;
   min-width: -moz-fit-content;
   width: 100%;
   padding: 0 0.5em;
@@ -35,6 +40,33 @@
 
   .logo-section {
     grid-area: logo;
+
+    // temp logo:
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    cursor: pointer;
+
+    p {
+      font-family: "Alatsi";
+      margin: 0 5px 0 0;
+      // font-weight: bold;
+      font-size: 1.2em;
+      text-transform: uppercase;
+      color: $white;
+      letter-spacing: 1px;
+      color: $highlight1;
+    }
+    
+    .circle-btn {
+      background-color: $soft_red;
+      text-transform: uppercase;
+
+      &:hover {
+        background-color: $highlight1;
+      }
+    }
   }
 
   .room-nav {
@@ -44,46 +76,33 @@
     justify-content: center;
     align-items: center;
 
-    .circle-hover {
-      // &:hover {
-      //   background-color: $greenmain;
-      //   * {
-      //     color: $white;
-      //   }
-      // }
-    }
-
     .room-nav-btn {
-      margin: 0 0.15em;
-    }
-
-    .home-btn,
-    .search-btn,
-    .create-room-btn {
+      // margin: 0 0.2em;
       background-color: transparent;
       svg {
         path {
-          fill: $white;
+          fill: $highlight1;
         }
       }
       &:hover {
-        background-color: $circle_btn_hover_color;
+        background-color: $highlight2;
         svg {
           path {
-            fill: $navbar_color;
+            fill: $white;
           }
         }
       }
     }
 
-    // this is how you disable the spin animation
-    // .search-btn {
-    //   svg {
-    //     transform: none;
-    //   }
-    // }
+    .room-list-container {
+      // background-color: red;
+      margin-left: 0.5em;
+      display: flex;
 
-    .create-room-btn {
+      .room-item-btn {
+        box-sizing: border-box;
+        margin: 0 0.2em;
+      }
     }
   }
 
@@ -93,27 +112,5 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-
-    .more-pages-btn {
-      background-color: $more_pages_btn_color;
-    }
-
-    .user-settings-btn {
-      background-color: $user_settings_btn_color;
-    }
-
-    .logout-btn {
-      background-color: $logout_btn_color;
-    }
-
-    .more-pages-btn,
-    .user-settings-btn,
-    .logout-btn {
-      margin: 0 0.15em;
-
-      &:hover {
-        opacity: 80%;
-      }
-    }
   }
 }
