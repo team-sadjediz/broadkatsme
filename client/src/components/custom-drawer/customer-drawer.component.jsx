@@ -39,7 +39,8 @@ const useStyles = makeStyles(theme => ({
     transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
-    })
+    }),
+    zIndex: theme.zIndex.drawer + 1
   },
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -99,8 +100,12 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "#eceff1"
   },
   content: {
+    display: "flex",
+    justifyContent: "center",
+    // alignItems: "center",
     flexGrow: 1,
-    padding: theme.spacing(3),
+    // padding: theme.spacing(3),
+    margin: "1em",
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
@@ -111,8 +116,8 @@ const useStyles = makeStyles(theme => ({
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
-    }),
-    marginLeft: 0
+    })
+    // marginLeft: 0
   }
 }));
 
@@ -141,7 +146,7 @@ const ToggleDrawerButton = withStyles(theme => ({
 const PersistentDrawerLeft = props => {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -164,7 +169,13 @@ const PersistentDrawerLeft = props => {
       >
         <ChevronRightIcon />
       </div> */}
-
+      {/* <AppBar position="fixed" className={classes.appBar}>
+        <Toolbar>
+          <Typography variant="h6" noWrap>
+            Clipped drawer
+          </Typography>
+        </Toolbar>
+      </AppBar> */}
       <Drawer
         className={classes.drawer}
         // variant="persistent"
