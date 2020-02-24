@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 
+import { connect } from "react-redux";
+
 import "./room-page.styles.scss";
 
 import Tag from "../../components/tag/tag.component";
@@ -8,6 +10,8 @@ import RoomBar from "../../components/room-bar/room-bar.component";
 
 const initialState = {
   isMouseMoving: false,
+  image: null,
+  isFavorited: false,
   roomName: "TestRoom",
   roomID: "5e4a4c5a86ae580017aa1a78",
   ownerID: "TestOwnerID",
@@ -53,6 +57,17 @@ class RoomPage extends Component {
       .catch(error => {
         console.error(error);
       });
+
+    await axios
+      .get("http://localhost:5000/api/userprops/is-favorited", {
+        params: {
+          "uid": this.props.currentUser.uid,
+          "roomID": "5e4a4c5a86ae580017aa1a78"
+        }
+      })
+      .then(res => this.setState({ isFavorited: res.data }))
+      .catch(error => console.error(error));
+    console.log(this.state);
   }
 
   fetchData = roomDetails => {
@@ -90,13 +105,23 @@ class RoomPage extends Component {
     this.setState({ showSettings: !currentSettingsState });
   };
 
-  favoriteRoom = () => {
-    //
-  };
-
   exit = () => {
     const home = "/";
     this.props.history.push(home);
+  };
+
+  favoriteRoom = async e => {
+    let request = {
+      "uid": this.props.currentUser.uid,
+      "roomID": this.state.roomID
+    };
+    let response;
+    await axios
+      .put("http://localhost:5000/api/userprops/favorite", request)
+      .then(res => this.setState({ isFavorited: res.data.favorited }))
+      .catch(error => console.error(error));
+
+    console.log(this.state);
   };
 
   handleMouseMove = e => {
@@ -110,13 +135,13 @@ class RoomPage extends Component {
   };
 
   render() {
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <div className="room-page">
+        {this.props.currentUser.uid}
         {/* Room Page {this.state.roomID} {this.state.roomName}
         {this.state.subscribers[0]} {this.state.tags}
         {this.state.settings.roomSize} {this.state.settings.access.roomAdmins} */}
-
         {/* <div>
           Tag Examples
           <Tag type="add" />
@@ -129,6 +154,7 @@ class RoomPage extends Component {
             tags={this.state.tags}
             toggleSettingsModal={this.toggleSettingsModal}
             favoriteRoom={this.favoriteRoom}
+            isFavorited={this.state.isFavorited}
           />
         </div>
         <div
@@ -141,10 +167,19 @@ class RoomPage extends Component {
           ) : (
             <div className="temp2" />
           )}
-        </div>
+        </div>{" "}
+        {/* <img
+          src={
+            "http://localhost:5000/api/room/get-thumbnail?thumbnail_url=default1.png"
+          }
+        /> */}
       </div>
     );
   }
 }
 
-export default RoomPage;
+const mapStateToProps = state => ({
+  currentUser: state.user.currentUser
+});
+
+export default connect(mapStateToProps)(RoomPage);

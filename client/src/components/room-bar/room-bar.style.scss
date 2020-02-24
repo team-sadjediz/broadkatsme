@@ -1,6 +1,15 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
 
+.active-btn {
+  background-color: $white;
+  svg {
+    path {
+      fill: $highlight1;
+    }
+  }
+}
+
 .room-bar {
   background-color: transparent;
   display: grid;

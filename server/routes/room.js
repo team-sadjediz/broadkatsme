@@ -1,55 +1,42 @@
 const express = require("express");
 const router = express.Router();
+const aws = require("aws-sdk");
 
 const upload = require("../services/photo-upload");
 const singleUpload = upload.single("image");
 
 const Room = require("../models/room.model");
+const UserProps = require("../models/userprops.model");
+
+// ---------------------------------------------------------- CREATE / DELETE / FIND ROOMS ----------------------------------------------------------
 
 router.get("/findroom", async function(req, res) {
-  router.get("/findroom", async function(req, res) {
-    let roomID = req.query.roomID;
-    console.log(roomID);
-    await Room.findById(roomID, function(error, room) {
-      console.log(JSON.stringify(room));
-      res.json(room);
-    });
+  let roomID = req.query.roomID;
+  // console.log(roomID);
+  await Room.findById(roomID, function(error, room) {
+    // console.log(JSON.stringify(room));
+    res.json(room);
   });
 });
 
 router.post("/createroom", async function(req, res) {
-  // let params = json.stringify(req.body);
-
   let name = req.body.room_name;
   let owner_ID = req.body.uid;
+  let thumbnail_url = "default1.png";
   let subscribers = [];
   let tags = req.body.tags;
-  // settings
   let room_size = req.body.room_size;
   let private = req.body.privacy;
-  // access
   let del = req.body.uid;
   let room_admins = [req.body.uid];
   let operator = [req.body.uid];
   let invitation = [req.body.uid];
   let banned = [];
-  // build models to push
-
-  // let name = params.room_name;
-  // let owner_ID,
-  //   del = params.uid;
-  // let subscribers,
-  //   room_admins,
-  //   operator,
-  //   invitation = [params.uid];
-  // let tags = params.tags;
-  // let room_size = params.room_size;
-  // let private = params.privacy;
-  // let banned = [];
 
   let new_room = new Room({
     name: name,
     owner_ID: owner_ID,
+    thumbnail_url: thumbnail_url,
     subscriber: subscribers,
     tags: tags,
     settings: {
@@ -71,9 +58,11 @@ router.post("/createroom", async function(req, res) {
     .catch(error => res.status(400).send("New room insert failed."));
 });
 
+// ---------------------------------------------------------- UPLOAD / GET THUMBNAILS ----------------------------------------------------------
+
 // send json with: { folder: ..., uid: ..., image: ...}
 // order is required
-router.post("/upload-thumnail", function(req, res) {
+router.put("/upload-thumnail", function(req, res) {
   singleUpload(req, res, error => {
     if (error) {
       console.log(error);
@@ -90,6 +79,97 @@ router.post("/upload-thumnail", function(req, res) {
       }
     }
   });
+});
+
+// How to Use:
+// <img src={`http://localhost:5000/api/room/get-thumbnail?thumbnail_url=${thumbnail_url}`} />
+router.get("/get-thumbnail", async function(req, res) {
+  let s3 = new aws.S3();
+  let url = "default1.png";
+  console.log(url);
+  let data = await s3.getObject({ Bucket: "broadkats.me", Key: url }).promise();
+  res.writeHead(200, { "Content-Type": "image/png" });
+  res.write(data.Body, "binary");
+  res.end(null, "binary");
+});
+
+// ---------------------------------------------------------- ADD / REMOVE SUBSCRIBERS ----------------------------------------------------------
+
+router.put("/add-subscriber", async function(req, res) {
+  let room_ID = req.body.room_ID;
+  let new_subscriber = req.body.uid;
+
+  let room_document, userprops_document;
+  await Room.findOneAndUpdate(
+    { _id: room_ID },
+    { $addToSet: { subscriber: new_subscriber } }
+  )
+    .then(document => (room_document = document))
+    .catch(error => res.status(400).send("Add subscriber failed."));
+
+  if (room_document) {
+    await UserProps.findOneAndUpdate(
+      { user_ID: new_subscriber },
+      { $addToSet: { subscribed_rooms: room_ID } }
+    )
+      .then(document => (userprops_document = document))
+      .catch(error => res.status(400).send("Add subscriber failed."));
+  }
+  res.send({
+    room_document: room_document,
+    userprops_document: userprops_document
+  });
+});
+
+router.put("/remove-subscriber", async function(req, res) {
+  let room_ID = req.body.room_ID;
+  let del_subscriber = req.body.uid;
+
+  let room_document, userprops_document;
+  await Room.findOneAndUpdate(
+    {
+      _id: room_ID,
+      subscriber: { $in: del_subscriber },
+      owner_ID: { $nin: del_subscriber }
+    },
+    { $pull: { subscriber: del_subscriber } }
+  )
+    .then(document => (room_document = document))
+    .catch(error => res.status(400).send("Remove subscriber failed."));
+
+  if (room_document) {
+    await UserProps.findOneAndUpdate(
+      { user_ID: del_subscriber, owned_rooms: { $nin: room_ID } },
+      { $pull: { subscribed_rooms: room_ID } }
+    )
+      .then(document => (userprops_document = document))
+      .catch(error => res.status(400).send("Add subscriber failed."));
+  }
+  res.send({
+    room_document: room_document,
+    userprops_document: userprops_document
+  });
+});
+
+// ---------------------------------------------------------- ADD / REMOVE TAGS ----------------------------------------------------------
+
+router.put("/add-tags", async function(req, res) {
+  let room_ID = req.body.room_ID;
+  let new_tag = req.body.new_tag;
+  await Room.findOneAndUpdate(
+    { _id: room_ID },
+    { $addToSet: { tags: new_tag } }
+  )
+    .then(document => res.send(document))
+    .catch(error => res.status(400).send("Add tag failed."));
+});
+
+router.put("/remove-tags", async function(req, res) {
+  let room_ID = req.body.room_ID;
+  let del_tag = req.body.del_tag;
+  await Room.findOneAndUpdate({ _id: room_ID }, { $pull: { tags: del_tag } })
+    .then(document => res.send(document))
+    .catch(error => res.status(400).send("Remove tag failed."));
 });
 
 module.exports = router;

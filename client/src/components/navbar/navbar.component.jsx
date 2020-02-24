@@ -15,7 +15,6 @@ import { ReactComponent as SearchIcon } from "../../assets/icons/search-solid.sv
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus-solid.svg";
 import { ReactComponent as BarsIcon } from "../../assets/icons/bars-solid.svg";
 
-
 import "./navbar.style.scss";
 
 let rooms = [
@@ -58,7 +57,7 @@ const NavBar = ({ currentUser }) => (
       <Link to="/search">
         <CircleBtn className="room-nav-btn search-btn" icon={<SearchIcon />} />
       </Link>
-      <Poppity alignArrow="center" content={<NewRoom/>}>
+      <Poppity alignArrow="center" content={<NewRoom />}>
         <CircleBtn
           className="room-nav-btn create-room-btn"
           icon={<PlusIcon />}
