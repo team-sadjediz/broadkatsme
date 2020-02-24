@@ -50,7 +50,8 @@ class RoomPage extends Component {
       //   .get("http://broadkatsme.herokuapp.com/api/room/findroom", {
       //     params: roomID
       //   })
-      .get("http://localhost:5000/api/room/findroom", {
+      // .get("http://localhost:5000/api/room/findroom", {
+      .get("http://broadkatsme.herokuapp.com/api/room/findroom", {
         params: roomID
       })
       .then(
@@ -62,7 +63,8 @@ class RoomPage extends Component {
       });
 
     await axios
-      .get("http://localhost:5000/api/userprops/is-favorited", {
+      // .get("http://localhost:5000/api/userprops/is-favorited", {
+      .get("http://broadkatsme.herokuapp.com/api/userprops/is-favorited", {
         params: {
           "uid": this.props.currentUser.uid,
           "roomID": "5e4a4c5a86ae580017aa1a78"
@@ -133,7 +135,8 @@ class RoomPage extends Component {
     };
     let response;
     await axios
-      .put("http://localhost:5000/api/userprops/favorite", request)
+      // .put("http://localhost:5000/api/userprops/favorite", request)
+      .put("http://broadkatsme.herokuapp.com/api/userprops/favorite", request)
       .then(res => this.setState({ isFavorited: res.data.favorited }))
       .catch(error => console.error(error));
 
