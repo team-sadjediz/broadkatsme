@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import axios from "axios";
 
+import Chip from "@material-ui/core/Chip";
+import { makeStyles } from "@material-ui/core/styles";
+
 import "./tag.style.scss";
 
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus-solid.svg";
@@ -10,6 +13,8 @@ import { ReactComponent as MinusIcon } from "../../assets/icons/minus.svg";
 // If type = remove -> onClick = removeOnClick, icon = removeIcon
 // REQUIRED PROPS: RoomID, text (if type == remove), onChangeTag
 // onChangeTag is a function from the parent tag (if you remove a tag, you want to setState to change which tags are being displayed)
+
+// const useStyles = makeStyles(theme => ({ root: { color: } }));
 class Tag extends Component {
   constructor(props) {
     super(props);
@@ -75,18 +80,23 @@ class Tag extends Component {
       );
     } else if (this.state.type === "remove") {
       return (
-        <div
-          className={`tag-properties ${
-            this.props.className ? this.props.className : ""
-          }`}
-        >
-          <div className="tag-properties-minus">
-            <div onClick={this.removeOnClick} className="tag-button">
-              <MinusIcon />
-            </div>
-            <div className="tag-label">{this.props.text}</div>
-          </div>
-        </div>
+        // <div
+        //   className={`tag-properties ${
+        //     this.props.className ? this.props.className : ""
+        //   }`}
+        // >
+        //   <div className="tag-properties-minus">
+        //     <div onClick={this.removeOnClick} className="tag-button">
+        //       <MinusIcon />
+        //     </div>
+        //     <div className="tag-label">{this.props.text}</div>
+        //   </div>
+        // </div>
+        <Chip
+          color="primary"
+          onDelete={this.removeOnClick}
+          label={this.props.text}
+        />
       );
     }
   }
