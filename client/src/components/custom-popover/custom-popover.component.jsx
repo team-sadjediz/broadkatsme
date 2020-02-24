@@ -23,7 +23,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function MouseOverPopover({ children, content }) {
+export default function MouseOverPopover({
+  anchorOrigin,
+  transformOrigin,
+  children,
+  content
+}) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -74,14 +79,17 @@ export default function MouseOverPopover({ children, content }) {
         }}
         open={open}
         anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right"
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right"
-        }}
+        // anchorOrigin={{
+        //   vertical: "bottom",
+        //   horizontal: "right"
+        // }}
+        // transformOrigin={{
+        //   vertical: "top",
+        //   horizontal: "right"
+        // }}
+
+        anchorOrigin={anchorOrigin}
+        transformOrigin={transformOrigin}
         onClose={handlePopoverClose}
         disableRestoreFocus
       >

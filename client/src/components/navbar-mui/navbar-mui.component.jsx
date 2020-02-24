@@ -16,6 +16,7 @@ import ImageButton from "../img-btn/img-btn.component";
 import Poppity from "../poppity/poppity.component";
 import PageDropdown from "../page-dropdown/page-dropdown.component";
 import MouseOverPopover from "../custom-popover/custom-popover.component";
+import NewRoom from "../new-room/new-room.component";
 
 // icons:
 import AddIcon from "@material-ui/icons/Add";
@@ -132,9 +133,21 @@ class ButtonAppBar extends React.Component {
                 <SearchIcon></SearchIcon>
               </RoomNavButton>
 
-              <RoomNavButton>
-                <AddIcon></AddIcon>
-              </RoomNavButton>
+              <MouseOverPopover
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "center"
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "center"
+                }}
+                content={<NewRoom />}
+              >
+                <RoomNavButton>
+                  <AddIcon></AddIcon>
+                </RoomNavButton>
+              </MouseOverPopover>
 
               {console.log("before map:", this.state.roomList)}
               {this.state.roomList.map(room => (
@@ -147,9 +160,18 @@ class ButtonAppBar extends React.Component {
               ))}
             </div>
 
-            <MouseOverPopover content={<PageDropdown />}>
+            <MouseOverPopover
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right"
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right"
+              }}
+              content={<PageDropdown />}
+            >
               <MenuButton>
-                {/* <MenuIcon color="primary"></MenuIcon> */}
                 <MenuIcon></MenuIcon>
               </MenuButton>
             </MouseOverPopover>
