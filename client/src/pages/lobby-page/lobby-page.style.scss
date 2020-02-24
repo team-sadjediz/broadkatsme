@@ -8,27 +8,29 @@
 
 //To Do: Media
 .container{
-    order: 2;
+    // order: 2;
     text-align: center;
     position: relative;
     // overflow-x: hidden;
     display: grid;
     grid-template-columns: minmax(100%, auto);
-    grid-template-rows: 80px 300px 600px;
+    grid-template-rows: 300px 600px;
     // grid-template-columns: fit-content;
     // grid-template-rows: 1fr 2fr 1fr;
     // background-color: $french_laundry_blue;
     grid-template-areas:
-      "active-header"
       "active"
       "featured";
+
     .active-container {
+        grid-area: active;
         overflow-x: hidden;
         overflow-y: hidden;
         position: relative;
         grid-area: active;
         padding-top: 20px;
         margin: 0;
+        
     }
 
     .featured-container {
@@ -76,7 +78,7 @@ p{
     padding-left: 30px;
     font-size: 30px;
     font-weight: lighter;
-    color: $comfortably_tan;
+    color: $foreground;
     margin: 0;
     // border-bottom: 5px solid $green_main;
     // font-weight: bold;
