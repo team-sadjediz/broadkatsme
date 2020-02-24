@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 
 import "./room-page.styles.scss";
 
-import Tag from "../../components/tag/tag.component";
+// import Tag from "../../components/tag/tag.component";
 import RoomBar from "../../components/room-bar/room-bar.component";
 
 const initialState = {
@@ -36,6 +36,7 @@ class RoomPage extends Component {
   constructor(props) {
     super(props);
     this.state = initialState;
+    this.timer = null;
   }
 
   async componentDidMount() {
@@ -71,6 +72,9 @@ class RoomPage extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    // console.log(this.state.isMouseMoving);
+    // console.log(nextState.isMouseMoving);
+    console.log(this.state.isMouseMoving !== nextState.isMouseMoving);
     let isMouseMoving = this.state.isMouseMoving !== nextState.isMouseMoving;
     let isFavorited = this.state.isFavorited !== nextState.isFavorited;
     let roomName = this.state.roomName !== nextState.roomName;
@@ -142,10 +146,12 @@ class RoomPage extends Component {
   handleMouseMove = e => {
     e.preventDefault();
     this.setState({ isMouseMoving: true });
-    let timer;
     (() => {
-      clearTimeout(timer);
-      timer = setTimeout(() => this.setState({ isMouseMoving: false }), 3000);
+      clearTimeout(this.timer);
+      this.timer = setTimeout(
+        () => this.setState({ isMouseMoving: false }),
+        5000
+      );
     })();
   };
 
@@ -187,13 +193,13 @@ class RoomPage extends Component {
           className="room-screen-area"
           onMouseMove={e => this.handleMouseMove(e)}
         >
-          Room Screen
+          {/* Room Screen */}
           {this.state.isMouseMoving ? (
-            <div className="temp">VolumeControl</div>
+            <div className="display-volume">VolumeControl</div>
           ) : (
-            <div className="temp2" />
+            <div className="remove-volume" />
           )}
-        </div>{" "}
+        </div>
         {/* <img
           src={
             "http://localhost:5000/api/room/get-thumbnail?thumbnail_url=default1.png"

@@ -18,11 +18,13 @@
   grid-area: room-bar;
 }
 
-.temp {
+.display-volume {
   color: white;
+  height: 100%;
+  width: 100%;
 }
 
-.temp2 {
+.remove-volume {
   height: 100%;
   width: 100%;
   cursor: none;
@@ -34,8 +36,6 @@
   justify-self: center;
   height: 720px;
   width: 1280px;
-  //   height: 480px;
-  //   width: 854px;
   background-color: $french_laundry_blue;
 }
 
