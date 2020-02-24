@@ -66,7 +66,8 @@ class Tag extends Component {
     let roomID = this.state.roomID;
     let request = { "new_tag": tag, "room_ID": roomID };
     axios
-      .put("http://localhost:5000/api/room/add-tags", request)
+      // .put("http://localhost:5000/api/room/add-tags", request)
+      .put("http://broadkatsme.herokuapp.com/api/room/add-tags", request)
       .then(res => this.props.onChangeTag(res.data))
       .catch(error => console.error(error));
   };
@@ -78,7 +79,8 @@ class Tag extends Component {
     let request = { "del_tag": tag, "room_ID": roomID };
     console.log("removing " + tag);
     axios
-      .put("http://localhost:5000/api/room/remove-tags", request)
+      // .put("http://localhost:5000/api/room/remove-tags", request)
+      .put("http://broadkatsme.herokuapp.com/api/room/remove-tags", request)
       .then(res => this.props.onChangeTag(res.data))
       .catch(error => console.error(error));
   };

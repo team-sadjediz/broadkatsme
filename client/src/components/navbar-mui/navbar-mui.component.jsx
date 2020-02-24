@@ -99,7 +99,8 @@ class ButtonAppBar extends React.Component {
     );
 
     let results = await axios.get(
-      "http://localhost:5000/api/home/users-rooms",
+      // "http://localhost:5000/api/home/users-rooms",
+      "http://broadkatsme.herokuapp.com/api/home/users-rooms",
       {
         params: { uid: this.props.currentUser.uid }
       }
@@ -158,7 +159,8 @@ class ButtonAppBar extends React.Component {
                 <Link to={`/room/id/${room.roomID}`}>
                   <ImageButton
                     iconHover={<SlowMotionVideoIcon />}
-                    bgImageUrl={`http://localhost:5000/api/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
+                    // bgImageUrl={`http://localhost:5000/api/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
+                    bgImageUrl={`http://broadkatsme.herokuapp.com/api/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
                   ></ImageButton>
                 </Link>
               ))}
