@@ -23,7 +23,7 @@ router.post("/createroom", async function(req, res) {
   let name = req.body.room_name;
   let owner_ID = req.body.uid;
   let thumbnail_url = "default1.png";
-  let subscribers = [];
+  let subscribers = [req.body.uid];
   let tags = req.body.tags;
   let room_size = req.body.room_size;
   let private = req.body.privacy;
@@ -51,11 +51,30 @@ router.post("/createroom", async function(req, res) {
       }
     }
   });
+  // let room_ID;
+  // await new_room
+  //   .save()
+  //   .then(document => (room_ID = document._id))
+  //   // .then(document => console.log(document._id))
+  //   .catch(error => res.status(400).send("New room insert failed."));
 
+  let room_ID;
   await new_room
     .save()
-    .then(document => console.log(document))
+    .then(document => (room_ID = document._id))
+    // .then(document => console.log(document._id))
     .catch(error => res.status(400).send("New room insert failed."));
+
+  // console.log("user id", owner_ID);
+  // console.log(room_ID);
+  await UserProps.findOneAndUpdate(
+    { user_ID: owner_ID },
+    { $addToSet: { owned_rooms: room_ID, subscribed_rooms: room_ID } }
+  )
+    .then(document => res.send(document))
+    .catch(error =>
+      res.status(400).send("New room insert added to user props failed.")
+    );
 });
 
 // ---------------------------------------------------------- UPLOAD / GET THUMBNAILS ----------------------------------------------------------
