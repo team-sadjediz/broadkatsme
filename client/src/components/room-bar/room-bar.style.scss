@@ -29,7 +29,7 @@
 .room-bar {
   background-color: transparent;
   display: grid;
-  grid-template-columns: min-content auto auto min-content min-content min-content;
+  grid-template-columns: max-content auto auto min-content min-content min-content;
   grid-template-areas: "name tags . refresh-button more-buttons more-button ";
   grid-gap: 5px;
   align-content: center;
