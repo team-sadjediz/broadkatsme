@@ -10,7 +10,7 @@
   // margin: 0 auto;
   display: grid;
   grid-template-columns: min-content;
-  grid-template-rows: 2em min-content 2em max-content auto;
+  grid-template-rows: 1em min-content 2em max-content auto;
   grid-template-areas:
     "    .     "
     " room-bar "
