@@ -152,7 +152,7 @@ class RoomPage extends Component {
       clearTimeout(this.timer);
       this.timer = setTimeout(
         () => this.setState({ isMouseMoving: false }),
-        10000
+        3000
       );
     })();
   };
@@ -164,12 +164,13 @@ class RoomPage extends Component {
   render() {
     console.log(";=;");
     return (
-      <div className="room-page">
-        {/* {this.props.currentUser.uid} */}
-        {/* Room Page {this.state.roomID} {this.state.roomName}
+      <div className="center">
+        <div className="room-page">
+          {/* {this.props.currentUser.uid} */}
+          {/* Room Page {this.state.roomID} {this.state.roomName}
         {this.state.subscribers[0]} {this.state.tags}
         {this.state.settings.roomSize} {this.state.settings.access.roomAdmins} */}
-        {/* <div>
+          {/* <div>
           Tag Examples
           <Tag
             type="add"
@@ -184,39 +185,40 @@ class RoomPage extends Component {
           />
           <Tag type="label"></Tag>
         </div> */}
-        <div className="room-bar-area">
-          {/* RoomBar w/Dynamic tags */}
-          <RoomBar
-            roomName={this.state.roomName}
-            roomID={this.state.roomID}
-            tags={this.state.tags}
-            toggleSettingsModal={this.toggleSettingsModal}
-            favoriteRoom={this.favoriteRoom}
-            isFavorited={this.state.isFavorited}
-            onChangeTag={this.onChangeTag}
-          />
-        </div>
-        <div
-          className="room-screen-area"
-          onMouseMove={e => this.handleMouseMove(e)}
-        >
-          {/* Room Screen */}
-          {this.state.isMouseMoving ? (
-            // <div className="display-volume">VolumeControl</div>
-            <BrowserOverlay
-              className="browser-overlay"
-              volume={this.state.volume}
-              handleVolume={this.handleVolume}
+          <div className="room-bar-area">
+            {/* RoomBar w/Dynamic tags */}
+            <RoomBar
+              roomName={this.state.roomName}
+              roomID={this.state.roomID}
+              tags={this.state.tags}
+              toggleSettingsModal={this.toggleSettingsModal}
+              favoriteRoom={this.favoriteRoom}
+              isFavorited={this.state.isFavorited}
+              onChangeTag={this.onChangeTag}
             />
-          ) : (
-            <div className="hide" />
-          )}
-        </div>
-        {/* <img
+          </div>
+          <div
+            className="room-screen-area"
+            onMouseMove={e => this.handleMouseMove(e)}
+          >
+            {/* Room Screen */}
+            {this.state.isMouseMoving ? (
+              // <div className="display-volume">VolumeControl</div>
+              <BrowserOverlay
+                className="browser-overlay"
+                volume={this.state.volume}
+                handleVolume={this.handleVolume}
+              />
+            ) : (
+              <div className="hide" />
+            )}
+          </div>
+          {/* <img
           src={
             "http://localhost:5000/api/room/get-thumbnail?thumbnail_url=default1.png"
           }
         /> */}
+        </div>
       </div>
     );
   }

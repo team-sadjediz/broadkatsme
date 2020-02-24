@@ -36,11 +36,12 @@ class RoomBar extends Component {
     let options = (
       <div className="more-buttons">
         <CircleBtn
-          className={this.props.isFavorited ? "active-btn" : ""}
+          className={this.props.isFavorited ? "active-btn" : "room-bar-btn"}
           onClick={this.props.favoriteRoom}
           icon={<FavoriteIcon />}
         />
         <CircleBtn
+          className="room-bar-btn"
           onClick={this.props.toggleSettingsModal}
           icon={<SettingsIcon />}
         />
@@ -58,12 +59,15 @@ class RoomBar extends Component {
           {this.props.roomName}
         </div>
         {this.state.showTags ? <div className="room-tags">{tags}</div> : null}
-        <CircleBtn className="refresh-button" icon={<RefreshIcon />} />
+        <CircleBtn
+          className="refresh-button room-bar-btn"
+          icon={<RefreshIcon />}
+        />
         <CircleBtn
           onClick={() =>
             this.setState({ showOptions: !this.state.showOptions })
           }
-          className="more-button"
+          className="more-button room-bar-btn"
           icon={<MoreIcon />}
         />
         {this.state.showOptions ? options : null}

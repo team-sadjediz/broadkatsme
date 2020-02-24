@@ -10,27 +10,16 @@ import VolumeOffIcon from "@material-ui/icons/VolumeOff";
 import { AutoScaling } from "aws-sdk";
 
 const useStyles = makeStyles({
-  //   overrides: {
-  //     MuiSlider: {
-  //       root: {
-  //         // width: 100,
-  //         height: 100,
-  //         color: "#fff"
-  //       }
-  //     }
-  //   }
   root: {
-    // width: 100,
     height: "100px",
-    color: "#fff"
-    // "& svg": {
-    //   fill: "#fff !important"
-    // }
+    // color: "#fff"
+    color: "#3a4660"
   },
   svg: {
     marginLeft: "auto",
     marginRight: "auto",
-    fill: "#fff !important"
+    // fill: "#fff !important"
+    fill: "#3a4660 !important"
   }
 });
 
@@ -40,7 +29,6 @@ const VolumeSlider = ({ volume, handleVolume, ...props }) => {
   const [prevValue, setPrevValue] = React.useState(0);
 
   const handleChange = (e, newValue) => {
-    // console.log(value);
     setValue(newValue);
     handleVolume(newValue);
   };

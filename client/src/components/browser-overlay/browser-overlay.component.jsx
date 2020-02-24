@@ -12,13 +12,7 @@ const useStyles = theme => ({});
 const BrowserOverlay = ({ volume, handleVolume, className, ...otherProps }) => {
   const classes = useStyles();
 
-  //   const handleChange = (e, newValue) => {
-  //     setValue(newValue);
-  //   };
   return (
-    // <div className="volume-bar">
-    //   <VolumeSlider />
-    // </div>
     <div className={`overlay ${className ? className : ""}`}>
       <div className="volume-bar">
         <VolumeSlider handleVolume={handleVolume} volume={volume} />

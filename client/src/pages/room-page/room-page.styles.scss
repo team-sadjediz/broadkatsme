@@ -1,8 +1,13 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
 
+.center {
+  display: flex;
+  justify-content: center;
+}
+
 .room-page {
-  margin: 0 auto;
+  // margin: 0 auto;
   display: grid;
   grid-template-columns: min-content;
   grid-template-rows: 2em min-content 2em max-content auto;
@@ -30,13 +35,13 @@
     " . overlay ";
   height: 720px;
   width: 1280px;
-  background-color: $french_laundry_blue;
+  background-color: $white;
   // background-color: rgba(101, 149, 158, 0.3);
 }
 
 .browser-overlay {
   grid-area: overlay;
-  color: white;
+  color: $french_laundry_blue;
   // height: 100%;
   width: 100%;
   margin-bottom: 5px;
