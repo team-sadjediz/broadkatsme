@@ -125,13 +125,17 @@ class ButtonAppBar extends React.Component {
             {/* <div>{`${this.props.currentUser.uid} ${this.props.currentUser.email}`}</div> */}
 
             <div className="room-nav">
-              <RoomNavButton>
-                <DashboardIcon></DashboardIcon>
-              </RoomNavButton>
+              <Link to="/lobby">
+                <RoomNavButton>
+                  <DashboardIcon></DashboardIcon>
+                </RoomNavButton>
+              </Link>
 
-              <RoomNavButton>
-                <SearchIcon></SearchIcon>
-              </RoomNavButton>
+              <Link to="/search">
+                <RoomNavButton>
+                  <SearchIcon></SearchIcon>
+                </RoomNavButton>
+              </Link>
 
               <MouseOverPopover
                 anchorOrigin={{

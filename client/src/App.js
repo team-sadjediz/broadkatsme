@@ -97,6 +97,7 @@ class App extends Component {
                 <Route exact path="/" component={LoginRegisterPage} />
                 <Route exact path="/login" component={LoginRegisterPage} />
                 <Route path="/reset" component={ResetPassPage} />
+                <Route path="/" component={LoginRegisterPage} />
               </Switch>
             </BrowserRouter>
           )}
