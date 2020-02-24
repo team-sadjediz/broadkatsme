@@ -150,7 +150,7 @@ class RoomPage extends Component {
       clearTimeout(this.timer);
       this.timer = setTimeout(
         () => this.setState({ isMouseMoving: false }),
-        5000
+        3000
       );
     })();
   };
@@ -176,6 +176,7 @@ class RoomPage extends Component {
             roomID={this.state.roomID}
             text="chicken"
           />
+          <Tag type="label"></Tag>
         </div> */}
         <div className="room-bar-area">
           {/* RoomBar w/Dynamic tags */}

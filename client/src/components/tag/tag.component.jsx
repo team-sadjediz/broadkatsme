@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 
 import Chip from "@material-ui/core/Chip";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 
 import "./tag.style.scss";
 
@@ -14,7 +14,27 @@ import { ReactComponent as MinusIcon } from "../../assets/icons/minus.svg";
 // REQUIRED PROPS: RoomID, text (if type == remove), onChangeTag
 // onChangeTag is a function from the parent tag (if you remove a tag, you want to setState to change which tags are being displayed)
 
-// const useStyles = makeStyles(theme => ({ root: { color: } }));
+const useStyles = theme => ({
+  root: {
+    marginLeft: 3,
+    marginRight: 3,
+    marginBottom: 3,
+    fontSize: "1rem",
+    fontWeight: "bold",
+    color: "#3a4660",
+    background: "#fff",
+    "& svg": {
+      fill: "#3a4660 !important"
+    },
+    "&:hover": {
+      color: "#fff",
+      background: "#ef5350",
+      "& svg": {
+        fill: "#fff !important"
+      }
+    }
+  }
+});
 class Tag extends Component {
   constructor(props) {
     super(props);
@@ -54,6 +74,7 @@ class Tag extends Component {
   };
 
   render() {
+    const { classes } = this.props;
     if (this.state.type === "add") {
       return (
         <div
@@ -93,13 +114,15 @@ class Tag extends Component {
         //   </div>
         // </div>
         <Chip
-          color="primary"
+          className={classes.root}
           onDelete={this.removeOnClick}
           label={this.props.text}
         />
       );
+    } else if (this.state.type === "label") {
+      return <Chip className={classes.root} />;
     }
   }
 }
 
-export default Tag;
+export default withStyles(useStyles)(Tag);
