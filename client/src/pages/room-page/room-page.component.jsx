@@ -7,11 +7,13 @@ import "./room-page.styles.scss";
 
 // import Tag from "../../components/tag/tag.component";
 import RoomBar from "../../components/room-bar/room-bar.component";
+import BrowserOverlay from "../../components/browser-overlay/browser-overlay.component";
 
 const initialState = {
   isMouseMoving: false,
   image: null,
   isFavorited: false,
+  volume: 50,
   roomName: "TestRoom",
   roomID: "5e4a4c5a86ae580017aa1a78",
   ownerID: "TestOwnerID",
@@ -150,9 +152,13 @@ class RoomPage extends Component {
       clearTimeout(this.timer);
       this.timer = setTimeout(
         () => this.setState({ isMouseMoving: false }),
-        3000
+        10000
       );
     })();
+  };
+
+  handleVolume = volume => {
+    this.setState({ volume: volume });
   };
 
   render() {
@@ -196,9 +202,14 @@ class RoomPage extends Component {
         >
           {/* Room Screen */}
           {this.state.isMouseMoving ? (
-            <div className="display-volume">VolumeControl</div>
+            // <div className="display-volume">VolumeControl</div>
+            <BrowserOverlay
+              className="browser-overlay"
+              volume={this.state.volume}
+              handleVolume={this.handleVolume}
+            />
           ) : (
-            <div className="remove-volume" />
+            <div className="hide" />
           )}
         </div>
         {/* <img

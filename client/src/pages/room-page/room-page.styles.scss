@@ -18,25 +18,37 @@
   grid-area: room-bar;
 }
 
-.display-volume {
-  color: white;
-  height: 100%;
-  width: 100%;
-}
-
-.remove-volume {
-  height: 100%;
-  width: 100%;
-  cursor: none;
-}
-
 .room-screen-area {
   grid-area: room-screen;
-  display: flex;
-  justify-self: center;
+  // display: flex;
+  // justify-self: center;
+  display: grid;
+  grid-template-columns: auto min-content;
+  grid-template-rows: auto min-content;
+  grid-template-areas:
+    " . . "
+    " . overlay ";
   height: 720px;
   width: 1280px;
   background-color: $french_laundry_blue;
+  // background-color: rgba(101, 149, 158, 0.3);
+}
+
+.browser-overlay {
+  grid-area: overlay;
+  color: white;
+  // height: 100%;
+  width: 100%;
+  margin-bottom: 5px;
+  // padding: 5px;
+  // display: grid;
+}
+
+.hide {
+  height: 100%;
+  width: 100%;
+  // display: none;
+  cursor: none;
 }
 
 @media (max-width: 1480px) {
