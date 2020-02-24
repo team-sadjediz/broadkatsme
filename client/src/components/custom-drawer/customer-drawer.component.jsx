@@ -100,8 +100,12 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "#eceff1"
   },
   content: {
+    display: "flex",
+    justifyContent: "center",
+    // alignItems: "center",
     flexGrow: 1,
-    padding: theme.spacing(3),
+    // padding: theme.spacing(3),
+    margin: "1em",
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
@@ -112,8 +116,8 @@ const useStyles = makeStyles(theme => ({
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
-    }),
-    marginLeft: 0
+    })
+    // marginLeft: 0
   }
 }));
 

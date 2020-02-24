@@ -72,7 +72,7 @@ const RoomNavButton = withStyles(theme => ({
     textTransform: "uppercase",
     fontWeight: "bold",
     fontSize: "1em",
-    margin: "0 3px",
+    // margin: "0 3px",
     color: "white",
     "&:hover": { backgroundColor: theme.palette.secondary.main, color: "white" }
   }
@@ -83,25 +83,26 @@ class ButtonAppBar extends React.Component {
     super(props);
 
     this.state = {
-      room_name: "",
-      tags: "",
-      room_size: "",
-      privacy: "true"
+      roomList: []
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     console.log(
       "hellllllllllllllllllllllllllllllllllllll",
       this.props.currentUser.uid
     );
 
-    // axios
-    //   .get("http://broadkatsme.herokuapp.com/api/room/createroom", room)
-    //   .then(() => console.log("Room posted to backend/created."))
-    //   .catch(error => {
-    //     console.error(error);
-    //   });
+    let results = await axios.get(
+      "http://localhost:5000/api/home/users-rooms",
+      {
+        params: { uid: this.props.currentUser.uid }
+      }
+    );
+    // console.log("iwannabefree", results);
+
+    this.setState({ roomList: results.data });
+    console.log("after api call", this.state.roomList);
   }
 
   render() {
@@ -131,10 +132,15 @@ class ButtonAppBar extends React.Component {
                 <AddIcon></AddIcon>
               </RoomNavButton>
 
-              <ImageButton
-                iconHover={<SlowMotionVideoIcon />}
-                bgImageUrl="https://i.picsum.photos/id/1049/3900/3120.jpg"
-              ></ImageButton>
+              {console.log("before map:", this.state.roomList)}
+              {this.state.roomList.map(room => (
+                <Link to={`/room/id/${room.roomID}`}>
+                  <ImageButton
+                    iconHover={<SlowMotionVideoIcon />}
+                    bgImageUrl={`http://localhost:5000/api/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
+                  ></ImageButton>
+                </Link>
+              ))}
             </div>
 
             <MenuButton>
