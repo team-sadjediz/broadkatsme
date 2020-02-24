@@ -20,7 +20,7 @@
   margin-top: 1em;
 
   .form-input {
-    background: $light_gray;
+    background-color: $light_gray;
     height: 2em;
     width: 100%;
     box-sizing: border-box;
@@ -36,8 +36,9 @@
 
     &:focus {
       outline: none;
+      // border: 1px solid $light_gray;
       border: 1px solid lightgray;
-      background-color: white;
+
       box-shadow: $light_box_shadow;
     }
 

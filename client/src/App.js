@@ -10,7 +10,7 @@ import { setCurrentUser } from "./redux/user/user.actions";
 import NavBar from "./components/navbar/navbar.component";
 import PersistentDrawerLeft from "./components/custom-drawer/customer-drawer.component";
 // import Drawer from "@material-ui/core/Drawer";
-
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 // pages:
 import LoginRegisterPage from "./pages/login-register-page/login-register-page.component";
 import LobbyPage from "./pages/lobby-page/lobby-page.component";
@@ -21,6 +21,30 @@ import ContactPage from "./pages/contact-page/contact-page.component";
 import ResetPassPage from "./pages/reset-password-page/reset-password-page.component";
 
 import "./App.scss";
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#3a4660"
+    },
+    secondary: {
+      main: "#ef5350"
+    }
+  },
+  status: {
+    danger: "orange"
+  },
+  typography: {
+    fontFamily: [
+      '"Karla"',
+      "Roboto",
+      "sans-serif",
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"'
+    ].join(",")
+  }
+});
 
 class App extends Component {
   unsubscribeFromAuth = null;
@@ -39,41 +63,43 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        {this.props.currentUser ? (
-          <BrowserRouter>
-            <NavBar />
-            <PersistentDrawerLeft>
+      <ThemeProvider theme={theme}>
+        <div className="App">
+          {this.props.currentUser ? (
+            <BrowserRouter>
+              <NavBar />
+              <PersistentDrawerLeft>
+                <Switch>
+                  <Route
+                    exact
+                    path="/login"
+                    render={() =>
+                      this.props.currentUser ? (
+                        <Redirect to="/" />
+                      ) : (
+                        <LoginRegisterPage />
+                      )
+                    }
+                  />
+                  <Route path="/lobby" component={LobbyPage} />
+                  <Route path="/room" component={RoomPage} />
+                  <Route path="/about" component={AboutPage} />
+                  <Route path="/contact" component={ContactPage} />
+                  <Route path="/codeofconduct" component={CodeOfConductPage} />
+                </Switch>
+              </PersistentDrawerLeft>
+            </BrowserRouter>
+          ) : (
+            <BrowserRouter>
               <Switch>
-                <Route
-                  exact
-                  path="/login"
-                  render={() =>
-                    this.props.currentUser ? (
-                      <Redirect to="/" />
-                    ) : (
-                      <LoginRegisterPage />
-                    )
-                  }
-                />
-                <Route path="/lobby" component={LobbyPage} />
-                <Route path="/room" component={RoomPage} />
-                <Route path="/about" component={AboutPage} />
-                <Route path="/contact" component={ContactPage} />
-                <Route path="/codeofconduct" component={CodeOfConductPage} />
+                <Route exact path="/" component={LoginRegisterPage} />
+                <Route exact path="/login" component={LoginRegisterPage} />
+                <Route path="/reset" component={ResetPassPage} />
               </Switch>
-            </PersistentDrawerLeft>
-          </BrowserRouter>
-        ) : (
-          <BrowserRouter>
-            <Switch>
-              <Route exact path="/" component={LoginRegisterPage} />
-              <Route exact path="/login" component={LoginRegisterPage} />
-              <Route path="/reset" component={ResetPassPage} />
-            </Switch>
-          </BrowserRouter>
-        )}
-      </div>
+            </BrowserRouter>
+          )}
+        </div>
+      </ThemeProvider>
     );
   }
 }
