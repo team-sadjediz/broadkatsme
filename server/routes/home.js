@@ -44,7 +44,8 @@ router.get("/users-rooms", async function(req, res) {
       });
       console.log(room_urls);
       res.send(room_urls);
-    });
+    })
+    .catch(error => console.log(error));
 });
 
 router.get("/get-random-rooms", async function(req, res) {
