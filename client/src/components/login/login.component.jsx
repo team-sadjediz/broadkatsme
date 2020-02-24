@@ -6,7 +6,6 @@ import { auth, signInWithGoogle } from "../../firebase/firebase.utils";
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
 import CircleBtn from "../circle-btn/circle-btn.component";
-import { auth, signInWithGoogle } from "../../firebase/firebase.utils";
 import "./login.style.scss";
 //icons
 import { ReactComponent as EyeDefault } from "../../assets/icons/eye-solid.svg";
