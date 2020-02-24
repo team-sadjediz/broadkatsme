@@ -44,7 +44,7 @@ class RoomPage extends Component {
   async componentDidMount() {
     // const roomID = this.state.roomID;
     const roomID = { "roomID": "5e4a4c5a86ae580017aa1a78" };
-    console.log(roomID);
+    // console.log(roomID);
 
     await axios
       //   .get("http://broadkatsme.herokuapp.com/api/room/findroom", {
@@ -140,7 +140,7 @@ class RoomPage extends Component {
       .then(res => this.setState({ isFavorited: res.data.favorited }))
       .catch(error => console.error(error));
 
-    console.log(this.state);
+    // console.log(this.state);
   };
 
   onChangeTag = tags => {
