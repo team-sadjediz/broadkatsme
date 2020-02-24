@@ -85,10 +85,10 @@ router.put("/upload-thumnail", function(req, res) {
 // <img src={`http://localhost:5000/api/room/get-thumbnail?thumbnail_url=${thumbnail_url}`} />
 router.get("/get-thumbnail", async function(req, res) {
   let s3 = new aws.S3();
-  let url = "default1.png";
+  let url = req.query.thumbnail_url;
   console.log(url);
   let data = await s3.getObject({ Bucket: "broadkats.me", Key: url }).promise();
-  res.writeHead(200, { "Content-Type": "image/png" });
+  res.writeHead(200, { "Content-Type": "image/png, image/jpg" });
   res.write(data.Body, "binary");
   res.end(null, "binary");
 });

@@ -211,11 +211,11 @@ class RoomPage extends Component {
               <div className="hide" />
             )}
           </div>
-          {/* <img
-          src={
-            "http://localhost:5000/api/room/get-thumbnail?thumbnail_url=default1.png"
-          }
-        /> */}
+          <img
+            src={
+              "http://localhost:5000/api/room/get-thumbnail?thumbnail_url=default2.png"
+            }
+          />
         </div>
       </div>
     );
