@@ -9,6 +9,7 @@ import { setCurrentUser } from "./redux/user/user.actions";
 // components:
 import NavBar from "./components/navbar/navbar.component";
 import PersistentDrawerLeft from "./components/custom-drawer/customer-drawer.component";
+import ButtonAppBar from "./components/navbar-mui/navbar-mui.component";
 // import Drawer from "@material-ui/core/Drawer";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 // pages:
@@ -67,7 +68,8 @@ class App extends Component {
         <div className="App">
           {this.props.currentUser ? (
             <BrowserRouter>
-              <NavBar />
+              {/* <NavBar /> */}
+              <ButtonAppBar />
               <PersistentDrawerLeft>
                 <Switch>
                   <Route

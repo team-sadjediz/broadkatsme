@@ -39,7 +39,8 @@ const useStyles = makeStyles(theme => ({
     transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
-    })
+    }),
+    zIndex: theme.zIndex.drawer + 1
   },
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -164,7 +165,13 @@ const PersistentDrawerLeft = props => {
       >
         <ChevronRightIcon />
       </div> */}
-
+      {/* <AppBar position="fixed" className={classes.appBar}>
+        <Toolbar>
+          <Typography variant="h6" noWrap>
+            Clipped drawer
+          </Typography>
+        </Toolbar>
+      </AppBar> */}
       <Drawer
         className={classes.drawer}
         // variant="persistent"
