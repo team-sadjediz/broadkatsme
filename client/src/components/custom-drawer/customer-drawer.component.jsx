@@ -1,6 +1,16 @@
 import React from "react";
 import clsx from "clsx";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+
+// icons:
+import InboxIcon from "@material-ui/icons/MoveToInbox";
+import MailIcon from "@material-ui/icons/Mail";
+import MenuIcon from "@material-ui/icons/Menu";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+
+// mui components:
+import IconButton from "@material-ui/core/IconButton";
+import { makeStyles, withStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
@@ -8,17 +18,12 @@ import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
 
-// icons:
+// components:
+import VerticalTabs from "../custom-tab-nav/custom-tab-nav.component";
 
 import "./custom-drawer.styles.scss";
 
@@ -57,8 +62,12 @@ const useStyles = makeStyles(theme => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    position: "static"
+    position: "relative"
+    // variant: "outlined"
   },
+  // paper: {
+  //   variant: "outlined"
+  // },
   drawerHeader: {
     display: "flex",
     alignItems: "center",
@@ -72,7 +81,7 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen
     }),
-    position: "static",
+    position: "relative",
     backgroundColor: "#eceff1"
   },
   drawerClose: {
@@ -86,7 +95,7 @@ const useStyles = makeStyles(theme => ({
     // [theme.breakpoints.up("sm")]: {
     //   width: theme.spacing(9) + 1
     // },
-    position: "static",
+    position: "relative",
     backgroundColor: "#eceff1"
   },
   content: {
@@ -106,6 +115,28 @@ const useStyles = makeStyles(theme => ({
     marginLeft: 0
   }
 }));
+
+const ToggleDrawerButton = withStyles(theme => ({
+  root: {
+    // background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    color: "white",
+    backgroundColor: theme.palette.primary.main,
+    width: "48px",
+    height: "48px",
+    margin: "9px 3px",
+    // margin: "0.5em",
+    "&:hover": { backgroundColor: theme.palette.secondary.main },
+    position: "absolute",
+    right: 0,
+    zIndex: 2002
+  },
+  selected: {
+    color: theme.palette.secondary.main
+  },
+  textColorInherit: {
+    opacity: 1
+  }
+}))(IconButton);
 
 const PersistentDrawerLeft = props => {
   const classes = useStyles();
@@ -155,7 +186,10 @@ const PersistentDrawerLeft = props => {
           })
         }}
       >
-        <div className="drawer-header-container">
+        <ToggleDrawerButton onClick={toggleDrawer}>
+          {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+        </ToggleDrawerButton>
+        {/* <div className="drawer-header-container">
           <div className={`drawer-header ${open ? "" : "hidden"}`}>
             my title
           </div>
@@ -168,8 +202,7 @@ const PersistentDrawerLeft = props => {
           >
             {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
-        </div>
-
+        </div> */}
         {/* <div onClick={toggleDrawer} className={`${classes.drawerHeader}`}>
           <IconButton onClick={toggleDrawer} className="close-btn">
             {theme.direction === "ltr" ? (
@@ -179,9 +212,8 @@ const PersistentDrawerLeft = props => {
             )}
           </IconButton>
         </div> */}
-
         {/* <Divider /> */}
-        <List>
+        {/* <List>
           {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
             <ListItem button key={text}>
               <ListItemIcon>
@@ -201,7 +233,8 @@ const PersistentDrawerLeft = props => {
               <ListItemText primary={text} />
             </ListItem>
           ))}
-        </List>
+        </List> */}
+        <VerticalTabs drawerOpen={open}></VerticalTabs>
       </Drawer>
 
       <main
