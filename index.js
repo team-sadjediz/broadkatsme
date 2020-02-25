@@ -41,10 +41,19 @@ const friends = require("./server/routes/friends");
 // var to avoid release of private database credentials)
 
 // Heroku Deployment
-const databaseURI = process.env.MONGODB_URI;
+// const databaseURI = process.env.MONGODB_URI;
 
 // Local Deployment
 // const databaseURI = process.env.MONGODB_URI || uri;
+
+let uri;
+try {
+  uri = require("./server/mongo-config/uri-credentials");
+} catch {
+  console.log("uri:", uri);
+}
+
+const databaseURI = uri || process.env.MONGODB_URI;
 
 mongoose.connect(databaseURI, { useNewUrlParser: true });
 
