@@ -33,6 +33,19 @@ const useStyles = theme => ({
         fill: "#fff !important"
       }
     }
+  },
+  label: {
+    marginLeft: 3,
+    marginRight: 3,
+    marginBottom: 3,
+    fontSize: "1rem",
+    fontWeight: "bold",
+    background: "#3a4660",
+    color: "#fff",
+    "&:hover": {
+      color: "#fff",
+      background: "#ef5350"
+    }
   }
 });
 class Tag extends Component {
@@ -122,7 +135,8 @@ class Tag extends Component {
         />
       );
     } else if (this.state.type === "label") {
-      return <Chip className={classes.root} label={this.props.text} />;
+      return <Chip className={classes.label} label={this.props.text} />;
+      // return <Chip className={classes.root} label={this.props.text} />;
     }
   }
 }
