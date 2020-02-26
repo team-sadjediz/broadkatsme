@@ -37,7 +37,7 @@ const friends = require("./server/routes/friends");
 let uri;
 
 try {
-  uri = require("../credentials/uri-credentials.js");
+  uri = require("./server/credentials/uri-credentials");
 } catch {
   console.log("MongoDB keys not found.");
   console.log("Defaulting to environment keys.");
