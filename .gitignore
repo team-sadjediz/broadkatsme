@@ -1,5 +1,9 @@
 /node_modules
+<<<<<<< HEAD
 /server/credentials/
+=======
+/server/credentials
+>>>>>>> master
 /server/mongo-config/
 /server/aws-config/
 /server/firebase-config/

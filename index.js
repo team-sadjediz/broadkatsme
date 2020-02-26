@@ -4,6 +4,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
+// const admin = require("./server/firebase-config/admin");
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -28,15 +30,14 @@ const roomSettings = require("./server/routes/roomsettings");
 const friends = require("./server/routes/friends");
 
 // --------------------------------- D B - C O N N ---------------------------------
-// Inquire @ Julie for hard-coded configuration of database access (hidden in config
-// var to avoid release of private database credentials)
 
 let uri;
+
 try {
   uri = require("./server/credentials/uri-credentials");
 } catch {
-  console.log("Mongodb key not found locally.");
-  console.log("Using heroku environment variable as key.");
+  console.log("MongoDB keys not found.");
+  console.log("Defaulting to environment keys.");
 }
 
 const databaseURI = uri || process.env.MONGODB_URI;
