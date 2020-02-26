@@ -3,9 +3,9 @@ const multer = require("multer");
 const multerS3 = require("multer-s3");
 const path = require("path");
 
-let config;
+let awsconfig;
 try {
-  config = require("../credentials/aws-credentials");
+  awsconfig = require("../credentials/aws-credentials");
 } catch {
   console.log("AWS Keys could not be found.");
   console.log("Defaulting to environment keys.");
@@ -13,10 +13,10 @@ try {
 
 aws.config.update({
   secretAccessKey:
-    config.AWS_SECRET_ACCESS_KEY || process.env.AWS_SECRET_ACCESS_KEY,
-  accessKeyId: config.AWS_ACCESS_KEY_ID || process.env.AWS_ACCESS_KEY_ID,
-  Bucket: config.AWS_BUCKET || process.env.AWS_BUCKET,
-  region: config.AWS_REGION || process.env.AWS_REGION
+    awsconfig.AWS_SECRET_ACCESS_KEY || process.env.AWS_SECRET_ACCESS_KEY,
+  accessKeyId: awsconfig.AWS_ACCESS_KEY_ID || process.env.AWS_ACCESS_KEY_ID,
+  Bucket: awsconfig.AWS_BUCKET || process.env.AWS_BUCKET,
+  region: awsconfig.AWS_REGION || process.env.AWS_REGION
 });
 
 const s3 = new aws.S3({
