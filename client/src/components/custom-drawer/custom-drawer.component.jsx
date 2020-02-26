@@ -106,7 +106,6 @@ const useStyles = makeStyles(theme => ({
     boxSizing: "border-box",
     display: "flex",
     justifyContent: "center",
-    // alignItems: "center",
     flexGrow: 1,
     // padding: theme.spacing(3),
     padding: "0.5em",
