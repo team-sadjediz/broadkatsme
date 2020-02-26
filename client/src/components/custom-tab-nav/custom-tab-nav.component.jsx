@@ -145,7 +145,7 @@ export default function VerticalTabs({ drawerOpen }) {
         </TabNav>
 
         <TabPanel value={value} index={0}>
-          yellow
+          yellowyyyoysoydfsjldfjs
         </TabPanel>
         <TabPanel value={value} index={1}>
           <NewRoom />
