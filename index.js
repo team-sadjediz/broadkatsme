@@ -1,15 +1,8 @@
 const express = require("express");
 const path = require("path");
-
 const cors = require("cors");
 const mongoose = require("mongoose");
-
 const bodyParser = require("body-parser");
-
-// const admin = require("./server/firebase-config/admin");
-
-// Local Deployment
-// const uri = require("./server/mongo-config/uri-credentials");
 
 const app = express();
 app.use(cors());
@@ -25,7 +18,6 @@ const port = process.env.PORT || 5000;
 app.use(express.static(path.join(__dirname, "client/build")));
 
 // --------------------------------- Q U E R I E S ---------------------------------
-
 const home = require("./server/routes/home");
 const userProfile = require("./server/routes/userprofile");
 const userProps = require("./server/routes/userprops");
@@ -36,21 +28,15 @@ const roomSettings = require("./server/routes/roomsettings");
 const friends = require("./server/routes/friends");
 
 // --------------------------------- D B - C O N N ---------------------------------
-
 // Inquire @ Julie for hard-coded configuration of database access (hidden in config
 // var to avoid release of private database credentials)
 
-// Heroku Deployment
-// const databaseURI = process.env.MONGODB_URI;
-
-// Local Deployment
-// const databaseURI = process.env.MONGODB_URI || uri;
-
 let uri;
 try {
-  uri = require("./server/mongo-config/uri-credentials");
+  uri = require("./server/credentials/uri-credentials");
 } catch {
-  console.log("uri:", uri);
+  console.log("Mongodb key not found locally.");
+  console.log("Using heroku environment variable as key.");
 }
 
 const databaseURI = uri || process.env.MONGODB_URI;
