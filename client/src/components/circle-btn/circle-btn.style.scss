@@ -69,6 +69,7 @@
 
       position: absolute;
       top: 0;
+      right: 0;
 
       height: 100%;
       width: 100%;
@@ -90,4 +91,8 @@
       transform: rotate(360deg);
     }
   }
+}
+
+.image-overlay {
+  background-color: transparent;
 }

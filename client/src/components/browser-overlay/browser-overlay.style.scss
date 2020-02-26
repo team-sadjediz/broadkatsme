@@ -1,0 +1,14 @@
+@import "../../assets/colors";
+@import "../../assets/dimensions";
+
+.overlay {
+  height: 130px;
+  width: auto;
+  justify-content: center;
+  //   align-content: center;
+}
+
+.volume-bar {
+  height: 100px;
+  z-index: 1000;
+}

@@ -24,6 +24,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import NineDotsIcon from "../../assets/icons/nine-dots-solid.svg";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import SlowMotionVideoIcon from "@material-ui/icons/SlowMotionVideo";
+import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 
 import "./navbar-mui.styles.scss";
 
@@ -93,14 +94,11 @@ class ButtonAppBar extends React.Component {
   }
 
   async componentDidMount() {
-    console.log(
-      "hellllllllllllllllllllllllllllllllllllll",
-      this.props.currentUser.uid
-    );
+    console.log("current user:", this.props.currentUser.uid);
 
     let results = await axios.get(
-      "http://localhost:5000/api/home/users-rooms",
-      // "http://broadkatsme.herokuapp.com/api/home/users-rooms",
+      // "http://localhost:5000/api/home/users-rooms",
+      "http://broadkatsme.herokuapp.com/api/home/users-rooms",
       {
         params: { uid: this.props.currentUser.uid }
       }
@@ -158,9 +156,9 @@ class ButtonAppBar extends React.Component {
               {this.state.roomList.map(room => (
                 <Link to={`/room/id/${room.roomID}`}>
                   <ImageButton
-                    iconHover={<SlowMotionVideoIcon />}
-                    bgImageUrl={`http://localhost:5000/api/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
-                    // bgImageUrl={`http://broadkatsme.herokuapp.com/api/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
+                    iconHover={<PlayCircleFilledIcon />}
+                    // bgImageUrl={`http://localhost:5000/api/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
+                    bgImageUrl={`http://broadkatsme.herokuapp.com/api/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
                   ></ImageButton>
                 </Link>
               ))}

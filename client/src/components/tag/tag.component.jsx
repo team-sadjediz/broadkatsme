@@ -1,4 +1,8 @@
 import React, { Component } from "react";
+import axios from "axios";
+
+import Chip from "@material-ui/core/Chip";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 
 import "./tag.style.scss";
 
@@ -7,27 +11,78 @@ import { ReactComponent as MinusIcon } from "../../assets/icons/minus.svg";
 
 // If type = add -> onClick = addOnClick, icon = addIcon
 // If type = remove -> onClick = removeOnClick, icon = removeIcon
-// If type = other -> onClick = onClick, icon = icon
+// REQUIRED PROPS: RoomID, text (if type == remove), onChangeTag
+// onChangeTag is a function from the parent tag (if you remove a tag, you want to setState to change which tags are being displayed)
+
+const useStyles = theme => ({
+  root: {
+    marginLeft: 3,
+    marginRight: 3,
+    marginBottom: 3,
+    fontSize: "1rem",
+    fontWeight: "bold",
+    color: "#3a4660",
+    background: "#fff",
+    "& svg": {
+      fill: "#3a4660 !important"
+    },
+    "&:hover": {
+      color: "#fff",
+      background: "#ef5350",
+      "& svg": {
+        fill: "#fff !important"
+      }
+    }
+  },
+  label: {
+    marginLeft: 3,
+    marginRight: 3,
+    marginBottom: 3,
+    fontSize: "1rem",
+    fontWeight: "bold",
+    background: "#3a4660",
+    color: "#fff",
+    "&:hover": {
+      color: "#fff",
+      background: "#ef5350"
+    }
+  }
+});
+
 class Tag extends Component {
   constructor(props) {
     super(props);
+    console.log(this.props.roomID);
     this.state = {
       type: this.props.type,
+      roomID: this.props.roomID,
       input: null
     };
   }
 
   addOnClick = e => {
     e.preventDefault();
-    console.log("added");
-    return "Add";
-    //add to db
+    let tag = this.state.input;
+    let roomID = this.state.roomID;
+    let request = { "new_tag": tag, "room_ID": roomID };
+    axios
+      // .put("http://localhost:5000/api/room/add-tags", request)
+      .put("http://broadkatsme.herokuapp.com/api/room/add-tags", request)
+      .then(res => this.props.onChangeTag(res.data))
+      .catch(error => console.error(error));
   };
 
-  removeOnClick = text => {
-    console.log("removed");
-    return "Remove";
-    //remove from db
+  removeOnClick = e => {
+    e.preventDefault();
+    let tag = this.props.text;
+    let roomID = this.state.roomID;
+    let request = { "del_tag": tag, "room_ID": roomID };
+    console.log("removing " + tag);
+    axios
+      // .put("http://localhost:5000/api/room/remove-tags", request)
+      .put("http://broadkatsme.herokuapp.com/api/room/remove-tags", request)
+      .then(res => this.props.onChangeTag(res.data))
+      .catch(error => console.error(error));
   };
 
   handleChange = e => {
@@ -35,6 +90,7 @@ class Tag extends Component {
   };
 
   render() {
+    const { classes } = this.props;
     if (this.state.type === "add") {
       return (
         <div
@@ -53,6 +109,7 @@ class Tag extends Component {
               type="text"
               maxlength="8"
               value={this.state.input}
+              required
               onChange={this.handleChange}
             ></input>
           </form>
@@ -60,24 +117,28 @@ class Tag extends Component {
       );
     } else if (this.state.type === "remove") {
       return (
-        <div
-          className={`tag-properties ${
-            this.props.className ? this.props.className : ""
-          }`}
-        >
-          <div className="tag-properties-minus">
-            <div
-              onClick={this.removeOnClick(this.props.text)}
-              className="tag-button"
-            >
-              <MinusIcon />
-            </div>
-            <div className="tag-label">{this.props.text}</div>
-          </div>
-        </div>
+        // <div
+        //   className={`tag-properties ${
+        //     this.props.className ? this.props.className : ""
+        //   }`}
+        // >
+        //   <div className="tag-properties-minus">
+        //     <div onClick={this.removeOnClick} className="tag-button">
+        //       <MinusIcon />
+        //     </div>
+        //     <div className="tag-label">{this.props.text}</div>
+        //   </div>
+        // </div>
+        <Chip
+          className={classes.root}
+          onDelete={this.removeOnClick}
+          label={this.props.text}
+        />
       );
+    } else if (this.state.type === "label") {
+      return <Chip className={classes.label} label={this.props.text} />;
     }
   }
 }
 
-export default Tag;
+export default withStyles(useStyles)(Tag);

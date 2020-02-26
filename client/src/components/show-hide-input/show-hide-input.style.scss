@@ -11,10 +11,10 @@
     position: absolute;
     padding: 23px;
     .circle-btn{
-        background-color: red;
+        background-color: transparent;
         svg {
             path {
-                fill: green;
+                fill: $green_main;
               }
         }
     }

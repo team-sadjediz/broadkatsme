@@ -1,0 +1,47 @@
+@import "../../assets/colors";
+@import "../../assets/dimensions";
+
+.img-btn-container {
+  width: $circle_btn_dimension;
+  height: $circle_btn_dimension;
+  position: relative;
+  cursor: pointer;
+  margin: 0 5px;
+
+  img {
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+    // object-fit: cover;
+  }
+
+  .icon-hover {
+    background-color: rgba(0, 0, 0, 0.4);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition-duration: 300ms;
+    transition-property: transform opacity;
+
+    svg {
+      path {
+        fill: $foreground;
+      }
+    }
+  }
+
+  &:hover .icon-hover {
+    opacity: 1;
+    transform: rotate(360deg);
+  }
+}

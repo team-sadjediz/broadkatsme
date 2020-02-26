@@ -5,22 +5,22 @@ import { auth, signInWithGoogle } from "../../firebase/firebase.utils";
 // components:
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
-import ShowHide from "../show-hide-input/show-hide-input.component";
-
-// icons:
-import { ReactComponent as GoogleLogoColorful } from "../../assets/icons/google-logo-colorful.svg";
-// import { ReactComponent as GoogleLogo } from "../../assets/icons/google-logo-solid.svg";
-
-
+import CircleBtn from "../circle-btn/circle-btn.component";
 import "./login.style.scss";
-
+//icons
+import { ReactComponent as EyeDefault } from "../../assets/icons/eye-solid.svg";
+import { ReactComponent as EyeHidden } from "../../assets/icons/eye-slash-solid.svg";
+import { ReactComponent as GoogleLogoColorful } from "../../assets/icons/google-logo-colorful.svg";
 class LogIn extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      text: "",
+      hidden: true,
+      button: <EyeDefault/>
     };
   }
 
@@ -42,6 +42,25 @@ class LogIn extends React.Component {
     this.setState({ [name]: value });
   };
 
+  handleShowHide = event => {
+    this.setState({ text: event.target.value});
+    this.setState({ password: event.target.password});
+    this.handleChange(event);
+  };
+
+  //To-Do: On the first click, there is a button change delay
+  toggleShow = () => {
+    console.log(this.state.hidden);
+    this.setState({ hidden: !this.state.hidden });
+    if (!this.state.hidden){
+      this.setState({button: <EyeHidden/>});
+    }
+    else {
+      this.setState({button: <EyeDefault/>});
+    }
+    console.log("click:" + this.state.hidden);
+  }
+
   render() {
     return (
       <div
@@ -59,27 +78,22 @@ class LogIn extends React.Component {
             label="email"
             required
           />
-
-          <FormInput
-            className="password-field"
-            name="password"
-            type="password"
-            handleChange={this.handleChange}
-            value={this.state.password}
-            label="password"
-            required
-          />
-
-          {/* <ShowHide
-            className="password-field"
-            name="password"
-            type="password"
-            handleChange={this.handleChange}
-            value={this.state.password}
-            label="password"
-            required
-          /> */}
-
+          <div className="password-container">
+            <FormInput
+              className="password-field"
+              name="password"
+              type={this.state.hidden ? "password" : "text"}
+              handleChange={this.handleShowHide}
+              value={this.state.password}
+              label="password"
+              required
+            />
+            <CircleBtn
+              type="button"
+              onClick={this.toggleShow}
+              icon={this.state.button}
+            />    
+          </div>
           <CustomButton
             className="login-btn"
             type="submit"

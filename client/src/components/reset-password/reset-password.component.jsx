@@ -4,8 +4,13 @@ import axios from "axios";
 
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
+import {auth, database} from "../../firebase/firebase.utils";
 
 import "./reset-password.style.scss";
+
+// const doPasswordReset = email => ;
+// const doPasswordUpdate = password => 
+// this.auth.currentUser.updatePassword(password);
 class ResetPassword extends React.Component{
     constructor(props) {
         super(props);
@@ -37,47 +42,53 @@ class ResetPassword extends React.Component{
         });
     }
 
-    // handleSendCodeClick = async e => {
-    //     e.preventDefault();
-    //     this.setState({isCodeSending: true});
+    handleTextChange = event => {
+        const { value, name } = event.target;
+        console.log("a:", event.target.name);
+        this.setState({ [name]: value });
+      };
 
-    //     try {
-    //         await Auth.forgotPassword(this.state.email);
-    //         this.setState({ isCodeSent: true});
-    //     } catch (error) {
-    //         alert(error.message);
-    //         this.setState({ isCodeSending: false })
-    //     }
-    // };
+    handleSendCodeClick = async e => {
+        e.preventDefault();
+        this.setState({isCodeSending: true});
+
+        try {
+            await auth.sendPasswordResetEmail(this.state.email);
+        } catch (error) {
+            alert(error.message + this.state.email);
+
+            this.setState({ isCodeSending: false })
+        }
+    };
 
     handleVerifyClick = async e => {
         e.preventDefault();
         this.setState({ isVerifying: true });
 
-        // try {
-        //     await Auth.forgotPasswordSubmit(
-        //         this.state.email,
-        //         this.state.code,
-        //         this.state.password
-        //     );
-        //     this.setState({ isVerified: true });
-        // }
-        // catch (error) {
-        //     alert(e.message);
-        //     this.setState({ isVerifying: false });
-        // }
+        try {
+            // await Auth.forgotPasswordSubmit(
+            //     this.state.email,
+            //     this.state.code,
+            //     this.state.password
+            // );
+            this.setState({ isVerified: true });
+        }
+        catch (error) {
+            alert(e.message);
+            this.setState({ isVerifying: false });
+        }
     };
 
     // Ask user for their email information
     renderRequestCodeForm() {
         return (
-            <form className="form-container">
+            <form className="forgot-password-form" onSubmit={this.handleSendCodeClick}>
                 <FormInput
                 className="email-field"
                 name="email"
                 type="email"
                 value={this.state.email}
-                handleChange={this.handleChange}
+                handleChange={this.handleTextChange}
                 label="forgot password"
                 required
                 />
@@ -85,7 +96,8 @@ class ResetPassword extends React.Component{
                 className="submit-btn"
                 type="submit"
                 isLoading={this.state.isCodeSending}
-                disabled={!this.validateCodeForm}>
+                disabled={!this.validateCodeForm}
+                onClick={this.renderConfirmationForm()}>
                 submit
                 </CustomButton>
             </form>
@@ -94,7 +106,7 @@ class ResetPassword extends React.Component{
 
     renderConfirmationForm() {
         return(
-        <form onSubmit={this.handleConfirmClick}>
+        <form onSubmit={this.handleVerifyClick}>
             <FormInput
             className="confirmation-field"
             handleChange={this.handleChange}

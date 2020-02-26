@@ -1,11 +1,16 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
 
+.center {
+  display: flex;
+  justify-content: center;
+}
+
 .room-page {
-  margin: 0 auto;
+  // margin: 0 auto;
   display: grid;
   grid-template-columns: min-content;
-  grid-template-rows: 2em min-content 2em max-content auto;
+  grid-template-rows: 1em min-content 2em max-content auto;
   grid-template-areas:
     "    .     "
     " room-bar "
@@ -18,42 +23,64 @@
   grid-area: room-bar;
 }
 
-.temp {
-  color: white;
+.room-screen-area {
+  grid-area: room-screen;
+  // display: flex;
+  // justify-self: center;
+  display: grid;
+  grid-template-columns: auto min-content;
+  grid-template-rows: auto min-content;
+  grid-template-areas:
+    " . . "
+    " . overlay ";
+  height: 720px;
+  width: 1280px;
+  // background-color: $white;
+  background-color: $foreground;
+  // background-color: rgba(101, 149, 158, 0.3);
 }
 
-.temp2 {
+.browser-overlay {
+  grid-area: overlay;
+  color: $french_laundry_blue;
+  // height: 100%;
+  width: 100%;
+  margin-bottom: 5px;
+  // padding: 5px;
+  // display: grid;
+}
+
+.hide {
   height: 100%;
   width: 100%;
+  // display: none;
   cursor: none;
 }
 
-.room-screen-area {
-  grid-area: room-screen;
-  display: flex;
-  justify-self: center;
-  height: 720px;
-  width: 1280px;
-  //   height: 480px;
-  //   width: 854px;
-  background-color: $french_laundry_blue;
+// catch all cases where screen is bigger or equal than 1482px
+@media (min-width: 1482px) {
+  .room-screen-area {
+    height: 680px;
+    width: 1054px;
+  }
 }
 
-@media (max-width: 1480px) {
+// catch all other others where screen is smaller than 1482px
+@media (max-width: 1481px) {
   .room-screen-area {
     height: 480px;
     width: 854px;
   }
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1250px) {
   .room-screen-area {
     height: 360px;
     width: 640px;
   }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1050px) {
   .room-screen-area {
     height: 240px;
     width: 426px;

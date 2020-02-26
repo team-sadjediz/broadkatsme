@@ -4,17 +4,16 @@
 ///////////////////////////////////////////////////////////////
 // EXPERIMENTAL COLORS HERE (put all new colors here):
 ///////////////////////////////////////////////////////////////
-$green-main: #50d19e;
 $green_main: #50d19e;
 
 $red: #bf616a;
-$red-cinnabar: #e9524a;
+$red_cinnabar: #e9524a;
 
 $yellow: #ebcb8b;
-$yellow-kournikova: #ffe96f;
+$yellow_kournikova: #ffe96f;
 
 $green: #a3be8c;
-$green-shamrock: #50d19e;
+$green_shamrock: #50d19e;
 
 ///////////////////////////////////////////////////////////////
 // CURRENT COLOR PALETTE HERE:
@@ -30,14 +29,15 @@ $soft_red: #ef5350;
 // GRAYS, WHITES, BLACKS HERE:
 ///////////////////////////////////////////////////////////////
 $white: #f2f3f0;
-$white-wildsand: #f5f5f5; //wild sand
+$white_wildsand: #f5f5f5; //wild sand
 $light_gray: rgba(0, 0, 0, 0.1);
 $black: #000000;
-$black-thunder: #231f20; //black-thunder
+$black_thunder: #231f20; //black-thunder
 $gray: #353c4a;
-$gray-nobel: #b7b7b7; //gray-nobel
-$gray-alto: #d9d9d9; //gray-alto
-$gray-jaguar: #26262b;
+$gray_nobel: #b7b7b7; //gray-nobel
+$gray_alto: #d9d9d9; //gray-alto
+$gray_jaguar: #26262b;
+$gray_material_ui: #eceff1;
 
 ///////////////////////////////////////////////////////////////
 // LINEAR GRADIENTS HERE:
@@ -68,11 +68,14 @@ $strong_box_shadow: 0 0 5px #414141;
 //////// USE THESE VARIABLES INSIDE YOUR COMPONENTS ///////////
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
-$bg_color: $lg_blue;
+// $bg_color: $lg_blue;
+$bg_color: rgb(197, 202, 212);
+
 $highlight1: $french_laundry_blue;
 $highlight2: $soft_red;
 // $highlight3: $; // room for ONE more color :)
 $foreground: white;
+$foreground2: $gray_material_ui;
 ///////////////////////////////////////////////////////////////
 // $bg_color: #466075;
 // $bg_color: #6786ae;

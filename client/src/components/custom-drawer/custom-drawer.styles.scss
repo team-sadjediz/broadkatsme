@@ -37,7 +37,7 @@
 }
 
 .drawer-header-container {
-  margin-top: 0.5em;
+  margin: 0.5em 0;
 
   position: relative;
   width: 100%;
@@ -69,5 +69,25 @@
     &:hover {
       background-color: $highlight2;
     }
+  }
+}
+
+.float-right {
+  width: fit-content;
+  float: right;
+}
+
+.toggle-drawer-btn {
+  background-color: $highlight1;
+  width: fit-content;
+  margin: 0 6px;
+  svg {
+    path {
+      fill: $foreground;
+    }
+  }
+
+  &:hover {
+    background-color: $highlight2;
   }
 }
