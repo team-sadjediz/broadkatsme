@@ -103,10 +103,10 @@ router.put("/upload-thumnail", function(req, res) {
 // <img src={`http://localhost:5000/api/room/get-thumbnail?thumbnail_url=${thumbnail_url}`} />
 router.get("/get-thumbnail", async function(req, res) {
   let s3 = new aws.S3();
-  let url = "default1.png";
+  let url = req.query.thumbnail_url;
   console.log(url);
   let data = await s3.getObject({ Bucket: "broadkats.me", Key: url }).promise();
-  res.writeHead(200, { "Content-Type": "image/png" });
+  res.writeHead(200, { "Content-Type": "image/png, image/jpg" });
   res.write(data.Body, "binary");
   res.end(null, "binary");
 });
@@ -176,17 +176,22 @@ router.put("/add-tags", async function(req, res) {
   let new_tag = req.body.new_tag;
   await Room.findOneAndUpdate(
     { _id: room_ID },
-    { $addToSet: { tags: new_tag } }
+    { $addToSet: { tags: new_tag } },
+    { new: true }
   )
-    .then(document => res.send(document))
+    .then(document => res.send(document.tags))
     .catch(error => res.status(400).send("Add tag failed."));
 });
 
 router.put("/remove-tags", async function(req, res) {
   let room_ID = req.body.room_ID;
   let del_tag = req.body.del_tag;
-  await Room.findOneAndUpdate({ _id: room_ID }, { $pull: { tags: del_tag } })
-    .then(document => res.send(document))
+  await Room.findOneAndUpdate(
+    { _id: room_ID },
+    { $pull: { tags: del_tag } },
+    { new: true }
+  )
+    .then(document => res.send(document.tags))
     .catch(error => res.status(400).send("Remove tag failed."));
 });
 

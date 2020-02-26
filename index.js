@@ -1,9 +1,7 @@
 const express = require("express");
 const path = require("path");
-
 const cors = require("cors");
 const mongoose = require("mongoose");
-
 const bodyParser = require("body-parser");
 
 // const admin = require("./server/firebase-config/admin");
@@ -22,7 +20,6 @@ const port = process.env.PORT || 5000;
 app.use(express.static(path.join(__dirname, "client/build")));
 
 // --------------------------------- Q U E R I E S ---------------------------------
-
 const home = require("./server/routes/home");
 const userProfile = require("./server/routes/userprofile");
 const userProps = require("./server/routes/userprops");

@@ -30,21 +30,31 @@ router.get("/user-props", async function(req, res) {
 router.get("/users-rooms", async function(req, res) {
   let uid = req.query.uid;
   let room_urls = [];
+
+  let exists = null;
   await UserProps.findOne({ user_ID: uid })
-    .populate("subscribed_rooms")
-    .exec((error, populatedProps) => {
-      let rooms = populatedProps.subscribed_rooms;
-      rooms.forEach(function(room) {
-        room_urls.push({
-          "roomID": room._id,
-          "name": room.name,
-          "thumbnail_url": room.thumbnail_url,
-          "tags": room.tags
+    .then(document => (exists = document))
+    .catch(error => console.log(error));
+
+  if (exists !== null) {
+    await UserProps.findOne({ user_ID: uid })
+      .populate("subscribed_rooms")
+      .exec((error, populatedProps) => {
+        let rooms = populatedProps.subscribed_rooms;
+        rooms.forEach(function(room) {
+          room_urls.push({
+            "roomID": room._id,
+            "name": room.name,
+            "thumbnail_url": room.thumbnail_url,
+            "tags": room.tags
+          });
         });
+        console.log(room_urls);
+        res.send(room_urls);
       });
-      console.log(room_urls);
-      res.send(room_urls);
-    });
+  } else {
+    res.send([]);
+  }
 });
 
 router.get("/get-random-rooms", async function(req, res) {
