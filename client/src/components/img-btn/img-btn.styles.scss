@@ -16,7 +16,7 @@
   }
 
   .icon-hover {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.4);
 
     display: flex;
     justify-content: center;
@@ -35,13 +35,12 @@
 
     svg {
       path {
-        fill: $white;
+        fill: $foreground;
       }
     }
   }
 
   &:hover .icon-hover {
-    background: #000;
     opacity: 1;
     transform: rotate(360deg);
   }
