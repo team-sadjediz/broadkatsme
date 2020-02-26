@@ -51,11 +51,18 @@ router.post("/createroom", async function(req, res) {
       }
     }
   });
+<<<<<<< HEAD
   // let room_ID;
   // await new_room
   //   .save()
   //   .then(document => (room_ID = document._id))
   //   // .then(document => console.log(document._id))
+=======
+
+  // await new_room
+  //   .save()
+  //   .then(document => console.log(document))
+>>>>>>> master
   //   .catch(error => res.status(400).send("New room insert failed."));
 
   let room_ID;

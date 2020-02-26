@@ -1,5 +1,5 @@
 /node_modules
-/server/credentials/
+/server/credentials
 /server/mongo-config/
 /server/aws-config/
 /server/firebase-config/

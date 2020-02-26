@@ -34,7 +34,8 @@ class NewRoom extends React.Component {
     };
 
     axios
-      .post("http://broadkatsme.herokuapp.com/api/room/createroom", room)
+      // .post("http://broadkatsme.herokuapp.com/api/room/createroom", room)
+      .post("http://localhost:5000/api/room/createroom", room)
       .then(() => console.log("Room posted to backend/created."))
       .catch(error => {
         console.error(error);
