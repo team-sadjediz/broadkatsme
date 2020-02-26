@@ -4,11 +4,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
-<<<<<<< HEAD
-=======
 // const admin = require("./server/firebase-config/admin");
 
->>>>>>> master
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());

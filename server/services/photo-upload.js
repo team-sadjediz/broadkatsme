@@ -3,23 +3,12 @@ const multer = require("multer");
 const multerS3 = require("multer-s3");
 const path = require("path");
 
-<<<<<<< HEAD
-// Local Deploymenet ---------------------------------------------------------------------------------------
-let config;
-
-try {
-  config = require("../credentials/aws-credentials");
-} catch {
-  console.log("AWS keys not found locally.");
-  console.log("Using heroku environment variable as keys.");
-=======
 let config;
 try {
   config = require("../credentials/aws-credentials");
 } catch {
   console.log("AWS Keys could not be found.");
   console.log("Defaulting to environment keys.");
->>>>>>> master
 }
 
 aws.config.update({
