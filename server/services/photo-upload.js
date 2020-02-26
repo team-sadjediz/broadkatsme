@@ -3,16 +3,20 @@ const multer = require("multer");
 const multerS3 = require("multer-s3");
 const path = require("path");
 
-// Local Deploymenet
-const config = require("../aws-config/aws-credentials");
+let config;
+try {
+  config = require("../credentials/aws-credentials");
+} catch {
+  console.log("AWS Keys could not be found.");
+  console.log("Defaulting to environment keys.");
+}
 
-// Heroku Deployment
 aws.config.update({
   secretAccessKey:
-    process.env.AWS_SECRET_ACCESS_KEY || config.AWS_SECRET_ACCESS_KEY,
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID || config.AWS_ACCESS_KEY_ID,
-  Bucket: process.env.AWS_BUCKET || config.AWS_BUCKET,
-  region: process.env.AWS_REGION || config.AWS_REGION
+    config.AWS_SECRET_ACCESS_KEY || process.env.AWS_SECRET_ACCESS_KEY,
+  accessKeyId: config.AWS_ACCESS_KEY_ID || process.env.AWS_ACCESS_KEY_ID,
+  Bucket: config.AWS_BUCKET || process.env.AWS_BUCKET,
+  region: config.AWS_REGION || process.env.AWS_REGION
 });
 
 const s3 = new aws.S3({

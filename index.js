@@ -8,9 +8,6 @@ const bodyParser = require("body-parser");
 
 // const admin = require("./server/firebase-config/admin");
 
-// Local Deployment
-const uri = require("./server/mongo-config/uri-credentials");
-
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -37,13 +34,15 @@ const friends = require("./server/routes/friends");
 
 // --------------------------------- D B - C O N N ---------------------------------
 
-// Inquire @ Julie for hard-coded configuration of database access (hidden in config
-// var to avoid release of private database credentials)
+let uri;
 
-// Heroku Deployment
-// const databaseURI = process.env.MONGODB_URI;
+try {
+  uri = require("../credentials/uri-credentials.js");
+} catch {
+  console.log("MongoDB keys not found.");
+  console.log("Defaulting to environment keys.");
+}
 
-// Local Deployment
 const databaseURI = process.env.MONGODB_URI || uri;
 
 mongoose.connect(databaseURI, { useNewUrlParser: true });

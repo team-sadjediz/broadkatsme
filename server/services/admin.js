@@ -1,7 +1,7 @@
 // const admin = require("firebase-admin");
 
 // // Local Deployment
-// // const config = require("./admin-credentials");
+// const config = require("../credentials/admin-credentials");
 
 // admin.initializeApp({
 //   credential: admin.credential.cert({
