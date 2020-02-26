@@ -43,7 +43,7 @@ try {
   console.log("Defaulting to environment keys.");
 }
 
-const databaseURI = process.env.MONGODB_URI || uri;
+const databaseURI = uri || process.env.MONGODB_URI;
 
 mongoose.connect(databaseURI, { useNewUrlParser: true });
 
