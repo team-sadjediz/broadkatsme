@@ -1,6 +1,32 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
 
+@keyframes forward-spin {
+  0% {
+    opacity: 1;
+    transform: rotate(0deg);
+    background-color: rgba(0, 0, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes backward-spin {
+  0% {
+    transform: rotate(360deg);
+  }
+  90% {
+    transform: rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0);
+  }
+}
+
 .img-btn-container {
   width: $circle_btn_dimension;
   height: $circle_btn_dimension;
@@ -12,7 +38,6 @@
     border-radius: 50%;
     height: 100%;
     width: 100%;
-    // object-fit: cover;
   }
 
   .icon-hover {
@@ -29,9 +54,10 @@
 
     height: 100%;
     width: 100%;
-    opacity: 0;
-    transition-duration: 300ms;
-    transition-property: transform opacity;
+
+    animation-name: backward-spin;
+    animation-duration: 300ms;
+    animation-fill-mode: forwards;
 
     svg {
       path {
@@ -41,7 +67,8 @@
   }
 
   &:hover .icon-hover {
-    opacity: 1;
-    transform: rotate(360deg);
+    animation-name: forward-spin;
+    animation-duration: 300ms;
+    animation-fill-mode: forwards;
   }
 }
