@@ -25,8 +25,10 @@ import NineDotsIcon from "../../assets/icons/nine-dots-solid.svg";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import SlowMotionVideoIcon from "@material-ui/icons/SlowMotionVideo";
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
-
 import "./navbar-mui.styles.scss";
+
+// utils:
+const utils = require("../../utils");
 
 // const useStyles = makeStyles(theme => ({
 //   root: {
@@ -96,17 +98,12 @@ class ButtonAppBar extends React.Component {
   async componentDidMount() {
     console.log("current user:", this.props.currentUser.uid);
 
-    let results = await axios.get(
-      // "http://localhost:5000/api/home/users-rooms",
-      "http://broadkatsme.herokuapp.com/api/home/users-rooms",
-      {
-        params: { uid: this.props.currentUser.uid }
-      }
-    );
-    // console.log("iwannabefree", results);
+    let results = await axios.get(`${utils.BASE_API_URL}/home/users-rooms`, {
+      params: { uid: this.props.currentUser.uid }
+    });
 
     this.setState({ roomList: results.data });
-    console.log("after api call", this.state.roomList);
+    // console.log("after api call", this.state.roomList);
   }
 
   render() {
@@ -129,13 +126,11 @@ class ButtonAppBar extends React.Component {
                   <DashboardIcon></DashboardIcon>
                 </RoomNavButton>
               </Link>
-
               <Link to="/search">
                 <RoomNavButton>
                   <SearchIcon></SearchIcon>
                 </RoomNavButton>
               </Link>
-
               <MouseOverPopover
                 anchorOrigin={{
                   vertical: "bottom",
@@ -151,14 +146,12 @@ class ButtonAppBar extends React.Component {
                   <AddIcon></AddIcon>
                 </RoomNavButton>
               </MouseOverPopover>
-
-              {console.log("before map:", this.state.roomList)}
+              {/* {console.log("before map:", this.state.roomList)} */}
               {this.state.roomList.map(room => (
                 <Link to={`/room/id/${room.roomID}`}>
                   <ImageButton
                     iconHover={<PlayCircleFilledIcon />}
-                    // bgImageUrl={`http://localhost:5000/api/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
-                    bgImageUrl={`http://broadkatsme.herokuapp.com/api/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
+                    bgImageUrl={`${utils.BASE_API_URL}/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
                   ></ImageButton>
                 </Link>
               ))}

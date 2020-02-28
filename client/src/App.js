@@ -7,7 +7,6 @@ import { connect } from "react-redux";
 import { setCurrentUser } from "./redux/user/user.actions";
 
 // components:
-import NavBar from "./components/navbar/navbar.component";
 import PersistentDrawerLeft from "./components/custom-drawer/custom-drawer.component";
 import ButtonAppBar from "./components/navbar-mui/navbar-mui.component";
 
@@ -25,8 +24,6 @@ import ResetPassPage from "./pages/reset-password-page/reset-password-page.compo
 import Test from "./components/test-component/test.component";
 
 import "./App.scss";
-
-console.log("env in app.js", process.env);
 
 const theme = createMuiTheme({
   palette: {
@@ -65,7 +62,7 @@ class App extends Component {
   componentDidMount() {
     this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
       this.props.setCurrentUser(user);
-      console.log("componentDidMount - logged in1:", this.props.currentUser);
+      // console.log("componentDidMount - logged in1:", this.props.currentUser);
     });
   }
 
