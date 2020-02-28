@@ -3,3 +3,4 @@
 /server/mongo-config/
 /server/aws-config/
 /server/firebase-config/
+.env
