@@ -32,7 +32,7 @@ class RoomBar extends Component {
     //     />
     //   );
     // });
-    console.log(this.state.roomID);
+    // console.log(this.state.roomID);
     let options = (
       <div className="more-buttons">
         <CircleBtn

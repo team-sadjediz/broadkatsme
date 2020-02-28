@@ -15,7 +15,7 @@ export default function BrowserInit(props) {
       {/* <PlayCircleFilledIcon /> */}
       {/* <div className="browser-init-bar"> */}
       {/* <Tag type="add"></Tag> */}
-      <PlayCircleFilledIcon />
+      <PlayCircleFilledIcon onClick={props.closeInit} />
       {/* </div> */}
     </div>
   );

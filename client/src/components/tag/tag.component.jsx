@@ -90,11 +90,11 @@ const useStyles = theme => ({
 class Tag extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props.roomID);
+    // console.log(this.props.roomID);
     this.state = {
       type: this.props.type,
       roomID: this.props.roomID,
-      input: null
+      input: ""
     };
   }
 
