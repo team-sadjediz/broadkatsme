@@ -18,7 +18,7 @@
 }
 
 .room-settings-container {
-  z-index: 2000;
+  // z-index: 2000;
   grid-column: 1;
   grid-row: 1;
   display: flex;
@@ -63,6 +63,11 @@
   // background-color: $white;
   background-color: $foreground;
   // background-color: rgba(101, 149, 158, 0.3);
+}
+
+.room-screen-init {
+  grid-area: room-screen;
+  z-index: 2000;
 }
 
 .browser-overlay {

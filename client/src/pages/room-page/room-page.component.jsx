@@ -8,7 +8,10 @@ import "./room-page.styles.scss";
 // import Tag from "../../components/tag/tag.component";
 import RoomBar from "../../components/room-bar/room-bar.component";
 import BrowserOverlay from "../../components/browser-overlay/browser-overlay.component";
+import BrowserInit from "../../components/browser-init/browser-init.component";
 import RoomSettings from "../../components/room-settings/room-settings.component";
+
+import Modal from "@material-ui/core/Modal";
 
 const initialState = {
   isMouseMoving: false,
@@ -108,15 +111,16 @@ class RoomPage extends Component {
       roomName: roomDetails.name,
       roomID: roomDetails._id,
       ownerID: roomDetails.owner_ID,
-      showInitial: true,
-      showSettings: false,
+      // showInitial: true,
+      // showSettings: false,
       subscribers: roomDetails.subscriber,
       tags: roomDetails.tags,
       settings: roomDetails.settings
     });
   };
 
-  closeInitialModal = () => {
+  closeInit = () => {
+    console.log("close init called");
     this.setState({ showInitial: false });
   };
 
@@ -164,6 +168,7 @@ class RoomPage extends Component {
   };
 
   render() {
+    console.log(this.state.showInitial);
     return (
       <div className="main-container">
         {this.state.showSettings ? (
@@ -177,7 +182,6 @@ class RoomPage extends Component {
         ) : null}
 
         <div className="room-page-container">
-          {/* <RoomSettings></RoomSettings> */}
           <div className="room-page">
             <div className="room-bar-area">
               <RoomBar
@@ -190,10 +194,23 @@ class RoomPage extends Component {
                 onChangeTag={this.onChangeTag}
               />
             </div>
+            {this.state.showInitial ? (
+              <div className="room-screen-init">
+                <BrowserInit
+                  closeInit={this.closeInit}
+                  roomName={this.state.roomName}
+                ></BrowserInit>
+              </div>
+            ) : null}
             <div
               className="room-screen-area"
               onMouseMove={e => this.handleMouseMove(e)}
             >
+              {/* <iframe
+                width="100%"
+                height="100%"
+                src="https://www.youtube.com/embed/Fb0Og6pB9Z8"
+              ></iframe> */}
               {this.state.isMouseMoving ? (
                 <BrowserOverlay
                   className="browser-overlay"
