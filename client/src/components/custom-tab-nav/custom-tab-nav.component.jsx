@@ -123,19 +123,23 @@ export default function VerticalTabs({ drawerOpen }) {
 
   return (
     <div className="custom-tab-nav-container">
-      {drawerOpen}
-      <div className="drawer-header-container">
+      <div
+        className={`drawer-header-container ${
+          !drawerOpen ? "bg-close" : "bg-open"
+        }`}
+      >
         {drawerOpen ? (
           <div className={`drawer-header`}>{NavItemDetails[value].title}</div>
         ) : null}
       </div>
+
       <div className={classes.root}>
         <TabNav
           orientation="vertical"
           variant="scrollable"
           value={value}
           onChange={handleChange}
-          aria-label="Vertical tabs example"
+          aria-label="vertical tab"
         >
           <TabNavIconButton icon={<NotificationsIcon />}></TabNavIconButton>
           <TabNavIconButton
