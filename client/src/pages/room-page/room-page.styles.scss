@@ -1,12 +1,21 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
 
-.center {
+.room-page-container {
   display: flex;
   justify-content: center;
+  width: 100%;
+  display: grid;
+}
+
+.room-page-settings {
+  grid-column: 1;
+  grid-row: 1;
 }
 
 .room-page {
+  grid-column: 1;
+  grid-row: 1;
   // margin: 0 auto;
   display: grid;
   grid-template-columns: min-content;
@@ -22,6 +31,10 @@
 .room-bar-area {
   grid-area: room-bar;
 }
+
+// .room-settings-area {
+//   grid-area: room-bar / room-screen;
+// }
 
 .room-screen-area {
   grid-area: room-screen;

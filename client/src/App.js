@@ -22,7 +22,11 @@ import CodeOfConductPage from "./pages/code-of-conduct-page/code-of-conduct-page
 import ContactPage from "./pages/contact-page/contact-page.component";
 import ResetPassPage from "./pages/reset-password-page/reset-password-page.component";
 
+import Test from "./components/test-component/test.component";
+
 import "./App.scss";
+
+console.log("env in app.js", process.env);
 
 const theme = createMuiTheme({
   palette: {
@@ -45,8 +49,15 @@ const theme = createMuiTheme({
       "BlinkMacSystemFont",
       '"Segoe UI"'
     ].join(",")
+  },
+  mixins: {
+    toolbar: {
+      minHeight: 64 // sets the navbar height in pixels
+    }
   }
 });
+
+console.log("MUI theme:", theme);
 
 class App extends Component {
   unsubscribeFromAuth = null;

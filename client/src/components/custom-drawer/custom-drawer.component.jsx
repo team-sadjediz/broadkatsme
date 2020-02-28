@@ -32,24 +32,24 @@ const drawerWidth = 350;
 const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
-    height: "100%",
+    height: `calc(100% - ${theme.mixins.toolbar.minHeight}px)`,
     zIndex: 0
   },
-  appBar: {
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    }),
-    zIndex: theme.zIndex.drawer + 1
-  },
-  appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  },
+  // appBar: {
+  //   transition: theme.transitions.create(["margin", "width"], {
+  //     easing: theme.transitions.easing.sharp,
+  //     duration: theme.transitions.duration.leavingScreen
+  //   }),
+  //   zIndex: theme.zIndex.drawer + 1
+  // },
+  // appBarShift: {
+  //   width: `calc(100% - ${drawerWidth}px)`,
+  //   marginLeft: drawerWidth,
+  //   transition: theme.transitions.create(["margin", "width"], {
+  //     easing: theme.transitions.easing.easeOut,
+  //     duration: theme.transitions.duration.enteringScreen
+  //   })
+  // },
   menuButton: {
     marginRight: theme.spacing(2)
   },
@@ -100,12 +100,17 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "#eceff1"
   },
   content: {
+    overflow: "auto",
+    overflowY: "auto",
+    // overflowX: "hidden", // will eventually have this option on
+    boxSizing: "border-box",
     display: "flex",
     justifyContent: "center",
-    // alignItems: "center",
     flexGrow: 1,
     // padding: theme.spacing(3),
-    margin: "1em",
+    padding: "0.5em",
+    boxSizing: "border-box",
+    // margin: "1em",
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
@@ -200,51 +205,6 @@ const PersistentDrawerLeft = props => {
         <ToggleDrawerButton onClick={toggleDrawer}>
           {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
         </ToggleDrawerButton>
-        {/* <div className="drawer-header-container">
-          <div className={`drawer-header ${open ? "" : "hidden"}`}>
-            my title
-          </div>
-          <IconButton
-            className={`close-btn outflow-top-right ${
-              open ? "position-right" : "position-center"
-            }`}
-            // className="close-btn position-right"
-            onClick={toggleDrawer}
-          >
-            {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </div> */}
-        {/* <div onClick={toggleDrawer} className={`${classes.drawerHeader}`}>
-          <IconButton onClick={toggleDrawer} className="close-btn">
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </div> */}
-        {/* <Divider /> */}
-        {/* <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List> */}
         <VerticalTabs drawerOpen={open}></VerticalTabs>
       </Drawer>
 

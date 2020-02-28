@@ -68,7 +68,9 @@ $strong_box_shadow: 0 0 5px #414141;
 //////// USE THESE VARIABLES INSIDE YOUR COMPONENTS ///////////
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
-$bg_color: $lg_blue;
+// $bg_color: $lg_blue;
+$bg_color: rgb(197, 202, 212);
+
 $highlight1: $french_laundry_blue;
 $highlight2: $soft_red;
 // $highlight3: $; // room for ONE more color :)

@@ -15,7 +15,9 @@ const Card = ({ property }) => {
   return (
     <div id={`card-${roomID}`} className="card">
       <div className="img-container">
-        {/* <img src={`http://localhost:5000/api/room/get-thumbnail?thumbnail_url=${thumbnail_url}`} /> */}
+        {/* <img
+          src={`http://localhost:5000/api/room/get-thumbnail?thumbnail_url=${thumbnail_url}`}
+        /> */}
         <img
           src={`http://broadkatsme.herokuapp.com/api/room/get-thumbnail?thumbnail_url=${thumbnail_url}`}
         />
