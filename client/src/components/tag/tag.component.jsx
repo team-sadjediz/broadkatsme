@@ -1,19 +1,14 @@
 import React, { Component } from "react";
 import axios from "axios";
 
+import { BASE_API_URL } from "../../utils";
+
 import Chip from "@material-ui/core/Chip";
-import {
-  makeStyles,
-  withStyles,
-  createMuiTheme,
-  MuiThemeProvider
-} from "@material-ui/core/styles";
+import { withStyles, createMuiTheme } from "@material-ui/core/styles";
 
 import "./tag.style.scss";
 
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-import { ReactComponent as PlusIcon } from "../../assets/icons/plus-solid.svg";
-import { ReactComponent as MinusIcon } from "../../assets/icons/minus.svg";
 
 // If type = add -> onClick = addOnClick, icon = addIcon
 // If type = remove -> onClick = removeOnClick, icon = removeIcon
@@ -92,15 +87,6 @@ const useStyles = theme => ({
   }
 });
 
-const themeTag = createMuiTheme({
-  overrides: {
-    MuiChip: {
-      "&:active": {
-        backgroundColor: "green"
-      }
-    }
-  }
-});
 class Tag extends Component {
   constructor(props) {
     super(props);
@@ -123,7 +109,8 @@ class Tag extends Component {
     let request = { "new_tag": tag, "room_ID": roomID };
     axios
       // .put("http://localhost:5000/api/room/add-tags", request)
-      .put("http://broadkatsme.herokuapp.com/api/room/add-tags", request)
+      // .put("http://broadkatsme.herokuapp.com/api/room/add-tags", request)
+      .put(`${BASE_API_URL}/room/add-tags`, request)
       .then(res => {
         this.props.onChangeTag(res.data);
         this.setState({ input: "" });
@@ -139,7 +126,8 @@ class Tag extends Component {
     console.log("removing " + tag);
     axios
       // .put("http://localhost:5000/api/room/remove-tags", request)
-      .put("http://broadkatsme.herokuapp.com/api/room/remove-tags", request)
+      // .put("http://broadkatsme.herokuapp.com/api/room/remove-tags", request)
+      .put(`${BASE_API_URL}/room/remove-tags`, request)
       .then(res => this.props.onChangeTag(res.data))
       .catch(error => console.error(error));
   };
