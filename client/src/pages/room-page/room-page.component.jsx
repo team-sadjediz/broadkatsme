@@ -88,6 +88,7 @@ class RoomPage extends Component {
     let subscribers = this.state.subscribers !== nextState.subscribers;
     let tags = this.state.tags !== nextState.tags;
     let settings = this.state.settings !== nextState.settings;
+    // let showSettings = this.state.showSettings !== nextState.showSettings;
     return (
       isMouseMoving ||
       isFavorited ||
@@ -98,6 +99,7 @@ class RoomPage extends Component {
       subscribers ||
       tags ||
       settings
+      // showSettings
     );
   }
 
@@ -163,33 +165,45 @@ class RoomPage extends Component {
 
   render() {
     return (
-      <div className="room-page-container">
-        <RoomSettings className="room-page-settings"></RoomSettings>
-        <div className="room-page">
-          <div className="room-bar-area">
-            <RoomBar
-              roomName={this.state.roomName}
-              roomID={this.state.roomID}
-              tags={this.state.tags}
+      <div className="main-container">
+        {this.state.showSettings ? (
+          <div className="room-settings-container">
+            <RoomSettings
+              tabs={["Add", "Delete", "Eat Shit"]}
+              panels={["fml", "2xfml", "3xfml"]}
               toggleSettingsModal={this.toggleSettingsModal}
-              favoriteRoom={this.favoriteRoom}
-              isFavorited={this.state.isFavorited}
-              onChangeTag={this.onChangeTag}
-            />
+            ></RoomSettings>
           </div>
-          <div
-            className="room-screen-area"
-            onMouseMove={e => this.handleMouseMove(e)}
-          >
-            {this.state.isMouseMoving ? (
-              <BrowserOverlay
-                className="browser-overlay"
-                volume={this.state.volume}
-                handleVolume={this.handleVolume}
+        ) : null}
+
+        <div className="room-page-container">
+          {/* <RoomSettings></RoomSettings> */}
+          <div className="room-page">
+            <div className="room-bar-area">
+              <RoomBar
+                roomName={this.state.roomName}
+                roomID={this.state.roomID}
+                tags={this.state.tags}
+                toggleSettingsModal={this.toggleSettingsModal}
+                favoriteRoom={this.favoriteRoom}
+                isFavorited={this.state.isFavorited}
+                onChangeTag={this.onChangeTag}
               />
-            ) : (
-              <div className="hide" />
-            )}
+            </div>
+            <div
+              className="room-screen-area"
+              onMouseMove={e => this.handleMouseMove(e)}
+            >
+              {this.state.isMouseMoving ? (
+                <BrowserOverlay
+                  className="browser-overlay"
+                  volume={this.state.volume}
+                  handleVolume={this.handleVolume}
+                />
+              ) : (
+                <div className="hide" />
+              )}
+            </div>
           </div>
         </div>
       </div>
