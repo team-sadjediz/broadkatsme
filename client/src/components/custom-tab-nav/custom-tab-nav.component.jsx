@@ -1,42 +1,30 @@
 import React from "react";
 import PropTypes from "prop-types";
+
+// components:
+import NewRoom from "../new-room/new-room.component";
+
+// mui components:
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import IconButton from "@material-ui/core/IconButton";
-
-// component:
-import NewRoom from "../new-room/new-room.component";
 
 // icons:
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import ChatIcon from "@material-ui/icons/Chat";
 import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
 
+// custom style sheet:
 import "./custom-tab-nav.styles.scss";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
-    // <Ty
-    //   component="div"
-    //   role="tabpanel"
-    //   hidden={value !== index}
-    //   id={`vertical-tabpanel-${index}`}
-    //   aria-labelledby={`vertical-tab-${index}`}
-    //   {...other}
-    // >
-    //   {children}
-    // </Ty>
     <div
       style={{
         flexGrow: 1,
         margin: "0.5em"
-        // display: "flex"
-        // justifyContent: "center"
       }}
       hidden={value !== index}
     >
@@ -113,7 +101,7 @@ const NavItemDetails = [
 ];
 
 // class VerticalTabs extends React.Component {
-export default function VerticalTabs({ drawerOpen }) {
+export default function DrawerTabs({ drawerOpen }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 

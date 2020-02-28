@@ -1,19 +1,20 @@
 import React from "react";
 import clsx from "clsx";
 
+// components:
+import DrawerTabs from "../custom-tab-nav/custom-tab-nav.component";
+
+// mui components:
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import IconButton from "@material-ui/core/IconButton";
+import Drawer from "@material-ui/core/Drawer";
+
 // icons:
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 
-// mui components:
-import IconButton from "@material-ui/core/IconButton";
-import { makeStyles, withStyles, useTheme } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-import CssBaseline from "@material-ui/core/CssBaseline";
-
-// components:
-import VerticalTabs from "../custom-tab-nav/custom-tab-nav.component";
-
+// custom style sheet:
 import "./custom-drawer.styles.scss";
 
 const drawerWidth = 350;
@@ -117,9 +118,8 @@ const ToggleDrawerButton = withStyles(theme => ({
   }
 }))(IconButton);
 
-const PersistentDrawerLeft = props => {
+const CustomDrawer = props => {
   const classes = useStyles();
-  const theme = useTheme();
   const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
@@ -139,14 +139,9 @@ const PersistentDrawerLeft = props => {
       <CssBaseline />
       <Drawer
         className={classes.drawer}
-        // variant="persistent"
         variant="permanent"
         anchor="left"
         open={open}
-        // classes={{
-        //   paper: classes.drawerPaper,
-        //   className: "custom-drawer"
-        // }}
         className={clsx(classes.drawer, {
           [classes.drawerOpen]: open,
           [classes.drawerClose]: !open
@@ -159,7 +154,6 @@ const PersistentDrawerLeft = props => {
         }}
       >
         <ToggleDrawerButton
-          // className={classes.toggleBtnPositionOpened}
           className={
             open
               ? classes.toggleBtnPositionOpened
@@ -170,7 +164,7 @@ const PersistentDrawerLeft = props => {
         >
           {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
         </ToggleDrawerButton>
-        <VerticalTabs drawerOpen={open}></VerticalTabs>
+        <DrawerTabs drawerOpen={open}></DrawerTabs>
       </Drawer>
 
       <main
@@ -184,4 +178,4 @@ const PersistentDrawerLeft = props => {
   );
 };
 
-export default PersistentDrawerLeft;
+export default CustomDrawer;

@@ -3,28 +3,27 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import axios from "axios";
 
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-
+// components:
 import CircleBtn from "../circle-btn/circle-btn.component";
 import ImageButton from "../img-btn/img-btn.component";
-import Poppity from "../poppity/poppity.component";
 import PageDropdown from "../page-dropdown/page-dropdown.component";
 import MouseOverPopover from "../custom-popover/custom-popover.component";
 import NewRoom from "../new-room/new-room.component";
 
+// mui components:
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+
 // icons:
 import AddIcon from "@material-ui/icons/Add";
 import SearchIcon from "@material-ui/icons/Search";
-import NineDotsIcon from "../../assets/icons/nine-dots-solid.svg";
 import DashboardIcon from "@material-ui/icons/Dashboard";
-import SlowMotionVideoIcon from "@material-ui/icons/SlowMotionVideo";
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
+import MenuIcon from "@material-ui/icons/Menu";
+
+// custom style sheet:
 import "./navbar-mui.styles.scss";
 
 // utils:

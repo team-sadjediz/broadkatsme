@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { setCurrentUser } from "./redux/user/user.actions";
 
 // components:
-import PersistentDrawerLeft from "./components/custom-drawer/custom-drawer.component";
+import CustomDrawer from "./components/custom-drawer/custom-drawer.component";
 import ButtonAppBar from "./components/navbar-mui/navbar-mui.component";
 
 // import Drawer from "@material-ui/core/Drawer";
@@ -62,7 +62,6 @@ class App extends Component {
   componentDidMount() {
     this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
       this.props.setCurrentUser(user);
-      // console.log("componentDidMount - logged in1:", this.props.currentUser);
     });
   }
 
@@ -79,7 +78,7 @@ class App extends Component {
             <BrowserRouter>
               {/* <NavBar /> */}
               <ButtonAppBar />
-              <PersistentDrawerLeft>
+              <CustomDrawer>
                 <Switch>
                   <Route
                     exact
@@ -98,7 +97,7 @@ class App extends Component {
                   <Route path="/contact" component={ContactPage} />
                   <Route path="/codeofconduct" component={CodeOfConductPage} />
                 </Switch>
-              </PersistentDrawerLeft>
+              </CustomDrawer>
             </BrowserRouter>
           ) : (
             <BrowserRouter>

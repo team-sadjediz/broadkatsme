@@ -6,33 +6,28 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
-}
 
-.hidden {
-  display: none;
-}
+  .drawer-header-container {
+    height: 48px;
+    width: 100%;
 
-.drawer-header-container {
-  // background-color: red;
-  height: 48px;
-  width: 100%;
+    position: relative;
 
-  position: relative;
+    z-index: 2000;
 
-  z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    transition: background-color 500ms;
 
-  transition: background-color 500ms;
-
-  .drawer-header {
-    // background-color: lightblue;
-    text-transform: uppercase;
-    font-weight: bold;
-    flex-grow: 1;
-    text-align: center;
+    .drawer-header {
+      // background-color: lightblue;
+      text-transform: uppercase;
+      font-weight: bold;
+      flex-grow: 1;
+      text-align: center;
+    }
   }
 }
 
