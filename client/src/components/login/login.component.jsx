@@ -10,9 +10,9 @@ import CircleBtn from "../circle-btn/circle-btn.component";
 import "./login.style.scss";
 
 //icons
-import { ReactComponent as EyeDefault } from "../../assets/icons/eye-solid.svg";
-import { ReactComponent as EyeHidden } from "../../assets/icons/eye-slash-solid.svg";
 import { ReactComponent as GoogleLogoColorful } from "../../assets/icons/google-logo-colorful.svg";
+import { ReactComponent as GoogleLogoIcon } from "../../assets/icons/google-logo-solid.svg";
+
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 class LogIn extends React.Component {

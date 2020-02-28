@@ -5,7 +5,6 @@ import { auth } from "../../firebase/firebase.utils";
 // components:
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
-import ShowHide from "../show-hide-input/show-hide-input.component";
 
 import "./register.style.scss";
 class Register extends React.Component {
@@ -25,8 +24,6 @@ class Register extends React.Component {
     event.preventDefault();
 
     const { username, email, password, confirmPassword } = this.state;
-
-    console.log(password, confirmPassword);
 
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
@@ -136,10 +133,7 @@ class Register extends React.Component {
             required
           />
 
-          <CustomButton
-            className="register-btn"
-            type="submit"
-          >
+          <CustomButton className="register-btn" type="submit">
             register
           </CustomButton>
         </form>
