@@ -11,6 +11,9 @@ import CustomButton from "../custom-button/custom-button.component";
 
 import "./new-room.style.scss";
 
+// utils:
+const utils = require("../../utils");
+
 class NewRoom extends React.Component {
   constructor(props) {
     super(props);
@@ -34,8 +37,7 @@ class NewRoom extends React.Component {
     };
 
     axios
-      // .post("http://broadkatsme.herokuapp.com/api/room/createroom", room)
-      .post("http://localhost:5000/api/room/createroom", room)
+      .post(`${utils.BASE_API_URL}/room/createroom`, room)
       .then(() => console.log("Room posted to backend/created."))
       .catch(error => {
         console.error(error);
