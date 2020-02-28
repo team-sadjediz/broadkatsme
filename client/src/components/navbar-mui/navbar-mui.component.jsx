@@ -32,7 +32,7 @@ import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import "./navbar-mui.styles.scss";
 
 // utils:
-const utils = require("../../utils");
+import { BASE_API_URL } from "../../utils";
 
 // const useStyles = makeStyles(theme => ({
 //   root: {
@@ -106,14 +106,11 @@ class ButtonAppBar extends React.Component {
       this.props.currentUser
     );
 
-    let results = await axios.get(`${utils.BASE_API_URL}/home/users-rooms`, {
+    let results = await axios.get(`${BASE_API_URL}/home/users-rooms`, {
       params: { uid: this.props.currentUser.uid }
     });
 
     this.props.setSubscribedRooms(results.data);
-    this.setState({ roomList: results.data });
-    console.log("aaaaa", this.props.subscribedRooms);
-    // console.log("after api call", this.state.roomList);
   }
 
   render() {
@@ -157,29 +154,12 @@ class ButtonAppBar extends React.Component {
                 </RoomNavButton>
               </MouseOverPopover>
               {/* {console.log("before map:", this.state.roomList)} */}
-              {console.log(this.props.subscribedRooms)}
-              {/* {this.state.roomList.map(room => (
-                <Link to={`/room/id/${room.roomID}`}>
-                  <ImageButton
-                    iconHover={<PlayCircleFilledIcon />}
-                    bgImageUrl={`${utils.BASE_API_URL}/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
-                  ></ImageButton>
-                </Link>
-              ))} */}
 
               {this.props.subscribedRooms.map(room => (
                 <Link
                   style={{ position: "relative" }}
                   to={`/room/id/${room.roomID}`}
                 >
-                  {/* {this.props.selectedRoom === room.roomID ? (
-                    <div className="room-selected">
-                      <PlayCircleOutlineIcon />
-                    </div>
-                  ) : (
-                    ""
-                  )} */}
-
                   {this.props.selectedRoom === room.roomID ? (
                     <div className="room-selected">
                       <div className="indicator"></div>
@@ -191,13 +171,8 @@ class ButtonAppBar extends React.Component {
                     onClick={() => {
                       this.props.setSelectedRoom(room.roomID);
                     }}
-                    // className={
-                    //   this.props.selectedRoom === room.roomID
-                    //     ? "room-selected"
-                    //     : ""
-                    // }
                     iconHover={<PlayCircleFilledIcon />}
-                    bgImageUrl={`${utils.BASE_API_URL}/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
+                    bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
                   ></ImageButton>
                 </Link>
               ))}
