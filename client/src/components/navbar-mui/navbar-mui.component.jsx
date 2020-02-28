@@ -1,6 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import {
+  setSubscribedRooms,
+  setSelectedRoom
+} from "../../redux/room/room.actions";
 import axios from "axios";
 
 // components:
@@ -22,6 +26,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import MenuIcon from "@material-ui/icons/Menu";
+import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 
 // custom style sheet:
 import "./navbar-mui.styles.scss";
@@ -89,19 +94,25 @@ class ButtonAppBar extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      roomList: []
-    };
+    // this.state = {
+    //   roomList: []
+    // };
   }
 
   async componentDidMount() {
-    console.log("current user:", this.props.currentUser.uid);
+    console.log(
+      "current user:",
+      this.props.currentUser.uid,
+      this.props.currentUser
+    );
 
     let results = await axios.get(`${utils.BASE_API_URL}/home/users-rooms`, {
       params: { uid: this.props.currentUser.uid }
     });
 
+    this.props.setSubscribedRooms(results.data);
     this.setState({ roomList: results.data });
+    console.log("aaaaa", this.props.subscribedRooms);
     // console.log("after api call", this.state.roomList);
   }
 
@@ -146,9 +157,45 @@ class ButtonAppBar extends React.Component {
                 </RoomNavButton>
               </MouseOverPopover>
               {/* {console.log("before map:", this.state.roomList)} */}
-              {this.state.roomList.map(room => (
+              {console.log(this.props.subscribedRooms)}
+              {/* {this.state.roomList.map(room => (
                 <Link to={`/room/id/${room.roomID}`}>
                   <ImageButton
+                    iconHover={<PlayCircleFilledIcon />}
+                    bgImageUrl={`${utils.BASE_API_URL}/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
+                  ></ImageButton>
+                </Link>
+              ))} */}
+
+              {this.props.subscribedRooms.map(room => (
+                <Link
+                  style={{ position: "relative" }}
+                  to={`/room/id/${room.roomID}`}
+                >
+                  {/* {this.props.selectedRoom === room.roomID ? (
+                    <div className="room-selected">
+                      <PlayCircleOutlineIcon />
+                    </div>
+                  ) : (
+                    ""
+                  )} */}
+
+                  {this.props.selectedRoom === room.roomID ? (
+                    <div className="room-selected">
+                      <div className="indicator"></div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                  <ImageButton
+                    onClick={() => {
+                      this.props.setSelectedRoom(room.roomID);
+                    }}
+                    // className={
+                    //   this.props.selectedRoom === room.roomID
+                    //     ? "room-selected"
+                    //     : ""
+                    // }
                     iconHover={<PlayCircleFilledIcon />}
                     bgImageUrl={`${utils.BASE_API_URL}/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
                   ></ImageButton>
@@ -182,10 +229,15 @@ class ButtonAppBar extends React.Component {
   }
 }
 
-// export default ButtonAppBar;
-
 const mapStateToProps = state => ({
-  currentUser: state.user.currentUser
+  currentUser: state.user.currentUser,
+  subscribedRooms: state.room.subscribedRooms,
+  selectedRoom: state.room.selectedRoom
 });
 
-export default connect(mapStateToProps)(ButtonAppBar);
+const mapDispatchToProps = dispatch => ({
+  setSubscribedRooms: subRoomList => dispatch(setSubscribedRooms(subRoomList)),
+  setSelectedRoom: roomID => dispatch(setSelectedRoom(roomID))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ButtonAppBar);

@@ -4,6 +4,7 @@ import axios from "axios";
 
 // redux:
 import { connect } from "react-redux";
+import { setSubscribedRooms } from "../../redux/room/room.actions";
 
 // components:
 import FormInput from "../form-input/form-input.component";
@@ -12,7 +13,7 @@ import CustomButton from "../custom-button/custom-button.component";
 import "./new-room.style.scss";
 
 // utils:
-const utils = require("../../utils");
+import { BASE_API_URL } from "../../utils";
 
 class NewRoom extends React.Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class NewRoom extends React.Component {
     };
   }
 
-  handleSubmit = event => {
+  handleSubmit = async event => {
     event.preventDefault();
     const room = {
       uid: this.props.currentUser.uid,
@@ -36,9 +37,17 @@ class NewRoom extends React.Component {
       privacy: this.state.privacy
     };
 
+    console.log(room);
+
     axios
-      .post(`${utils.BASE_API_URL}/room/createroom`, room)
-      .then(() => console.log("Room posted to backend/created."))
+      .post(`${BASE_API_URL}/room/createroom`, room)
+      .then(async res => {
+        console.log("Room posted for user:", this.props.currentUser.uid);
+        let results = await axios.get(`${BASE_API_URL}/home/users-rooms`, {
+          params: { uid: this.props.currentUser.uid }
+        });
+        this.props.setSubscribedRooms(results.data);
+      })
       .catch(error => {
         console.error(error);
       });
@@ -108,4 +117,9 @@ const mapStateToProps = state => ({
   currentUser: state.user.currentUser
 });
 
-export default connect(mapStateToProps)(NewRoom);
+const mapDispatchToProps = dispatch => ({
+  setSubscribedRooms: subscribedRoomList =>
+    dispatch(setSubscribedRooms(subscribedRoomList))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewRoom);
