@@ -26,6 +26,8 @@ import Test from "./components/test-component/test.component";
 
 import "./App.scss";
 
+console.log("env in app.js", process.env);
+
 const theme = createMuiTheme({
   palette: {
     primary: {
