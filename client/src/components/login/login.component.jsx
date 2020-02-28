@@ -20,7 +20,7 @@ class LogIn extends React.Component {
       password: "",
       text: "",
       hidden: true,
-      button: <EyeDefault/>
+      button: <EyeDefault />
     };
   }
 
@@ -38,13 +38,12 @@ class LogIn extends React.Component {
 
   handleChange = event => {
     const { value, name } = event.target;
-    console.log("a:", event.target.name);
     this.setState({ [name]: value });
   };
 
   handleShowHide = event => {
-    this.setState({ text: event.target.value});
-    this.setState({ password: event.target.password});
+    this.setState({ text: event.target.value });
+    this.setState({ password: event.target.password });
     this.handleChange(event);
   };
 
@@ -52,14 +51,13 @@ class LogIn extends React.Component {
   toggleShow = () => {
     console.log(this.state.hidden);
     this.setState({ hidden: !this.state.hidden });
-    if (!this.state.hidden){
-      this.setState({button: <EyeHidden/>});
-    }
-    else {
-      this.setState({button: <EyeDefault/>});
+    if (!this.state.hidden) {
+      this.setState({ button: <EyeHidden /> });
+    } else {
+      this.setState({ button: <EyeDefault /> });
     }
     console.log("click:" + this.state.hidden);
-  }
+  };
 
   render() {
     return (
@@ -92,7 +90,7 @@ class LogIn extends React.Component {
               type="button"
               onClick={this.toggleShow}
               icon={this.state.button}
-            />    
+            />
           </div>
           <CustomButton
             className="login-btn"
