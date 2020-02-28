@@ -8,6 +8,7 @@ import "./room-page.styles.scss";
 // import Tag from "../../components/tag/tag.component";
 import RoomBar from "../../components/room-bar/room-bar.component";
 import BrowserOverlay from "../../components/browser-overlay/browser-overlay.component";
+import RoomSettings from "../../components/room-settings/room-settings.component";
 
 const initialState = {
   isMouseMoving: false,
@@ -111,7 +112,6 @@ class RoomPage extends Component {
       tags: roomDetails.tags,
       settings: roomDetails.settings
     });
-    // console.log(this.state);
   };
 
   closeInitialModal = () => {
@@ -139,8 +139,6 @@ class RoomPage extends Component {
       .put("http://broadkatsme.herokuapp.com/api/userprops/favorite", request)
       .then(res => this.setState({ isFavorited: res.data.favorited }))
       .catch(error => console.error(error));
-
-    // console.log(this.state);
   };
 
   onChangeTag = tags => {
@@ -165,29 +163,10 @@ class RoomPage extends Component {
 
   render() {
     return (
-      <div className="center">
+      <div className="room-page-container">
+        <RoomSettings></RoomSettings>
         <div className="room-page">
-          {/* {this.props.currentUser.uid} */}
-          {/* Room Page {this.state.roomID} {this.state.roomName}
-        {this.state.subscribers[0]} {this.state.tags}
-        {this.state.settings.roomSize} {this.state.settings.access.roomAdmins} */}
-          {/* <div>
-          Tag Examples
-          <Tag
-            type="add"
-            onChangeTag={this.onChangeTag}
-            roomID={this.state.roomID}
-          />
-          <Tag
-            type="remove"
-            onChangeTag={this.onChangeTag}
-            roomID={this.state.roomID}
-            text="chicken"
-          />
-          <Tag type="label"></Tag>
-        </div> */}
           <div className="room-bar-area">
-            {/* RoomBar w/Dynamic tags */}
             <RoomBar
               roomName={this.state.roomName}
               roomID={this.state.roomID}
@@ -202,9 +181,7 @@ class RoomPage extends Component {
             className="room-screen-area"
             onMouseMove={e => this.handleMouseMove(e)}
           >
-            {/* Room Screen */}
             {this.state.isMouseMoving ? (
-              // <div className="display-volume">VolumeControl</div>
               <BrowserOverlay
                 className="browser-overlay"
                 volume={this.state.volume}
@@ -214,11 +191,6 @@ class RoomPage extends Component {
               <div className="hide" />
             )}
           </div>
-          {/* <img
-            src={
-              "http://localhost:5000/api/room/get-thumbnail?thumbnail_url=default1.png"
-            }
-          /> */}
         </div>
       </div>
     );
