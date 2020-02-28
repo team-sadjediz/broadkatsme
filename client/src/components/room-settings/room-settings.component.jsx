@@ -4,25 +4,59 @@ import { makeStyles } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
+import CancelIcon from "@material-ui/icons/Cancel";
+import Modal from "@material-ui/core/Modal";
 
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: "white",
     display: "flex",
-    // position: "absolute",
-    height: "100%",
-    width: "100%",
-    zIndex: 2000
+    // displayContent: "center",
+    width: "80%",
+    height: "80%",
+    maxHeight: "800px",
+    maxWidth: "1280px",
+    border: "none",
+    outline: 0
+    // margin: "auto"
+    // Without Modal
+    // marginTop: "1em",
+    // maxHeight: "800px",
+    // width: "1280px"
+  },
+  modal: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+    // outline: 0
   },
   tabs: {
-    borderRight: "1px solid aquamarine"
+    borderRight: "1px solid grey",
+    minWidth: "max-content"
   },
-  container: {
-    flex: "1 1 100%",
-    display: "flex",
-    flexDirection: "column",
-    overflow: "auto"
+  panelContainer: {
+    width: "100%",
+    display: "grid",
+    gridTemplateColumns: "1fr 2em",
+    // display: "flex",
+    paddingTop: 10,
+    paddingBottom: 10
+  },
+  panel: {
+    gridColumn: 1
+    // flexGrow: 2
+  },
+  panelBorder: {
+    marginRight: 10,
+    gridColumn: 2
   }
+  //   paper: {
+  //     position: "absolute",
+  //     width: "100vw",
+  //     height: "100vh",
+  //     backgroundColor: "pink",
+  //     border: "2x solid #000"
+  //   }
 }));
 
 function TabPanel(props) {
@@ -45,109 +79,61 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired
 };
 
-export default function RoomSettings() {
+export default function RoomSettings(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const [open, setOpen] = React.useState(true);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    props.toggleSettingsModal();
+    setOpen(false);
+  };
+
+  const tabs = props.tabs.map((tab, index) => {
+    return <Tab label={tab} id={`vertical-tab-${index}`}></Tab>;
+  });
+
+  const panels = props.panels.map((panel, index) => {
+    return (
+      <TabPanel className={classes.panel} value={value} index={index}>
+        {panel}
+      </TabPanel>
+    );
+  });
+
   return (
-    <div className={classes.root}>
-      <Tabs
-        // contentContainerStyle={classes.container}
-        orientation="vertical"
-        variant="scrollable"
-        value={value}
-        onChange={handleChange}
-        className={classes.tabs}
-      >
-        <Tab label="Settings 0" id="vertical-tab-0" />
-        <Tab label="Settings 1" id="vertical-tab-1" />
-        <Tab label="Settings 2" id="vertical-tab-2" />
-        <Tab label="Settings 3" id="vertical-tab-31" />
-        <Tab label="Settings 4" id="vertical-tab-4" />
-        <Tab label="Settings 5" id="vertical-tab-5" />
-        <Tab label="Settings 6" id="vertical-tab-6" />
-        <Tab label="Settings 7" id="vertical-tab-7" />
-        <Tab label="Settings 8" id="vertical-tab-8" />
-        <Tab label="Settings 9" id="vertical-tab-9" />
-        <Tab label="Settings 10" id="vertical-tab-10" />
-        <Tab label="Settings 11" id="vertical-tab-11" />
-        <Tab label="Settings 12" id="vertical-tab-12" />
-        <Tab label="Settings 13" id="vertical-tab-13" />
-        <Tab label="Settings 14" id="vertical-tab-14" />
-        <Tab label="Settings 15" id="vertical-tab-15" />
-        <Tab label="Settings 16" id="vertical-tab-16" />
-        <Tab label="Settings 17" id="vertical-tab-17" />
-        <Tab label="Settings 18" id="vertical-tab-18" />
-        <Tab label="Settings 19" id="vertical-tab-19" />
-        <Tab label="Settings 20" id="vertical-tab-20" />
-      </Tabs>
-      <TabPanel value={value} index={0}>
-        Settings 0 Here
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        Settings 1 Here
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        Settings 2 Here
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        Settings 3 Here
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        Settings 4 Here
-      </TabPanel>
-      <TabPanel value={value} index={5}>
-        Settings 5 Here
-      </TabPanel>
-      <TabPanel value={value} index={6}>
-        Settings 6 Here
-      </TabPanel>
-      <TabPanel value={value} index={7}>
-        Settings 7 Here
-      </TabPanel>
-      <TabPanel value={value} index={8}>
-        Settings 8 Here
-      </TabPanel>
-      <TabPanel value={value} index={9}>
-        Settings 9 Here
-      </TabPanel>
-      <TabPanel value={value} index={10}>
-        Settings 10 Here
-      </TabPanel>
-      <TabPanel value={value} index={11}>
-        Settings 11 Here
-      </TabPanel>
-      <TabPanel value={value} index={12}>
-        Settings 12 Here
-      </TabPanel>
-      <TabPanel value={value} index={13}>
-        Settings 13 Here
-      </TabPanel>
-      <TabPanel value={value} index={14}>
-        Settings 14 Here
-      </TabPanel>
-      <TabPanel value={value} index={15}>
-        Settings 15 Here
-      </TabPanel>
-      <TabPanel value={value} index={16}>
-        Settings 16 Here
-      </TabPanel>
-      <TabPanel value={value} index={17}>
-        Settings 17 Here
-      </TabPanel>
-      <TabPanel value={value} index={18}>
-        Settings 18 Here
-      </TabPanel>
-      <TabPanel value={value} index={19}>
-        Settings 19 Here
-      </TabPanel>
-      <TabPanel value={value} index={20}>
-        Settings 20 Here
-      </TabPanel>
-    </div>
+    <Modal
+      className={classes.modal}
+      open={open}
+      onClose={handleClose}
+      disablePortal
+      keepMounted
+      //   hideBackdrop
+    >
+      <div className={classes.root}>
+        <Tabs
+          // contentContainerStyle={classes.container}
+          orientation="vertical"
+          variant="scrollable"
+          value={value}
+          onChange={handleChange}
+          className={classes.tabs}
+        >
+          {tabs}
+        </Tabs>
+        <div className={classes.panelContainer}>
+          {panels}
+          <CancelIcon className={classes.panelBorder}></CancelIcon>
+        </div>
+      </div>
+    </Modal>
   );
 }
