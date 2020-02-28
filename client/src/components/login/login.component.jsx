@@ -6,11 +6,15 @@ import { auth, signInWithGoogle } from "../../firebase/firebase.utils";
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
 import CircleBtn from "../circle-btn/circle-btn.component";
+
 import "./login.style.scss";
+
 //icons
 import { ReactComponent as EyeDefault } from "../../assets/icons/eye-solid.svg";
 import { ReactComponent as EyeHidden } from "../../assets/icons/eye-slash-solid.svg";
 import { ReactComponent as GoogleLogoColorful } from "../../assets/icons/google-logo-colorful.svg";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 class LogIn extends React.Component {
   constructor(props) {
     super(props);
@@ -18,48 +22,36 @@ class LogIn extends React.Component {
     this.state = {
       email: "",
       password: "",
-      text: "",
-      hidden: true,
-      button: <EyeDefault/>
+      passwordVisibility: true
     };
   }
 
   handleSubmit = async event => {
     event.preventDefault();
     const { email, password } = this.state;
-    console.log("email:", this.state.email, "pw:", this.state.password);
+    // console.log("email:", this.state.email, "pw:", this.state.password);
     try {
       await auth.signInWithEmailAndPassword(email, password);
       this.setState({ email: "", password: "" });
     } catch (error) {
       console.log("log in error:", error);
+      if (error.code === "auth/user-not-found") {
+        alert("wrong password");
+      }
     }
   };
 
   handleChange = event => {
     const { value, name } = event.target;
-    console.log("a:", event.target.name);
     this.setState({ [name]: value });
-  };
-
-  handleShowHide = event => {
-    this.setState({ text: event.target.value});
-    this.setState({ password: event.target.password});
-    this.handleChange(event);
   };
 
   //To-Do: On the first click, there is a button change delay
   toggleShow = () => {
-    console.log(this.state.hidden);
-    this.setState({ hidden: !this.state.hidden });
-    if (!this.state.hidden){
-      this.setState({button: <EyeHidden/>});
-    }
-    else {
-      this.setState({button: <EyeDefault/>});
-    }
-    console.log("click:" + this.state.hidden);
-  }
+    // console.log(this.state.hidden);
+    this.setState({ passwordVisibility: !this.state.passwordVisibility });
+    // console.log("click:" + this.state.passwordVisibility);
+  };
 
   render() {
     return (
@@ -82,17 +74,19 @@ class LogIn extends React.Component {
             <FormInput
               className="password-field"
               name="password"
-              type={this.state.hidden ? "password" : "text"}
-              handleChange={this.handleShowHide}
+              type={this.state.passwordVisibility ? "password" : "text"}
+              handleChange={this.handleChange}
               value={this.state.password}
               label="password"
               required
             />
-            <CircleBtn
-              type="button"
-              onClick={this.toggleShow}
-              icon={this.state.button}
-            />    
+            <div className="visibility-container" onClick={this.toggleShow}>
+              {this.state.passwordVisibility ? (
+                <VisibilityIcon />
+              ) : (
+                <VisibilityOffIcon />
+              )}
+            </div>
           </div>
           <CustomButton
             className="login-btn"

@@ -50,7 +50,7 @@ export default function MouseOverPopover({
 
   const open = Boolean(anchorEl);
 
-  console.log("child", children);
+  // console.log("child", children);
   let newChildWithOnClick = React.cloneElement(children, {
     onClick: togglePopover
   });

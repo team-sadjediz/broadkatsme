@@ -1,9 +1,11 @@
+require("dotenv").config(); // injects environment variables from .env file
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
+console.log("root index.js envs:", process.env);
 // const admin = require("./server/firebase-config/admin");
 
 const app = express();

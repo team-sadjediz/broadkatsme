@@ -1,30 +1,20 @@
 import React from "react";
 import clsx from "clsx";
 
+// components:
+import DrawerTabs from "../custom-tab-nav/custom-tab-nav.component";
+
+// mui components:
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import IconButton from "@material-ui/core/IconButton";
+import Drawer from "@material-ui/core/Drawer";
+
 // icons:
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 
-// mui components:
-import IconButton from "@material-ui/core/IconButton";
-import { makeStyles, withStyles, useTheme } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-
-// components:
-import VerticalTabs from "../custom-tab-nav/custom-tab-nav.component";
-
+// custom style sheet:
 import "./custom-drawer.styles.scss";
 
 const drawerWidth = 350;
@@ -32,29 +22,8 @@ const drawerWidth = 350;
 const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
-    height: "100%",
+    height: `calc(100% - ${theme.mixins.toolbar.minHeight}px)`,
     zIndex: 0
-  },
-  appBar: {
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    }),
-    zIndex: theme.zIndex.drawer + 1
-  },
-  appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  },
-  menuButton: {
-    marginRight: theme.spacing(2)
-  },
-  hide: {
-    display: "none"
   },
   drawer: {
     width: drawerWidth,
@@ -66,9 +35,6 @@ const useStyles = makeStyles(theme => ({
     position: "relative"
     // variant: "outlined"
   },
-  // paper: {
-  //   variant: "outlined"
-  // },
   drawerHeader: {
     display: "flex",
     alignItems: "center",
@@ -77,15 +43,16 @@ const useStyles = makeStyles(theme => ({
     justifyContent: "flex-end"
   },
   drawerOpen: {
+    backgroundColor: "#eceff1",
     width: drawerWidth,
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen
     }),
-    position: "relative",
-    backgroundColor: "#eceff1"
+    position: "relative"
   },
   drawerClose: {
+    backgroundColor: "white",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
@@ -97,15 +64,20 @@ const useStyles = makeStyles(theme => ({
     //   width: theme.spacing(9) + 1
     // },
     position: "relative",
-    backgroundColor: "#eceff1"
+    borderRight: `2px solid ${theme.palette.divider}`
   },
   content: {
+    overflow: "auto",
+    overflowY: "auto",
+    // overflowX: "hidden", // will eventually have this option on
+    boxSizing: "border-box",
     display: "flex",
     justifyContent: "center",
-    // alignItems: "center",
     flexGrow: 1,
     // padding: theme.spacing(3),
-    margin: "1em",
+    padding: "0.5em",
+    boxSizing: "border-box",
+    // margin: "1em",
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
@@ -117,7 +89,17 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
     })
-    // marginLeft: 0
+  },
+  toggleBtnPositionOpened: {
+    position: "absolute",
+    right: 0,
+    margin: `calc((48px - 32px) / 2)`
+  },
+  toggleBtnPositionClosed: {
+    position: "absolute",
+    marginTop: "calc((48px - 32px) / 2)",
+    left: "50%",
+    transform: "translate(-50%, 0)"
   }
 }));
 
@@ -126,26 +108,18 @@ const ToggleDrawerButton = withStyles(theme => ({
     // background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
     color: "white",
     backgroundColor: theme.palette.primary.main,
-    width: "48px",
-    height: "48px",
-    margin: "9px 3px",
+    // width: "32px",
+    // height: "32px",
     // margin: "0.5em",
     "&:hover": { backgroundColor: theme.palette.secondary.main },
-    position: "absolute",
-    right: 0,
-    zIndex: 2002
-  },
-  selected: {
-    color: theme.palette.secondary.main
-  },
-  textColorInherit: {
-    opacity: 1
+    // position: "absolute",
+    // right: 0,
+    zIndex: 2001
   }
 }))(IconButton);
 
-const PersistentDrawerLeft = props => {
+const CustomDrawer = props => {
   const classes = useStyles();
-  const theme = useTheme();
   const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
@@ -163,29 +137,11 @@ const PersistentDrawerLeft = props => {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      {/* <div
-        className={`half-circle-btn ${open ? "hidden" : ""}`}
-        onClick={toggleDrawer}
-      >
-        <ChevronRightIcon />
-      </div> */}
-      {/* <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <Typography variant="h6" noWrap>
-            Clipped drawer
-          </Typography>
-        </Toolbar>
-      </AppBar> */}
       <Drawer
         className={classes.drawer}
-        // variant="persistent"
         variant="permanent"
         anchor="left"
         open={open}
-        // classes={{
-        //   paper: classes.drawerPaper,
-        //   className: "custom-drawer"
-        // }}
         className={clsx(classes.drawer, {
           [classes.drawerOpen]: open,
           [classes.drawerClose]: !open
@@ -197,55 +153,18 @@ const PersistentDrawerLeft = props => {
           })
         }}
       >
-        <ToggleDrawerButton onClick={toggleDrawer}>
+        <ToggleDrawerButton
+          className={
+            open
+              ? classes.toggleBtnPositionOpened
+              : classes.toggleBtnPositionClosed
+          }
+          size="small"
+          onClick={toggleDrawer}
+        >
           {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
         </ToggleDrawerButton>
-        {/* <div className="drawer-header-container">
-          <div className={`drawer-header ${open ? "" : "hidden"}`}>
-            my title
-          </div>
-          <IconButton
-            className={`close-btn outflow-top-right ${
-              open ? "position-right" : "position-center"
-            }`}
-            // className="close-btn position-right"
-            onClick={toggleDrawer}
-          >
-            {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </div> */}
-        {/* <div onClick={toggleDrawer} className={`${classes.drawerHeader}`}>
-          <IconButton onClick={toggleDrawer} className="close-btn">
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </div> */}
-        {/* <Divider /> */}
-        {/* <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List> */}
-        <VerticalTabs drawerOpen={open}></VerticalTabs>
+        <DrawerTabs drawerOpen={open}></DrawerTabs>
       </Drawer>
 
       <main
@@ -259,4 +178,4 @@ const PersistentDrawerLeft = props => {
   );
 };
 
-export default PersistentDrawerLeft;
+export default CustomDrawer;

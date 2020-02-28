@@ -7,8 +7,7 @@ import { connect } from "react-redux";
 import { setCurrentUser } from "./redux/user/user.actions";
 
 // components:
-import NavBar from "./components/navbar/navbar.component";
-import PersistentDrawerLeft from "./components/custom-drawer/custom-drawer.component";
+import CustomDrawer from "./components/custom-drawer/custom-drawer.component";
 import ButtonAppBar from "./components/navbar-mui/navbar-mui.component";
 
 // import Drawer from "@material-ui/core/Drawer";
@@ -21,6 +20,8 @@ import AboutPage from "./pages/about-page/about-page.component";
 import CodeOfConductPage from "./pages/code-of-conduct-page/code-of-conduct-page.component";
 import ContactPage from "./pages/contact-page/contact-page.component";
 import ResetPassPage from "./pages/reset-password-page/reset-password-page.component";
+
+import Test from "./components/test-component/test.component";
 
 import "./App.scss";
 
@@ -45,8 +46,15 @@ const theme = createMuiTheme({
       "BlinkMacSystemFont",
       '"Segoe UI"'
     ].join(",")
+  },
+  mixins: {
+    toolbar: {
+      minHeight: 64 // sets the navbar height in pixels
+    }
   }
 });
+
+console.log("MUI theme:", theme);
 
 class App extends Component {
   unsubscribeFromAuth = null;
@@ -54,7 +62,6 @@ class App extends Component {
   componentDidMount() {
     this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
       this.props.setCurrentUser(user);
-      console.log("componentDidMount - logged in1:", this.props.currentUser);
     });
   }
 
@@ -71,7 +78,7 @@ class App extends Component {
             <BrowserRouter>
               {/* <NavBar /> */}
               <ButtonAppBar />
-              <PersistentDrawerLeft>
+              <CustomDrawer>
                 <Switch>
                   <Route
                     exact
@@ -90,7 +97,7 @@ class App extends Component {
                   <Route path="/contact" component={ContactPage} />
                   <Route path="/codeofconduct" component={CodeOfConductPage} />
                 </Switch>
-              </PersistentDrawerLeft>
+              </CustomDrawer>
             </BrowserRouter>
           ) : (
             <BrowserRouter>

@@ -3,29 +3,31 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import axios from "axios";
 
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-
+// components:
 import CircleBtn from "../circle-btn/circle-btn.component";
 import ImageButton from "../img-btn/img-btn.component";
-import Poppity from "../poppity/poppity.component";
 import PageDropdown from "../page-dropdown/page-dropdown.component";
 import MouseOverPopover from "../custom-popover/custom-popover.component";
 import NewRoom from "../new-room/new-room.component";
 
+// mui components:
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+
 // icons:
 import AddIcon from "@material-ui/icons/Add";
 import SearchIcon from "@material-ui/icons/Search";
-import NineDotsIcon from "../../assets/icons/nine-dots-solid.svg";
 import DashboardIcon from "@material-ui/icons/Dashboard";
-import SlowMotionVideoIcon from "@material-ui/icons/SlowMotionVideo";
+import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
+import MenuIcon from "@material-ui/icons/Menu";
 
+// custom style sheet:
 import "./navbar-mui.styles.scss";
+
+// utils:
+const utils = require("../../utils");
 
 // const useStyles = makeStyles(theme => ({
 //   root: {
@@ -93,27 +95,14 @@ class ButtonAppBar extends React.Component {
   }
 
   async componentDidMount() {
-    console.log(
-      "hellllllllllllllllllllllllllllllllllllll",
-      this.props.currentUser.uid
-    );
+    console.log("current user:", this.props.currentUser.uid);
 
-    let results = await axios.get(
-<<<<<<< HEAD
-      // "http://localhost:5000/api/home/users-rooms",
-      "http://broadkatsme.herokuapp.com/api/home/users-rooms",
-=======
-      "http://localhost:5000/api/home/users-rooms",
-      // "http://broadkatsme.herokuapp.com/api/home/users-rooms",
->>>>>>> master
-      {
-        params: { uid: this.props.currentUser.uid }
-      }
-    );
-    // console.log("iwannabefree", results);
+    let results = await axios.get(`${utils.BASE_API_URL}/home/users-rooms`, {
+      params: { uid: this.props.currentUser.uid }
+    });
 
     this.setState({ roomList: results.data });
-    console.log("after api call", this.state.roomList);
+    // console.log("after api call", this.state.roomList);
   }
 
   render() {
@@ -136,13 +125,11 @@ class ButtonAppBar extends React.Component {
                   <DashboardIcon></DashboardIcon>
                 </RoomNavButton>
               </Link>
-
               <Link to="/search">
                 <RoomNavButton>
                   <SearchIcon></SearchIcon>
                 </RoomNavButton>
               </Link>
-
               <MouseOverPopover
                 anchorOrigin={{
                   vertical: "bottom",
@@ -158,19 +145,12 @@ class ButtonAppBar extends React.Component {
                   <AddIcon></AddIcon>
                 </RoomNavButton>
               </MouseOverPopover>
-
-              {console.log("before map:", this.state.roomList)}
+              {/* {console.log("before map:", this.state.roomList)} */}
               {this.state.roomList.map(room => (
                 <Link to={`/room/id/${room.roomID}`}>
                   <ImageButton
-                    iconHover={<SlowMotionVideoIcon />}
-<<<<<<< HEAD
-                    // bgImageUrl={`http://localhost:5000/api/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
-                    bgImageUrl={`http://broadkatsme.herokuapp.com/api/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
-=======
-                    bgImageUrl={`http://localhost:5000/api/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
-                    // bgImageUrl={`http://broadkatsme.herokuapp.com/api/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
->>>>>>> master
+                    iconHover={<PlayCircleFilledIcon />}
+                    bgImageUrl={`${utils.BASE_API_URL}/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
                   ></ImageButton>
                 </Link>
               ))}
