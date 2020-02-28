@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 
 import "./room-page.styles.scss";
 
-// import Tag from "../../components/tag/tag.component";
+import Tag from "../../components/tag/tag.component";
 import RoomBar from "../../components/room-bar/room-bar.component";
 import BrowserOverlay from "../../components/browser-overlay/browser-overlay.component";
 import BrowserInit from "../../components/browser-init/browser-init.component";
@@ -151,6 +151,11 @@ class RoomPage extends Component {
     this.setState({ tags: tags });
   };
 
+  onChangeTitle = e => {
+    this.setState({ roomName: e.target.value });
+    //axios call to save title changes here & return true -> flashes when saved/true is returned?
+  };
+
   handleMouseMove = e => {
     e.preventDefault();
     this.setState({ isMouseMoving: true });
@@ -168,7 +173,17 @@ class RoomPage extends Component {
   };
 
   render() {
-    console.log(this.state.showInitial);
+    // console.log(this.state.showInitial);
+    let tags = this.state.tags.map(tag => {
+      return (
+        <Tag
+          type="remove"
+          text={tag}
+          onChangeTag={this.onChangeTag}
+          roomID={this.state.roomID}
+        ></Tag>
+      );
+    });
     return (
       <div className="main-container">
         {this.state.showSettings ? (
@@ -192,11 +207,13 @@ class RoomPage extends Component {
                 favoriteRoom={this.favoriteRoom}
                 isFavorited={this.state.isFavorited}
                 onChangeTag={this.onChangeTag}
+                onChangeTitle={this.onChangeTitle}
               />
             </div>
             {this.state.showInitial ? (
               <div className="room-screen-init">
                 <BrowserInit
+                  // className="room-screen-init-play"
                   closeInit={this.closeInit}
                   roomName={this.state.roomName}
                 ></BrowserInit>
@@ -220,6 +237,14 @@ class RoomPage extends Component {
               ) : (
                 <div className="hide" />
               )}
+            </div>
+            <div className="room-tags-area">
+              <Tag
+                type="add"
+                roomID={this.state.roomID}
+                onChangeTag={this.onChangeTag}
+              ></Tag>
+              {tags}
             </div>
           </div>
         </div>

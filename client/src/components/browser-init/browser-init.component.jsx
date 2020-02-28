@@ -13,10 +13,10 @@ export default function BrowserInit(props) {
   return (
     <div className="browser-init-container">
       {/* <PlayCircleFilledIcon /> */}
-      <div className="browser-init-bar">
-        <Tag type="add"></Tag>
-        <PlayCircleFilledIcon />
-      </div>
+      {/* <div className="browser-init-bar"> */}
+      {/* <Tag type="add"></Tag> */}
+      <PlayCircleFilledIcon />
+      {/* </div> */}
     </div>
   );
 }

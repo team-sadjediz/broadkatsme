@@ -68,9 +68,13 @@ router.post("/createroom", async function(req, res) {
   // console.log(room_ID);
   await UserProps.findOneAndUpdate(
     { user_ID: owner_ID },
-    { $addToSet: { owned_rooms: room_ID, subscribed_rooms: room_ID } }
+    { $addToSet: { owned_rooms: room_ID, subscribed_rooms: room_ID } },
+    { new: true }
   )
-    .then(document => res.send(document))
+    .then(document => {
+      console.log(document.subscribed_rooms);
+      res.send(document.subscribed_rooms);
+    })
     .catch(error =>
       res.status(400).send("New room insert added to user props failed.")
     );

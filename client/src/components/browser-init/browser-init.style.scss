@@ -22,6 +22,7 @@
   width: 2em;
 
   &:hover {
+    cursor: pointer;
     fill: rgba(58, 70, 96, 0.7);
     // transition: play 0.2s ease-in-out;
     // transform: scale(1.5);
@@ -63,6 +64,36 @@
 @keyframes slide {
   100% {
     left: 0;
+  }
+}
+
+// // catch all cases where screen is bigger or equal than 1482px
+@media (min-width: 1482px) {
+  .browser-init-container svg {
+    height: 4em;
+    width: 4em;
+  }
+}
+
+// catch all other others where screen is smaller than 1482px
+@media (max-width: 1481px) {
+  .browser-init-container svg {
+    height: 4em;
+    width: 4em;
+  }
+}
+
+@media (max-width: 1250px) {
+  .browser-init-container svg {
+    height: 3em;
+    width: 3em;
+  }
+}
+
+@media (max-width: 1050px) {
+  .browser-init-container svg {
+    height: 2em;
+    width: 2em;
   }
 }
 
