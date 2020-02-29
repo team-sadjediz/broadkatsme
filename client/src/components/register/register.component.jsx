@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { auth } from "../../firebase/firebase.utils";
+import { BASE_API_URL } from "../../utils";
 
 // components:
 import FormInput from "../form-input/form-input.component";
@@ -34,10 +35,23 @@ class Register extends React.Component {
     }
 
     try {
-      const { user } = await auth.createUserWithEmailAndPassword(
-        email,
-        password
-      );
+      // const { user } = await auth
+
+      await auth
+        .createUserWithEmailAndPassword(email, password)
+        .then(async userCredential => {
+          let newUser = {
+            "uid": userCredential.user.uid,
+            "username": this.state.username
+          };
+          await axios
+            .post(`${BASE_API_URL}/register/new-user`, newUser)
+            .then(res => console.log("User successfully created."))
+            .catch(error => console.error(error));
+        })
+        .catch(error => {
+          console.error(error);
+        });
 
       this.setState({
         uid: "",
@@ -136,10 +150,7 @@ class Register extends React.Component {
             required
           />
 
-          <CustomButton
-            className="register-btn"
-            type="submit"
-          >
+          <CustomButton className="register-btn" type="submit">
             register
           </CustomButton>
         </form>
