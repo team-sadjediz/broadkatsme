@@ -56,7 +56,7 @@ class RoomPage extends Component {
     // console.log(this.props.currentUser);
     // await axiosConfig
     await axios
-      .get(`${BASE_API_URL}/room/findroom`, {
+      .get(`${BASE_API_URL}/room/find-room`, {
         params: roomID
       })
       .then(res => this.fetchData(res.data))
@@ -67,7 +67,7 @@ class RoomPage extends Component {
     // console.log(this.props.currentUser);
     // await axiosConfig
     await axios
-      .get(`${BASE_API_URL}/userprops/is-favorited`, {
+      .get(`${BASE_API_URL}/userprops/favorite-rooms/is-favorited`, {
         params: {
           "uid": this.props.currentUser.uid,
           "roomID": "5e4a4c5a86ae580017aa1a78"
@@ -139,9 +139,7 @@ class RoomPage extends Component {
     };
     let response;
     await axios
-      // .put("http://localhost:5000/api/userprops/favorite", request)
-      // .put("http://broadkatsme.herokuapp.com/api/userprops/favorite", request)
-      .put(`${BASE_API_URL}/userprops/favorite`, request)
+      .put(`${BASE_API_URL}/userprops/favorite-rooms/favorite`, request)
       .then(res => this.setState({ isFavorited: res.data.favorited }))
       .catch(error => console.error(error));
   };

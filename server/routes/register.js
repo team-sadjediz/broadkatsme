@@ -10,31 +10,26 @@ router.post("/new-user", async function(req, res) {
   let userID = req.body.uid;
   let username = req.body.username;
   let photoUrl = "default1.png";
-  // let email = req.body.email;
-  // let password = req.body.password;
-  // let vpassword = req.body.vpassword;
 
   let user = new User({
-    "user_ID": userID,
+    "userID": userID,
     "username": username,
-    "photo_URL": photoUrl
-    // "email": email,
-    // "password": password,
-    // "verf_password": vpassword
+    "photoURL": photoUrl
   });
+
   let userProfile = new UserProfile({
-    "user_ID": userID,
+    "userID": userID,
     "biography": "",
     "tags": [],
     "favorites": { movies: "", music: "", websites: "" },
     "privacy": true
   });
   let userProps = new UserProps({
-    "user_ID": userID,
+    "userID": userID,
     "friends": [],
-    "owned_rooms": [],
-    "subscribed_rooms": [],
-    "favorited_rooms": [],
+    "ownedRooms": [],
+    "subscribedRooms": [],
+    "favoritedRooms": [],
     "notifications": []
   });
 
@@ -42,7 +37,6 @@ router.post("/new-user", async function(req, res) {
     .save()
     .then(document => {
       console.log(document);
-      // res.send("???");
     })
     .catch(error => res.status(400).send("User insert failed."));
 
@@ -55,11 +49,8 @@ router.post("/new-user", async function(req, res) {
     .save()
     .then(document => {
       console.log(document);
-      // res.send("Created.");
     })
     .catch(error => res.status(400).send("User Props insert failed."));
-  // res.send("???");
-  // res.send("User profile & props created.");
 });
 
 module.exports = router;

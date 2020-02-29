@@ -10,7 +10,7 @@ const UserProps = require("../models/userprops.model");
 
 // ---------------------------------------------------------- FIND ROOMS ----------------------------------------------------------
 
-router.get("/findroom", async function(req, res) {
+router.get("/find-room", async function(req, res) {
   let roomID = req.query.roomID;
   await Room.findById(roomID, function(error, room) {
     if (error) {
@@ -23,35 +23,35 @@ router.get("/findroom", async function(req, res) {
 
 // ---------------------------------------------------------- CREATE FIND ROOMS ----------------------------------------------------------
 
-router.post("/createroom", async function(req, res) {
-  let name = req.body.room_name;
-  let owner_ID = req.body.uid;
-  let thumbnail_url = "default1.png";
+router.post("/create-room", async function(req, res) {
+  let name = req.body.roomName;
+  let ownerID = req.body.uid;
+  let thumbnailUrl = "default1.png";
   let subscribers = [req.body.uid];
   let tags = req.body.tags;
-  let room_size = req.body.room_size;
-  let private = req.body.privacy;
-  let del = req.body.uid;
-  let room_admins = [req.body.uid];
-  let operator = [req.body.uid];
-  let invitation = [req.body.uid];
-  let banned = [];
+  let roomSize = req.body.roomSize;
+  let privacy = req.body.privacy;
+  let deleteUser = req.body.uid;
+  let roomAdmins = [req.body.uid];
+  let operators = [req.body.uid];
+  let invitations = [req.body.uid];
+  let bans = [];
 
   let new_room = new Room({
     name: name,
-    owner_ID: owner_ID,
-    thumbnail_url: thumbnail_url,
-    subscriber: subscribers,
+    ownerID: ownerID,
+    thumbnailUrl: thumbnailUrl,
+    subscribers: subscribers,
     tags: tags,
     settings: {
-      room_size: room_size,
-      private: private,
+      roomSize: roomSize,
+      privacy: privacy,
       access: {
-        delete: del,
-        roomAdmins: room_admins,
-        operator: operator,
-        invitation: invitation,
-        banned: banned
+        delete: deleteUser,
+        roomAdmins: roomAdmins,
+        operators: operators,
+        invitations: invitations,
+        bans: bans
       }
     }
   });
@@ -59,15 +59,15 @@ router.post("/createroom", async function(req, res) {
   await new_room
     .save()
     .then(async new_room => {
-      let room_ID = new_room._id;
+      let roomID = new_room._id;
       await UserProps.findOneAndUpdate(
-        { user_ID: owner_ID },
-        { $addToSet: { owned_rooms: room_ID, subscribed_rooms: room_ID } },
+        { userID: ownerID },
+        { $addToSet: { ownedRooms: roomID, subscribedRooms: roomID } },
         { new: true }
       )
         .then(document => {
-          console.log(document.subscribed_rooms);
-          res.send(document.subscribed_rooms);
+          console.log(document.subscribedRooms);
+          res.send(document.subscribedRooms);
         })
         .catch(error =>
           res.status(400).send("New room insert added to user props failed.")
@@ -82,21 +82,21 @@ router.delete("/delete-room", async function(req, res) {
   let roomID = req.query.roomID;
   // may not be allowed... (conventionally speaking)
   let uid = req.query.uid;
-  await Room.findOneAndDelete({ _id: roomID, owner_ID: uid })
+  await Room.findOneAndDelete({ _id: roomID, ownerID: uid })
     .then(async document => {
       console.log(document);
       // let subscribers = document.subscriber;
       await UserProps(
         {
-          subscribed_rooms: roomID,
-          owned_rooms: roomID,
-          favorited_rooms: roomID
+          subscribedRooms: roomID,
+          ownedRooms: roomID,
+          favoritedRooms: roomID
         },
         {
           $pull: {
-            subscribed_rooms: roomID,
-            owned_rooms: roomID,
-            favorited_rooms: roomID
+            subscribedRooms: roomID,
+            ownedRooms: roomID,
+            favoritedRooms: roomID
           }
         }
       ).then(response => {
@@ -135,7 +135,7 @@ router.put("/upload-thumnail", function(req, res) {
 // <img src={`http://localhost:5000/api/room/get-thumbnail?thumbnail_url=${thumbnail_url}`} />
 router.get("/get-thumbnail", async function(req, res) {
   let s3 = new aws.S3();
-  let url = req.query.thumbnail_url;
+  let url = req.query.thumbnailUrl;
   console.log(url);
   let data = await s3.getObject({ Bucket: "broadkats.me", Key: url }).promise();
   res.writeHead(200, { "Content-Type": "image/png, image/jpg" });
@@ -146,11 +146,11 @@ router.get("/get-thumbnail", async function(req, res) {
 // ---------------------------------------------------------- ADD / REMOVE TAGS ----------------------------------------------------------
 
 router.put("/add-tags", async function(req, res) {
-  let room_ID = req.body.room_ID;
-  let new_tag = req.body.new_tag;
+  let roomID = req.body.roomID;
+  let newTag = req.body.newTag;
   await Room.findOneAndUpdate(
-    { _id: room_ID },
-    { $addToSet: { tags: new_tag } },
+    { _id: roomID },
+    { $addToSet: { tags: newTag } },
     { new: true }
   )
     .then(document => res.send(document.tags))
@@ -158,11 +158,11 @@ router.put("/add-tags", async function(req, res) {
 });
 
 router.put("/remove-tags", async function(req, res) {
-  let room_ID = req.body.room_ID;
-  let del_tag = req.body.del_tag;
+  let roomID = req.body.roomID;
+  let delTag = req.body.delTag;
   await Room.findOneAndUpdate(
-    { _id: room_ID },
-    { $pull: { tags: del_tag } },
+    { _id: roomID },
+    { $pull: { tags: delTag } },
     { new: true }
   )
     .then(document => res.send(document.tags))

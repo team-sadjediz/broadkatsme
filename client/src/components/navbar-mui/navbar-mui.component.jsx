@@ -97,9 +97,13 @@ class ButtonAppBar extends React.Component {
   async componentDidMount() {
     console.log("current user:", this.props.currentUser.uid);
 
-    let results = await axios.get(`${utils.BASE_API_URL}/home/users-rooms`, {
-      params: { uid: this.props.currentUser.uid }
-    });
+    let results = await axios.get(
+      `${utils.BASE_API_URL}/userprops/users-rooms`,
+      {
+        params: { uid: this.props.currentUser.uid }
+      }
+    );
+    console.log(results);
 
     this.setState({ roomList: results.data });
     // console.log("after api call", this.state.roomList);
@@ -150,7 +154,7 @@ class ButtonAppBar extends React.Component {
                 <Link to={`/room/id/${room.roomID}`}>
                   <ImageButton
                     iconHover={<PlayCircleFilledIcon />}
-                    bgImageUrl={`${utils.BASE_API_URL}/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
+                    bgImageUrl={`${utils.BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${room.thumbnailUrl}`}
                   ></ImageButton>
                 </Link>
               ))}

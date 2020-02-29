@@ -4,15 +4,15 @@ const random = require("mongoose-simple-random");
 const Access = new mongoose.Schema({
   delete: String, // Only room owner is allowed to delete a room / remove an operator / kick a subscriber (contains owner ID)
   roomAdmins: [String], // ID's of those who can: add operators, change privacy...
-  operator: [String], // ID's of operators
-  invitation: [String], // ID's of those who can invite
+  operators: [String], // ID's of operators
+  invitations: [String], // ID's of those who can invite
   //   kick: [{ type: String }], // ID's of those who can kick
-  banned: [String] // ID of those who are banned
+  bans: [String] // ID of those who are banned
 });
 
-const Room_Settings = new mongoose.Schema({
-  room_size: Number,
-  private: Boolean,
+const RoomSettings = new mongoose.Schema({
+  roomSize: Number,
+  privacy: Boolean,
   access: Access
 });
 
@@ -20,11 +20,11 @@ const Room_Settings = new mongoose.Schema({
 const Room = new mongoose.Schema({
   //   room_ID: String,
   name: String,
-  owner_ID: String,
-  thumbnail_url: String,
-  subscriber: [{ type: String }],
+  ownerID: String,
+  thumbnailUrl: String,
+  subscribers: [{ type: String }],
   tags: [{ type: String }],
-  settings: Room_Settings
+  settings: RoomSettings
 });
 
 Room.plugin(random);

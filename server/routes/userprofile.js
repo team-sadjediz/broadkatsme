@@ -10,9 +10,9 @@ const UserProfile = require("../models/userprofile.model");
 
 router.get("/user-profile", async function(req, res) {
   let uid = req.query.uid;
-  await UserProfile.findOne({ user_ID: uid })
+  await UserProfile.findOne({ userID: uid })
     .then(userprofile => {
-      let response = { userprofile, userprops };
+      let response = userprofile;
       res.send(response);
     })
     .catch(res.status(404).send(`User ${uid} profile is not found.`));

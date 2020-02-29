@@ -106,10 +106,8 @@ class Tag extends Component {
 
     console.log("adding " + tag);
     console.log("to " + roomID);
-    let request = { "new_tag": tag, "room_ID": roomID };
+    let request = { "newTag": tag, "roomID": roomID };
     axios
-      // .put("http://localhost:5000/api/room/add-tags", request)
-      // .put("http://broadkatsme.herokuapp.com/api/room/add-tags", request)
       .put(`${BASE_API_URL}/room/add-tags`, request)
       .then(res => {
         this.props.onChangeTag(res.data);
@@ -122,7 +120,7 @@ class Tag extends Component {
     e.preventDefault();
     let tag = this.props.text;
     let roomID = this.state.roomID;
-    let request = { "del_tag": tag, "room_ID": roomID };
+    let request = { "delTag": tag, "roomID": roomID };
     console.log("removing " + tag);
     axios
       // .put("http://localhost:5000/api/room/remove-tags", request)
