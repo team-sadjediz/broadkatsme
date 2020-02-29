@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
+// import axios from "../../firebase/firebase.sdk";
+import { axiosConfig, setAuthorization } from "../../firebase/firebase.sdk";
 
 import { BASE_API_URL } from "../../utils";
 import { connect } from "react-redux";
@@ -12,7 +14,7 @@ import BrowserOverlay from "../../components/browser-overlay/browser-overlay.com
 import BrowserInit from "../../components/browser-init/browser-init.component";
 import RoomSettings from "../../components/room-settings/room-settings.component";
 
-import Modal from "@material-ui/core/Modal";
+// import Modal from "@material-ui/core/Modal";
 
 const initialState = {
   isMouseMoving: false,
@@ -47,34 +49,23 @@ class RoomPage extends Component {
   }
 
   async componentDidMount() {
-    // const roomID = this.state.roomID;
+    let token = await this.props.currentUser.getIdToken(false);
+    setAuthorization(token);
     const roomID = { "roomID": "5e4a4c5a86ae580017aa1a78" };
-    // console.log(roomID);
 
-    let header = { "AuthToken": this.props.currentUser.getIdToken(true) };
-    console.log(this.props.currentUser.getIdToken(true));
-    await axios
-      //   .get("http://broadkatsme.herokuapp.com/api/room/findroom", {
-      //     params: roomID
-      //   })
-      // .get("http://localhost:5000/api/room/findroom", {
-      // .get("http://broadkatsme.herokuapp.com/api/room/findroom", {
-      //   params: roomID
-      // })
+    // console.log("???");
+    // console.log(this.props.currentUser);
+    await axiosConfig
       .get(`${BASE_API_URL}/room/findroom`, {
         params: roomID
       })
-      .then(
-        res => this.fetchData(res.data)
-        // console.log(res.data)
-      )
+      .then(res => this.fetchData(res.data))
       .catch(error => {
         console.error(error);
       });
 
-    await axios
-      // .get("http://localhost:5000/api/userprops/is-favorited", {
-      // .get("http://broadkatsme.herokuapp.com/api/userprops/is-favorited", {
+    // console.log(this.props.currentUser);
+    await axiosConfig
       .get(`${BASE_API_URL}/userprops/is-favorited`, {
         params: {
           "uid": this.props.currentUser.uid,
@@ -83,7 +74,6 @@ class RoomPage extends Component {
       })
       .then(res => this.setState({ isFavorited: res.data }))
       .catch(error => console.error(error));
-    console.log(this.state);
   }
 
   shouldComponentUpdate(nextProps, nextState) {

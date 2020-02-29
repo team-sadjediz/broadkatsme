@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { auth } from "./firebase/firebase.utils";
 
+// axios
+import { setAuthorization } from "./firebase/firebase.sdk";
+
 // redux stuff:
 import { connect } from "react-redux";
 import { setCurrentUser } from "./redux/user/user.actions";
@@ -62,6 +65,7 @@ class App extends Component {
   componentDidMount() {
     this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
       this.props.setCurrentUser(user);
+      this.authorize();
     });
   }
 
@@ -70,7 +74,15 @@ class App extends Component {
     console.log("logged out");
   }
 
+  async authorize() {
+    let idToken = await this.props.currentUser.getIdToken(false);
+    setAuthorization(idToken);
+  }
+
   render() {
+    if (this.props.currentUser) {
+      this.authorize();
+    }
     return (
       <ThemeProvider theme={theme}>
         <div className="App">

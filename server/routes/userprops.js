@@ -53,6 +53,7 @@ router.put("/favorite", async function(req, res) {
 router.get("/is-favorited", async function(req, res) {
   let roomID = req.query.roomID;
   let uid = req.query.uid;
+  console.log("coming from is favorited");
   console.log(roomID);
   console.log(uid);
 

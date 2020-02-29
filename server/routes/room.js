@@ -12,9 +12,10 @@ const UserProps = require("../models/userprops.model");
 
 router.get("/findroom", async function(req, res) {
   let roomID = req.query.roomID;
-  // console.log(roomID);
+  console.log("coming from findroom");
+  console.log(roomID);
   await Room.findById(roomID, function(error, room) {
-    // console.log(JSON.stringify(room));
+    console.log(JSON.stringify(room));
     res.json(room);
   });
 });
