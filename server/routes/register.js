@@ -9,16 +9,18 @@ router.post("/new-user", async function(req, res) {
   console.log(req);
   let userID = req.body.uid;
   let username = req.body.username;
-  let email = req.body.email;
-  let password = req.body.password;
-  let vpassword = req.body.vpassword;
+  let photoUrl = "default1.png";
+  // let email = req.body.email;
+  // let password = req.body.password;
+  // let vpassword = req.body.vpassword;
 
   let user = new User({
     "user_ID": userID,
     "username": username,
-    "email": email,
-    "password": password,
-    "verf_password": vpassword
+    "photo_URL": photoUrl
+    // "email": email,
+    // "password": password,
+    // "verf_password": vpassword
   });
   let userProfile = new UserProfile({
     "user_ID": userID,
@@ -38,7 +40,10 @@ router.post("/new-user", async function(req, res) {
 
   await user
     .save()
-    .then(document => console.log(document))
+    .then(document => {
+      console.log(document);
+      // res.send("???");
+    })
     .catch(error => res.status(400).send("User insert failed."));
 
   await userProfile
@@ -48,9 +53,12 @@ router.post("/new-user", async function(req, res) {
 
   await userProps
     .save()
-    .then(document => console.log(document))
+    .then(document => {
+      console.log(document);
+      // res.send("Created.");
+    })
     .catch(error => res.status(400).send("User Props insert failed."));
-
+  // res.send("???");
   // res.send("User profile & props created.");
 });
 

@@ -47,6 +47,8 @@ class RoomPage extends Component {
     const roomID = { "roomID": "5e4a4c5a86ae580017aa1a78" };
     // console.log(roomID);
 
+    let header = { "AuthToken": this.props.currentUser.getIdToken(true) };
+    console.log(this.props.currentUser.getIdToken(true));
     await axios
       //   .get("http://broadkatsme.herokuapp.com/api/room/findroom", {
       //     params: roomID

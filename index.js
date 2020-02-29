@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
 console.log("root index.js envs:", process.env);
-// const admin = require("./server/firebase-config/admin");
+const admin = require("./server/services/admin");
 
 const app = express();
 app.use(cors());
@@ -54,25 +54,25 @@ connection.once("open", () => {
 
 // --------------------------------- - - - - - - ---------------------------------
 
-// const verifyAuthToken = async function(req, res, next) {
-//   const idToken = req.headers.authorization;
+const verifyAuthToken = async function(req, res, next) {
+  const idToken = req.headers.authorization;
 
-//   try {
-//     const decodedToken = await admin.auth().verifyIdToken(idToken);
+  try {
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
 
-//     if (decodedToken) {
-//       // appends uid for usage in other routes
-//       req.body.uid = decodedToken.uid;
-//       // middleware verification of correct user access to particular routes
-//       return next();
-//     } else {
-//       return res.status(401).send("Unauthorized access.");
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     return res.status(401).send("Unauthorized access.");
-//   }
-// };
+    if (decodedToken) {
+      // appends uid for usage in other routes
+      req.body.uid = decodedToken.uid;
+      // middleware verification of correct user access to particular routes
+      return next();
+    } else {
+      return res.status(401).send("Unauthorized access.");
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(401).send("Unauthorized access.");
+  }
+};
 
 // --------------------------------- A P P C O N F ---------------------------------
 
