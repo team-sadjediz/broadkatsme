@@ -85,7 +85,7 @@ const friends = require("./server/routes/friends");
 // --------------------------------- A P P C O N F ---------------------------------
 
 // app.use("", );
-app.use("/", verifyAuthToken);
+// app.use("/", verifyAuthToken);
 app.use("/api/home", home);
 app.use("/api/userprofile", userProfile);
 app.use("/api/register", register);

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-// import axios from "../../firebase/firebase.sdk";
-import { axiosConfig, setAuthorization } from "../../firebase/firebase.sdk";
+// import { axiosConfig, setAuthorization } from "../../firebase/firebase.sdk";
 
 import { BASE_API_URL } from "../../utils";
 import { connect } from "react-redux";
@@ -49,13 +48,14 @@ class RoomPage extends Component {
   }
 
   async componentDidMount() {
-    let token = await this.props.currentUser.getIdToken(false);
-    setAuthorization(token);
+    // let token = await this.props.currentUser.getIdToken(false);
+    // setAuthorization(token);
     const roomID = { "roomID": "5e4a4c5a86ae580017aa1a78" };
 
     // console.log("???");
     // console.log(this.props.currentUser);
-    await axiosConfig
+    // await axiosConfig
+    await axios
       .get(`${BASE_API_URL}/room/findroom`, {
         params: roomID
       })
@@ -65,7 +65,8 @@ class RoomPage extends Component {
       });
 
     // console.log(this.props.currentUser);
-    await axiosConfig
+    // await axiosConfig
+    await axios
       .get(`${BASE_API_URL}/userprops/is-favorited`, {
         params: {
           "uid": this.props.currentUser.uid,
