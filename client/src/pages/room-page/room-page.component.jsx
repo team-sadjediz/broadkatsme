@@ -1,14 +1,18 @@
 import React, { Component } from "react";
 import axios from "axios";
 
+import { BASE_API_URL } from "../../utils";
 import { connect } from "react-redux";
 
 import "./room-page.styles.scss";
 
-// import Tag from "../../components/tag/tag.component";
+import Tag from "../../components/tag/tag.component";
 import RoomBar from "../../components/room-bar/room-bar.component";
 import BrowserOverlay from "../../components/browser-overlay/browser-overlay.component";
+import BrowserInit from "../../components/browser-init/browser-init.component";
 import RoomSettings from "../../components/room-settings/room-settings.component";
+
+import Modal from "@material-ui/core/Modal";
 
 const initialState = {
   isMouseMoving: false,
@@ -54,7 +58,10 @@ class RoomPage extends Component {
       //     params: roomID
       //   })
       // .get("http://localhost:5000/api/room/findroom", {
-      .get("http://broadkatsme.herokuapp.com/api/room/findroom", {
+      // .get("http://broadkatsme.herokuapp.com/api/room/findroom", {
+      //   params: roomID
+      // })
+      .get(`${BASE_API_URL}/room/findroom`, {
         params: roomID
       })
       .then(
@@ -67,7 +74,8 @@ class RoomPage extends Component {
 
     await axios
       // .get("http://localhost:5000/api/userprops/is-favorited", {
-      .get("http://broadkatsme.herokuapp.com/api/userprops/is-favorited", {
+      // .get("http://broadkatsme.herokuapp.com/api/userprops/is-favorited", {
+      .get(`${BASE_API_URL}/userprops/is-favorited`, {
         params: {
           "uid": this.props.currentUser.uid,
           "roomID": "5e4a4c5a86ae580017aa1a78"
@@ -110,15 +118,16 @@ class RoomPage extends Component {
       roomName: roomDetails.name,
       roomID: roomDetails._id,
       ownerID: roomDetails.owner_ID,
-      showInitial: true,
-      showSettings: false,
+      // showInitial: true,
+      // showSettings: false,
       subscribers: roomDetails.subscriber,
       tags: roomDetails.tags,
       settings: roomDetails.settings
     });
   };
 
-  closeInitialModal = () => {
+  closeInit = () => {
+    console.log("close init called");
     this.setState({ showInitial: false });
   };
 
@@ -140,13 +149,19 @@ class RoomPage extends Component {
     let response;
     await axios
       // .put("http://localhost:5000/api/userprops/favorite", request)
-      .put("http://broadkatsme.herokuapp.com/api/userprops/favorite", request)
+      // .put("http://broadkatsme.herokuapp.com/api/userprops/favorite", request)
+      .put(`${BASE_API_URL}/userprops/favorite`, request)
       .then(res => this.setState({ isFavorited: res.data.favorited }))
       .catch(error => console.error(error));
   };
 
   onChangeTag = tags => {
     this.setState({ tags: tags });
+  };
+
+  onChangeTitle = e => {
+    this.setState({ roomName: e.target.value });
+    //axios call to save title changes here & return true -> flashes when saved/true is returned?
   };
 
   handleMouseMove = e => {
@@ -166,6 +181,17 @@ class RoomPage extends Component {
   };
 
   render() {
+    // console.log(this.state.showInitial);
+    let tags = this.state.tags.map(tag => {
+      return (
+        <Tag
+          type="remove"
+          text={tag}
+          onChangeTag={this.onChangeTag}
+          roomID={this.state.roomID}
+        ></Tag>
+      );
+    });
     return (
       <div className="main-container">
         {this.state.showSettings ? (
@@ -179,7 +205,6 @@ class RoomPage extends Component {
         ) : null}
 
         <div className="room-page-container">
-          {/* <RoomSettings></RoomSettings> */}
           <div className="room-page">
             <div className="room-bar-area">
               <RoomBar
@@ -190,12 +215,27 @@ class RoomPage extends Component {
                 favoriteRoom={this.favoriteRoom}
                 isFavorited={this.state.isFavorited}
                 onChangeTag={this.onChangeTag}
+                onChangeTitle={this.onChangeTitle}
               />
             </div>
+            {this.state.showInitial ? (
+              <div className="room-screen-init">
+                <BrowserInit
+                  // className="room-screen-init-play"
+                  closeInit={this.closeInit}
+                  roomName={this.state.roomName}
+                ></BrowserInit>
+              </div>
+            ) : null}
             <div
               className="room-screen-area"
               onMouseMove={e => this.handleMouseMove(e)}
             >
+              {/* <iframe
+                width="100%"
+                height="100%"
+                src="https://www.youtube.com/embed/Fb0Og6pB9Z8"
+              ></iframe> */}
               {this.state.isMouseMoving ? (
                 <BrowserOverlay
                   className="browser-overlay"
@@ -205,6 +245,14 @@ class RoomPage extends Component {
               ) : (
                 <div className="hide" />
               )}
+            </div>
+            <div className="room-tags-area">
+              <Tag
+                type="add"
+                roomID={this.state.roomID}
+                onChangeTag={this.onChangeTag}
+              ></Tag>
+              {tags}
             </div>
           </div>
         </div>
