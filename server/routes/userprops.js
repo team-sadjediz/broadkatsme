@@ -5,31 +5,116 @@ const UserProfile = require("../models/userprofile.model");
 const UserProps = require("../models/userprops.model");
 const Room = require("../models/room.model");
 
+// ---------------------------------------------------------- FIND PROPS ----------------------------------------------------------
+
+router.get("/user-props", async function(req, res) {
+  let uid = req.query.uid;
+  await UserProps.findOne({ user_ID: uid })
+    .then(userprops => res.send({ userprops }))
+    .catch(res.status(404).send(`User ${uid} props is not found.`));
+});
+
+// ---------------------------------------------------------- FIND USERS ROOMS ----------------------------------------------------------
+
+router.get("/users-rooms", async function(req, res) {
+  let uid = req.query.uid;
+  let room_urls = [];
+
+  let exists = null;
+  await UserProps.findOne({ user_ID: uid })
+    .then(document => (exists = document))
+    .catch(error => console.log(error));
+
+  if (exists !== null) {
+    await UserProps.findOne({ user_ID: uid })
+      .populate("subscribed_rooms")
+      .exec((error, populatedProps) => {
+        let rooms = populatedProps.subscribed_rooms;
+        rooms.forEach(function(room) {
+          room_urls.push({
+            "roomID": room._id,
+            "name": room.name,
+            "thumbnail_url": room.thumbnail_url,
+            "tags": room.tags
+          });
+        });
+        console.log(room_urls);
+        res.send(room_urls);
+      });
+  } else {
+    res.send([]);
+  }
+});
+
+// ---------------------------------------------------------- UN/SUBSCRIBE TO ROOM ----------------------------------------------------------
+
+router.put("/unsubscribe", async function(req, res) {
+  let roomID = req.body.roomID;
+  let uid = req.body.uid;
+
+  await UserProps.findOneAndUpdate(
+    { "user_ID": uid, "owned_rooms": { $nin: roomID } },
+    {
+      $pull: {
+        subscribed_rooms: roomID,
+        favorited_rooms: roomID
+      }
+    },
+    { new: true }
+  )
+    .then(async userprops => {
+      await Room.findByIdAndUpdate(roomID, { $pull: { subscriber: uid } })
+        .then(room => {
+          let updatedUserProps = {
+            "subscribed_rooms": userprops.subscribed_rooms,
+            "favorited_rooms": userprops.favorited_rooms
+          };
+          let updatedRoom = { "subscribers": room.subscriber };
+          let response = { updatedUserProps, updatedRoom };
+          console.log("response " + response);
+          res.send(response);
+        })
+        .catch(error =>
+          res.status(400).send("Unsubscribing (in Room) failed.")
+        );
+    })
+    .catch(error =>
+      res.status(400).send("Unsubscribing in (UserProps) failed.")
+    );
+});
+
+router.put("/subscribe", async function(req, res) {
+  let roomID = req.body.roomID;
+  let uid = req.body.uid;
+
+  await UserProps.findOneAndUpdate(
+    { "user_ID": uid },
+    {
+      $addToSet: {
+        subscribed_rooms: roomID
+        // favorited_rooms: roomID
+      }
+    },
+    { new: true }
+  )
+    .then(async userprops => {
+      await Room.findByIdAndUpdate(roomID, { $addToSet: { subscriber: uid } })
+        .then(room => {
+          let updatedUserProps = {
+            "subscribed_rooms": userprops.subscribed_rooms,
+            "favorited_rooms": userprops.favorited_rooms
+          };
+          let updatedRoom = { "subscribers": room.subscriber };
+          let response = { updatedUserProps, updatedRoom };
+          console.log("response " + response);
+          res.send(response);
+        })
+        .catch(error => res.status(400).send("Subscribing (in Room) failed."));
+    })
+    .catch(error => res.status(400).send("Subscribing in (UserProps) failed."));
+});
+
 // ---------------------------------------------------------- FAVORITE / UNFAVORITE ----------------------------------------------------------
-
-// router.put("/favorite", async function(req, res) {
-//   let room_ID = req.body.room_ID;
-//   let uid = req.body.uid;
-//   await UserProps.findOneAndUpdate(
-//     // { "user_ID": uid, "favorited_rooms": { $nin: room_ID } },
-//     // { $push: { "favorited_rooms": room_ID } }
-//     { user_ID: uid },
-//     { $addToSet: { favorited_rooms: room_ID } }
-//   )
-//     .then(document => res.send(document))
-//     .catch(error => res.status(400).send("Favoriting room failed."));
-// });
-
-// router.put("/unfavorite", async function(req, res) {
-//   let room_ID = req.body.room_ID;
-//   let uid = req.body.uid;
-//   await UserProps.findOneAndUpdate(
-//     { user_ID: uid, favorited_rooms: { $in: room_ID } },
-//     { $pull: { favorited_rooms: room_ID } }
-//   )
-//     .then(document => res.send(document))
-//     .catch(error => res.status(400).send("Unfavoriting room failed."));
-// });
 
 router.put("/favorite", async function(req, res) {
   let roomID = req.body.roomID;
@@ -79,8 +164,6 @@ router.put("/new-notification", async function(req, res) {
   let message = req.body.message;
   let notification = { title: title, message: message };
   await UserProps.findOneAndUpdate(
-    // { "user_ID": uid, "favorited_rooms": { $nin: room_ID } },
-    // { $push: { "favorited_rooms": room_ID } }
     { user_ID: uid },
     { $push: { notifications: notification } }
   )

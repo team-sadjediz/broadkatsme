@@ -6,13 +6,19 @@ const singleUpload = upload.single("image");
 
 const UserProfile = require("../models/userprofile.model");
 
-router.get("/user", async function(req, res) {
-  let user_ID = req.body.uid;
-  await UserProfile.find({ user_ID: user_ID }, function(error, userprofile) {
-    console.log(JSON.stringify(userprofile));
-    res.send(userprofile);
-  });
+// ---------------------------------------------------------- FIND USER PROFILE ----------------------------------------------------------
+
+router.get("/user-profile", async function(req, res) {
+  let uid = req.query.uid;
+  await UserProfile.findOne({ user_ID: uid })
+    .then(userprofile => {
+      let response = { userprofile, userprops };
+      res.send(response);
+    })
+    .catch(res.status(404).send(`User ${uid} profile is not found.`));
 });
+
+// ---------------------------------------------------------- UPLOAD USER PROF PIC ----------------------------------------------------------
 
 // send json with: { folder: ..., uid: ..., image: ...}
 // order is required
