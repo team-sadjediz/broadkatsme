@@ -106,9 +106,11 @@ class ButtonAppBar extends React.Component {
       this.props.currentUser
     );
 
-    let results = await axios.get(`${BASE_API_URL}/home/users-rooms`, {
+    let results = await axios.get(`${BASE_API_URL}/userprops/users-rooms`, {
       params: { uid: this.props.currentUser.uid }
     });
+    console.log(results);
+
     this.props.setSubscribedRooms(results.data);
   }
 
@@ -171,7 +173,7 @@ class ButtonAppBar extends React.Component {
                       this.props.setSelectedRoom(room.roomID);
                     }}
                     iconHover={<PlayCircleFilledIcon />}
-                    bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
+                    bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${room.thumbnailUrl}`}
                   ></ImageButton>
                 </Link>
               ))}

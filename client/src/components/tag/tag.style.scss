@@ -1,93 +1,98 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
 
-@mixin left-border {
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-}
+// @mixin left-border {
+//   border-top-left-radius: 3px;
+//   border-bottom-left-radius: 3px;
+// }
 
-@mixin right-border {
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-}
+// @mixin right-border {
+//   border-top-right-radius: 3px;
+//   border-bottom-right-radius: 3px;
+// }
 
-@mixin flex {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+// @mixin flex {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// }
 
-@mixin height {
-  height: 20px;
-}
+// @mixin height {
+//   height: 20px;
+// }
 
-.tag-properties {
-  @include height;
-  display: inline-block;
-  background-color: transparent;
-  border-radius: 3px;
-}
+// .tag-properties {
+//   @include height;
+//   display: inline-block;
+//   background-color: transparent;
+//   border-radius: 3px;
+// }
 
-.tag-properties:hover {
-  box-shadow: 0 0 5px $french_laundry_blue;
-}
+// .tag-properties:hover {
+//   box-shadow: 0 0 5px $french_laundry_blue;
+// }
 
-.tag-properties form {
-  @include flex;
-  height: 100%;
-}
+// .tag-properties form {
+//   @include flex;
+//   height: 100%;
+// }
 
-.tag-properties input {
-  @include right-border;
-  @include height;
+// .tag-properties input,
+.tag-add-input {
+  // @include right-border;
+  // @include height;
   width: 70px;
   padding: 0 0 0 5px;
   outline: none;
   border: none;
 
+  background-color: transparent;
   color: $french_laundry_blue;
-  font-family: "Karla", sans-serif;
-  font-size: 0.8em;
+  font-family: "Karla", Roboto, sans-serif, -apple-system, BlinkMacSystemFont,
+    "Segoe UI";
+  font-size: 1rem;
+  // font-family: "Karla", sans-serif;
+  // font-size: 0.8em;
   //   font-size: 18px;
   letter-spacing: 0.05em;
 }
 
-.tag-button {
-  @include left-border;
-  @include flex;
-  border: none;
-  background-color: $french_laundry_blue;
+// .tag-button {
+//   @include left-border;
+//   @include flex;
+//   border: none;
+//   background-color: $french_laundry_blue;
 
-  cursor: pointer;
+//   cursor: pointer;
 
-  padding: 0;
+//   padding: 0;
 
-  height: 20px;
-  width: 20px;
+//   height: 20px;
+//   width: 20px;
 
-  svg {
-    height: 15px;
-    width: auto;
-    path {
-      fill: $white;
-    }
-  }
-}
+//   svg {
+//     height: 15px;
+//     width: auto;
+//     path {
+//       fill: $white;
+//     }
+//   }
+// }
 
-.tag-button:hover {
-  background-color: $soft_red;
-}
+// .tag-button:hover {
+//   background-color: $soft_red;
+// }
 
-.tag-properties-minus {
-  @include flex;
-}
+// .tag-properties-minus {
+//   @include flex;
+// }
 
-.tag-label {
-  @include right-border;
-  @include height;
-  background-color: white;
-  padding: 0 5px;
-  font-size: 0.8em;
-  //   width: auto;
-  color: $french_laundry_blue;
-}
+// .tag-label {
+//   @include right-border;
+//   @include height;
+//   background-color: white;
+//   padding: 0 5px;
+//   font-size: 0.8em;
+//   //   width: auto;
+//   color: $french_laundry_blue;
+// }

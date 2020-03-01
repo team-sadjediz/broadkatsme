@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 // components:
 import NewRoom from "../new-room/new-room.component";
+import Chat from "../chat/chat.component";
 
 // mui components:
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -143,7 +144,7 @@ export default function DrawerTabs({ drawerOpen }) {
           <NewRoom />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          schoolsux
+          <Chat />
         </TabPanel>
       </div>
     </div>

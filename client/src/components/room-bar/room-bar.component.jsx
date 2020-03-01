@@ -21,18 +21,18 @@ class RoomBar extends Component {
   }
 
   render() {
-    let tags = this.props.tags.map(tag => {
-      return (
-        <Tag
-          className="room-tag"
-          type="remove"
-          text={tag}
-          onChangeTag={this.props.onChangeTag}
-          roomID={this.state.roomID}
-        />
-      );
-    });
-    console.log(this.state.roomID);
+    // let tags = this.props.tags.map(tag => {
+    //   return (
+    //     <Tag
+    //       className="room-tag"
+    //       type="remove"
+    //       text={tag}
+    //       onChangeTag={this.props.onChangeTag}
+    //       roomID={this.state.roomID}
+    //     />
+    //   );
+    // });
+    // console.log(this.state.roomID);
     let options = (
       <div className="more-buttons">
         <CircleBtn
@@ -50,15 +50,23 @@ class RoomBar extends Component {
 
     return (
       <div className="room-bar">
-        <div
+        <input
           className="room-name"
-          onClick={() => this.setState({ showTags: !this.state.showTags })}
+          type="text"
+          value={this.props.roomName}
+          onChange={this.props.onChangeTitle}
+          // placeholder={this.props.roomName}
+          // onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';"
+        />
+        {/* <div
+          className="room-name"
+          // onClick={() => this.setState({ showTags: !this.state.showTags })}
           //   onMouseMove={() => this.setState({ showTags: true })}
           //   onMouseLeave={() => this.setState({ showTags: false })}
         >
           {this.props.roomName}
-        </div>
-        {this.state.showTags ? <div className="room-tags">{tags}</div> : null}
+        </div> */}
+        {/* {this.state.showTags ? <div className="room-tags">{tags}</div> : null} */}
         <CircleBtn
           className="refresh-button room-bar-btn"
           icon={<RefreshIcon />}

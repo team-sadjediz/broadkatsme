@@ -51,8 +51,6 @@ const Chat = ({ currentUser, selectedRoom }) => {
     }
   };
 
-  // console.log(message, messages);
-
   console.log("MSG", message);
   console.log("MESSAGES:", messages);
   return (
