@@ -212,7 +212,7 @@ class RoomPage extends Component {
 
   render() {
     // console.log(this.state.showInitial);
-    console.log(this.props.selectedRoom);
+    // console.log(this.props.selectedRoom);
     let tags = this.state.tags.map(tag => {
       return (
         <Tag
@@ -230,7 +230,13 @@ class RoomPage extends Component {
         {this.state.showSettings ? (
           <div className="room-settings-container">
             <RoomSettings
-              tabs={["Add", "Delete", "Eat Shit"]}
+              tabs={[
+                "General",
+                "Notifications",
+                "Settings",
+                "Role Management",
+                "Delete"
+              ]}
               panels={["fml", "2xfml", "3xfml"]}
               toggleSettingsModal={this.toggleSettingsModal}
             ></RoomSettings>
