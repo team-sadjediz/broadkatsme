@@ -52,7 +52,7 @@ const Chat = ({ currentUser, selectedRoom }) => {
 
     socket.on("message", message => {
       // console.log("on rec", messages);
-      console.log("array of messsages from this room:", message);
+      console.log("Array of messsages from this room:", message);
       // setMessages([...message]);
       setMessages(message);
 
