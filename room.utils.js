@@ -6,14 +6,18 @@ const messageList = [
 ];
 
 const addMessageToRoom = (roomId, message) => {
-  messageList.push({ roomId: roomId, sender: message.user, msg: message.text });
+  const formattedMsg = {
+    roomId: roomId,
+    sender: message.user,
+    msg: message.text
+  };
+  messageList.push(formattedMsg);
 
-  return message;
+  return formattedMsg;
 };
 
 const getMessagesFromRoom = roomId => {
-  let results = messageList.filter(room => room.roomId === roomId);
-  console.log(results);
+  return messageList.filter(room => room.roomId === roomId);
 };
 
 const getAllMessages = () => messageList;

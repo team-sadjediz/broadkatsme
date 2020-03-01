@@ -14,6 +14,12 @@ const {
   getAllUsers
 } = require("./chat.utils");
 
+const {
+  addMessageToRoom,
+  getMessagesFromRoom,
+  getAllMessages
+} = require("./room.utils");
+
 // console.log("root index.js envs:", process.env);
 // const admin = require("./server/firebase-config/admin");
 
@@ -134,14 +140,16 @@ io.on("connection", socket => {
 
     if (error) return callback(error);
 
-    socket.emit("message", {
-      user: "admin",
-      text: `${user.name}, welcome to the room ${user.room}`
-    });
+    const msg = [
+      ...getMessagesFromRoom(user.room),
+      addMessageToRoom(user.room, {
+        user: "admin",
+        text: `${user.name} has joined!`
+      })
+    ];
 
-    socket.broadcast
-      .to(user.room)
-      .emit("message", { user: "admin", text: `${user.name} has joined!` });
+    socket.emit("message", msg);
+    socket.broadcast.to(user.room).emit("message", msg);
 
     socket.join(user.room);
     console.log(getAllUsers());
@@ -154,7 +162,14 @@ io.on("connection", socket => {
   socket.on("sendMessage", (message, callback) => {
     const user = getUser(socket.id);
 
-    io.to(user.room).emit("message", { user: user.name, text: message });
+    const msg = [
+      ...getMessagesFromRoom(user.room),
+      addMessageToRoom(user.room, { user: user.name, text: message })
+    ];
+
+    io.to(user.room).emit("message", msg);
+
+    socket.emit("message", msg);
 
     callback();
   });
@@ -168,14 +183,17 @@ io.on("connection", socket => {
     const user = removeUser(socket.id);
 
     if (user) {
-      io.to(user.room).emit("message", {
-        user: "Admin",
-        text: `${user.name} has left.`
-      });
-      io.to(user.room).emit("roomData", {
-        room: user.room,
-        users: getUsersInRoom(user.room)
-      });
+      io.to(user.room).emit("message", [
+        ...getMessagesFromRoom(user.room),
+        addMessageToRoom(user.room, {
+          user: "admin",
+          text: `${user.name} has left.`
+        })
+      ]);
+      // io.to(user.room).emit("roomData", {
+      //   room: user.room,
+      //   users: getUsersInRoom(user.room)
+      // });
     }
     console.log(getAllUsers());
   });

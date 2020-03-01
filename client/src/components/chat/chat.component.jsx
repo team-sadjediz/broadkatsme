@@ -47,9 +47,13 @@ const Chat = ({ currentUser, selectedRoom }) => {
     );
 
     socket.on("message", message => {
-      console.log("on rec", messages);
-      console.log("from useEffect", message.text);
-      setMessages([...messages, message]);
+      // console.log("on rec", messages);
+      console.log("array of messsages from this room:", message);
+      // setMessages([...message]);
+      setMessages(message);
+
+      // console.log("from useEffect", message.text);
+      // setMessages([...messages, message]);
     });
 
     return () => {
@@ -94,19 +98,16 @@ const Chat = ({ currentUser, selectedRoom }) => {
       {selectedRoom ? (
         <React.Fragment>
           <div className="chat-header-container">{selectedRoom}</div>
-          <div className="message-list-container">
-            {/* <ScrollToBottom> */}
-            {messages.map(msg => {
-              // console.log("from map", msg);
-              return <Message message={msg.text} sender={msg.user}></Message>;
+          <ScrollToBottom className="message-list-container">
+            {messages.map(message => {
+              return (
+                <Message
+                  message={message.msg}
+                  sender={message.sender}
+                ></Message>
+              );
             })}
-            {/* </ScrollToBottom> */}
-          </div>
-          {/* <input
-            value={message}
-            onChange={handleChange}
-            onKeyPress={handleKeyPress}
-          /> */}
+          </ScrollToBottom>
 
           <TextField
             id="filled-multiline-flexible"
@@ -120,7 +121,7 @@ const Chat = ({ currentUser, selectedRoom }) => {
           />
         </React.Fragment>
       ) : (
-        "please pick a room first"
+        "Please pick a room first"
       )}
     </div>
   );
