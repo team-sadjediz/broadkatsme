@@ -40,7 +40,7 @@ const Message = ({ message, sender, currentUser }) => {
 
   return (
     <div className={`message-container ${orientation}`}>
-      <div className={`msg-info-container ${flexDirection}`}>
+      <div className={`msg-info-container ${flexDirection} ${orientation}`}>
         <div className={`msg-sender ${border} ${bgColor}`}>{username}</div>
         <div className="msg-timestamp">11:59:36</div>
       </div>

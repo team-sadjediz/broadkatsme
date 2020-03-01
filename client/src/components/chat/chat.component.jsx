@@ -13,6 +13,15 @@ import Message from "../message/message.component";
 // custom style sheet:
 import "./chat.styles.scss";
 
+const useStyles = makeStyles(theme => ({
+  root: {
+    "& .MuiTextField-root": {
+      margin: theme.spacing(1),
+      width: 200
+    }
+  }
+}));
+
 let socket;
 
 const Chat = ({ currentUser, selectedRoom }) => {
@@ -98,10 +107,21 @@ const Chat = ({ currentUser, selectedRoom }) => {
             })}
             {/* </ScrollToBottom> */}
           </div>
-          <input
+          {/* <input
             value={message}
             onChange={handleChange}
             onKeyPress={handleKeyPress}
+          /> */}
+
+          <TextField
+            id="filled-multiline-flexible"
+            label="Chat Message"
+            multiline
+            rowsMax="4"
+            value={message}
+            onChange={handleChange}
+            onKeyPress={handleKeyPress}
+            variant="filled"
           />
         </React.Fragment>
       ) : (

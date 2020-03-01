@@ -1,24 +1,16 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
 
-@mixin sent-msgs {
-  background-color: $gray_material_ui;
+@mixin chat-bubble {
   color: $highlight1;
   padding: 0.2em 0.5em;
-  border-right: 5px solid $highlight1;
-}
-
-@mixin received-msgs {
-  background-color: $gray_material_ui;
-  color: $highlight1;
-  padding: 0.2em 0.5em;
-  border-left: 5px solid $highlight2;
+  font-family: "Karla", sans-serif;
+  font-size: 16px;
 }
 
 .message-container {
-  font-family: "Karla", sans-serif;
-  font-size: 16px;
-  width: fit-content;
+  width: 100%;
+  max-width: 288;
   color: $foreground;
   margin: 5px 0;
 
@@ -29,29 +21,19 @@
     display: flex;
 
     .msg-sender {
-      background-color: $gray_material_ui;
-      color: $highlight1;
-      padding: 0.2em 0.5em;
-
+      @include chat-bubble;
       font-weight: bold;
     }
 
     .msg-timestamp {
-      color: $highlight1;
-      padding: 0.2em 0.5em;
-    }
-
-    .sent-msgs {
-    }
-
-    .received-msgs {
+      @include chat-bubble;
     }
   }
 
   .msg-text {
-    background-color: $gray_material_ui;
-    color: $highlight1;
-    padding: 0.2em 0.5em;
+    @include chat-bubble;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
   }
 }
 
