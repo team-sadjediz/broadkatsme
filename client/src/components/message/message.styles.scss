@@ -1,0 +1,73 @@
+@import "../../assets/colors";
+@import "../../assets/dimensions";
+
+@mixin chat-bubble {
+  color: $highlight1;
+  padding: 0.2em 0.5em;
+  font-family: "Karla", sans-serif;
+  font-size: 16px;
+}
+
+.message-container {
+  width: 100%;
+  max-width: 288;
+  color: $foreground;
+  margin: 5px 0;
+
+  display: flex;
+  flex-direction: column;
+
+  .msg-info-container {
+    display: flex;
+
+    .msg-sender {
+      @include chat-bubble;
+      font-weight: bold;
+    }
+
+    .msg-timestamp {
+      @include chat-bubble;
+    }
+  }
+
+  .msg-text {
+    @include chat-bubble;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+}
+
+.border-left {
+  border: none;
+  border-left: 5px solid $highlight2;
+}
+
+.border-right {
+  border: none;
+  border-right: 5px solid $highlight1;
+}
+
+.flex-row-reverse {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.bgc-sent {
+  background-color: $gray_material_ui;
+}
+
+.bgc-rec {
+  background-color: $gray_material_ui;
+}
+
+.align-right {
+  align-self: flex-end;
+}
+
+.align-left {
+  align-self: flex-start;
+}

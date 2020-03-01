@@ -4,6 +4,24 @@ const path = require("path");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const http = require("http");
+const socketio = require("socket.io");
+const {
+  addUser,
+  removeUser,
+  getUser,
+  getUsersInRoom,
+  getAllUsers
+} = require("./chat.utils");
+
+const {
+  addMessageToRoom,
+  getMessagesFromRoom,
+  getAllMessages
+} = require("./room.utils");
+
+// console.log("root index.js envs:", process.env);
+// const admin = require("./server/firebase-config/admin");
 
 console.log("root index.js envs:", process.env);
 const admin = require("./server/services/admin");
@@ -99,12 +117,90 @@ app.use("/api/friends", friends);
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname + "/client/build/index.html"));
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname + "/client/build/index.html"));
+// });
+
+const server = http.createServer(app);
+const io = socketio(server);
+
+// app.listen(port, () => {
+//   console.log(`App listening on port ${port}`);
+// });
+
+io.on("connection", socket => {
+  console.log(`New connection: ${socket.id}`);
+
+  socket.on("join", ({ name, room }, callback) => {
+    console.log(
+      `SERVER: socket: ${socket.id} / user (${name}) -> room [${room}]`
+    );
+
+    const { error, user } = addUser({ id: socket.id, name, room });
+
+    if (error) return callback(error);
+
+    const msg = [
+      ...getMessagesFromRoom(user.room),
+      addMessageToRoom(user.room, {
+        user: "admin",
+        text: `${user.name} has joined!`
+      })
+    ];
+
+    socket.emit("message", msg);
+    socket.broadcast.to(user.room).emit("message", msg);
+
+    socket.join(user.room);
+    console.log(getAllUsers());
+
+    //
+
+    callback();
+  });
+
+  socket.on("sendMessage", (message, callback) => {
+    const user = getUser(socket.id);
+
+    const msg = [
+      ...getMessagesFromRoom(user.room),
+      addMessageToRoom(user.room, { user: user.name, text: message })
+    ];
+
+    io.to(user.room).emit("message", msg);
+
+    socket.emit("message", msg);
+
+    callback();
+  });
+
+  socket.on("disconnect", () => {
+    console.log(
+      `SERVER: disconnected socket: ${socket.id} / user has LEFT room`
+    );
+
+    console.log("------------------------------------------");
+    const user = removeUser(socket.id);
+
+    if (user) {
+      io.to(user.room).emit("message", [
+        ...getMessagesFromRoom(user.room),
+        addMessageToRoom(user.room, {
+          user: "admin",
+          text: `${user.name} has left.`
+        })
+      ]);
+      // io.to(user.room).emit("roomData", {
+      //   room: user.room,
+      //   users: getUsersInRoom(user.room)
+      // });
+    }
+    console.log(getAllUsers());
+  });
 });
 
-app.listen(port, () => {
-  console.log(`App listening on port ${port}`);
+server.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
 });
 
 // --------------------------------- D B - C O N N ---------------------------------

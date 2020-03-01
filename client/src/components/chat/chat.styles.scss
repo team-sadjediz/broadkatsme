@@ -1,0 +1,70 @@
+@import "../../assets/colors";
+@import "../../assets/dimensions";
+
+.chat-container {
+  // background-color: lightblue;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  .chat-header-container {
+    background-color: $gray_material_ui;
+    padding: 1em 0;
+    width: 100%;
+    border-radius: 5px;
+
+    font-family: "Karla", sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: $highlight1;
+
+    display: flex;
+    justify-content: center;
+  }
+
+  .message-list-container {
+    overflow-y: auto;
+    flex-grow: 1;
+    // background-color: lightcoral;
+    max-width: 100%;
+
+    height: 60vh;
+    // padding: 0.2em;
+
+    display: flex;
+    flex-direction: column;
+    scrollbar-color: transparent transparent;
+  }
+}
+
+// ::-webkit-scrollbar {
+//   width: 10px;
+// }
+
+// ::-webkit-scrollbar {
+//   width: 1em;
+// }
+
+// ::-webkit-scrollbar-track {
+//   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+// }
+
+// ::-webkit-scrollbar-thumb {
+//   background-color: darkgrey;
+//   outline: 1px solid slategrey;
+// }
+
+// html {
+//   overflow: scroll;
+//   overflow-x: hidden;
+// }
+// ::-webkit-scrollbar {
+//   width: 0px; /* Remove scrollbar space */
+//   background: transparent; /* Optional: just make scrollbar invisible */
+// }
+// /* Optional: show position indicator in red */
+// ::-webkit-scrollbar-thumb {
+//   background: #ff0000;
+// }

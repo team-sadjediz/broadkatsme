@@ -25,6 +25,7 @@ import ContactPage from "./pages/contact-page/contact-page.component";
 import ResetPassPage from "./pages/reset-password-page/reset-password-page.component";
 
 import Test from "./components/test-component/test.component";
+import Chat from "./components/chat/chat.component";
 
 import "./App.scss";
 
@@ -102,7 +103,9 @@ class App extends Component {
                       )
                     }
                   />
+                  {/* <Route path="/lobby" component={Chat} /> */}
                   <Route path="/lobby" component={LobbyPage} />
+
                   <Route path="/room" component={RoomPage} />
                   <Route path="/about" component={AboutPage} />
                   <Route path="/contact" component={ContactPage} />
