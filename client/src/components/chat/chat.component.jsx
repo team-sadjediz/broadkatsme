@@ -31,47 +31,44 @@ const Chat = ({ currentUser, selectedRoom }) => {
   const ENDPOINT = "localhost:5000";
 
   useEffect(() => {
-    console.log("UE 1");
+    console.log("---------------------------------------------------------");
+    console.log("MOUNT", messages);
     socket = io(ENDPOINT);
-    // console.log(
-    //   `[Socket: ${socket.id}] [UserID: ${currentUser.uid}] [RoomID: ${selectedRoom}] ${socket}`
-    // );
 
     socket.emit(
       "join",
       { name: currentUser.uid, room: selectedRoom },
       error => {
-        console.log("joined");
+        console.log("someone joined");
         if (error) {
-          console.log(error);
+          console.log("ERROR", error);
         }
       }
     );
 
-    // socket.on("message", message => {
-    //   // console.log("from useEffect", message);
-    //   setMessages([...messages, message]);
-    // });
+    socket.on("message", message => {
+      console.log("on rec", messages);
+      console.log("from useEffect", message.text);
+      setMessages([...messages, message]);
+    });
 
     return () => {
       // setMessages([]);
-      console.log("dismount");
-      console.log("predismounted socket id:", socket.id);
-
       socket.disconnect();
-      console.log("dismounted socket id:", socket.id);
+      console.log("DISMOUNT", messages);
+      console.log("**************************************************");
     };
     // }, [ENDPOINT, currentUser.uid, selectedRoom]);
   }, [ENDPOINT, selectedRoom]);
 
   // second use effect not working as intended:
-  useEffect(() => {
-    console.log("UE 2");
-    socket.on("message", message => {
-      // console.log("from useEffect", message);
-      setMessages([...messages, message]);
-    });
-  });
+  // useEffect(() => {
+  //   console.log("UPDATE MSGS:", messages);
+  //   socket.on("message", message => {
+  //     // console.log("from useEffect", message);
+  //     setMessages([...messages, message]);
+  //   });
+  // });
 
   const sendMessage = event => {
     event.preventDefault();
@@ -92,8 +89,6 @@ const Chat = ({ currentUser, selectedRoom }) => {
     }
   };
 
-  console.log("MSG", message);
-  console.log("MESSAGES:", messages);
   return (
     <div className="chat-container">
       {selectedRoom ? (
