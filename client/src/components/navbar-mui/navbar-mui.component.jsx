@@ -109,7 +109,6 @@ class ButtonAppBar extends React.Component {
     let results = await axios.get(`${BASE_API_URL}/home/users-rooms`, {
       params: { uid: this.props.currentUser.uid }
     });
-
     this.props.setSubscribedRooms(results.data);
   }
 
