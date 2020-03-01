@@ -20,9 +20,9 @@ const initialState = {
   image: null,
   isFavorited: false,
   volume: 50,
-  roomName: "TestRoom",
-  roomID: "5e5a6b943c5932413c6495bc",
-  ownerID: "TestOwnerID",
+  roomName: "",
+  // roomID: null,
+  ownerID: "",
   showInitial: true,
   showSettings: false,
   subscribers: [],
@@ -44,46 +44,45 @@ class RoomPage extends Component {
   constructor(props) {
     super(props);
     this.state = initialState;
+    // this.state.roomID = this.props.selectedRoom;
     this.timer = null;
   }
 
   async componentDidMount() {
     // let token = await this.props.currentUser.getIdToken(false);
     // setAuthorization(token);
-    const roomID = { "roomID": "5e5a6b943c5932413c6495bc" };
+    // this.state.room
+    // await axios
+    //   .get(`${BASE_API_URL}/room/find-room`, {
+    //     // params: { "roomID": this.state.roomID }
+    //     params: { "roomID": this.props.selectedRoom }
+    //   })
+    //   .then(res => {
+    //     console.log(res);
+    //     this.fetchData(res.data);
+    //   })
+    //   .catch(error => {
+    //     console.error(error);
+    //   });
 
-    // console.log("???");
-    // console.log(this.props.currentUser);
-    // await axiosConfig
-    await axios
-      .get(`${BASE_API_URL}/room/find-room`, {
-        params: roomID
-      })
-      .then(res => {
-        console.log(res);
-        this.fetchData(res.data);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-
-    // console.log(this.props.currentUser);
-    // await axiosConfig
-    await axios
-      .get(`${BASE_API_URL}/userprops/favorite-rooms/is-favorited`, {
-        params: {
-          "uid": this.props.currentUser.uid,
-          "roomID": "5e5a6b943c5932413c6495bc"
-        }
-      })
-      .then(res => this.setState({ isFavorited: res.data }))
-      .catch(error => console.error(error));
+    // // console.log(this.props.currentUser);
+    // // await axiosConfig
+    // await axios
+    //   .get(`${BASE_API_URL}/userprops/favorite-rooms/is-favorited`, {
+    //     params: {
+    //       "uid": this.props.currentUser.uid,
+    //       // "roomID": this.state.roomID
+    //       "roomID": this.props.selectedRoom
+    //     }
+    //   })
+    //   .then(res => this.setState({ isFavorited: res.data }))
+    //   .catch(error => console.error(error));
+    this.fetchData();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    // console.log(this.state.isMouseMoving);
-    // console.log(nextState.isMouseMoving);
-    // console.log(this.state.isMouseMoving !== nextState.isMouseMoving);
+    console.log(this.props.selectedRoom !== nextProps.selectedRoom);
+    let roomID = this.props.selectedRoom !== nextProps.selectedRoom;
     let isMouseMoving = this.state.isMouseMoving !== nextState.isMouseMoving;
     let isFavorited = this.state.isFavorited !== nextState.isFavorited;
     let roomName = this.state.roomName !== nextState.roomName;
@@ -94,6 +93,7 @@ class RoomPage extends Component {
     let settings = this.state.settings !== nextState.settings;
     // let showSettings = this.state.showSettings !== nextState.showSettings;
     return (
+      roomID ||
       isMouseMoving ||
       isFavorited ||
       roomName ||
@@ -107,7 +107,43 @@ class RoomPage extends Component {
     );
   }
 
-  fetchData = roomDetails => {
+  componentDidUpdate(prevProps) {
+    if (this.props.selectedRoom !== prevProps.selectedRoom) {
+      this.fetchData();
+    }
+  }
+
+  fetchData = async () => {
+    if (this.props.selectedRoom === null) {
+      return;
+    }
+    let roomDetails, isFavorited;
+    await axios
+      .get(`${BASE_API_URL}/room/find-room`, {
+        // params: { "roomID": this.state.roomID }
+        params: { "roomID": this.props.selectedRoom }
+      })
+      .then(res => {
+        roomDetails = res.data;
+        // console.log(res.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    // console.log(roomDetails);
+    // await axiosConfig
+    await axios
+      .get(`${BASE_API_URL}/userprops/favorite-rooms/is-favorited`, {
+        params: {
+          "uid": this.props.currentUser.uid,
+          "roomID": this.props.selectedRoom
+        }
+      })
+      .then(res => {
+        isFavorited = res.data;
+        // this.setState({ isFavorited: res.data });
+      })
+      .catch(error => console.error(error));
     this.setState({
       roomName: roomDetails.name,
       roomID: roomDetails._id,
@@ -116,7 +152,8 @@ class RoomPage extends Component {
       // showSettings: false,
       subscribers: roomDetails.subscriber,
       tags: roomDetails.tags,
-      settings: roomDetails.settings
+      settings: roomDetails.settings,
+      isFavorited: isFavorited
     });
   };
 
@@ -138,7 +175,8 @@ class RoomPage extends Component {
   favoriteRoom = async e => {
     let request = {
       "uid": this.props.currentUser.uid,
-      "roomID": this.state.roomID
+      // "roomID": this.state.roomID
+      "roomID": this.props.selectedRoom
     };
     let response;
     await axios
@@ -174,13 +212,16 @@ class RoomPage extends Component {
 
   render() {
     // console.log(this.state.showInitial);
+    console.log(this.props.selectedRoom);
     let tags = this.state.tags.map(tag => {
       return (
         <Tag
+          key={tag}
           type="remove"
           text={tag}
           onChangeTag={this.onChangeTag}
-          roomID={this.state.roomID}
+          // roomID={this.state.roomID}
+          roomID={this.props.selectedRoom}
         ></Tag>
       );
     });
@@ -201,7 +242,8 @@ class RoomPage extends Component {
             <div className="room-bar-area">
               <RoomBar
                 roomName={this.state.roomName}
-                roomID={this.state.roomID}
+                // roomID={this.state.roomID}
+                roomID={this.props.selectedRoom}
                 tags={this.state.tags}
                 toggleSettingsModal={this.toggleSettingsModal}
                 favoriteRoom={this.favoriteRoom}
@@ -241,7 +283,8 @@ class RoomPage extends Component {
             <div className="room-tags-area">
               <Tag
                 type="add"
-                roomID={this.state.roomID}
+                // roomID={this.state.roomID}
+                roomID={this.props.selectedRoom}
                 onChangeTag={this.onChangeTag}
               ></Tag>
               {tags}
@@ -254,7 +297,8 @@ class RoomPage extends Component {
 }
 
 const mapStateToProps = state => ({
-  currentUser: state.user.currentUser
+  currentUser: state.user.currentUser,
+  selectedRoom: state.room.selectedRoom
 });
 
 export default connect(mapStateToProps)(RoomPage);

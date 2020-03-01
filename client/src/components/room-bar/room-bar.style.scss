@@ -24,6 +24,8 @@
 
 .active-btn {
   background-color: $highlight2;
+  width: 36px;
+  height: 36px;
   svg {
     path {
       // fill: $white;
@@ -96,8 +98,14 @@
 .more-buttons {
   grid-area: more-buttons;
   display: grid;
-  grid-template-columns: min-content min-content;
-  grid-template-areas: "favorite-button settings-button";
+  grid-template-columns: min-content min-content min-content;
+  grid-template-areas: "favorite-button inivte-btn settings-button";
   grid-gap: 5px;
   align-content: center;
 }
+
+// .more-buttons {
+//   grid-area: more-buttons;
+//   display: flex;
+//   flex-direction: row;
+// }
