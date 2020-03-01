@@ -2,13 +2,15 @@ import React, { Component } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { auth } from "./firebase/firebase.utils";
 
+// axios
+import { setAuthorization } from "./firebase/firebase.sdk";
+
 // redux stuff:
 import { connect } from "react-redux";
 import { setCurrentUser } from "./redux/user/user.actions";
 
 // components:
-import NavBar from "./components/navbar/navbar.component";
-import PersistentDrawerLeft from "./components/custom-drawer/custom-drawer.component";
+import CustomDrawer from "./components/custom-drawer/custom-drawer.component";
 import ButtonAppBar from "./components/navbar-mui/navbar-mui.component";
 
 // import Drawer from "@material-ui/core/Drawer";
@@ -63,7 +65,6 @@ class App extends Component {
   componentDidMount() {
     this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
       this.props.setCurrentUser(user);
-      console.log("componentDidMount - logged in1:", this.props.currentUser);
     });
   }
 
@@ -72,7 +73,15 @@ class App extends Component {
     console.log("logged out");
   }
 
+  async authorize() {
+    let idToken = await this.props.currentUser.getIdToken(false);
+    setAuthorization(idToken);
+  }
+
   render() {
+    if (this.props.currentUser) {
+      this.authorize();
+    }
     return (
       <ThemeProvider theme={theme}>
         <div className="App">
@@ -80,7 +89,7 @@ class App extends Component {
             <BrowserRouter>
               {/* <NavBar /> */}
               <ButtonAppBar />
-              <PersistentDrawerLeft>
+              <CustomDrawer>
                 <Switch>
                   <Route
                     exact
@@ -99,7 +108,7 @@ class App extends Component {
                   <Route path="/contact" component={ContactPage} />
                   <Route path="/codeofconduct" component={CodeOfConductPage} />
                 </Switch>
-              </PersistentDrawerLeft>
+              </CustomDrawer>
             </BrowserRouter>
           ) : (
             <BrowserRouter>

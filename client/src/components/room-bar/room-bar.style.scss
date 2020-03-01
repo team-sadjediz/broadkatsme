@@ -2,7 +2,11 @@
 @import "../../assets/dimensions";
 
 .room-bar-btn {
-  background-color: $white;
+  background-color: $foreground;
+  // width: 2em;
+  // height: 2em;
+  width: 36px;
+  height: 36px;
   svg {
     path {
       fill: $highlight1;
@@ -20,6 +24,8 @@
 
 .active-btn {
   background-color: $highlight2;
+  width: 36px;
+  height: 36px;
   svg {
     path {
       // fill: $white;
@@ -31,18 +37,39 @@
 .room-bar {
   background-color: transparent;
   display: grid;
-  grid-template-columns: max-content auto auto min-content min-content min-content;
-  grid-template-areas: "name tags . refresh-button more-buttons more-button ";
+  max-inline-size: 100%;
+  // grid-template-columns: max-content auto auto min-content min-content min-content;
+  grid-template-columns: 1fr 5px min-content min-content min-content;
+  grid-template-areas: "name . refresh-button more-buttons more-button ";
   grid-gap: 5px;
   align-content: center;
 }
 
+// .room-name {
+//   grid-area: name;
+//   text-transform: uppercase;
+//   font-size: 2em;
+//   font-weight: bold;
+//   // color: white;
+//   color: $foreground;
+// }
+
 .room-name {
   grid-area: name;
+  background-color: transparent;
   text-transform: uppercase;
-  font-size: 2em;
+  text-overflow: ellipsis;
+  width: 100%;
+  outline: none;
+  // max-width: 8.6em;
+  border: none;
+  font-size: 1.5em;
   font-weight: bold;
   // color: white;
+  color: $foreground;
+}
+
+.room-name::placeholder {
   color: $foreground;
 }
 
@@ -71,8 +98,14 @@
 .more-buttons {
   grid-area: more-buttons;
   display: grid;
-  grid-template-columns: min-content min-content;
-  grid-template-areas: "favorite-button settings-button";
+  grid-template-columns: min-content min-content min-content;
+  grid-template-areas: "favorite-button inivte-btn settings-button";
   grid-gap: 5px;
   align-content: center;
 }
+
+// .more-buttons {
+//   grid-area: more-buttons;
+//   display: flex;
+//   flex-direction: row;
+// }

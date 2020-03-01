@@ -1,11 +1,11 @@
 import React from "react";
 import axios from "axios";
 import { auth } from "../../firebase/firebase.utils";
+import { BASE_API_URL } from "../../utils";
 
 // components:
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
-import ShowHide from "../show-hide-input/show-hide-input.component";
 
 import "./register.style.scss";
 class Register extends React.Component {
@@ -26,18 +26,29 @@ class Register extends React.Component {
 
     const { username, email, password, confirmPassword } = this.state;
 
-    console.log(password, confirmPassword);
-
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
 
     try {
-      const { user } = await auth.createUserWithEmailAndPassword(
-        email,
-        password
-      );
+      // const { user } = await auth
+
+      await auth
+        .createUserWithEmailAndPassword(email, password)
+        .then(async userCredential => {
+          let newUser = {
+            "uid": userCredential.user.uid,
+            "username": this.state.username
+          };
+          await axios
+            .post(`${BASE_API_URL}/register/new-user`, newUser)
+            .then(res => console.log("User successfully created."))
+            .catch(error => console.error(error));
+        })
+        .catch(error => {
+          console.error(error);
+        });
 
       this.setState({
         uid: "",
@@ -136,10 +147,7 @@ class Register extends React.Component {
             required
           />
 
-          <CustomButton
-            className="register-btn"
-            type="submit"
-          >
+          <CustomButton className="register-btn" type="submit">
             register
           </CustomButton>
         </form>

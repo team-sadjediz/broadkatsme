@@ -1,0 +1,35 @@
+@import "../../../assets/colors";
+@import "../../../assets/dimensions";
+
+@mixin card-margins {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.delete-panel-title {
+  font-size: 1.3em;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
+
+.delete-panel-contents {
+  @include card-margins;
+  // border: 1px solid $highlight1;
+}
+
+.delete-panel-contents-title {
+  flex-shrink: 0;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.delete-panel-contents-description {
+  font-size: 0.9em;
+  margin-bottom: 1em;
+}
+
+.delete-panel-button {
+  width: 100%;
+}

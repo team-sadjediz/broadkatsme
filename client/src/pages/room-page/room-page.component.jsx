@@ -1,22 +1,28 @@
 import React, { Component } from "react";
 import axios from "axios";
+// import { axiosConfig, setAuthorization } from "../../firebase/firebase.sdk";
 
+import { BASE_API_URL } from "../../utils";
 import { connect } from "react-redux";
 
 import "./room-page.styles.scss";
 
-// import Tag from "../../components/tag/tag.component";
+import Tag from "../../components/tag/tag.component";
 import RoomBar from "../../components/room-bar/room-bar.component";
 import BrowserOverlay from "../../components/browser-overlay/browser-overlay.component";
+import BrowserInit from "../../components/browser-init/browser-init.component";
+import RoomSettings from "../../components/room-settings/room-settings.component";
+
+// import Modal from "@material-ui/core/Modal";
 
 const initialState = {
   isMouseMoving: false,
   image: null,
   isFavorited: false,
   volume: 50,
-  roomName: "TestRoom",
-  roomID: "5e4a4c5a86ae580017aa1a78",
-  ownerID: "TestOwnerID",
+  roomName: "",
+  // roomID: null,
+  ownerID: "",
   showInitial: true,
   showSettings: false,
   subscribers: [],
@@ -38,47 +44,45 @@ class RoomPage extends Component {
   constructor(props) {
     super(props);
     this.state = initialState;
+    // this.state.roomID = this.props.selectedRoom;
     this.timer = null;
   }
 
   async componentDidMount() {
-    // const roomID = this.state.roomID;
-    const roomID = { "roomID": "5e4a4c5a86ae580017aa1a78" };
-    // console.log(roomID);
+    // let token = await this.props.currentUser.getIdToken(false);
+    // setAuthorization(token);
+    // this.state.room
+    // await axios
+    //   .get(`${BASE_API_URL}/room/find-room`, {
+    //     // params: { "roomID": this.state.roomID }
+    //     params: { "roomID": this.props.selectedRoom }
+    //   })
+    //   .then(res => {
+    //     console.log(res);
+    //     this.fetchData(res.data);
+    //   })
+    //   .catch(error => {
+    //     console.error(error);
+    //   });
 
-    await axios
-      //   .get("http://broadkatsme.herokuapp.com/api/room/findroom", {
-      //     params: roomID
-      //   })
-      // .get("http://localhost:5000/api/room/findroom", {
-      .get("http://broadkatsme.herokuapp.com/api/room/findroom", {
-        params: roomID
-      })
-      .then(
-        res => this.fetchData(res.data)
-        // console.log(res.data)
-      )
-      .catch(error => {
-        console.error(error);
-      });
-
-    await axios
-      // .get("http://localhost:5000/api/userprops/is-favorited", {
-      .get("http://broadkatsme.herokuapp.com/api/userprops/is-favorited", {
-        params: {
-          "uid": this.props.currentUser.uid,
-          "roomID": "5e4a4c5a86ae580017aa1a78"
-        }
-      })
-      .then(res => this.setState({ isFavorited: res.data }))
-      .catch(error => console.error(error));
-    console.log(this.state);
+    // // console.log(this.props.currentUser);
+    // // await axiosConfig
+    // await axios
+    //   .get(`${BASE_API_URL}/userprops/favorite-rooms/is-favorited`, {
+    //     params: {
+    //       "uid": this.props.currentUser.uid,
+    //       // "roomID": this.state.roomID
+    //       "roomID": this.props.selectedRoom
+    //     }
+    //   })
+    //   .then(res => this.setState({ isFavorited: res.data }))
+    //   .catch(error => console.error(error));
+    this.fetchData();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    // console.log(this.state.isMouseMoving);
-    // console.log(nextState.isMouseMoving);
-    // console.log(this.state.isMouseMoving !== nextState.isMouseMoving);
+    // console.log(this.props.selectedRoom !== nextProps.selectedRoom);
+    let roomID = this.props.selectedRoom !== nextProps.selectedRoom;
     let isMouseMoving = this.state.isMouseMoving !== nextState.isMouseMoving;
     let isFavorited = this.state.isFavorited !== nextState.isFavorited;
     let roomName = this.state.roomName !== nextState.roomName;
@@ -87,7 +91,9 @@ class RoomPage extends Component {
     let subscribers = this.state.subscribers !== nextState.subscribers;
     let tags = this.state.tags !== nextState.tags;
     let settings = this.state.settings !== nextState.settings;
+    // let showSettings = this.state.showSettings !== nextState.showSettings;
     return (
+      roomID ||
       isMouseMoving ||
       isFavorited ||
       roomName ||
@@ -97,24 +103,62 @@ class RoomPage extends Component {
       subscribers ||
       tags ||
       settings
+      // showSettings
     );
   }
 
-  fetchData = roomDetails => {
+  componentDidUpdate(prevProps) {
+    if (this.props.selectedRoom !== prevProps.selectedRoom) {
+      this.fetchData();
+    }
+  }
+
+  fetchData = async () => {
+    if (this.props.selectedRoom === null) {
+      return;
+    }
+    let roomDetails, isFavorited;
+    await axios
+      .get(`${BASE_API_URL}/room/find-room`, {
+        // params: { "roomID": this.state.roomID }
+        params: { "roomID": this.props.selectedRoom }
+      })
+      .then(res => {
+        roomDetails = res.data;
+        // console.log(res.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    // console.log(roomDetails);
+    // await axiosConfig
+    await axios
+      .get(`${BASE_API_URL}/userprops/favorite-rooms/is-favorited`, {
+        params: {
+          "uid": this.props.currentUser.uid,
+          "roomID": this.props.selectedRoom
+        }
+      })
+      .then(res => {
+        isFavorited = res.data;
+        // this.setState({ isFavorited: res.data });
+      })
+      .catch(error => console.error(error));
     this.setState({
       roomName: roomDetails.name,
       roomID: roomDetails._id,
       ownerID: roomDetails.owner_ID,
-      showInitial: true,
-      showSettings: false,
+      // showInitial: true,
+      // showSettings: false,
       subscribers: roomDetails.subscriber,
       tags: roomDetails.tags,
-      settings: roomDetails.settings
+      settings: roomDetails.settings,
+      isFavorited: isFavorited
     });
-    // console.log(this.state);
   };
 
-  closeInitialModal = () => {
+  closeInit = () => {
+    console.log("close init called");
     this.setState({ showInitial: false });
   };
 
@@ -131,20 +175,23 @@ class RoomPage extends Component {
   favoriteRoom = async e => {
     let request = {
       "uid": this.props.currentUser.uid,
-      "roomID": this.state.roomID
+      // "roomID": this.state.roomID
+      "roomID": this.props.selectedRoom
     };
     let response;
     await axios
-      // .put("http://localhost:5000/api/userprops/favorite", request)
-      .put("http://broadkatsme.herokuapp.com/api/userprops/favorite", request)
+      .put(`${BASE_API_URL}/userprops/favorite-rooms/favorite`, request)
       .then(res => this.setState({ isFavorited: res.data.favorited }))
       .catch(error => console.error(error));
-
-    // console.log(this.state);
   };
 
   onChangeTag = tags => {
     this.setState({ tags: tags });
+  };
+
+  onChangeTitle = e => {
+    this.setState({ roomName: e.target.value });
+    //axios call to save title changes here & return true -> flashes when saved/true is returned?
   };
 
   handleMouseMove = e => {
@@ -164,61 +211,98 @@ class RoomPage extends Component {
   };
 
   render() {
+    // console.log(this.state.showInitial);
+    // console.log(this.props.selectedRoom);
+    let tags = this.state.tags.map(tag => {
+      console.log(this.props.selectedRoom);
+      return (
+        <Tag
+          key={tag}
+          type="remove"
+          text={tag}
+          onChangeTag={this.onChangeTag}
+          // roomID={this.state.roomID}
+          roomID={this.props.selectedRoom}
+        ></Tag>
+      );
+    });
+    let addTag = (
+      <Tag
+        type="add"
+        // roomID={this.state.roomID}
+        roomID={this.props.selectedRoom}
+        onChangeTag={this.onChangeTag}
+      ></Tag>
+    );
     return (
-      <div className="center">
-        <div className="room-page">
-          {/* {this.props.currentUser.uid} */}
-          {/* Room Page {this.state.roomID} {this.state.roomName}
-        {this.state.subscribers[0]} {this.state.tags}
-        {this.state.settings.roomSize} {this.state.settings.access.roomAdmins} */}
-          {/* <div>
-          Tag Examples
-          <Tag
-            type="add"
-            onChangeTag={this.onChangeTag}
-            roomID={this.state.roomID}
-          />
-          <Tag
-            type="remove"
-            onChangeTag={this.onChangeTag}
-            roomID={this.state.roomID}
-            text="chicken"
-          />
-          <Tag type="label"></Tag>
-        </div> */}
-          <div className="room-bar-area">
-            {/* RoomBar w/Dynamic tags */}
-            <RoomBar
-              roomName={this.state.roomName}
-              roomID={this.state.roomID}
-              tags={this.state.tags}
+      <div className="main-container">
+        {this.state.showSettings ? (
+          <div className="room-settings-container">
+            <RoomSettings
               toggleSettingsModal={this.toggleSettingsModal}
-              favoriteRoom={this.favoriteRoom}
-              isFavorited={this.state.isFavorited}
-              onChangeTag={this.onChangeTag}
-            />
+              // HEEEEREEEEEE
+              owned={true}
+              tags={tags}
+              addTag={addTag}
+              roomName={this.state.roomName}
+            ></RoomSettings>
           </div>
-          <div
-            className="room-screen-area"
-            onMouseMove={e => this.handleMouseMove(e)}
-          >
-            {/* Room Screen */}
-            {this.state.isMouseMoving ? (
-              // <div className="display-volume">VolumeControl</div>
-              <BrowserOverlay
-                className="browser-overlay"
-                volume={this.state.volume}
-                handleVolume={this.handleVolume}
+        ) : null}
+
+        <div className="room-page-container">
+          <div className="room-page">
+            <div className="room-bar-area">
+              <RoomBar
+                roomName={this.state.roomName}
+                // roomID={this.state.roomID}
+                roomID={this.props.selectedRoom}
+                // tags={this.state.tags}
+                toggleSettingsModal={this.toggleSettingsModal}
+                favoriteRoom={this.favoriteRoom}
+                isFavorited={this.state.isFavorited}
+                onChangeTag={this.onChangeTag}
+                onChangeTitle={this.onChangeTitle}
               />
-            ) : (
-              <div className="hide" />
-            )}
+            </div>
+            {this.state.showInitial ? (
+              <div className="room-screen-init">
+                <BrowserInit
+                  // className="room-screen-init-play"
+                  closeInit={this.closeInit}
+                  roomName={this.state.roomName}
+                ></BrowserInit>
+              </div>
+            ) : null}
+            <div
+              className="room-screen-area"
+              onMouseMove={e => this.handleMouseMove(e)}
+            >
+              {/* <iframe
+                width="100%"
+                height="100%"
+                src="https://www.youtube.com/embed/Fb0Og6pB9Z8"
+              ></iframe> */}
+              {this.state.isMouseMoving ? (
+                <BrowserOverlay
+                  className="browser-overlay"
+                  volume={this.state.volume}
+                  handleVolume={this.handleVolume}
+                />
+              ) : (
+                <div className="hide" />
+              )}
+            </div>
+            <div className="room-tags-area">
+              {/* <Tag
+                type="add"
+                // roomID={this.state.roomID}
+                roomID={this.props.selectedRoom}
+                onChangeTag={this.onChangeTag}
+              ></Tag> */}
+              {addTag}
+              {tags}
+            </div>
           </div>
-          {/* <img
-            src={
-              "http://localhost:5000/api/room/get-thumbnail?thumbnail_url=default1.png"
-            }
-          /> */}
         </div>
       </div>
     );
@@ -226,7 +310,8 @@ class RoomPage extends Component {
 }
 
 const mapStateToProps = state => ({
-  currentUser: state.user.currentUser
+  currentUser: state.user.currentUser,
+  selectedRoom: state.room.selectedRoom
 });
 
 export default connect(mapStateToProps)(RoomPage);

@@ -6,53 +6,35 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
-}
 
-.hidden {
-  display: none;
-}
+  .drawer-header-container {
+    height: 48px;
+    width: 100%;
 
-.drawer-header-container {
-  margin: 0.5em 0;
+    position: relative;
 
-  position: relative;
-  width: 100%;
-  height: 48px;
-  z-index: 2000;
+    z-index: 2000;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-  .drawer-header {
-    // background-color: lightblue;
-    text-transform: uppercase;
-    font-weight: bold;
-    flex-grow: 1;
-    text-align: center;
-  }
+    transition: background-color 500ms;
 
-  .close-btn.MuiIconButton-root {
-    background-color: $highlight1;
-    width: fit-content;
-    margin: 0 6px;
-    svg {
-      path {
-        fill: $foreground;
-      }
-    }
-
-    &:hover {
-      background-color: $highlight2;
+    .drawer-header {
+      // background-color: lightblue;
+      text-transform: uppercase;
+      font-weight: bold;
+      flex-grow: 1;
+      text-align: center;
     }
   }
 }
 
-.box {
-  // max-width: 100%;
-  // width: 100%;
-  // height: 5em;
-  background-color: red;
-  display: flex;
-  flex-wrap: wrap;
+.bg-close {
+  background-color: white;
+}
+
+.bg-open {
+  background-color: #eceff1;
 }

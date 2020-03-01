@@ -1,32 +1,38 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import {
+  setSubscribedRooms,
+  setSelectedRoom
+} from "../../redux/room/room.actions";
 import axios from "axios";
 
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-
+// components:
 import CircleBtn from "../circle-btn/circle-btn.component";
 import ImageButton from "../img-btn/img-btn.component";
-import Poppity from "../poppity/poppity.component";
 import PageDropdown from "../page-dropdown/page-dropdown.component";
 import MouseOverPopover from "../custom-popover/custom-popover.component";
 import NewRoom from "../new-room/new-room.component";
 
+// mui components:
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+
 // icons:
 import AddIcon from "@material-ui/icons/Add";
 import SearchIcon from "@material-ui/icons/Search";
-import NineDotsIcon from "../../assets/icons/nine-dots-solid.svg";
 import DashboardIcon from "@material-ui/icons/Dashboard";
-import SlowMotionVideoIcon from "@material-ui/icons/SlowMotionVideo";
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
+import MenuIcon from "@material-ui/icons/Menu";
+import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 
+// custom style sheet:
 import "./navbar-mui.styles.scss";
+
+// utils:
+import { BASE_API_URL } from "../../utils";
 
 // const useStyles = makeStyles(theme => ({
 //   root: {
@@ -88,25 +94,24 @@ class ButtonAppBar extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      roomList: []
-    };
+    // this.state = {
+    //   roomList: []
+    // };
   }
 
   async componentDidMount() {
-    console.log("current user:", this.props.currentUser.uid);
-
-    let results = await axios.get(
-      // "http://localhost:5000/api/home/users-rooms",
-      "http://broadkatsme.herokuapp.com/api/home/users-rooms",
-      {
-        params: { uid: this.props.currentUser.uid }
-      }
+    console.log(
+      "current user:",
+      this.props.currentUser.uid,
+      this.props.currentUser
     );
-    // console.log("iwannabefree", results);
 
-    this.setState({ roomList: results.data });
-    console.log("after api call", this.state.roomList);
+    let results = await axios.get(`${BASE_API_URL}/userprops/users-rooms`, {
+      params: { uid: this.props.currentUser.uid }
+    });
+    console.log(results);
+
+    this.props.setSubscribedRooms(results.data);
   }
 
   render() {
@@ -129,13 +134,11 @@ class ButtonAppBar extends React.Component {
                   <DashboardIcon></DashboardIcon>
                 </RoomNavButton>
               </Link>
-
               <Link to="/search">
                 <RoomNavButton>
                   <SearchIcon></SearchIcon>
                 </RoomNavButton>
               </Link>
-
               <MouseOverPopover
                 anchorOrigin={{
                   vertical: "bottom",
@@ -151,14 +154,26 @@ class ButtonAppBar extends React.Component {
                   <AddIcon></AddIcon>
                 </RoomNavButton>
               </MouseOverPopover>
+              {/* {console.log("before map:", this.state.roomList)} */}
 
-              {console.log("before map:", this.state.roomList)}
-              {this.state.roomList.map(room => (
-                <Link to={`/room/id/${room.roomID}`}>
+              {this.props.subscribedRooms.map(room => (
+                <Link
+                  style={{ position: "relative" }}
+                  to={`/room/id/${room.roomID}`}
+                >
+                  {this.props.selectedRoom === room.roomID ? (
+                    <div className="room-selected">
+                      <div className="indicator"></div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                   <ImageButton
+                    onClick={() => {
+                      this.props.setSelectedRoom(room.roomID);
+                    }}
                     iconHover={<PlayCircleFilledIcon />}
-                    // bgImageUrl={`http://localhost:5000/api/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
-                    bgImageUrl={`http://broadkatsme.herokuapp.com/api/room/get-thumbnail?thumbnail_url=${room.thumbnail_url}`}
+                    bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${room.thumbnailUrl}`}
                   ></ImageButton>
                 </Link>
               ))}
@@ -190,10 +205,15 @@ class ButtonAppBar extends React.Component {
   }
 }
 
-// export default ButtonAppBar;
-
 const mapStateToProps = state => ({
-  currentUser: state.user.currentUser
+  currentUser: state.user.currentUser,
+  subscribedRooms: state.room.subscribedRooms,
+  selectedRoom: state.room.selectedRoom
 });
 
-export default connect(mapStateToProps)(ButtonAppBar);
+const mapDispatchToProps = dispatch => ({
+  setSubscribedRooms: subRoomList => dispatch(setSubscribedRooms(subRoomList)),
+  setSelectedRoom: roomID => dispatch(setSelectedRoom(roomID))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ButtonAppBar);

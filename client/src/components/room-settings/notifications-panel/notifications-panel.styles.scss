@@ -1,0 +1,41 @@
+@import "../../../assets/colors";
+@import "../../../assets/dimensions";
+
+@mixin card-grid {
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  grid-template-rows: auto auto;
+  grid-template-areas: "title button" "description button";
+}
+
+@mixin card-margins {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.room-notifications-panel-title {
+  font-size: 1.3em;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
+
+.room-notifications-panel-allow {
+  @include card-grid;
+  @include card-margins;
+  .room-notifications-panel-allow-title {
+    grid-area: title;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .room-notifications-panel-allow-description {
+    grid-area: description;
+    font-size: 0.9em;
+  }
+
+  .room-notifications-panel-allow-button {
+    grid-area: button;
+  }
+}

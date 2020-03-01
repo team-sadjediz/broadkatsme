@@ -1,0 +1,109 @@
+@import "../../../assets/colors";
+@import "../../../assets/dimensions";
+
+@mixin item-border {
+  margin-bottom: 15px;
+  margin-top: 15px;
+  // border-bottom: 1px solid $highlight1;
+}
+
+.room-general-panel {
+  height: 100%;
+  width: 100%;
+  border: none;
+  // background-color: white;
+  box-sizing: border-box;
+}
+
+.room-general-panel-title {
+  font-size: 1.3em;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
+
+.room-general {
+  // border: 1px solid $highlight1;
+  margin: 10px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 200px auto;
+  grid-template-areas: "upload info";
+  grid-gap: 40px;
+}
+
+.room-general-title {
+  font-size: 0.8em;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.room-general-description {
+  font-size: 0.9em;
+}
+
+.room-general-upload {
+  grid-area: upload;
+  height: 200px;
+  width: 100%;
+  img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+
+.room-general-upload-btn {
+  grid-area: upload;
+  width: fit-content;
+  z-index: 3000;
+  margin-left: auto;
+  svg {
+    // height: 45px;
+    // width: 45px;
+    cursor: pointer;
+    fill: $highlight1;
+  }
+}
+
+.room-general-info {
+  grid-area: info;
+  grid-template-rows: min-content min-content min-content;
+  grid-template-areas: "name" "owned-by" "tags";
+  grid-gap: 10px;
+}
+
+.room-general-info-name {
+  @include item-border;
+  grid-area: name;
+  input {
+    text-transform: uppercase;
+    background-color: transparent;
+    text-overflow: ellipsis;
+    width: 100%;
+    outline: none;
+    border: none;
+    font-size: 1em;
+    // font-weight: bold;
+    margin-top: 10px;
+    color: $highlight1;
+  }
+}
+
+.room-general-info-owned-by {
+  @include item-border;
+  grid-area: owned-by;
+}
+
+.room-general-info-tags {
+  // @include item-border;
+
+  margin-bottom: 15px;
+  margin-top: 1.3em;
+  grid-area: tags;
+}
+
+.room-hide {
+  display: none;
+}

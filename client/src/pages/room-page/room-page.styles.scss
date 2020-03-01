@@ -1,27 +1,54 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
 
-.center {
+.main-container {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 100%;
+}
+
+.room-page-container {
   display: flex;
   justify-content: center;
+  grid-column: 1;
+  grid-row: 1;
+  max-height: 100%;
+}
+
+.room-settings-container {
+  // z-index: 2000;
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  // width: 80%;
+  max-height: 100%;
 }
 
 .room-page {
-  // margin: 0 auto;
   display: grid;
   grid-template-columns: min-content;
-  grid-template-rows: 1em min-content 2em max-content auto;
+  grid-template-rows: 2em min-content 15px max-content 2em min-content auto;
   grid-template-areas:
     "    .     "
     " room-bar "
     "    .     "
     "room-screen"
+    "     .     "
+    " room-tags "
     "     .     ";
 }
 
 .room-bar-area {
   grid-area: room-bar;
 }
+
+// .room-settings-area {
+//   grid-area: room-bar / room-screen;
+// }
 
 .room-screen-area {
   grid-area: room-screen;
@@ -38,6 +65,15 @@
   // background-color: $white;
   background-color: $foreground;
   // background-color: rgba(101, 149, 158, 0.3);
+}
+
+.room-screen-init {
+  grid-area: room-screen;
+  z-index: 1101;
+}
+
+.room-tags-area {
+  grid-area: room-tags;
 }
 
 .browser-overlay {
@@ -63,6 +99,10 @@
     height: 680px;
     width: 1054px;
   }
+  .room-screen-init svg {
+    height: 6em;
+    width: 6em;
+  }
 }
 
 // catch all other others where screen is smaller than 1482px
@@ -71,6 +111,10 @@
     height: 480px;
     width: 854px;
   }
+  // .room-screen-init-play svg {
+  //   height: 6em;
+  //   width: 6em;
+  // }
 }
 
 @media (max-width: 1250px) {
@@ -78,6 +122,10 @@
     height: 360px;
     width: 640px;
   }
+  // .room-screen-init-play svg {
+  //   height: 4em;
+  //   width: 4em;
+  // }
 }
 
 @media (max-width: 1050px) {
@@ -85,4 +133,8 @@
     height: 240px;
     width: 426px;
   }
+  // .room-screen-init-play svg {
+  //   height: 2em;
+  //   width: 2em;
+  // }
 }

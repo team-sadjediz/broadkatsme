@@ -6,7 +6,7 @@ const Grievance = new mongoose.Schema({
 });
 
 const UserReport = new mongoose.Schema({
-  user_ID: String,
+  userID: String,
   issue: [{ type: Grievance }]
 });
 
