@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { connect } from "react-redux";
+import Timestamp from "react-timestamp";
 
 // mui components:
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
-import { connect } from "react-redux";
 
 // custom style sheet:
 import "./message.styles.scss";
@@ -38,13 +37,25 @@ const Message = ({ message, sender, currentUser }) => {
     orientation = "align-left";
   }
 
+  let date = new Date();
+
+  console.log(date);
+
   return (
     <div className={`message-container ${orientation}`}>
       <div className={`msg-info-container ${flexDirection} ${orientation}`}>
         <div className={`msg-sender ${border} ${bgColor}`}>{username}</div>
-        <div className="msg-timestamp">11:59:36</div>
+        {/* <div className="msg-timestamp">11:59:36</div> */}
+        <Timestamp
+          className="msg-timestamp"
+          date={date}
+          relative
+          autoUpdate
+        ></Timestamp>
       </div>
-      <div className={`msg-text ${border} ${bgColor}`}>{message}</div>
+      <div className={`msg-text ${border} ${bgColor} ${orientation}`}>
+        {message}
+      </div>
     </div>
   );
 

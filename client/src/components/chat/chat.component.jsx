@@ -13,6 +13,10 @@ import Message from "../message/message.component";
 // custom style sheet:
 import "./chat.styles.scss";
 
+import { BASE_API_URL } from "../../utils";
+
+const ENDPOINT = BASE_API_URL.slice(0, BASE_API_URL.length - 4);
+
 const useStyles = makeStyles(theme => ({
   root: {
     "& .MuiTextField-root": {
@@ -28,12 +32,12 @@ const Chat = ({ currentUser, selectedRoom }) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
-  const ENDPOINT = "localhost:5000";
+  const endpoint = ENDPOINT;
 
   useEffect(() => {
     console.log("---------------------------------------------------------");
     console.log("MOUNT", messages);
-    socket = io(ENDPOINT);
+    socket = io(endpoint);
 
     socket.emit(
       "join",

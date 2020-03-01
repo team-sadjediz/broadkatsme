@@ -29,13 +29,14 @@
     flex-grow: 1;
     // background-color: lightcoral;
     max-width: 100%;
+    margin: 10px 0;
 
     height: 60vh;
     // padding: 0.2em;
 
     display: flex;
     flex-direction: column;
-    scrollbar-color: transparent transparent;
+    // scrollbar-color: yellow yellow;
   }
 }
 

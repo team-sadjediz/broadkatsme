@@ -42,21 +42,30 @@ a:active {
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 16px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #efefef;
+  background: transparent;
+  background: $gray_material_ui;
+
+  width: 8px;
+  border-left: 8px transparent solid;
+  background-clip: padding-box;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: $highlight1;
-  border-radius: 5px;
+  background: $gray_slightly_darker;
+  // width: 8px;
+  border-left: 8px transparent solid;
+  background-clip: padding-box;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: $highlight2;
+  border-left: 8px transparent solid;
+  background-clip: padding-box;
 }
