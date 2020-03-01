@@ -149,6 +149,9 @@ io.on("connection", socket => {
 
     socket.join(user.room);
     console.log(getAllUsers());
+
+    //
+
     callback();
   });
 

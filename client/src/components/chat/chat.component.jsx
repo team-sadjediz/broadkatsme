@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import io from "socket.io-client";
+import ScrollToBottom from "react-scroll-to-bottom";
 
 // mui components:
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+
+// components:
+import Message from "../message/message.component";
 
 // custom style sheet:
 import "./chat.styles.scss";
@@ -20,10 +24,9 @@ const Chat = ({ currentUser, selectedRoom }) => {
   useEffect(() => {
     console.log("UE 1");
     socket = io(ENDPOINT);
-    console.log(
-      `[Socket: ${socket.id}] [UserID: ${currentUser.uid}] [RoomID: ${selectedRoom}] ${socket}`
-    );
-    console.log("socket from client", socket);
+    // console.log(
+    //   `[Socket: ${socket.id}] [UserID: ${currentUser.uid}] [RoomID: ${selectedRoom}] ${socket}`
+    // );
 
     socket.emit(
       "join",
@@ -36,17 +39,13 @@ const Chat = ({ currentUser, selectedRoom }) => {
       }
     );
 
-    console.log(
-      `[Socket: ${socket.id}] [UserID: ${currentUser.uid}] [RoomID: ${selectedRoom}]`
-    );
-
-    socket.on("message", message => {
-      // console.log("from useEffect", message);
-      setMessages([...messages, message]);
-    });
+    // socket.on("message", message => {
+    //   // console.log("from useEffect", message);
+    //   setMessages([...messages, message]);
+    // });
 
     return () => {
-      setMessages([]);
+      // setMessages([]);
       console.log("dismount");
       console.log("predismounted socket id:", socket.id);
 
@@ -57,13 +56,13 @@ const Chat = ({ currentUser, selectedRoom }) => {
   }, [ENDPOINT, selectedRoom]);
 
   // second use effect not working as intended:
-  // useEffect(() => {
-  //   console.log("UE 2");
-  //   socket.on("message", message => {
-  //     // console.log("from useEffect", message);
-  //     setMessages([...messages, message]);
-  //   });
-  // }, [messages]);
+  useEffect(() => {
+    console.log("UE 2");
+    socket.on("message", message => {
+      // console.log("from useEffect", message);
+      setMessages([...messages, message]);
+    });
+  });
 
   const sendMessage = event => {
     event.preventDefault();
@@ -91,17 +90,23 @@ const Chat = ({ currentUser, selectedRoom }) => {
       {selectedRoom ? (
         <React.Fragment>
           <div className="chat-header-container">{selectedRoom}</div>
-          <div className="message-list-container"></div>
+          <div className="message-list-container">
+            {/* <ScrollToBottom> */}
+            {messages.map(msg => {
+              // console.log("from map", msg);
+              return <Message message={msg.text} sender={msg.user}></Message>;
+            })}
+            {/* </ScrollToBottom> */}
+          </div>
+          <input
+            value={message}
+            onChange={handleChange}
+            onKeyPress={handleKeyPress}
+          />
         </React.Fragment>
       ) : (
         "please pick a room first"
       )}
-
-      {/* <input
-        value={message}
-        onChange={handleChange}
-        onKeyPress={handleKeyPress}
-      /> */}
     </div>
   );
 };
