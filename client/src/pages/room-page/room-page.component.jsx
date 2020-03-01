@@ -21,7 +21,7 @@ const initialState = {
   isFavorited: false,
   volume: 50,
   roomName: "TestRoom",
-  roomID: "5e4a4c5a86ae580017aa1a78",
+  roomID: "5e5a6b943c5932413c6495bc",
   ownerID: "TestOwnerID",
   showInitial: true,
   showSettings: false,
@@ -50,7 +50,7 @@ class RoomPage extends Component {
   async componentDidMount() {
     // let token = await this.props.currentUser.getIdToken(false);
     // setAuthorization(token);
-    const roomID = { "roomID": "5e4a4c5a86ae580017aa1a78" };
+    const roomID = { "roomID": "5e5a6b943c5932413c6495bc" };
 
     // console.log("???");
     // console.log(this.props.currentUser);
@@ -59,7 +59,10 @@ class RoomPage extends Component {
       .get(`${BASE_API_URL}/room/find-room`, {
         params: roomID
       })
-      .then(res => this.fetchData(res.data))
+      .then(res => {
+        console.log(res);
+        this.fetchData(res.data);
+      })
       .catch(error => {
         console.error(error);
       });
@@ -70,7 +73,7 @@ class RoomPage extends Component {
       .get(`${BASE_API_URL}/userprops/favorite-rooms/is-favorited`, {
         params: {
           "uid": this.props.currentUser.uid,
-          "roomID": "5e4a4c5a86ae580017aa1a78"
+          "roomID": "5e5a6b943c5932413c6495bc"
         }
       })
       .then(res => this.setState({ isFavorited: res.data }))

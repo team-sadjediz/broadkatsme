@@ -21,12 +21,25 @@ router.get("/find-room", async function(req, res) {
   });
 });
 
+// ---------------------------------------------------------- UPDATE STATUS ----------------------------------------------------------
+
+router.put("/update-active", async function(req, res) {
+  let roomID = req.query.roomID;
+  let active = req.query.active;
+  await Room.findOneAndUpdate({ _id: roomID }, { active: active })
+    .then(document => res.send(document.active))
+    .catch(error =>
+      res.send(404).send(`Room ${roomID} status could not be updated.`)
+    );
+});
+
 // ---------------------------------------------------------- CREATE FIND ROOMS ----------------------------------------------------------
 
 router.post("/create-room", async function(req, res) {
   let name = req.body.roomName;
   let ownerID = req.body.uid;
   let thumbnailUrl = "default1.png";
+  let active = false;
   let subscribers = [req.body.uid];
   let tags = req.body.tags;
   let roomSize = req.body.roomSize;
@@ -41,6 +54,7 @@ router.post("/create-room", async function(req, res) {
     name: name,
     ownerID: ownerID,
     thumbnailUrl: thumbnailUrl,
+    active: active,
     subscribers: subscribers,
     tags: tags,
     settings: {
@@ -86,11 +100,10 @@ router.delete("/delete-room", async function(req, res) {
     .then(async document => {
       console.log(document);
       // let subscribers = document.subscriber;
-      await UserProps(
+      await UserProps.findOneAndUpdate(
         {
           subscribedRooms: roomID,
-          ownedRooms: roomID,
-          favoritedRooms: roomID
+          ownedRooms: roomID
         },
         {
           $pull: {
@@ -99,11 +112,13 @@ router.delete("/delete-room", async function(req, res) {
             favoritedRooms: roomID
           }
         }
-      ).then(response => {
-        console.log("# of matching user props: " + response.n);
-        console.log("# of documents modified: " + response.nModified);
-        res.status(204).send();
-      });
+      )
+        .then(response => {
+          console.log("# of matching user props: " + response.n);
+          console.log("# of documents modified: " + response.nModified);
+          res.status(204).send();
+        })
+        .catch(res.status(404).send(`Room ${roomID} could not be found.`));
     })
     .catch(res.status(404).send(`Room ${roomID} could not be found.`));
 });

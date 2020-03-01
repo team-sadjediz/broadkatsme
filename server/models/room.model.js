@@ -22,6 +22,7 @@ const Room = new mongoose.Schema({
   name: String,
   ownerID: String,
   thumbnailUrl: String,
+  active: Boolean,
   subscribers: [{ type: String }],
   tags: [{ type: String }],
   settings: RoomSettings
