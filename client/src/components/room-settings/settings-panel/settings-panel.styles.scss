@@ -8,18 +8,35 @@
   grid-template-areas: "title button" "description button";
 }
 
+@mixin card-margins {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.room-settings-panel-title {
+  font-size: 1.3em;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
+
 .room-settings-panel-privacy {
   //   display: grid;
   //   grid-template-columns: 1fr min-content;
   //   grid-template-rows: auto auto;
   //   grid-template-areas: "title button" "description button";
   @include card-grid;
+  @include card-margins;
   .room-settings-panel-privacy-title {
     grid-area: title;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    font-weight: bold;
   }
 
   .room-settings-panel-privacy-description {
     grid-area: description;
+    font-size: 0.9em;
   }
 
   .room-settings-panel-privacy-button {
@@ -29,11 +46,16 @@
 
 .room-settings-panel-size {
   @include card-grid;
+  @include card-margins;
   .room-settings-panel-size-title {
     grid-area: title;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    font-weight: bold;
   }
   .room-settings-panel-size-description {
     grid-area: description;
+    font-size: 0.9em;
   }
   .room-settings-panel-size-button {
     grid-area: button;

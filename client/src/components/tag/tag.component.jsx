@@ -4,7 +4,7 @@ import axios from "axios";
 import { BASE_API_URL } from "../../utils";
 
 import Chip from "@material-ui/core/Chip";
-import { withStyles, createMuiTheme } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 
 import "./tag.style.scss";
 
@@ -50,7 +50,7 @@ const useStyles = theme => ({
       "Karla, Roboto, sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI",
     fontSize: "1rem",
     "&:focus": {
-      backgroundColor: "#ef5350 !important",
+      backgroundColor: "transparent !important",
       "& svg": {
         fill: "#fff !important"
       }
@@ -90,23 +90,20 @@ const useStyles = theme => ({
 class Tag extends Component {
   constructor(props) {
     super(props);
-    // console.log(this.props.roomID);
     this.state = {
       type: this.props.type,
-      roomID: this.props.roomID,
       input: ""
     };
   }
 
   addOnClick = e => {
     e.preventDefault();
-    console.log(this.state.input);
+    console.log(this.props.roomID);
     let tag = this.state.input;
-    let roomID = this.state.roomID;
 
     console.log("adding " + tag);
-    console.log("to " + roomID);
-    let request = { "newTag": tag, "roomID": roomID };
+    console.log("to " + this.props.roomID);
+    let request = { "newTag": tag, "roomID": this.props.roomID };
     axios
       .put(`${BASE_API_URL}/room/add-tags`, request)
       .then(res => {
@@ -119,12 +116,9 @@ class Tag extends Component {
   removeOnClick = e => {
     e.preventDefault();
     let tag = this.props.text;
-    let roomID = this.state.roomID;
-    let request = { "delTag": tag, "roomID": roomID };
+    let request = { "delTag": tag, "roomID": this.props.roomID };
     console.log("removing " + tag);
     axios
-      // .put("http://localhost:5000/api/room/remove-tags", request)
-      // .put("http://broadkatsme.herokuapp.com/api/room/remove-tags", request)
       .put(`${BASE_API_URL}/room/remove-tags`, request)
       .then(res => this.props.onChangeTag(res.data))
       .catch(error => console.error(error));
@@ -159,6 +153,7 @@ class Tag extends Component {
           icon={
             <AddCircleIcon onClick={this.addOnClick} className={classes.svg} />
           }
+          variant="outlined"
         ></Chip>
         // <div
         //   className={`tag-properties ${
@@ -202,6 +197,7 @@ class Tag extends Component {
           className={classes.root}
           onDelete={this.removeOnClick}
           label={this.props.text}
+          variant="outlined"
         />
       );
     } else if (this.state.type === "label") {

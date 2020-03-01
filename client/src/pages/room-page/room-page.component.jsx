@@ -81,7 +81,7 @@ class RoomPage extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log(this.props.selectedRoom !== nextProps.selectedRoom);
+    // console.log(this.props.selectedRoom !== nextProps.selectedRoom);
     let roomID = this.props.selectedRoom !== nextProps.selectedRoom;
     let isMouseMoving = this.state.isMouseMoving !== nextState.isMouseMoving;
     let isFavorited = this.state.isFavorited !== nextState.isFavorited;
@@ -214,6 +214,7 @@ class RoomPage extends Component {
     // console.log(this.state.showInitial);
     // console.log(this.props.selectedRoom);
     let tags = this.state.tags.map(tag => {
+      console.log(this.props.selectedRoom);
       return (
         <Tag
           key={tag}
@@ -225,22 +226,25 @@ class RoomPage extends Component {
         ></Tag>
       );
     });
+    let addTag = (
+      <Tag
+        type="add"
+        // roomID={this.state.roomID}
+        roomID={this.props.selectedRoom}
+        onChangeTag={this.onChangeTag}
+      ></Tag>
+    );
     return (
       <div className="main-container">
         {this.state.showSettings ? (
           <div className="room-settings-container">
             <RoomSettings
-              tabs={[
-                "General",
-                "Notifications",
-                "Settings",
-                "Role Management",
-                "Delete"
-              ]}
-              panels={["fml", "2xfml", "3xfml"]}
               toggleSettingsModal={this.toggleSettingsModal}
               // HEEEEREEEEEE
               owned={true}
+              tags={tags}
+              addTag={addTag}
+              roomName={this.state.roomName}
             ></RoomSettings>
           </div>
         ) : null}
@@ -252,7 +256,7 @@ class RoomPage extends Component {
                 roomName={this.state.roomName}
                 // roomID={this.state.roomID}
                 roomID={this.props.selectedRoom}
-                tags={this.state.tags}
+                // tags={this.state.tags}
                 toggleSettingsModal={this.toggleSettingsModal}
                 favoriteRoom={this.favoriteRoom}
                 isFavorited={this.state.isFavorited}
@@ -289,12 +293,13 @@ class RoomPage extends Component {
               )}
             </div>
             <div className="room-tags-area">
-              <Tag
+              {/* <Tag
                 type="add"
                 // roomID={this.state.roomID}
                 roomID={this.props.selectedRoom}
                 onChangeTag={this.onChangeTag}
-              ></Tag>
+              ></Tag> */}
+              {addTag}
               {tags}
             </div>
           </div>

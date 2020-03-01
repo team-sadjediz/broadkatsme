@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
     alignItems: "center"
   },
   tabs: {
-    borderRight: "1px solid grey",
+    borderRight: "1px solid #e0e0e0",
     minWidth: "max-content"
   },
   panelContainer: {
@@ -103,17 +103,17 @@ export default function RoomSettings(props) {
     setOpen(false);
   };
 
-  const tabs = props.tabs.map((tab, index) => {
-    return <Tab label={tab} id={`vertical-tab-${index}`}></Tab>;
-  });
+  // const tabs = props.tabs.map((tab, index) => {
+  //   return <Tab label={tab} id={`vertical-tab-${index}`}></Tab>;
+  // });
 
-  const panels = props.panels.map((panel, index) => {
-    return (
-      <TabPanel className={classes.panel} value={value} index={index}>
-        {panel}
-      </TabPanel>
-    );
-  });
+  // const panels = props.panels.map((panel, index) => {
+  //   return (
+  //     <TabPanel className={classes.panel} value={value} index={index}>
+  //       {panel}
+  //     </TabPanel>
+  //   );
+  // });
 
   return (
     <Modal
@@ -146,10 +146,12 @@ export default function RoomSettings(props) {
           {/* {panels} */}
           <TabPanel className={classes.panel} value={value} index={0}>
             <GeneralPanel
-              thumbnailUrl="default1.png"
+              thumbnailUrl="default3.png"
               name="Shokugeki"
               owner="Julie"
-              tags="Tags Tags Tags"
+              // tags="Tags Tags Tags"
+              tags={props.tags}
+              addTag={props.addTag}
             />
           </TabPanel>
           <TabPanel className={classes.panel} value={value} index={1}>
@@ -193,7 +195,7 @@ export default function RoomSettings(props) {
           </TabPanel>
           {props.owned ? (
             <TabPanel className={classes.panel} value={value} index={4}>
-              <DeletePanel></DeletePanel>
+              <DeletePanel roomName={props.roomName}></DeletePanel>
             </TabPanel>
           ) : null}
 

@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
+// import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 import Avatar from "@material-ui/core/Avatar";
@@ -14,6 +14,7 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Divider from "@material-ui/core/Divider";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import FlagOutlinedIcon from "@material-ui/icons/FlagOutlined";
@@ -30,12 +31,13 @@ const useStyles = makeStyles(theme => ({
   list: {
     width: "100%",
     height: "100%"
+  },
+  listItem: {
+    borderBottom: "1px solid #efefef"
+  },
+  summary: {
+    borderBottom: "1px solid #e0e0e0"
   }
-  //   banned: {
-  //     "& svg": {
-  //       fill: "#ef5350 !important"
-  //     }
-  //   }
 }));
 
 export default function RoleManagementPanel(props) {
@@ -49,7 +51,7 @@ export default function RoleManagementPanel(props) {
   const generate = (items, owned) => {
     let list = items.map(item => {
       return (
-        <ListItem>
+        <ListItem className={classes.listItem}>
           <ListItemAvatar>
             <Avatar>
               <AccountCircleIcon />
@@ -83,7 +85,7 @@ export default function RoleManagementPanel(props) {
   const generateBannedUsers = () => {
     let bannedList = props.bannedUsers.map(banned => {
       return (
-        <ListItem>
+        <ListItem className={classes.listItem}>
           <ListItemAvatar>
             <Avatar>
               <AccountCircleIcon />
@@ -107,18 +109,24 @@ export default function RoleManagementPanel(props) {
 
   return (
     <div className="role-management-panel">
-      Role Management
+      <div className="role-management-panel-title">Role Management</div>
+      <Divider variant="fullWidth" />
       <div className="role-management-boxes">
         <ExpansionPanel
           expanded={expanded === "RoomAdmins"}
           onChange={handleChange("RoomAdmins")}
         >
           <ExpansionPanelSummary
+            className={classes.summary}
             expandIcon={<ExpandMoreIcon />}
             id="RoomAdmins"
           >
-            <div className="room-heading">Room Administrators</div>
-            <div className="room-secondary-heading">Room Administrators</div>
+            <div className="role-management-boxes-title">
+              Room Administrators
+            </div>
+            <div className="role-management-boxes-description">
+              view users allowed to administrate room management
+            </div>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <List className={classes.list}>
@@ -131,9 +139,15 @@ export default function RoleManagementPanel(props) {
           expanded={expanded === "Operators"}
           onChange={handleChange("Operators")}
         >
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} id="Operators">
-            <div className="room-heading">Operators</div>
-            <div className="room-secondary-heading">Operators</div>
+          <ExpansionPanelSummary
+            className={classes.summary}
+            expandIcon={<ExpandMoreIcon />}
+            id="Operators"
+          >
+            <div className="role-management-boxes-title">Operators</div>
+            <div className="role-management-boxes-description">
+              view users allowed to operate room remote control
+            </div>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <List className={classes.list}>
@@ -147,11 +161,14 @@ export default function RoleManagementPanel(props) {
           onChange={handleChange("Invitations")}
         >
           <ExpansionPanelSummary
+            className={classes.summary}
             expandIcon={<ExpandMoreIcon />}
             id="Invitations"
           >
-            <div className="room-heading">Invitations</div>
-            <div className="room-secondary-heading">Invitations</div>
+            <div className="role-management-boxes-title">Invitations</div>
+            <div className="role-management-boxes-description">
+              view users allowed to invite
+            </div>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <List className={classes.list}>
@@ -160,17 +177,21 @@ export default function RoleManagementPanel(props) {
           </ExpansionPanelDetails>
         </ExpansionPanel>
       </div>
+      <Divider variant="fullWidth" />
       <div className="role-management-boxes">
         <ExpansionPanel
           expanded={expanded === "BannedUsers"}
           onChange={handleChange("BannedUsers")}
         >
           <ExpansionPanelSummary
+            className={classes.summary}
             expandIcon={<ExpandMoreIcon />}
             id="BannedUsers"
           >
-            <div className="room-heading">Banned Users</div>
-            <div className="room-secondary-heading">Banned Users</div>
+            <div className="role-management-boxes-title">Banned Users</div>
+            <div className="role-management-boxes-description">
+              view users banned from room
+            </div>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <List className={classes.list}>{generateBannedUsers()}</List>

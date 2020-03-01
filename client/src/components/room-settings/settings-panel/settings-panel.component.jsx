@@ -4,6 +4,7 @@ import React from "react";
 import Switch from "@material-ui/core/Switch";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Divider from "@material-ui/core/Divider";
 
 import "./settings-panel.styles.scss";
 
@@ -22,7 +23,8 @@ export default function SettingsPanel(props) {
   };
   return (
     <div>
-      Settings
+      <div className="room-settings-panel-title">Settings</div>
+      <Divider variant="fullWidth" />
       <div className="room-settings-panel-privacy">
         <div className="room-settings-panel-privacy-title">Privacy</div>
         <div className="room-settings-panel-privacy-description">
@@ -36,6 +38,7 @@ export default function SettingsPanel(props) {
           color="primary"
         ></Switch>
       </div>
+      <Divider variant="fullWidth" />
       <div className="room-settings-panel-size">
         <div className="room-settings-panel-size-title">Room Size</div>
         <div className="room-settings-panel-size-description">
@@ -53,6 +56,7 @@ export default function SettingsPanel(props) {
           <MenuItem value={5}>5</MenuItem>
         </Select>
       </div>
+      <Divider variant="fullWidth" />
     </div>
   );
 }

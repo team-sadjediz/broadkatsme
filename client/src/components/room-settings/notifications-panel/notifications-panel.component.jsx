@@ -2,6 +2,7 @@ import React from "react";
 // import axios from "axios";
 
 import Switch from "@material-ui/core/Switch";
+import Divider from "@material-ui/core/Divider";
 
 import "./notifications-panel.styles.scss";
 
@@ -16,7 +17,8 @@ export default function NotificationsPanel(props) {
 
   return (
     <div>
-      Notifications
+      <div className="room-notifications-panel-title">Notifications</div>
+      <Divider variant="fullWidth" />
       <div className="room-notifications-panel-allow">
         <div className="room-notifications-panel-allow-title">
           Receive Notifications
@@ -32,6 +34,7 @@ export default function NotificationsPanel(props) {
           color="primary"
         ></Switch>
       </div>
+      <Divider variant="fullWidth" />
     </div>
   );
 }

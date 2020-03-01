@@ -1,17 +1,35 @@
 @import "../../../assets/colors";
 @import "../../../assets/dimensions";
 
-@mixin item-border {
-  margin-bottom: 10px;
-  margin-top: 10px;
-  border-bottom: 1px solid $highlight1;
+@mixin card-margins {
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
-.role-management-panel {
-  background-color: white;
+// .role-management-panel {
+//   background-color: white;
+// }
+
+.role-management-panel-title {
+  font-size: 1.3em;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 15px;
 }
 
 .role-management-boxes {
-  border: 1px solid $highlight1;
-  margin-bottom: 10px;
+  @include card-margins;
+  // border: 1px solid $highlight1;
+}
+
+.role-management-boxes-title {
+  flex-basis: 33.33%;
+  flex-shrink: 0;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.role-management-boxes-description {
+  font-size: 0.9em;
 }
