@@ -7,7 +7,7 @@ import Box from "@material-ui/core/Box";
 import CancelIcon from "@material-ui/icons/Cancel";
 import Modal from "@material-ui/core/Modal";
 
-import "./room-settings.styles.scss";
+// import "./room-settings.styles.scss";
 
 import GeneralPanel from "./general-panel/general-panel.component";
 import RoleManagementPanel from "./role-management-panel/role-management-panel.component";

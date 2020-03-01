@@ -1,23 +1,23 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
 
-/* width */
-::-webkit-scrollbar {
-  width: 4px;
-}
+// /* width */
+// ::-webkit-scrollbar {
+//   width: 4px;
+// }
 
-/* Track */
-::-webkit-scrollbar-track {
-  background: #efefef;
-}
+// /* Track */
+// ::-webkit-scrollbar-track {
+//   background: #efefef;
+// }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: $highlight1;
-  border-radius: 5px;
-}
+// /* Handle */
+// ::-webkit-scrollbar-thumb {
+//   background: $highlight1;
+//   border-radius: 5px;
+// }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: $highlight2;
-}
+// /* Handle on hover */
+// ::-webkit-scrollbar-thumb:hover {
+//   background: $highlight2;
+// }
