@@ -1,40 +1,69 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
 import { connect } from "react-redux";
 import io from "socket.io-client";
 
+// mui components:
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+
+// custom style sheet:
 import "./chat.styles.scss";
-const roomId = "123";
+
 let socket;
 
 const Chat = ({ currentUser, selectedRoom }) => {
-  // console.log("uid", currentUser.uid);
-  // console.log("roomid", selectedRoom);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
   const ENDPOINT = "localhost:5000";
 
   useEffect(() => {
+    console.log("UE 1");
     socket = io(ENDPOINT);
+    console.log(
+      `[Socket: ${socket.id}] [UserID: ${currentUser.uid}] [RoomID: ${selectedRoom}] ${socket}`
+    );
     console.log("socket from client", socket);
 
-    socket.emit("join", { name: currentUser.uid, room: roomId }, () => {
-      console.log("joined");
+    socket.emit(
+      "join",
+      { name: currentUser.uid, room: selectedRoom },
+      error => {
+        console.log("joined");
+        if (error) {
+          console.log(error);
+        }
+      }
+    );
+
+    console.log(
+      `[Socket: ${socket.id}] [UserID: ${currentUser.uid}] [RoomID: ${selectedRoom}]`
+    );
+
+    socket.on("message", message => {
+      // console.log("from useEffect", message);
+      setMessages([...messages, message]);
     });
 
     return () => {
-      socket.disconnect();
-    };
-  }, [ENDPOINT, currentUser.uid, roomId]);
+      setMessages([]);
+      console.log("dismount");
+      console.log("predismounted socket id:", socket.id);
 
-  useEffect(() => {
-    socket.on("message", message => {
-      console.log("from useEffect", message);
-      setMessages([...messages, message]);
-    });
-  }, [messages]);
+      socket.disconnect();
+      console.log("dismounted socket id:", socket.id);
+    };
+    // }, [ENDPOINT, currentUser.uid, selectedRoom]);
+  }, [ENDPOINT, selectedRoom]);
+
+  // second use effect not working as intended:
+  // useEffect(() => {
+  //   console.log("UE 2");
+  //   socket.on("message", message => {
+  //     // console.log("from useEffect", message);
+  //     setMessages([...messages, message]);
+  //   });
+  // }, [messages]);
 
   const sendMessage = event => {
     event.preventDefault();
@@ -43,6 +72,10 @@ const Chat = ({ currentUser, selectedRoom }) => {
         setMessage("");
       });
     }
+  };
+
+  const handleChange = event => {
+    setMessage(event.target.value);
   };
 
   const handleKeyPress = event => {
@@ -55,13 +88,20 @@ const Chat = ({ currentUser, selectedRoom }) => {
   console.log("MESSAGES:", messages);
   return (
     <div className="chat-container">
-      <div>CHAT</div>
+      {selectedRoom ? (
+        <React.Fragment>
+          <div className="chat-header-container">{selectedRoom}</div>
+          <div className="message-list-container"></div>
+        </React.Fragment>
+      ) : (
+        "please pick a room first"
+      )}
 
-      <input
+      {/* <input
         value={message}
-        onChange={event => setMessage(event.target.value)}
+        onChange={handleChange}
         onKeyPress={handleKeyPress}
-      />
+      /> */}
     </div>
   );
 };

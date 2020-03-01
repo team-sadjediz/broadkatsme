@@ -29,7 +29,9 @@ function TabPanel(props) {
       }}
       hidden={value !== index}
     >
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div
+        style={{ display: "flex", justifyContent: "center", height: "100%" }}
+      >
         {children}
       </div>
     </div>
@@ -138,13 +140,16 @@ export default function DrawerTabs({ drawerOpen }) {
         </TabNav>
 
         <TabPanel value={value} index={0}>
-          yellowyyyoysoydfsjldfjs
+          <Chat />
+
+          {/* yellowyyyoysoydfsjldfjs */}
         </TabPanel>
         <TabPanel value={value} index={1}>
           <NewRoom />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <Chat />
+          {/* <Chat /> */}
+          sdfsdf
         </TabPanel>
       </div>
     </div>

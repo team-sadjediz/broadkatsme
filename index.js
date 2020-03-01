@@ -10,7 +10,8 @@ const {
   addUser,
   removeUser,
   getUser,
-  getUsersInRoom
+  getUsersInRoom,
+  getAllUsers
 } = require("./chat.utils");
 
 // console.log("root index.js envs:", process.env);
@@ -126,11 +127,13 @@ io.on("connection", socket => {
 
   socket.on("join", ({ name, room }, callback) => {
     console.log(
-      `SERVER: connected socket: ${socket.id} / user ${name} has JOINED room ${room}`
+      `SERVER: socket: ${socket.id} / user (${name}) -> room [${room}]`
     );
 
     const { error, user } = addUser({ id: socket.id, name, room });
 
+    // console.log(user.id);
+    // console.log(socket.id);
     console.log("SERVER: error", error);
     console.log("SERVER: user:", user);
     if (error) return callback(error);
@@ -145,7 +148,7 @@ io.on("connection", socket => {
       .emit("message", { user: "admin", text: `${user.name} has joined!` });
 
     socket.join(user.room);
-
+    console.log(getAllUsers());
     callback();
   });
 
@@ -162,6 +165,7 @@ io.on("connection", socket => {
       `SERVER: disconnected socket: ${socket.id} / user has LEFT room`
     );
 
+    console.log("------------------------------------------");
     const user = removeUser(socket.id);
 
     if (user) {
@@ -174,6 +178,7 @@ io.on("connection", socket => {
         users: getUsersInRoom(user.room)
       });
     }
+    console.log(getAllUsers());
   });
 });
 
