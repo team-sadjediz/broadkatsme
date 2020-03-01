@@ -20,42 +20,51 @@ class NewRoom extends React.Component {
     super(props);
 
     this.state = {
-      room_name: "",
+      roomName: "",
       tags: "",
-      room_size: "",
+      roomSize: "",
       privacy: "true"
     };
   }
 
   handleSubmit = async event => {
     event.preventDefault();
+    // const room = {
+    //   uid: this.props.currentUser.uid,
+    //   room_name: this.state.room_name,
+    //   tags: this.state.tags,
+    //   room_size: this.state.room_size,
+    //   privacy: this.state.privacy
+    // };
+
+    // axios
+    //   .post(`${utils.BASE_API_URL}/room/createroom`, room)
+    //   .then(() => console.log("Room posted to backend/created."))
+    //   .catch(error => {
+    //     console.error(error);
+    //   });
+
     const room = {
       uid: this.props.currentUser.uid,
-      room_name: this.state.room_name,
+      roomName: this.state.roomName,
       tags: this.state.tags,
-      room_size: this.state.room_size,
+      roomSize: this.state.roomSize,
       privacy: this.state.privacy
     };
 
     console.log(room);
 
     axios
-      .post(`${BASE_API_URL}/room/createroom`, room)
-      .then(async res => {
-        console.log("Room posted for user:", this.props.currentUser.uid);
-        let results = await axios.get(`${BASE_API_URL}/home/users-rooms`, {
-          params: { uid: this.props.currentUser.uid }
-        });
-        this.props.setSubscribedRooms(results.data);
-      })
+      .post(`${utils.BASE_API_URL}/room/create-room`, room)
+      .then(() => console.log("Room posted to backend/created."))
       .catch(error => {
         console.error(error);
       });
 
     this.setState({
-      room_name: "",
+      roomName: "",
       tags: "",
-      room_size: "",
+      roomSize: "",
       privacy: ""
     });
   };
@@ -72,18 +81,18 @@ class NewRoom extends React.Component {
         <form className="form-container" onSubmit={this.handleSubmit}>
           <FormInput
             className="room-title"
-            name="room_name"
+            name="roomName"
             handleChange={this.handleChange}
-            value={this.state.room_name}
+            value={this.state.roomName}
             label="room title"
             required
           />
 
           <FormInput
             className="room-size"
-            name="room_size"
+            name="roomSize"
             handleChange={this.handleChange}
-            value={this.state.room_size}
+            value={this.state.roomSize}
             label="room size"
             type="number"
             min="1"

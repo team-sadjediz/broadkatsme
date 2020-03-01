@@ -4,14 +4,14 @@ const mongoose = require("mongoose");
 
 // Each log represents a message sent by a user.
 const Log = new mongoose.Schema({
-  time_stamp: Date,
-  user_ID: String,
+  timeStamp: Date,
+  userID: String,
   message: String
 });
 
 // Under the premise that chats are only available per room, each chat is associated per room ID.
 const Chat = new mongoose.Schema({
-  room_ID: { type: mongoose.Schema.Types.ObjectId, ref: "Room" },
+  roomID: { type: mongoose.Schema.Types.ObjectId, ref: "Room" },
   log: [{ type: Log }]
 });
 

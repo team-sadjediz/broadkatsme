@@ -27,6 +27,16 @@ aws.config.update({
   region: awsconfig_AWS_REGION || process.env.AWS_REGION
 });
 
+// Heroku Deployment ---------------------------------------------------------------------------------------
+// aws.config.update({
+//   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+//   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+//   Bucket: process.env.AWS_BUCKET,
+//   region: process.env.AWS_REGION
+// });
+
+// ---------------- ---------------------------------------------------------------------------------------
+
 const s3 = new aws.S3({
   /* ... */
 });

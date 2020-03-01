@@ -14,6 +14,8 @@ import { connect } from "react-redux";
 import { ReactComponent as NextBtn } from "../../assets/icons/caret-right-solid.svg";
 import { ReactComponent as BackBtn } from "../../assets/icons/caret-left-solid.svg";
 
+import { BASE_API_URL } from "../../utils";
+
 import "./lobby-page.style.scss";
 
 class LobbyPage extends React.Component {
@@ -41,10 +43,11 @@ class LobbyPage extends React.Component {
   componentDidMount() {
     axios
       // .get("http://localhost:5000/api/home/users-rooms?uid=" + this.state.uid)
-      .get(
-        "http://broadkatsme.herokuapp.com/api/home/users-rooms?uid=" +
-          this.state.uid
-      )
+      // .get(
+      //   "http://broadkatsme.herokuapp.com/api/home/users-rooms?uid=" +
+      //     this.state.uid
+      // )
+      .get(`${BASE_API_URL}/userprops/users-rooms?uid=${this.state.uid}`)
       .then(rooms => {
         const properties = rooms.data;
         this.setState({ properties: rooms.data });

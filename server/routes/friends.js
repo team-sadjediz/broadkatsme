@@ -6,57 +6,57 @@ const UserProps = require("../models/userprops.model");
 // ---------------------------------------------------------- IN PROGRESS ----------------------------------------------------------
 
 router.put("/add-friend", async function(req, res) {
-  let user_ID = req.body.uid;
-  let friend_ID = req.body.friend_uid;
+  let userID = req.body.uid;
+  let friendID = req.body.friendUid;
 
-  let userprops_document, friendprops_document;
+  let userpropsDoc, friendpropsDoc;
   await UserProps.findOneAndUpdate(
-    { user_ID: user_ID },
-    { $addToSet: { friends: friend_ID } }
+    { userID: userID },
+    { $addToSet: { friends: friendID } }
   )
-    .then(document => (userprops_document = document))
+    .then(document => (userpropsDoc = document))
     .catch(error => res.status(400).send("Add friend failed."));
 
-  if (userprops_document) {
+  if (userpropsDoc) {
     await UserProps.findOneAndUpdate(
-      { user_ID: friend_ID },
-      { $addToSet: { friends: user_ID } }
+      { userID: friendID },
+      { $addToSet: { friends: userID } }
     )
-      .then(document => (friendprops_document = document))
+      .then(document => (friendpropsDoc = document))
       .catch(error => res.status(400).send("Add subscriber failed."));
   }
   res.send({
-    userprops_document: userprops_document,
-    friendprops_document: friendprops_document
+    userpropsDoc: userpropsDoc,
+    friendpropsDoc: friendpropsDoc
   });
 });
 
 router.put("/remove-friend", async function(req, res) {
-  let user_ID = req.body.uid;
-  let friend_ID = req.body.friend_uid;
+  let userID = req.body.uid;
+  let friendID = req.body.friend_uid;
 
-  let userprops_document, friendprops_document;
+  let userpropsDoc, friendpropsDoc;
   await Room.findOneAndUpdate(
     {
-      user_ID: user_ID,
-      friends: { $in: friend_ID }
+      userID: userID,
+      friends: { $in: friendID }
     },
-    { $pull: { friends: friend_ID } }
+    { $pull: { friends: friendID } }
   )
-    .then(document => (userprops_document = document))
+    .then(document => (userpropsDoc = document))
     .catch(error => res.status(400).send("Remove friend failed."));
 
-  if (userprops_document) {
+  if (userpropsDoc) {
     await UserProps.findOneAndUpdate(
-      { user_ID: friend_ID, friends: { $nin: user_ID } },
-      { $pull: { friends: user_ID } }
+      { userID: friendID, friends: { $nin: userID } },
+      { $pull: { friends: userID } }
     )
-      .then(document => (friendprops_document = document))
+      .then(document => (friendpropsDoc = document))
       .catch(error => res.status(400).send("Add subscriber failed."));
   }
   res.send({
-    userprops_document: userprops_document,
-    friendprops_document: friendprops_document
+    userpropsDoc: userpropsDoc,
+    friendpropsDoc: friendpropsDoc
   });
 });
 

@@ -18,7 +18,7 @@
 }
 
 .room-settings-container {
-  z-index: 2000;
+  // z-index: 2000;
   grid-column: 1;
   grid-row: 1;
   display: flex;
@@ -31,12 +31,14 @@
 .room-page {
   display: grid;
   grid-template-columns: min-content;
-  grid-template-rows: 1em min-content 2em max-content auto;
+  grid-template-rows: 2em min-content 15px max-content 2em min-content auto;
   grid-template-areas:
     "    .     "
     " room-bar "
     "    .     "
     "room-screen"
+    "     .     "
+    " room-tags "
     "     .     ";
 }
 
@@ -65,6 +67,15 @@
   // background-color: rgba(101, 149, 158, 0.3);
 }
 
+.room-screen-init {
+  grid-area: room-screen;
+  z-index: 2000;
+}
+
+.room-tags-area {
+  grid-area: room-tags;
+}
+
 .browser-overlay {
   grid-area: overlay;
   color: $french_laundry_blue;
@@ -88,6 +99,10 @@
     height: 680px;
     width: 1054px;
   }
+  .room-screen-init svg {
+    height: 6em;
+    width: 6em;
+  }
 }
 
 // catch all other others where screen is smaller than 1482px
@@ -96,6 +111,10 @@
     height: 480px;
     width: 854px;
   }
+  // .room-screen-init-play svg {
+  //   height: 6em;
+  //   width: 6em;
+  // }
 }
 
 @media (max-width: 1250px) {
@@ -103,6 +122,10 @@
     height: 360px;
     width: 640px;
   }
+  // .room-screen-init-play svg {
+  //   height: 4em;
+  //   width: 4em;
+  // }
 }
 
 @media (max-width: 1050px) {
@@ -110,4 +133,8 @@
     height: 240px;
     width: 426px;
   }
+  // .room-screen-init-play svg {
+  //   height: 2em;
+  //   width: 2em;
+  // }
 }
