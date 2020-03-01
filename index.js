@@ -132,10 +132,6 @@ io.on("connection", socket => {
 
     const { error, user } = addUser({ id: socket.id, name, room });
 
-    // console.log(user.id);
-    // console.log(socket.id);
-    console.log("SERVER: error", error);
-    console.log("SERVER: user:", user);
     if (error) return callback(error);
 
     socket.emit("message", {
