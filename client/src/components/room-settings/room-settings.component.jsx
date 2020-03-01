@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
   panel: {
     height: "100%",
     width: "100%",
-    backgroundColor: "black",
+    // backgroundColor: "black",
     gridColumn: 1,
     overflowY: "auto"
   },
