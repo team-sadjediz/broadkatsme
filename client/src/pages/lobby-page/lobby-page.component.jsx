@@ -28,16 +28,24 @@ class LobbyPage extends React.Component {
   nextProperty = () => {
     const newIndex = this.state.property.index + 1;
     this.setState({
-      property: data.properties[newIndex]
+      start: this.state.start[newIndex]
     });
   };
 
   prevProperty = () => {
     const newIndex = this.state.property.index - 1;
     this.setState({
-      property: data.properties[newIndex]
+      start: this.state.start[newIndex]
     });
   };
+
+  indexing(data) {
+    for (const e of data) {
+      this.state.index.push(e);
+    }
+    console.log(this.state.index);
+  }
+
   componentDidMount() {
     axios
       // .get("http://localhost:5000/api/home/users-rooms?uid=" + this.state.uid)
@@ -49,7 +57,11 @@ class LobbyPage extends React.Component {
         const properties = rooms.data;
         this.setState({ properties: rooms.data });
         // this.setState({property: JSON.stringify(rooms.data)});
-        console.log(JSON.stringify(rooms.data));
+        console.log("hewo:", this.state.properties);
+        // this.setState({start: this.state.index[0]});
+        // console.log(Object.keys(this.state.start));
+        this.setState({ property: properties[0]});
+
       })
       .catch(error => {
         console.error(error);
@@ -79,8 +91,10 @@ class LobbyPage extends React.Component {
             ))}
           </div>
         </div>
-        <BackBtn className="back-btn" />
-        <NextBtn className="next-btn" />
+        {/* disabled={Object.keys(this.state.start) === 0} */}
+        {/* disabled={property.index === data.properties.length-1} */}
+        <BackBtn className="back-btn" onClick={() => this.prevProperty()} />
+        <NextBtn className="next-btn" onClick={() => this.nextProperty()} />
         {/* <img className="next-btn" src="https://image.flaticon.com/icons/svg/126/126490.svg" disabled={this.state.property.index === data.properties.length-3}
                  onClick={() => this.nextProperty()}></img> */}
         {/* <button className='back-btn' onClick={() => this.prevProperty()} disabled={property.index === 0}>
