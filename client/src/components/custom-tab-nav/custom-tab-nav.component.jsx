@@ -25,7 +25,8 @@ function TabPanel(props) {
     <div
       style={{
         flexGrow: 1,
-        margin: "0.5em"
+        margin: "0.2em",
+        whiteSpace: "pre-wrap"
       }}
       hidden={value !== index}
     >

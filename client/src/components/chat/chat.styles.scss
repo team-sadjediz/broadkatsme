@@ -7,6 +7,9 @@
   height: 100%;
   overflow-y: auto;
 
+  display: flex;
+  flex-direction: column;
+
   .chat-header-container {
     background-color: $highlight1;
     padding: 1em 0;
@@ -19,5 +22,20 @@
 
     display: flex;
     justify-content: center;
+  }
+
+  .message-list-container {
+    flex-grow: 1;
+    // background-color: lightcoral;
+    max-width: 100%;
+    // padding: 0.2em;
+
+    .msg {
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      font-family: "Karla", sans-serif;
+      font-size: 16px;
+      color: $foreground;
+    }
   }
 }

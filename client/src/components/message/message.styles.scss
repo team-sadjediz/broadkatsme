@@ -1,0 +1,23 @@
+@import "../../assets/colors";
+@import "../../assets/dimensions";
+
+.message-container {
+  // overflow-wrap: break-word;
+  // word-wrap: break-word;
+  font-family: "Karla", sans-serif;
+  font-size: 16px;
+
+  color: $foreground;
+  // background-color: bisque;
+  margin: 5px 0;
+}
+
+.align-right {
+  text-align: right;
+  background-color: coral;
+}
+
+.align-left {
+  text-align: left;
+  background-color: cornflowerblue;
+}
