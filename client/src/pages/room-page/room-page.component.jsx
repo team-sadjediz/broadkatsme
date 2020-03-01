@@ -239,6 +239,8 @@ class RoomPage extends Component {
               ]}
               panels={["fml", "2xfml", "3xfml"]}
               toggleSettingsModal={this.toggleSettingsModal}
+              // HEEEEREEEEEE
+              owned={true}
             ></RoomSettings>
           </div>
         ) : null}

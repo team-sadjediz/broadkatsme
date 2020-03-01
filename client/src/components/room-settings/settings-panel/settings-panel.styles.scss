@@ -1,0 +1,41 @@
+@import "../../../assets/colors";
+@import "../../../assets/dimensions";
+
+@mixin card-grid {
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  grid-template-rows: auto auto;
+  grid-template-areas: "title button" "description button";
+}
+
+.room-settings-panel-privacy {
+  //   display: grid;
+  //   grid-template-columns: 1fr min-content;
+  //   grid-template-rows: auto auto;
+  //   grid-template-areas: "title button" "description button";
+  @include card-grid;
+  .room-settings-panel-privacy-title {
+    grid-area: title;
+  }
+
+  .room-settings-panel-privacy-description {
+    grid-area: description;
+  }
+
+  .room-settings-panel-privacy-button {
+    grid-area: button;
+  }
+}
+
+.room-settings-panel-size {
+  @include card-grid;
+  .room-settings-panel-size-title {
+    grid-area: title;
+  }
+  .room-settings-panel-size-description {
+    grid-area: description;
+  }
+  .room-settings-panel-size-button {
+    grid-area: button;
+  }
+}

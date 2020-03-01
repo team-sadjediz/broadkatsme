@@ -1,0 +1,24 @@
+@import "../../../assets/colors";
+@import "../../../assets/dimensions";
+
+@mixin card-grid {
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  grid-template-rows: auto auto;
+  grid-template-areas: "title button" "description button";
+}
+
+.room-notifications-panel-allow {
+  @include card-grid;
+  .room-notifications-panel-allow-title {
+    grid-area: title;
+  }
+
+  .room-notifications-panel-allow-description {
+    grid-area: description;
+  }
+
+  .room-notifications-panel-allow-button {
+    grid-area: button;
+  }
+}

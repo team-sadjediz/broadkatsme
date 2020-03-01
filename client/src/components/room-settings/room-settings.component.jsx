@@ -12,6 +12,8 @@ import Modal from "@material-ui/core/Modal";
 import GeneralPanel from "./general-panel/general-panel.component";
 import RoleManagementPanel from "./role-management-panel/role-management-panel.component";
 import SettingsPanel from "./settings-panel/settings-panel.component";
+import DeletePanel from "./delete-panel/delete-panel.component";
+import NotificationsPanel from "./notifications-panel/notifications-panel.component";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -136,7 +138,9 @@ export default function RoomSettings(props) {
           <Tab label="Notifications" id={`vertical-tab-${1}`}></Tab>
           <Tab label="Settings" id={`vertical-tab-${2}`}></Tab>
           <Tab label="Role Management" id={`vertical-tab-${3}`}></Tab>
-          <Tab label="Delete" id={`vertical-tab-${4}`}></Tab>
+          {props.owned ? (
+            <Tab label="Delete" id={`vertical-tab-${4}`}></Tab>
+          ) : null}
         </Tabs>
         <div className={classes.panelContainer}>
           {/* {panels} */}
@@ -149,10 +153,10 @@ export default function RoomSettings(props) {
             />
           </TabPanel>
           <TabPanel className={classes.panel} value={value} index={1}>
-            Notifications Stuff here
+            <NotificationsPanel allowNotifications={true}></NotificationsPanel>
           </TabPanel>
           <TabPanel className={classes.panel} value={value} index={2}>
-            <SettingsPanel></SettingsPanel>
+            <SettingsPanel privacy={true} size={2}></SettingsPanel>
           </TabPanel>
           <TabPanel className={classes.panel} value={value} index={3}>
             <RoleManagementPanel
@@ -187,9 +191,12 @@ export default function RoomSettings(props) {
               ]}
             />
           </TabPanel>
-          <TabPanel className={classes.panel} value={value} index={4}>
-            Delete Stuff here
-          </TabPanel>
+          {props.owned ? (
+            <TabPanel className={classes.panel} value={value} index={4}>
+              <DeletePanel></DeletePanel>
+            </TabPanel>
+          ) : null}
+
           <CancelIcon
             className={classes.exit}
             onClick={handleClose}
