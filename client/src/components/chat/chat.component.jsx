@@ -64,8 +64,9 @@ const Chat = ({ currentUser, selectedRoom, drawerOpen }) => {
       // console.log("on rec", messages);
       console.log("Array of messsages from this room:", message);
       // setMessages([...message]);
+      console.log("issue:", message);
       setMessages(message);
-
+      console.log("helllo");
       // console.log("from useEffect", message.text);
       // setMessages([...messages, message]);
     });
