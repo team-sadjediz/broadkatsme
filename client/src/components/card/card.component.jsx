@@ -11,9 +11,9 @@ import { BASE_API_URL } from "../../utils";
 //     )
 // }
 
-const Card = ({ property }) => {
+const Card = ({ roomID, name, thumbnailUrl, tags}) => {
   // const { roomID, name, thumbnail_url, tags } = property;
-  const { roomID, name, thumbnailUrl, tags } = property;
+  const roomTags = tags;
   return (
     <div id={`card-${roomID}`} className="card">
       <div className="img-container">
@@ -24,16 +24,17 @@ const Card = ({ property }) => {
           src={`http://broadkatsme.herokuapp.com/api/room/get-thumbnail?thumbnail_url=${thumbnail_url}`}
         /> */}
         <img
-          src={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${thumbnailUrl}`}
+          src={thumbnailUrl}
         />
         <Live />
       </div>
 
       <div className="description-container">
         <p>{name}</p>
-        {tags.map((value, index) => {
+        {roomTags && roomTags.map((value, index) => {
           return <Tag type="label" text={value} />;
         })}
+        {/* {tags} */}
       </div>
     </div>
   );

@@ -6,7 +6,6 @@
   flex-direction: row;
 }
 
-//To Do: Media
 .container{
     // order: 2;
     text-align: center;
@@ -14,16 +13,16 @@
     // overflow-x: hidden;
     display: grid;
     // grid-template-columns: minmax(100%, auto);
-    grid-template-columns: 1fr 4fr 1fr;
+    grid-template-columns: 0.5fr 8fr 0.5fr;
     grid-template-rows: 400px 600px;
     // grid-template-columns: fit-content;
     // grid-template-rows: 1fr 2fr 1fr;
     // background-color: $french_laundry_blue;
     grid-template-areas:
-      "back-btn featured next-btn"
+      ". featured ."
       ". active .";
 
-    .featured-container {
+    .active-container {
         grid-area: active;
         overflow-x: hidden;
         overflow-y: hidden;
@@ -33,7 +32,7 @@
         margin: 0;
     }
 
-    .active-container {
+    .featured-container {
         grid-area: featured;
         overflow: hidden;
     }
