@@ -101,26 +101,10 @@ export default function RoomSettings(props) {
     setValue(newValue);
   };
 
-  // const handleOpen = () => {
-  //   setOpen(true);
-  // };
-
   const handleClose = () => {
     props.toggleSettingsModal();
     setOpen(false);
   };
-
-  // const tabs = props.tabs.map((tab, index) => {
-  //   return <Tab label={tab} id={`vertical-tab-${index}`}></Tab>;
-  // });
-
-  // const panels = props.panels.map((panel, index) => {
-  //   return (
-  //     <TabPanel className={classes.panel} value={value} index={index}>
-  //       {panel}
-  //     </TabPanel>
-  //   );
-  // });
 
   return (
     <Modal
@@ -141,6 +125,7 @@ export default function RoomSettings(props) {
           className={`${classes.tabs}`}
           classes={{ indicator: classes.indicator }}
           inkBarStyle={classes.activeTab}
+          textColor="secondary"
         >
           {/* {tabs} */}
           <Tab label="General" id={`vertical-tab-${0}`}></Tab>

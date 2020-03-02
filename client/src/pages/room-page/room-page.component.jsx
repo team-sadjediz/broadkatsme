@@ -155,7 +155,6 @@ class RoomPage extends Component {
       // "roomID": this.props.selectedRoom
       "roomID": this.props.match.params.id
     };
-    let response;
     await axios
       .put(`${BASE_API_URL}/userprops/favorite-rooms/favorite`, request)
       .then(res => this.setState({ isFavorited: res.data.favorited }))

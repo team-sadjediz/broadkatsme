@@ -3,9 +3,9 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { auth } from "./firebase/firebase.utils";
 
 // axios
-import axios from "axios";
+// import axios from "axios";
 import { setAuthorization } from "./firebase/firebase.sdk";
-import { BASE_API_URL } from "./utils";
+// import { BASE_API_URL } from "./utils";
 
 // redux stuff:
 import { connect } from "react-redux";

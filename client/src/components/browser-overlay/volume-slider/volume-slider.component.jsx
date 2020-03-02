@@ -3,7 +3,7 @@ import React from "react";
 
 import Slider from "@material-ui/core/Slider";
 
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import VolumeUpIcon from "@material-ui/icons/VolumeUp";
 import VolumeDownIcon from "@material-ui/icons/VolumeDown";
 import VolumeOffIcon from "@material-ui/icons/VolumeOff";
@@ -40,7 +40,7 @@ const VolumeSlider = ({ volume, handleVolume, ...props }) => {
       setPrevValue(value);
       setValue(0);
       handleVolume(0);
-    } else if (value == 0) {
+    } else if (value === 0) {
       setValue(prevValue);
       setPrevValue(0);
       handleVolume(prevValue);
@@ -65,7 +65,7 @@ const VolumeSlider = ({ volume, handleVolume, ...props }) => {
         </div>
       </React.Fragment>
     );
-  } else if (value == 0) {
+  } else if (value === 0) {
     return (
       <React.Fragment>
         {slider}
