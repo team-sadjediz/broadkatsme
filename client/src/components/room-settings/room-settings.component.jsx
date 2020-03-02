@@ -35,6 +35,12 @@ const useStyles = makeStyles(theme => ({
     borderRight: "1px solid #e0e0e0",
     minWidth: "max-content"
   },
+  indicator: {
+    width: 5
+  },
+  activeTab: {
+    background: "#efefef"
+  },
   panelContainer: {
     width: "100%",
     display: "grid",
@@ -132,7 +138,9 @@ export default function RoomSettings(props) {
           variant="scrollable"
           value={value}
           onChange={handleChange}
-          className={classes.tabs}
+          className={`${classes.tabs}`}
+          classes={{ indicator: classes.indicator }}
+          inkBarStyle={classes.activeTab}
         >
           {/* {tabs} */}
           <Tab label="General" id={`vertical-tab-${0}`}></Tab>
