@@ -131,7 +131,7 @@ const io = socketio(server);
 io.on("connection", socket => {
   console.log(`New connection: ${socket.id}`);
 
-  socket.on("join", ({ name, room }, callback) => {
+  socket.on("join", ({ name, room, date }, callback) => {
     console.log(
       `SERVER: socket: ${socket.id} / user (${name}) -> room [${room}]`
     );
@@ -144,7 +144,8 @@ io.on("connection", socket => {
       ...getMessagesFromRoom(user.room),
       addMessageToRoom(user.room, {
         user: "admin",
-        text: `${user.name} has joined!`
+        text: `${user.name} has joined!`,
+        date: date
       })
     ];
 
@@ -164,7 +165,11 @@ io.on("connection", socket => {
 
     const msg = [
       ...getMessagesFromRoom(user.room),
-      addMessageToRoom(user.room, { user: user.name, text: message })
+      addMessageToRoom(user.room, {
+        user: user.name,
+        text: message.msg,
+        date: message.date
+      })
     ];
 
     io.to(user.room).emit("message", msg);
@@ -187,7 +192,8 @@ io.on("connection", socket => {
         ...getMessagesFromRoom(user.room),
         addMessageToRoom(user.room, {
           user: "admin",
-          text: `${user.name} has left.`
+          text: `${user.name} has left.`,
+          date: new Date()
         })
       ]);
       // io.to(user.room).emit("roomData", {

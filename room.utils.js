@@ -9,10 +9,10 @@ const addMessageToRoom = (roomId, message) => {
   const formattedMsg = {
     roomId: roomId,
     sender: message.user,
-    msg: message.text
+    msg: message.text,
+    date: message.date
   };
   messageList.push(formattedMsg);
-
   return formattedMsg;
 };
 
