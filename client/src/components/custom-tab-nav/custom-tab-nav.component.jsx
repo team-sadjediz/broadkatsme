@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import NewRoom from "../new-room/new-room.component";
 import Chat from "../chat/chat.component";
 import RoomSubscribe from "../room-subscribe/room-subscribe.component";
+import HeaderInfo from "../header-info/header-info.component";
 
 // mui components:
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -143,7 +144,11 @@ export default function DrawerTabs({ drawerOpen }) {
         </TabNav>
 
         <TabPanel value={value} index={0}>
-          <RoomSubscribe />
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <HeaderInfo />
+            <RoomSubscribe />
+          </div>
+
           {/* <Chat drawerOpen={drawerOpen} /> */}
           {/* yellowyyyoysoydfsjldfjs */}
         </TabPanel>
