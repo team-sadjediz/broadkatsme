@@ -3,7 +3,9 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { auth } from "./firebase/firebase.utils";
 
 // axios
+import axios from "axios";
 import { setAuthorization } from "./firebase/firebase.sdk";
+import { BASE_API_URL } from "./utils";
 
 // redux stuff:
 import { connect } from "react-redux";
@@ -27,6 +29,7 @@ import ResetPassPage from "./pages/reset-password-page/reset-password-page.compo
 import Test from "./components/test-component/test.component";
 
 import "./App.scss";
+import RoomPrivateRoute from "./pages/room-page/room-private-route";
 
 const theme = createMuiTheme({
   palette: {
@@ -103,7 +106,7 @@ class App extends Component {
                     }
                   />
                   <Route path="/lobby" component={LobbyPage} />
-                  <Route path="/room" component={RoomPage} />
+                  <RoomPrivateRoute path="/room/id=:id" component={RoomPage} />
                   <Route path="/about" component={AboutPage} />
                   <Route path="/contact" component={ContactPage} />
                   <Route path="/codeofconduct" component={CodeOfConductPage} />

@@ -159,7 +159,7 @@ class ButtonAppBar extends React.Component {
               {this.props.subscribedRooms.map(room => (
                 <Link
                   style={{ position: "relative" }}
-                  to={`/room/id/${room.roomID}`}
+                  to={`/room/id=${room.roomID}`}
                 >
                   {this.props.selectedRoom === room.roomID ? (
                     <div className="room-selected">
