@@ -19,6 +19,7 @@
 
   .msg-info-container {
     display: flex;
+    width: 100%;
 
     .msg-sender {
       @include chat-bubble;
@@ -27,6 +28,7 @@
 
     .msg-timestamp {
       @include chat-bubble;
+      flex-grow: 1;
     }
   }
 
@@ -70,4 +72,12 @@
 
 .align-left {
   align-self: flex-start;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
 }

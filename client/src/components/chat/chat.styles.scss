@@ -22,6 +22,9 @@
 
     display: flex;
     justify-content: center;
+
+    overflow-wrap: break-word;
+    word-wrap: break-word;
   }
 
   .message-list-container {

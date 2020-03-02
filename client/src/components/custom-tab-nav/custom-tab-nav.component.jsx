@@ -142,7 +142,7 @@ export default function DrawerTabs({ drawerOpen }) {
         </TabNav>
 
         <TabPanel value={value} index={0}>
-          <Chat />
+          <Chat drawerOpen={drawerOpen} />
           {/* yellowyyyoysoydfsjldfjs */}
         </TabPanel>
         <TabPanel value={value} index={1}>

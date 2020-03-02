@@ -7,7 +7,7 @@ import Timestamp from "react-timestamp";
 // custom style sheet:
 import "./message.styles.scss";
 
-const Message = ({ message, sender, currentUser }) => {
+const Message = ({ message, sender, date, currentUser }) => {
   let isSentByCurrentUser = false;
 
   if (currentUser.uid === sender) {
@@ -25,32 +25,35 @@ const Message = ({ message, sender, currentUser }) => {
   let border;
   let bgColor;
   let orientation;
+  let textAlign;
   if (isSentByCurrentUser) {
     flexDirection = "flex-row-reverse";
     border = "border-right";
     bgColor = "bgc-sent";
     orientation = "align-right";
+    textAlign = "text-left";
   } else {
     flexDirection = "flex-row";
     border = "border-left";
     bgColor = "bgc-rec";
     orientation = "align-left";
+    textAlign = "text-right";
   }
 
-  let date = new Date();
+  // let date = new Date();
 
-  console.log(date);
+  // console.log(date);
 
   return (
     <div className={`message-container ${orientation}`}>
       <div className={`msg-info-container ${flexDirection} ${orientation}`}>
         <div className={`msg-sender ${border} ${bgColor}`}>{username}</div>
-        {/* <div className="msg-timestamp">11:59:36</div> */}
+        {/* <div className={`msg-timestamp ${textAlign}`}>{date}</div> */}
         <Timestamp
-          className="msg-timestamp"
+          className={`msg-timestamp ${textAlign}`}
+          // relative
           date={date}
-          relative
-          autoUpdate
+          // autoUpdate
         ></Timestamp>
       </div>
       <div className={`msg-text ${border} ${bgColor} ${orientation}`}>

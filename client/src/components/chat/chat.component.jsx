@@ -13,26 +13,36 @@ import Message from "../message/message.component";
 // custom style sheet:
 import "./chat.styles.scss";
 
-import { BASE_API_URL } from "../../utils";
+import { CHAT_SERVER } from "../../utils";
 
-const ENDPOINT = BASE_API_URL.slice(0, BASE_API_URL.length - 4);
+const textBoxBorderRadius = 3;
 
-const useStyles = makeStyles(theme => ({
+const CustomTextField = withStyles(theme => ({
   root: {
-    "& .MuiTextField-root": {
-      margin: theme.spacing(1),
-      width: 200
+    marginBottom: 2,
+    "& .MuiFilledInput-underline:before": {
+      // borderBottomColor: "green"
+      borderBottom: "none"
+    },
+    "& .MuiFilledInput-underline:after": {
+      // borderBottomColor: "green"
+      borderBottom: `4px solid ${theme.palette.secondary.main}`,
+      borderBottomRightRadius: textBoxBorderRadius,
+      borderBottomLeftRadius: textBoxBorderRadius
+    },
+    "& .MuiFilledInput-root": {
+      borderRadius: textBoxBorderRadius
     }
   }
-}));
+}))(TextField);
 
 let socket;
 
-const Chat = ({ currentUser, selectedRoom }) => {
+const Chat = ({ currentUser, selectedRoom, drawerOpen }) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
-  const endpoint = ENDPOINT;
+  const endpoint = CHAT_SERVER;
 
   useEffect(() => {
     console.log("---------------------------------------------------------");
@@ -41,7 +51,7 @@ const Chat = ({ currentUser, selectedRoom }) => {
 
     socket.emit(
       "join",
-      { name: currentUser.uid, room: selectedRoom },
+      { name: currentUser.uid, room: selectedRoom, date: new Date() },
       error => {
         console.log("someone joined");
         if (error) {
@@ -67,7 +77,7 @@ const Chat = ({ currentUser, selectedRoom }) => {
       console.log("**************************************************");
     };
     // }, [ENDPOINT, currentUser.uid, selectedRoom]);
-  }, [ENDPOINT, selectedRoom]);
+  }, [CHAT_SERVER, selectedRoom]);
 
   // second use effect not working as intended:
   // useEffect(() => {
@@ -81,7 +91,7 @@ const Chat = ({ currentUser, selectedRoom }) => {
   const sendMessage = event => {
     event.preventDefault();
     if (message) {
-      socket.emit("sendMessage", message, () => {
+      socket.emit("sendMessage", { msg: message, date: new Date() }, () => {
         setMessage("");
       });
     }
@@ -101,19 +111,23 @@ const Chat = ({ currentUser, selectedRoom }) => {
     <div className="chat-container">
       {selectedRoom ? (
         <React.Fragment>
-          <div className="chat-header-container">{selectedRoom}</div>
+          <div className="chat-header-container">
+            {drawerOpen ? selectedRoom : ""}
+          </div>
           <ScrollToBottom className="message-list-container">
-            {messages.map(message => {
+            {messages.map((message, i) => {
               return (
                 <Message
+                  key={i}
                   message={message.msg}
                   sender={message.sender}
+                  date={message.date}
                 ></Message>
               );
             })}
           </ScrollToBottom>
 
-          <TextField
+          <CustomTextField
             id="filled-multiline-flexible"
             label="Chat Message"
             multiline
