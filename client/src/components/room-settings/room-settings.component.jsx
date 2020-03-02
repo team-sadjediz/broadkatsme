@@ -124,7 +124,7 @@ export default function RoomSettings(props) {
           onChange={handleChange}
           className={`${classes.tabs}`}
           classes={{ indicator: classes.indicator }}
-          inkBarStyle={classes.activeTab}
+          // inkBarStyle={classes.activeTab}
           textColor="secondary"
         >
           {/* {tabs} */}
@@ -156,7 +156,8 @@ export default function RoomSettings(props) {
           </TabPanel>
           <TabPanel className={classes.panel} value={value} index={3}>
             <RoleManagementPanel
-              owned={true}
+              // owned={true}
+              owned={props.owned}
               admins={[
                 { username: "a", uid: "auid" },
                 { username: "b", uid: "buid" },
@@ -189,7 +190,10 @@ export default function RoomSettings(props) {
           </TabPanel>
           {props.owned ? (
             <TabPanel className={classes.panel} value={value} index={4}>
-              <DeletePanel roomName={props.roomName}></DeletePanel>
+              <DeletePanel
+                roomName={props.roomName}
+                delete={props.delete}
+              ></DeletePanel>
             </TabPanel>
           ) : null}
 

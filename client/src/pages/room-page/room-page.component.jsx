@@ -123,7 +123,7 @@ class RoomPage extends Component {
     this.setState({
       roomName: roomDetails.name,
       roomID: roomDetails._id,
-      ownerID: roomDetails.owner_ID,
+      ownerID: roomDetails.ownerID,
       // showInitial: true,
       // showSettings: false,
       subscribers: roomDetails.subscriber,
@@ -158,6 +158,32 @@ class RoomPage extends Component {
     await axios
       .put(`${BASE_API_URL}/userprops/favorite-rooms/favorite`, request)
       .then(res => this.setState({ isFavorited: res.data.favorited }))
+      .catch(error => console.error(error));
+  };
+
+  unsubscribe = async () => {
+    let request = {
+      "roomID": this.props.match.params.id,
+      "uid": this.props.currentUser.uid
+    };
+    await axios
+      .put(`${BASE_API_URL}/userprops/subscribed-rooms/unsubscribe`, request)
+      .then(res =>
+        console.log("Unsubscribed from " + this.props.match.params.id)
+      )
+      .catch(error => console.error(error));
+  };
+
+  deleteRoom = async () => {
+    let request = {
+      params: {
+        "roomID": this.props.match.params.id,
+        "uid": this.props.currentUser.uid
+      }
+    };
+    await axios
+      .delete(`${BASE_API_URL}/room/delete-room`, request)
+      .then(res => console.log(`Deleted room ${this.props.match.params.id}`))
       .catch(error => console.error(error));
   };
 
@@ -212,17 +238,20 @@ class RoomPage extends Component {
         onChangeTag={this.onChangeTag}
       ></Tag>
     );
+    console.log(this.props.currentUser.uid);
+    console.log(this.state.ownerID);
+    console.log(this.props.currentUser.uid == this.state.ownerID);
     return (
       <div className="main-container">
         {this.state.showSettings ? (
           <div className="room-settings-container">
             <RoomSettings
               toggleSettingsModal={this.toggleSettingsModal}
-              // HEEEEREEEEEE
-              owned={true}
+              owned={this.props.currentUser.uid == this.state.ownerID}
               tags={tags}
               addTag={addTag}
               roomName={this.state.roomName}
+              delete={this.deleteRoom}
             ></RoomSettings>
           </div>
         ) : null}
@@ -239,6 +268,7 @@ class RoomPage extends Component {
                 toggleSettingsModal={this.toggleSettingsModal}
                 favoriteRoom={this.favoriteRoom}
                 isFavorited={this.state.isFavorited}
+                unsubscribe={this.unsubscribe}
                 onChangeTag={this.onChangeTag}
                 onChangeTitle={this.onChangeTitle}
               />
@@ -293,4 +323,9 @@ const mapStateToProps = state => ({
   selectedRoom: state.room.selectedRoom
 });
 
-export default connect(mapStateToProps)(RoomPage);
+const mapDispatchToProps = dispatch => ({
+  // setSubscribedRooms: subRoomList => dispatch(setSubscribedRooms(subRoomList)),
+  // setSelectedRoom: roomID => dispatch(setSelectedRoom(roomID))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RoomPage);

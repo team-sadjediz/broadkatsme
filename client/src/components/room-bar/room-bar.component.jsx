@@ -7,6 +7,7 @@ import { ReactComponent as MoreIcon } from "../../assets/icons/three-dots.svg";
 import { ReactComponent as FavoriteIcon } from "../../assets/icons/heart.svg";
 import { ReactComponent as SettingsIcon } from "../../assets/icons/cog.svg";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 
 import CircleBtn from "../circle-btn/circle-btn.component";
 
@@ -49,6 +50,11 @@ class RoomBar extends Component {
           className="room-bar-btn"
           onClick={this.props.toggleSettingsModal}
           icon={<PersonAddIcon />}
+        />
+        <CircleBtn
+          className="room-bar-btn"
+          onClick={this.props.unsubscribe}
+          icon={<DeleteForeverIcon />}
         />
       </div>
     );

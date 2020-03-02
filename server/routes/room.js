@@ -96,14 +96,17 @@ router.delete("/delete-room", async function(req, res) {
   let roomID = req.query.roomID;
   // may not be allowed... (conventionally speaking)
   let uid = req.query.uid;
+  console.log(roomID);
+  console.log(uid);
   await Room.findOneAndDelete({ _id: roomID, ownerID: uid })
-    .then(async document => {
-      console.log(document);
+    .then(async roomDocument => {
+      console.log(roomDocument);
       // let subscribers = document.subscriber;
       await UserProps.findOneAndUpdate(
         {
-          subscribedRooms: roomID,
-          ownedRooms: roomID
+          userID: uid
+          // subscribedRooms: roomID,
+          // ownedRooms: roomID
         },
         {
           $pull: {
@@ -112,15 +115,19 @@ router.delete("/delete-room", async function(req, res) {
             favoritedRooms: roomID
           }
         }
-      )
-        .then(response => {
-          console.log("# of matching user props: " + response.n);
-          console.log("# of documents modified: " + response.nModified);
-          res.status(204).send();
-        })
-        .catch(res.status(404).send(`Room ${roomID} could not be found.`));
+      ).then(propsDocument => {
+        // console.log("# of matching user props: " + response.n);
+        // console.log("# of documents modified: " + response.nModified);
+        console.log(propsDocument);
+        // res.status(204).send();
+      });
+      // .catch(
+      //   res
+      //     .status(404)
+      //     .send(`Room ${roomID} could not be found in UserProps.`)
+      // );
     })
-    .catch(res.status(404).send(`Room ${roomID} could not be found.`));
+    .catch(res.status(404).send(`Room ${roomID} could not be found in Rooms.`));
 });
 
 // ---------------------------------------------------------- UPLOAD / GET THUMBNAILS ----------------------------------------------------------

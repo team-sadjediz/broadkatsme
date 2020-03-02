@@ -177,27 +177,29 @@ export default function RoleManagementPanel(props) {
           </ExpansionPanelDetails>
         </ExpansionPanel>
       </div>
-      <Divider variant="fullWidth" />
-      <div className="role-management-boxes">
-        <ExpansionPanel
-          expanded={expanded === "BannedUsers"}
-          onChange={handleChange("BannedUsers")}
-        >
-          <ExpansionPanelSummary
-            className={classes.summary}
-            expandIcon={<ExpandMoreIcon />}
-            id="BannedUsers"
+      {props.owned ? <Divider variant="fullWidth" /> : null}
+      {props.owned ? (
+        <div className="role-management-boxes">
+          <ExpansionPanel
+            expanded={expanded === "BannedUsers"}
+            onChange={handleChange("BannedUsers")}
           >
-            <div className="role-management-boxes-title">Banned Users</div>
-            <div className="role-management-boxes-description">
-              view users banned from room
-            </div>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <List className={classes.list}>{generateBannedUsers()}</List>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-      </div>
+            <ExpansionPanelSummary
+              className={classes.summary}
+              expandIcon={<ExpandMoreIcon />}
+              id="BannedUsers"
+            >
+              <div className="role-management-boxes-title">Banned Users</div>
+              <div className="role-management-boxes-description">
+                view users banned from room
+              </div>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <List className={classes.list}>{generateBannedUsers()}</List>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        </div>
+      ) : null}
     </div>
   );
 }

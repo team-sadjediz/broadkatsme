@@ -98,8 +98,8 @@
 .more-buttons {
   grid-area: more-buttons;
   display: grid;
-  grid-template-columns: min-content min-content min-content;
-  grid-template-areas: "favorite-button inivte-btn settings-button";
+  grid-template-columns: min-content min-content min-content min-content;
+  grid-template-areas: "favorite-button inivte-btn settings-button unsubscribe-btn";
   grid-gap: 5px;
   align-content: center;
 }

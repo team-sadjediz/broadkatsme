@@ -19,8 +19,12 @@ class RoomPrivateRoute extends Component {
         params: { "roomID": this.props.computedMatch.params.id }
       })
       .then(res => {
-        this.setState({ validatedRoom: true });
-        console.log("true");
+        if (res.data !== null) {
+          this.setState({ validatedRoom: true });
+          console.log("true");
+        } else if (res.data === null) {
+          this.setState({ validatedRoom: false });
+        }
         //   return true;
       })
       .catch(error => {
