@@ -1,12 +1,12 @@
 import React from 'react';
 import ItemsCarousel from 'react-items-carousel';
 import Card from "../../components/card/card.component";
+import CardTwo from "../../components/card/card-two.component";
 import { Link } from "react-router-dom";
 import { BASE_API_URL } from "../../utils";
 import { ReactComponent as NextBtn } from "../../assets/icons/caret-right-solid.svg";
 import { ReactComponent as BackBtn } from "../../assets/icons/caret-left-solid.svg";
-
-export default class Carousel extends React.Component {
+class Carousel extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -17,21 +17,20 @@ export default class Carousel extends React.Component {
   changeActiveCard = (activeCard) => this.setState({ activeCard });
 
   render() {
-    const {
-      activeCard
-    } = this.state;
     console.log(JSON.stringify(this.props.properties));
+    console.log(this.props.cardType);
     return (
-    <div style={{"padding":"0 60px","maxWidth":800,"margin":"0 auto"}}>
+    <div style={{"padding":"0px 45px","maxWidth":1000,"margin":"30px auto"}}>
     <ItemsCarousel
+        style={{"overflow-y": "visible"}}
         infiniteLoop={true}
         gutter={12}
         activePosition={'center'}
         chevronWidth={60}
         disableSwipe={false}
         alwaysShowChevrons={false}
-        numberOfCards={3}
-        slidesToScroll={2}
+        numberOfCards={4}
+        slidesToScroll={3}
         outsideChevron={true}
         showSlither={false}
         firstAndLastGutter={false}
@@ -40,15 +39,16 @@ export default class Carousel extends React.Component {
         rightChevron={'>'}
         leftChevron={'<'}
     >
-        {Array.from(this.props.properties).map((property) =>
-        <Link to={`/room/id/${property.roomID}`}>
-        <Card 
-        roomID={property.roomID} 
-        name={property.name} 
-        thumbnailUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}`}
-        tags={property.tags}
-        />
-      </Link>
+
+      {Array.from(this.props.properties).map((property) =>
+        // <Link to={`/room/id/${property.roomID}`}>
+            <CardTwo
+            roomID={property.roomID} 
+            name={property.name} 
+            thumbnailUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}`}
+            tags={property.tags}
+            /> 
+        // </Link>
         )}
     </ItemsCarousel>
     </div>
@@ -56,6 +56,8 @@ export default class Carousel extends React.Component {
   }
 } 
 
-// const Carousel = (props) => {
+const mapStateToProps = state => ({
+  currentUser: state.user.currentUser
+});
 
-// }
+export default Carousel;

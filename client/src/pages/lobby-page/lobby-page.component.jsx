@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import { BASE_API_URL } from "../../utils";
 
 //components
@@ -39,6 +38,8 @@ class LobbyPage extends React.Component {
         console.log("oof");
       });
   }
+
+
   render() {
     return (
       <div className="container">
@@ -46,11 +47,11 @@ class LobbyPage extends React.Component {
           <div id="featured_header" className="header">
             FEATURED ROOMS
           </div>
-          <div className="cards-carousel-wrapper">
-            <Carousel
-                properties={this.state.properties}
-            />
-          </div>
+          <Carousel
+              properties={this.state.properties}
+              cardType="two"
+              uid={this.state.uid}
+          />
         </div>
         {/* <BackBtn className="back-btn" onClick={() => this.prevProperty()} />
         <NextBtn className="next-btn" onClick={() => this.nextProperty()} /> */}
@@ -59,18 +60,10 @@ class LobbyPage extends React.Component {
           <div id="active_header" className="header">
             ACTIVE ROOMS
           </div>
-          <div className="cards-grid">
-            {this.state.properties.map(property => (
-              <div className="zoom">
-                <Card 
-                roomID={property.roomID} 
-                name={property.name} 
-                thumbnailUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}`}
-                tags={property.tags}
-                />
-              </div>
-            ))}
-          </div>
+          <Carousel
+              properties={this.state.properties}
+              cardType="one"
+          />
         </div>
       </div>
     );
