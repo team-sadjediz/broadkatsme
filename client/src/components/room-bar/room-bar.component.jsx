@@ -8,7 +8,6 @@ import { ReactComponent as FavoriteIcon } from "../../assets/icons/heart.svg";
 import { ReactComponent as SettingsIcon } from "../../assets/icons/cog.svg";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 
-import Tag from "../tag/tag.component";
 import CircleBtn from "../circle-btn/circle-btn.component";
 
 class RoomBar extends Component {
