@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
-import { setSubscribedRooms } from "../../redux/room/room.actions";
+import {
+  setSubscribedRooms,
+  setSelectedRoom
+} from "../../redux/room/room.actions";
 
 import { BASE_API_URL } from "../../utils";
 
@@ -10,7 +13,12 @@ import Button from "@material-ui/core/Button";
 
 import "./room-subscribe.styles.scss";
 
-const RoomSubscribe = ({ currentUser, setSubscribedRooms }) => {
+const RoomSubscribe = ({
+  currentUser,
+  setSubscribedRooms,
+  setSelectedRoom,
+  subscribedRooms
+}) => {
   const [roomId, setRoomId] = useState(null);
 
   const handleChange = event => {
@@ -29,25 +37,31 @@ const RoomSubscribe = ({ currentUser, setSubscribedRooms }) => {
         params: { uid: currentUser.uid }
       });
       setSubscribedRooms(results.data);
+      setSelectedRoom(roomId);
     }
+    setRoomId("");
   };
 
   const handleUnsubscribe = async event => {
     if (roomId) {
       console.log(roomId, currentUser.uid);
-      await axios.put(
-        `${BASE_API_URL}/userprops/subscribed-rooms/unsubscribe`,
-        {
+      await axios
+        .put(`${BASE_API_URL}/userprops/subscribed-rooms/unsubscribe`, {
           roomID: roomId,
           uid: currentUser.uid
-        }
-      );
+        })
+        .catch(error => {
+          console.log(error);
+        });
 
       let results = await axios.get(`${BASE_API_URL}/userprops/users-rooms`, {
         params: { uid: currentUser.uid }
       });
+
       setSubscribedRooms(results.data);
+      setSelectedRoom(subscribedRooms[0].roomID);
     }
+    setRoomId("");
   };
 
   return (
@@ -72,12 +86,13 @@ const RoomSubscribe = ({ currentUser, setSubscribedRooms }) => {
 };
 
 const mapStateToProps = state => ({
-  currentUser: state.user.currentUser
+  currentUser: state.user.currentUser,
+  subscribedRooms: state.room.subscribedRooms
 });
 
 const mapDispatchToProps = dispatch => ({
-  setSubscribedRooms: subRoomList => dispatch(setSubscribedRooms(subRoomList))
-  // setSelectedRoom: roomID => dispatch(setSelectedRoom(roomID))
+  setSubscribedRooms: subRoomList => dispatch(setSubscribedRooms(subRoomList)),
+  setSelectedRoom: roomID => dispatch(setSelectedRoom(roomID))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RoomSubscribe);
