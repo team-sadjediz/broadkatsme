@@ -68,6 +68,7 @@ export default function GeneralPanel(props) {
         <div className="room-general-upload">
           <img
             src={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${props.thumbnailUrl}`}
+            alt="Thumbnail"
           />
         </div>
         <div className="room-general-info">
