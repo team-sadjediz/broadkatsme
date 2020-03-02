@@ -91,7 +91,7 @@ router.put("/subscribed-rooms/subscribe", async function(req, res) {
     { "userID": uid },
     {
       $addToSet: {
-        subscribed_rooms: roomID
+        subscribedRooms: roomID
         // favorited_rooms: roomID
       }
     },

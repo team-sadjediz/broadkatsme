@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 // components:
 import NewRoom from "../new-room/new-room.component";
 import Chat from "../chat/chat.component";
+import RoomSubscribe from "../room-subscribe/room-subscribe.component";
 
 // mui components:
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -142,15 +143,15 @@ export default function DrawerTabs({ drawerOpen }) {
         </TabNav>
 
         <TabPanel value={value} index={0}>
-          <Chat drawerOpen={drawerOpen} />
+          <RoomSubscribe />
+          {/* <Chat drawerOpen={drawerOpen} /> */}
           {/* yellowyyyoysoydfsjldfjs */}
         </TabPanel>
         <TabPanel value={value} index={1}>
           <NewRoom />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          {/* <Chat /> */}
-          sdfsdf
+          <Chat drawerOpen={drawerOpen} />
         </TabPanel>
       </div>
     </div>

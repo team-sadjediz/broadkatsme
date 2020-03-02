@@ -56,7 +56,13 @@ class NewRoom extends React.Component {
 
     axios
       .post(`${BASE_API_URL}/room/create-room`, room)
-      .then(() => console.log("Room posted to backend/created."))
+      .then(async res => {
+        console.log("Room posted for user:", this.props.currentUser.uid);
+        let results = await axios.get(`${BASE_API_URL}/userprops/users-rooms`, {
+          params: { uid: this.props.currentUser.uid }
+        });
+        this.props.setSubscribedRooms(results.data);
+      })
       .catch(error => {
         console.error(error);
       });
