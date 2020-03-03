@@ -20,16 +20,15 @@ class Carousel extends React.Component {
     console.log(JSON.stringify(this.props.properties));
     console.log(this.props.cardType);
     return (
-    <div style={{"padding":"0px 45px","maxWidth":1000,"margin":"30px auto"}}>
+    <div style={{"padding":"0px 45px","maxWidth":1000,"margin":"0 auto"}}>
     <ItemsCarousel
-        style={{"overflow-y": "visible"}}
         infiniteLoop={true}
         gutter={12}
         activePosition={'center'}
         chevronWidth={60}
         disableSwipe={false}
         alwaysShowChevrons={false}
-        numberOfCards={4}
+        numberOfCards={2}
         slidesToScroll={3}
         outsideChevron={true}
         showSlither={false}

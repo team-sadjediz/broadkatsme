@@ -49,8 +49,6 @@ class LobbyPage extends React.Component {
           </div>
           <Carousel
               properties={this.state.properties}
-              cardType="two"
-              uid={this.state.uid}
           />
         </div>
         {/* <BackBtn className="back-btn" onClick={() => this.prevProperty()} />
@@ -60,10 +58,21 @@ class LobbyPage extends React.Component {
           <div id="active_header" className="header">
             ACTIVE ROOMS
           </div>
-          <Carousel
-              properties={this.state.properties}
-              cardType="one"
-          />
+          <div className="cards-grid">
+          {
+              this.state.properties.map(property=> 
+              <div className="zoom">
+                  {/* <p className='title'>{property.name}</p> */}
+                  <Card 
+                  roomID={ property.roomID } 
+                  name={ property.name} 
+                  tags={property.tags} 
+                  thumbnailUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}`}></Card>
+                  {/* <p className='title'>Tags: {property.tags}</p> */}
+              </div>
+              )
+          }
+          </div>
         </div>
       </div>
     );
