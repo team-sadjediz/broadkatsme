@@ -7,24 +7,18 @@ import "./card.style.scss";
 const Card = ({ roomID, name, thumbnailUrl, tags}) => {
   // const { roomID, name, thumbnail_url, tags } = property;
   const roomTags = tags;
+  console.log(roomTags.length);
+  console.log(roomTags);
   return (
-    <div id={`card-${roomID}`} className="card zoom">
+    <div className="card zoom" key={roomID}>
       <div className="img-container">
-        {/* <img
-          src={`http://localhost:5000/api/room/get-thumbnail?thumbnail_url=${thumbnail_url}`}
-        /> */}
-        {/* <img
-          src={`http://broadkatsme.herokuapp.com/api/room/get-thumbnail?thumbnail_url=${thumbnail_url}`}
-        /> */}
-        <img
-          src={thumbnailUrl}
-        />
+        <img src={thumbnailUrl} />
         <Live />
       </div>
 
       <div className="description-container">
         <p>{name}</p>
-        {roomTags && roomTags.map((value, index) => {
+        {roomTags.length !== 0 && roomTags.map((value, index) => {
           return <Tag type="label" text={value} />;
         })}
         {/* {tags} */}
@@ -33,9 +27,9 @@ const Card = ({ roomID, name, thumbnailUrl, tags}) => {
   );
 };
 
-Card.propTypes = {
-  property: PropTypes.object.isRequired
-};
+// Card.propTypes = {
+//   property: PropTypes.object.isRequired
+// };
 
 const mapStateToProps = state => ({
   currentUser: state.user.currentUser

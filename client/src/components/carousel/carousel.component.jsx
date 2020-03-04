@@ -17,8 +17,8 @@ class Carousel extends React.Component {
   changeActiveCard = (activeCard) => this.setState({ activeCard });
 
   render() {
-    console.log(JSON.stringify(this.props.properties));
-    console.log(this.props.cardType);
+    // console.log(JSON.stringify(this.props.properties));
+    // console.log(this.props.cardType);
     return (
     <div style={{"padding":"0px 45px","maxWidth":1000,"margin":"0 auto"}}>
     <ItemsCarousel
@@ -28,7 +28,7 @@ class Carousel extends React.Component {
         chevronWidth={60}
         disableSwipe={false}
         alwaysShowChevrons={false}
-        numberOfCards={2}
+        numberOfCards={5}
         slidesToScroll={3}
         outsideChevron={true}
         showSlither={false}
@@ -42,6 +42,7 @@ class Carousel extends React.Component {
       {Array.from(this.props.properties).map((property) =>
         // <Link to={`/room/id/${property.roomID}`}>
             <CardTwo
+            key={property.roomID}
             roomID={property.roomID} 
             name={property.name} 
             thumbnailUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}`}

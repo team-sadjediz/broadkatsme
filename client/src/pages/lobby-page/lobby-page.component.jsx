@@ -12,35 +12,81 @@ import { ReactComponent as NextBtn } from "../../assets/icons/caret-right-solid.
 import { ReactComponent as BackBtn } from "../../assets/icons/caret-left-solid.svg";
 import "./lobby-page.style.scss";
 
+// for filter
+import { makeStyles } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
 class LobbyPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       uid: this.props.currentUser.uid,
-      properties: []
+      featureRooms: [],
+      featureSize: 8,
+      userRooms: [],
+      activeRooms: [],
+      search: "",
+      filterBy: "roomName"
     };
   }
 
+  handleFilter(e) {
+    this.setState({search: e.target.value});
+  }
+
+  handleSelect(e) {
+    this.setState({filterBy: e.target.value});
+  }
+
   componentDidMount() {
+    // Get Random Rooms for Feature Rooms
     axios
-      // .get("http://localhost:5000/api/home/users-rooms?uid=" + this.state.uid)
-      // .get(
-      //   "http://broadkatsme.herokuapp.com/api/home/users-rooms?uid=" +
-      //     this.state.uid
-      // )
-      .get(`${BASE_API_URL}/userprops/users-rooms?uid=${this.state.uid}`)
+      .get(`${BASE_API_URL}/home/get-random-rooms?size=${this.state.featureSize}`)
       .then(rooms => {
-        const properties = rooms.data;
-        this.setState({ properties: rooms.data });
+        // const properties = rooms.data;
+        this.setState({ featureRooms: rooms.data });
+        // console.log(rooms);
       })
       .catch(error => {
         console.error(error);
-        console.log("oof");
+      });
+    // Get User Rooms
+    axios
+      .get(`${BASE_API_URL}/userprops/users-rooms?uid=${this.state.uid}`)
+      .then(rooms => {
+        // console.log("user rooms: " + rooms);
+        this.setState({ userRooms: rooms.data });
+      })
+      .catch(error => {
+        console.error(error);
+        // console.log("oof");
       });
   }
 
 
   render() {
+    let filteredUserRooms = this.state.userRooms.filter(
+      (room) => {
+        // console.log(room.name);
+        // console.log(this.state.search);
+        if (this.state.filterBy === "tags") {
+          // rooms.map((value, index) => {
+          //   return
+
+          // })
+          for (let tag = 0; tag < room.tags.length; tag++){
+            return room.tags[tag].toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1;
+          }
+        }
+        if (this.state.filterBy === "roomName") {
+          return room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1;
+        }
+      }
+    );
     return (
       <div className="container">
         <div className="featured-container">
@@ -48,7 +94,7 @@ class LobbyPage extends React.Component {
             FEATURED ROOMS
           </div>
           <Carousel
-              properties={this.state.properties}
+              properties={this.state.featureRooms}
           />
         </div>
         {/* <BackBtn className="back-btn" onClick={() => this.prevProperty()} />
@@ -57,11 +103,27 @@ class LobbyPage extends React.Component {
         <div className="active-container">
           <div id="active_header" className="header">
             ACTIVE ROOMS
+            <input value={this.state.search} onChange={this.handleFilter.bind(this)}></input>
+            <FormControl variant="outlined">
+            <Select
+              labelId="demo-simple-select-outlined-label"
+              id="demo-simple-select-outlined"
+              value={this.state.filterBy}
+              onChange={this.handleSelect.bind(this)}
+              // labelWidth={labelWidth}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={"roomName"}>room name</MenuItem>
+              <MenuItem value={"tags"}>tags</MenuItem>
+            </Select>
+          </FormControl>
           </div>
           <div className="cards-grid">
           {
-              this.state.properties.map(property=> 
-              <div className="zoom">
+              filteredUserRooms.map(property=> 
+              <div className="zoom" key={ property.roomID }>
                   {/* <p className='title'>{property.name}</p> */}
                   <Card 
                   roomID={ property.roomID } 
