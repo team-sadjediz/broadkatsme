@@ -23,7 +23,7 @@ const {
 // console.log("root index.js envs:", process.env);
 // const admin = require("./server/firebase-config/admin");
 
-console.log("root index.js envs:", process.env);
+// console.log("root index.js envs:", process.env);
 const admin = require("./server/services/admin");
 
 const app = express();
@@ -39,7 +39,7 @@ app.use(express.static(path.join(__dirname, "client/build")));
 // --------------------------------- V E R I F Y () ---------------------------------
 
 const verifyAuthToken = async function(req, res, next) {
-  console.log(req);
+  // console.log(req);
   const idToken = req.headers.authorization;
   // console.log("???? " + req.headers.authorization);
   // console.log("??? " + req.query);
@@ -73,7 +73,7 @@ const verifyAuthToken = async function(req, res, next) {
   // }
   if (idToken) {
     const decodedToken = await admin.auth().verifyIdToken(idToken);
-    console.log(decodedToken);
+    // console.log(decodedToken);
     if (decodedToken) {
       // appends uid for usage in other routes
       console.log("??");
@@ -153,7 +153,7 @@ io.on("connection", socket => {
     socket.broadcast.to(user.room).emit("message", msg);
 
     socket.join(user.room);
-    console.log(getAllUsers());
+    // console.log(getAllUsers());
 
     //
 
@@ -201,7 +201,7 @@ io.on("connection", socket => {
       //   users: getUsersInRoom(user.room)
       // });
     }
-    console.log(getAllUsers());
+    // console.log(getAllUsers());
   });
 });
 

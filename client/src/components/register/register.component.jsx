@@ -21,6 +21,14 @@ class Register extends React.Component {
     };
   }
 
+  componentDidMount() {
+    console.log("reigster has mounted");
+  }
+
+  componentWillUnmount() {
+    console.log("bye im unmounting");
+  }
+
   handleSubmit = async event => {
     event.preventDefault();
 
@@ -31,50 +39,64 @@ class Register extends React.Component {
       return;
     }
 
-    try {
-      // const { user } = await auth
+    // validation for username:
+    let usernameValid = await axios
+      .get(`${BASE_API_URL}/userprofile/validate-username`, {
+        params: { requestedUsername: username }
+      })
+      .then(res => {
+        console.log(res);
+        return true; // username is valid
+      })
+      .catch(error => {
+        console.error(error);
 
-      await auth
+        if (error.response) {
+          console.error("HINT", error.response.data);
+          alert(error.response.data.msg);
+        }
+
+        return false; // not neccessary but whatever
+      });
+
+    console.log("username", usernameValid);
+
+    // firebase register:
+    let newUserAuth;
+    if (usernameValid) {
+      newUserAuth = await auth
         .createUserWithEmailAndPassword(email, password)
-        .then(async userCredential => {
-          let newUser = {
-            "uid": userCredential.user.uid,
-            "username": this.state.username
-          };
+        .then(async userAuth => {
+          // mongodb register:
           await axios
-            .post(`${BASE_API_URL}/register/new-user`, newUser)
+            .post(`${BASE_API_URL}/register/new-user`, {
+              "uid": newUserAuth.user.uid,
+              "username": username
+            })
             .then(res => console.log("User successfully created."))
-            .catch(error => console.error(error));
+            // if we get to this point, it means that someone finished inserting another UserProfile
+            // with values that
+            .catch(error => {
+              if (error.response) {
+                console.error("MONGODB ERROR:", error.response.data.message);
+                console.error(error);
+                newUserAuth.user.delete(); // deletes the firebase user if
+              }
+            });
         })
         .catch(error => {
           console.error(error);
+          return null;
         });
-
-      this.setState({
-        uid: "",
-        username: "",
-        email: "",
-        password: "",
-        verf_password: ""
-      });
-    } catch (error) {
-      console.log("register error:", error);
     }
 
-    // const user = {
-    //   "uid": this.state.uid,
-    //   "username": this.state.username,
-    //   "email": this.state.email,
-    //   "password": this.state.password,
-    //   "vpassword": this.state.verf_password
-    // };
-
-    // axios
-    //   .post("http://localhost:5000/register/new-user", user)
-    //   .then(() => console.log("User posted to backend/created."))
-    //   .catch(error => {
-    //               console.error(error);
-    //   });
+    this.setState({
+      uid: "",
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: ""
+    });
   };
 
   handleChange = event => {
@@ -98,7 +120,7 @@ class Register extends React.Component {
             handleChange={this.handleChange}
             value={this.state.username}
             label="username"
-            maxlength="16"
+            maxLength="16"
             required
           />
 
@@ -120,7 +142,7 @@ class Register extends React.Component {
             handleChange={this.handleChange}
             value={this.state.password}
             label="password"
-            minlength="8"
+            minLength="8"
             // pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$"
             required
           />

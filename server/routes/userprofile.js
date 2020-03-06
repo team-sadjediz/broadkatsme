@@ -5,6 +5,7 @@ const upload = require("../services/photo-upload");
 const singleUpload = upload.single("image");
 
 const UserProfile = require("../models/userprofile.model");
+const User = require("../models/user.model");
 
 // ---------------------------------------------------------- FIND USER PROFILE ----------------------------------------------------------
 
@@ -40,6 +41,55 @@ router.post("/upload-prof-img", function(req, res, next) {
       }
     }
   });
+});
+
+router.get("/set-username", async function(req, res, next) {
+  let newUsername = req.query.requestedUsername;
+  await User.findOne({ username: newUsername })
+    .then(userprofile => {
+      let response = userprofile;
+      res.send(response);
+    })
+    .catch(res.status(404).send(`User ${uid} profile is not found.`));
+});
+
+router.get("/validate-username", async (req, res, next) => {
+  const newUsername = req.query.requestedUsername;
+
+  const userProfile = new UserProfile({
+    "userID": "",
+    "username": newUsername,
+    "chatColor": "",
+    "photoURL": "",
+    "biography": "",
+    "tags": [],
+    "favorites": { movies: "", music: "", websites: "" },
+    "privacy": true
+  });
+
+  userProfile
+    .validate()
+    .then(() => {
+      res.status(200).send("good");
+    })
+    .catch(error => {
+      console.log(error);
+      const errorList = error.errors;
+      const errorKeys = Object.keys(errorList);
+      console.log("ALL ERRORS", errorKeys);
+
+      let e;
+      errorKeys.forEach(errorType => {
+        console.log("type", errorList[errorType].properties.type);
+        console.log("msg", errorList[errorType].properties.message);
+        e = {
+          type: errorList[errorType].properties.type,
+          msg: errorList[errorType].properties.message
+        };
+      });
+
+      res.status(422).send(e);
+    });
 });
 
 module.exports = router;
