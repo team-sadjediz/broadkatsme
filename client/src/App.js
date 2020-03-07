@@ -9,7 +9,7 @@ import { setAuthorization } from "./firebase/firebase.sdk";
 
 // redux stuff:
 import { connect } from "react-redux";
-import { setCurrentUser } from "./redux/user/user.actions";
+import { setUserAuth } from "./redux/user/user.actions";
 
 // components:
 import CustomDrawer from "./components/custom-drawer/custom-drawer.component";
@@ -68,28 +68,32 @@ class App extends Component {
 
   componentDidMount() {
     this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-      this.props.setCurrentUser(user);
+      // this.props.setCurrentUser(user);
+      this.props.setUserAuth(user);
     });
   }
 
   componentWillUnmount() {
     this.unsubscribeFromAuth();
+    // this.props.setUserAuth(null);
+
     console.log("logged out");
   }
 
   async authorize() {
-    let idToken = await this.props.currentUser.getIdToken(false);
+    let idToken = await this.props.userAuth.getIdToken(false);
     setAuthorization(idToken);
   }
 
   render() {
-    if (this.props.currentUser) {
+    if (this.props.userAuth) {
       this.authorize();
     }
+    console.log(this.props.userAuth);
     return (
       <ThemeProvider theme={theme}>
         <div className="App">
-          {this.props.currentUser ? (
+          {this.props.userAuth ? (
             <BrowserRouter>
               {/* <NavBar /> */}
               <ButtonAppBar />
@@ -99,7 +103,7 @@ class App extends Component {
                     exact
                     path="/login"
                     render={() =>
-                      this.props.currentUser ? (
+                      this.props.userAuth ? (
                         <Redirect to="/" />
                       ) : (
                         <LoginRegisterPage />
@@ -132,11 +136,11 @@ class App extends Component {
 }
 
 const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser
+  userAuth: user.userAuth
 });
 
 const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
+  setUserAuth: user => dispatch(setUserAuth(user))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

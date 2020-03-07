@@ -12,10 +12,10 @@ import "./header-info.styles.scss";
 // utils:
 import { BASE_API_URL, CHAT_SERVER } from "../../utils";
 
-const HeaderInfo = ({ currentUser, selectedRoom, subscribedRooms }) => {
+const HeaderInfo = ({ userAuth, selectedRoom, subscribedRooms }) => {
   return (
     <div className="info-header-container">
-      <div>User: {currentUser.uid}</div>
+      <div>User: {userAuth.uid}</div>
       <div>Room: {selectedRoom}</div>
       <div>BASE_API_URL: {BASE_API_URL}</div>
       <div>CHAT_SERVER: {CHAT_SERVER}</div>
@@ -24,7 +24,7 @@ const HeaderInfo = ({ currentUser, selectedRoom, subscribedRooms }) => {
 };
 
 const mapStateToProps = state => ({
-  currentUser: state.user.currentUser,
+  userAuth: state.user.userAuth,
   subscribedRooms: state.room.subscribedRooms,
   selectedRoom: state.room.selectedRoom
 });

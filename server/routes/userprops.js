@@ -10,8 +10,13 @@ const Room = require("../models/room.model");
 router.get("/user-props", async function(req, res) {
   let uid = req.query.uid;
   await UserProps.findOne({ userID: uid })
-    .then(userprops => res.send({ userprops }))
-    .catch(res.status(404).send(`User ${uid} props is not found.`));
+    .then(userprops => {
+      res.send(userprops);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(404).send(`User ${uid} props is not found.`);
+    });
 });
 
 // ---------------------------------------------------------- FIND USERS ROOMS ----------------------------------------------------------
