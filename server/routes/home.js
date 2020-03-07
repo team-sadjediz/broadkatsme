@@ -9,7 +9,10 @@ const Room = require("../models/room.model");
 // ---------------------------------------------------------- GET RANDOM ROOMS ----------------------------------------------------------
 
 router.get("/get-random-rooms", async function(req, res) {
-  let roomNum = req.query.size;
+  let roomNum = 0;
+  if (req.query.size) {
+    roomNum = req.query.size;
+  }
   Room.findRandom({}, {}, { limit: roomNum }, function(error, rooms) {
     if (error) {
       res.send(error);

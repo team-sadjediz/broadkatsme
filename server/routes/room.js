@@ -11,8 +11,8 @@ const UserProps = require("../models/userprops.model");
 
 // ---------------------------------------------------------- FIND ROOMS ----------------------------------------------------------
 
-router.get("/room-exists", async function(req, res) {
-  let roomID = req.query.roomID;
+router.get("/valid/:roomID", async function(req, res) {
+  let roomID = req.params.roomID;
   if (mongoose.Types.ObjectId.isValid(roomID)) {
     await Room.exists({ _id: roomID })
       .then(exists => {
@@ -26,32 +26,37 @@ router.get("/room-exists", async function(req, res) {
 
 // ---------------------------------------------------------- FIND ROOMS ----------------------------------------------------------
 
-router.get("/find-room", async function(req, res) {
-  let roomID = req.query.roomID;
-  await Room.findById(roomID, function(error, room) {
-    if (error) {
-      res.status(404).send(`Room ${roomID} is not found.`);
-    } else {
-      res.json(room);
-    }
-  });
+router.get("/find/:roomID", async function(req, res) {
+  let roomID = req.params.roomID;
+  if (mongoose.Types.ObjectId.isValid(roomID)) {
+    await Room.findById(roomID, function(error, room) {
+      if (error) {
+        res.status(404).send(`Room ${roomID} is not found.`);
+      } else {
+        res.json(room);
+      }
+    });
+  }
 });
 
 // ---------------------------------------------------------- UPDATE STATUS ----------------------------------------------------------
 
-router.put("/update-active", async function(req, res) {
-  let roomID = req.query.roomID;
-  let active = req.query.active;
-  await Room.findOneAndUpdate({ _id: roomID }, { active: active })
-    .then(document => res.send(document.active))
-    .catch(error =>
-      res.send(404).send(`Room ${roomID} status could not be updated.`)
-    );
+router.put("/update-active/:roomID", async function(req, res) {
+  let roomID = req.params.roomID;
+  let active = req.body.active;
+
+  if (mongoose.Types.ObjectId.isValid(roomID)) {
+    await Room.findOneAndUpdate({ _id: roomID }, { active: active })
+      .then(document => res.send(document.active))
+      .catch(error =>
+        res.send(404).send(`Room ${roomID} status could not be updated.`)
+      );
+  }
 });
 
 // ---------------------------------------------------------- CREATE FIND ROOMS ----------------------------------------------------------
 
-router.post("/create-room", async function(req, res) {
+router.post("/create", async function(req, res) {
   let name = req.body.roomName;
   let ownerID = req.body.uid;
   let thumbnailUrl = "default1.png";
@@ -66,7 +71,7 @@ router.post("/create-room", async function(req, res) {
   let invitations = [req.body.uid];
   let bans = [];
 
-  let new_room = new Room({
+  let newRoom = new Room({
     name: name,
     ownerID: ownerID,
     thumbnailUrl: thumbnailUrl,
@@ -86,10 +91,10 @@ router.post("/create-room", async function(req, res) {
     }
   });
 
-  await new_room
+  await newRoom
     .save()
-    .then(async new_room => {
-      let roomID = new_room._id;
+    .then(async newRoom => {
+      let roomID = newRoom._id;
       await UserProps.findOneAndUpdate(
         { userID: ownerID },
         { $addToSet: { ownedRooms: roomID, subscribedRooms: roomID } },
@@ -108,35 +113,37 @@ router.post("/create-room", async function(req, res) {
 
 // ---------------------------------------------------------- DELETE ROOMS ----------------------------------------------------------
 
-router.delete("/delete-room", async function(req, res) {
-  let roomID = req.query.roomID;
-  // may not be allowed... (conventionally speaking)
-  let uid = req.query.uid;
-  await Room.findOneAndDelete({ _id: roomID, ownerID: uid })
-    .then(async document => {
-      console.log(document);
-      // let subscribers = document.subscriber;
-      await UserProps.findOneAndUpdate(
-        {
-          subscribedRooms: roomID,
-          ownedRooms: roomID
-        },
-        {
-          $pull: {
+router.delete("/delete/:roomID/:uid", async function(req, res) {
+  let roomID = req.params.roomID;
+  let uid = req.params.uid;
+
+  if (mongoose.Types.ObjectId.isValid(roomID)) {
+    await Room.findOneAndDelete({ _id: roomID, ownerID: uid })
+      .then(async document => {
+        console.log(document);
+        // let subscribers = document.subscriber;
+        await UserProps.findOneAndUpdate(
+          {
             subscribedRooms: roomID,
-            ownedRooms: roomID,
-            favoritedRooms: roomID
+            ownedRooms: roomID
+          },
+          {
+            $pull: {
+              subscribedRooms: roomID,
+              ownedRooms: roomID,
+              favoritedRooms: roomID
+            }
           }
-        }
-      )
-        .then(response => {
-          console.log("# of matching user props: " + response.n);
-          console.log("# of documents modified: " + response.nModified);
-          res.status(204).send();
-        })
-        .catch(res.status(404).send(`Room ${roomID} could not be found.`));
-    })
-    .catch(res.status(404).send(`Room ${roomID} could not be found.`));
+        )
+          .then(response => {
+            console.log("# of matching user props: " + response.n);
+            console.log("# of documents modified: " + response.nModified);
+            res.status(204).send();
+          })
+          .catch(res.status(404).send(`Room ${roomID} could not be found.`));
+      })
+      .catch(res.status(404).send(`Room ${roomID} could not be found.`));
+  }
 });
 
 // ---------------------------------------------------------- UPLOAD / GET THUMBNAILS ----------------------------------------------------------
@@ -176,8 +183,35 @@ router.get("/get-thumbnail", async function(req, res) {
 
 // ---------------------------------------------------------- ADD / REMOVE TAGS ----------------------------------------------------------
 
-router.put("/add-tags", async function(req, res) {
-  let roomID = req.body.roomID;
+router.put("/tags/:uid/:roomID", async function(req, res) {
+  let roomID = req.params.roomID;
+  let uid = req.params.uid;
+  let tags = req.query.tags;
+  let action = req.query.action;
+
+  if (action == "delete") {
+    await Room.findOneAndUpdate(
+      { _id: roomID, roomAdmins: uid },
+      { $pull: { tags: tags } },
+      { new: true }
+    )
+      .then(document => res.send(document.tags))
+      .catch(error => res.status(400).send("Remove tag failed."));
+  } else if (action == "add") {
+    await Room.findOneAndUpdate(
+      { _id: roomID, roomAdmins: uid },
+      { $addToSet: { tags: tags } },
+      { new: true }
+    )
+      .then(document => res.send(document.tags))
+      .catch(error => res.status(400).send("Add tag failed."));
+  } else {
+    res.status(400).send("Bad request.");
+  }
+});
+
+router.put("/add-tags/:roomID", async function(req, res) {
+  let roomID = req.params.roomID;
   let newTag = req.body.newTag;
   await Room.findOneAndUpdate(
     { _id: roomID },
@@ -188,8 +222,8 @@ router.put("/add-tags", async function(req, res) {
     .catch(error => res.status(400).send("Add tag failed."));
 });
 
-router.put("/remove-tags", async function(req, res) {
-  let roomID = req.body.roomID;
+router.put("/remove-tags/:roomID", async function(req, res) {
+  let roomID = req.params.roomID;
   let delTag = req.body.delTag;
   await Room.findOneAndUpdate(
     { _id: roomID },

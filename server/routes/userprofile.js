@@ -7,10 +7,21 @@ const singleUpload = upload.single("image");
 const UserProfile = require("../models/userprofile.model");
 const User = require("../models/user.model");
 
+// ---------------------------------------------------------- USER PROFILE EXISTS ----------------------------------------------------------
+
+// router.get("/valid/:username", async function(req, res) {
+//   let username = req.params.username;
+//   await User.exists({ "username": username })
+//     .then(exists => {
+//       res.send(exists);
+//     })
+//     .catch(error => res.status(404).send(`User ${username} is not found.`));
+// });
+
 // ---------------------------------------------------------- FIND USER PROFILE ----------------------------------------------------------
 
-router.get("/user-profile", async function(req, res) {
-  let uid = req.query.uid;
+router.get("/user-profile/:uid", async function(req, res) {
+  let uid = req.params.uid;
   await UserProfile.findOne({ userID: uid })
     .then(userprofile => {
       let response = userprofile;

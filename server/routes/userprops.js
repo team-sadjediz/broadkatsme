@@ -7,17 +7,24 @@ const Room = require("../models/room.model");
 
 // ---------------------------------------------------------- FIND PROPS ----------------------------------------------------------
 
-router.get("/user-props", async function(req, res) {
-  let uid = req.query.uid;
+router.get("/user-props/:uid", async function(req, res) {
+  let uid = req.params.uid;
+  console.log(uid);
   await UserProps.findOne({ userID: uid })
-    .then(userprops => res.send({ userprops }))
-    .catch(res.status(404).send(`User ${uid} props is not found.`));
+    .then(userprops => {
+      console.log(userprops);
+      res.send({ userprops });
+    })
+    .catch(error => {
+      // console.log(error);
+      res.status(404).send(`User ${uid} props is not found.`);
+    });
 });
 
 // ---------------------------------------------------------- FIND USERS ROOMS ----------------------------------------------------------
 
-router.get("/users-rooms", async function(req, res) {
-  let uid = req.query.uid;
+router.get("/users-rooms/:uid", async function(req, res) {
+  let uid = req.params.uid;
   let roomUrls = [];
 
   let exists = null;
@@ -47,6 +54,78 @@ router.get("/users-rooms", async function(req, res) {
 });
 
 // ---------------------------------------------------------- UN/SUBSCRIBE TO ROOM ----------------------------------------------------------
+
+router.put("/subscribed-rooms/:uid/:roomID", async function(req, res) {
+  let roomID = req.params.roomID;
+  let uid = req.params.uid;
+  let action = req.query.action;
+
+  if (action == "unsubscribe") {
+    await UserProps.findOneAndUpdate(
+      { "userID": uid, "ownedRooms": { $nin: roomID } },
+      {
+        $pull: {
+          subscribedRooms: roomID,
+          favoritedRooms: roomID
+        }
+      },
+      { new: true }
+    )
+      .then(async userprops => {
+        await Room.findByIdAndUpdate(roomID, { $pull: { subscribers: uid } })
+          .then(room => {
+            let updatedUserProps = {
+              "subscribedRooms": userprops.subscribedRooms,
+              "favoritedRooms": userprops.favoritedRooms
+            };
+            let updatedRoom = { "subscribers": room.subscribers };
+            let response = { updatedUserProps, updatedRoom };
+            console.log("response " + response);
+            res.send(response);
+          })
+          .catch(error =>
+            res.status(400).send("Unsubscribing (in Room) failed.")
+          );
+      })
+      .catch(error =>
+        res.status(400).send("Unsubscribing in (UserProps) failed.")
+      );
+  } else if (action == "subscribe") {
+    await UserProps.findOneAndUpdate(
+      { "userID": uid },
+      {
+        $addToSet: {
+          subscribedRooms: roomID
+          // favorited_rooms: roomID
+        }
+      },
+      { new: true }
+    )
+      .then(async userprops => {
+        await Room.findByIdAndUpdate(roomID, {
+          $addToSet: { subscribers: uid }
+        })
+          .then(room => {
+            let updatedUserProps = {
+              "subscribedRooms": userprops.subscribedRooms,
+              "favoritedRooms": userprops.favoritedRooms
+            };
+            let updatedRoom = { "subscribers": room.subscribers };
+            let response = { updatedUserProps, updatedRoom };
+            console.log("response " + response);
+            res.send(response);
+          })
+          .catch(error =>
+            res.status(400).send("Subscribing (in Room) failed.")
+          );
+      })
+      .catch(error =>
+        res.status(400).send("Subscribing in (UserProps) failed.")
+      );
+  } else {
+    res.status(400).send("Bad request.");
+  }
+});
 
 router.put("/subscribed-rooms/unsubscribe", async function(req, res) {
   let roomID = req.body.roomID;
