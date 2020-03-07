@@ -4,6 +4,7 @@ import axios from "axios";
 
 import { BASE_API_URL } from "../../utils";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 import "./room-page.styles.scss";
 
@@ -16,6 +17,8 @@ import RoomSettings from "../../components/room-settings/room-settings.component
 // import Modal from "@material-ui/core/Modal";
 
 const initialState = {
+  isFetching: true,
+  exists: false,
   isMouseMoving: false,
   image: null,
   isFavorited: false,
@@ -44,19 +47,34 @@ class RoomPage extends Component {
   constructor(props) {
     super(props);
     this.state = initialState;
-    // this.state.roomID = this.props.selectedRoom;
     this.timer = null;
   }
 
-  async componentDidMount() {
-    // console.log(this.props.match.params);
-    // console.log(this.props.match.params.id);
-    this.fetchData();
+  componentDidMount() {
+    this.validate();
   }
 
+  validate = async () => {
+    console.log(this.state.exists);
+    console.log(this.state.isFetching);
+    await axios
+      .get(`${BASE_API_URL}/room/room-exists`, {
+        params: { "roomID": this.props.match.params.id }
+      })
+      .then(res => {
+        this.setState({ exists: res.data, isFetching: false });
+        // console.log(this.state);
+        if (this.state.exists) {
+          this.fetchData();
+        }
+      })
+      .catch(error => this.setState({ exists: false }));
+    console.log(this.state);
+  };
+
   shouldComponentUpdate(nextProps, nextState) {
-    // console.log(this.props.selectedRoom !== nextProps.selectedRoom);
-    // let roomID = this.props.selectedRoom !== nextProps.selectedRoom;
+    let isFetching = this.state.isFetching !== nextState.isFetching;
+    let exists = this.state.exists !== nextState.exists;
     let roomID = this.props.match.params.id !== nextProps.match.params.id;
     let isMouseMoving = this.state.isMouseMoving !== nextState.isMouseMoving;
     let isFavorited = this.state.isFavorited !== nextState.isFavorited;
@@ -68,6 +86,8 @@ class RoomPage extends Component {
     let settings = this.state.settings !== nextState.settings;
     // let showSettings = this.state.showSettings !== nextState.showSettings;
     return (
+      isFetching ||
+      exists ||
       roomID ||
       isMouseMoving ||
       isFavorited ||
@@ -187,104 +207,92 @@ class RoomPage extends Component {
   };
 
   render() {
-    // console.log(this.state.showInitial);
-    // console.log(this.props.selectedRoom);
-    let tags = this.state.tags.map(tag => {
-      // console.log(this.props.selectedRoom);
-      return (
-        <Tag
-          key={tag}
-          type="remove"
-          text={tag}
-          onChangeTag={this.onChangeTag}
-          // roomID={this.state.roomID}
-          // roomID={this.props.selectedRoom}
-          roomID={this.props.match.params.id}
-        ></Tag>
-      );
-    });
-    let addTag = (
-      <Tag
-        type="add"
-        // roomID={this.state.roomID}
-        // roomID={this.props.selectedRoom}
-        roomID={this.props.match.params.id}
-        onChangeTag={this.onChangeTag}
-      ></Tag>
-    );
-    return (
-      <div className="main-container">
-        {this.state.showSettings ? (
-          <div className="room-settings-container">
-            <RoomSettings
-              toggleSettingsModal={this.toggleSettingsModal}
-              // HEEEEREEEEEE
-              owned={true}
-              tags={tags}
-              addTag={addTag}
-              roomName={this.state.roomName}
-            ></RoomSettings>
-          </div>
-        ) : null}
-
-        <div className="room-page-container">
-          <div className="room-page">
-            <div className="room-bar-area">
-              <RoomBar
-                roomName={this.state.roomName}
-                // roomID={this.state.roomID}
-                // roomID={this.props.selectedRoom}
-                roomID={this.props.match.params.id}
-                // tags={this.state.tags}
-                toggleSettingsModal={this.toggleSettingsModal}
-                favoriteRoom={this.favoriteRoom}
-                isFavorited={this.state.isFavorited}
-                onChangeTag={this.onChangeTag}
-                onChangeTitle={this.onChangeTitle}
-              />
-            </div>
-            {this.state.showInitial ? (
-              <div className="room-screen-init">
-                <BrowserInit
-                  // className="room-screen-init-play"
-                  closeInit={this.closeInit}
+    console.log(this.state.exists);
+    console.log(this.state.isFetching);
+    if (this.state.isFetching) {
+      return <div> LOADING </div>;
+    } else {
+      if (!this.state.exists) {
+        return <Redirect to="/lobby" />;
+      } else {
+        let tags = this.state.tags.map(tag => {
+          return (
+            <Tag
+              key={tag}
+              type="remove"
+              text={tag}
+              onChangeTag={this.onChangeTag}
+              roomID={this.props.match.params.id}
+            ></Tag>
+          );
+        });
+        let addTag = (
+          <Tag
+            type="add"
+            roomID={this.props.match.params.id}
+            onChangeTag={this.onChangeTag}
+          ></Tag>
+        );
+        return (
+          <div className="main-container">
+            {this.state.showSettings ? (
+              <div className="room-settings-container">
+                <RoomSettings
+                  toggleSettingsModal={this.toggleSettingsModal}
+                  // HEEEEREEEEEE
+                  owned={true}
+                  tags={tags}
+                  addTag={addTag}
                   roomName={this.state.roomName}
-                ></BrowserInit>
+                ></RoomSettings>
               </div>
             ) : null}
-            <div
-              className="room-screen-area"
-              onMouseMove={e => this.handleMouseMove(e)}
-            >
-              {/* <iframe
-                width="100%"
-                height="100%"
-                src="https://www.youtube.com/embed/Fb0Og6pB9Z8"
-              ></iframe> */}
-              {this.state.isMouseMoving ? (
-                <BrowserOverlay
-                  className="browser-overlay"
-                  volume={this.state.volume}
-                  handleVolume={this.handleVolume}
-                />
-              ) : (
-                <div className="hide" />
-              )}
-            </div>
-            <div className="room-tags-area">
-              {/* <Tag
-                type="add"
-                // roomID={this.state.roomID}
-                roomID={this.props.selectedRoom}
-                onChangeTag={this.onChangeTag}
-              ></Tag> */}
-              {addTag}
-              {tags}
+
+            <div className="room-page-container">
+              <div className="room-page">
+                <div className="room-bar-area">
+                  <RoomBar
+                    roomName={this.state.roomName}
+                    roomID={this.props.match.params.id}
+                    toggleSettingsModal={this.toggleSettingsModal}
+                    favoriteRoom={this.favoriteRoom}
+                    isFavorited={this.state.isFavorited}
+                    onChangeTag={this.onChangeTag}
+                    onChangeTitle={this.onChangeTitle}
+                  />
+                </div>
+                {this.state.showInitial ? (
+                  <div className="room-screen-init">
+                    <BrowserInit
+                      closeInit={this.closeInit}
+                      roomName={this.state.roomName}
+                    ></BrowserInit>
+                  </div>
+                ) : null}
+                <div
+                  className="room-screen-area"
+                  onMouseMove={e => this.handleMouseMove(e)}
+                >
+                  {this.state.isMouseMoving ? (
+                    <BrowserOverlay
+                      className="browser-overlay"
+                      volume={this.state.volume}
+                      handleVolume={this.handleVolume}
+                    />
+                  ) : (
+                    <div className="hide" />
+                  )}
+                </div>
+                <div className="room-tags-area">
+                  {addTag}
+                  {tags}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    );
+        );
+      }
+    }
   }
 }
 

@@ -6,6 +6,7 @@ const Grievance = new mongoose.Schema({
 });
 
 const RoomReport = new mongoose.Schema({
+  reporterUID: String,
   roomID: { type: mongoose.Schema.Types.ObjectId, ref: "Room" },
   issue: [{ type: Grievance }]
 });

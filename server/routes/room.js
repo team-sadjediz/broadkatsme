@@ -1,12 +1,28 @@
 const express = require("express");
 const router = express.Router();
 const aws = require("aws-sdk");
+const mongoose = require("mongoose");
 
 const upload = require("../services/photo-upload");
 const singleUpload = upload.single("image");
 
 const Room = require("../models/room.model");
 const UserProps = require("../models/userprops.model");
+
+// ---------------------------------------------------------- FIND ROOMS ----------------------------------------------------------
+
+router.get("/room-exists", async function(req, res) {
+  let roomID = req.query.roomID;
+  if (mongoose.Types.ObjectId.isValid(roomID)) {
+    await Room.exists({ _id: roomID })
+      .then(exists => {
+        res.send(exists);
+      })
+      .catch(error => res.status(404).send(`Room ${roomID} is not found.`));
+  } else {
+    res.send(false);
+  }
+});
 
 // ---------------------------------------------------------- FIND ROOMS ----------------------------------------------------------
 

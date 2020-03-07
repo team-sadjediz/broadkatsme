@@ -5,7 +5,6 @@ const UserProps = new mongoose.Schema({
   userID: String,
   friends: [String],
   ownedRooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
-  // subscribed_rooms: [String],
   subscribedRooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
   favoritedRooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
   notifications: [{ title: String, message: String }]
