@@ -8,11 +8,16 @@ const Room = require("../models/room.model");
 
 // ---------------------------------------------------------- GET RANDOM ROOMS ----------------------------------------------------------
 
-router.get("/get-random-rooms", async function(req, res) {
-  let roomNum = 0;
-  if (req.query.size) {
-    roomNum = req.query.size;
-  }
+// How To Use:
+// axios.put(`${BASE_API_URI}/home/rooms, null, { params: { query: "" }})
+// action = int (some int number)
+
+// NOT HOOKED UP TO ERROR VALIDATION
+// AUTOMATIC FUNCTION ERROR HANDLING INCLUDES NEGATIVE NUMBERS AND NON NUMBERS
+// WILL RETURN NOTHING
+router.get("/rooms", async function(req, res) {
+  let roomNum = req.query.size;
+  // console.log(roomNum);
   Room.findRandom({}, {}, { limit: roomNum }, function(error, rooms) {
     if (error) {
       res.send(error);

@@ -7,7 +7,7 @@ const Room = require("../models/room.model");
 
 // ---------------------------------------------------------- FIND PROPS ----------------------------------------------------------
 
-router.get("/user-props/:uid", async function(req, res) {
+router.get("/props/:uid", async function(req, res) {
   let uid = req.params.uid;
   console.log(uid);
   await UserProps.findOne({ userID: uid })
@@ -23,7 +23,7 @@ router.get("/user-props/:uid", async function(req, res) {
 
 // ---------------------------------------------------------- FIND USERS ROOMS ----------------------------------------------------------
 
-router.get("/users-rooms/:uid", async function(req, res) {
+router.get("/rooms/:uid", async function(req, res) {
   let uid = req.params.uid;
   let roomUrls = [];
 
@@ -55,7 +55,7 @@ router.get("/users-rooms/:uid", async function(req, res) {
 
 // ---------------------------------------------------------- UN/SUBSCRIBE TO ROOM ----------------------------------------------------------
 
-router.put("/subscribed-rooms/:uid/:roomID", async function(req, res) {
+router.put("/subscribe/:uid/:roomID", async function(req, res) {
   let roomID = req.params.roomID;
   let uid = req.params.uid;
   let action = req.query.action;
@@ -69,10 +69,14 @@ router.put("/subscribed-rooms/:uid/:roomID", async function(req, res) {
           favoritedRooms: roomID
         }
       },
-      { new: true }
+      { runValidators: true, new: true }
     )
       .then(async userprops => {
-        await Room.findByIdAndUpdate(roomID, { $pull: { subscribers: uid } })
+        await Room.findByIdAndUpdate(
+          roomID,
+          { $pull: { subscribers: uid } },
+          { runValidators: true, new: true }
+        )
           .then(room => {
             let updatedUserProps = {
               "subscribedRooms": userprops.subscribedRooms,
@@ -99,12 +103,16 @@ router.put("/subscribed-rooms/:uid/:roomID", async function(req, res) {
           // favorited_rooms: roomID
         }
       },
-      { new: true }
+      { runValidators: true, new: true }
     )
       .then(async userprops => {
-        await Room.findByIdAndUpdate(roomID, {
-          $addToSet: { subscribers: uid }
-        })
+        await Room.findByIdAndUpdate(
+          roomID,
+          {
+            $addToSet: { subscribers: uid }
+          },
+          { runValidators: true, new: true }
+        )
           .then(room => {
             let updatedUserProps = {
               "subscribedRooms": userprops.subscribedRooms,
@@ -127,77 +135,11 @@ router.put("/subscribed-rooms/:uid/:roomID", async function(req, res) {
   }
 });
 
-router.put("/subscribed-rooms/unsubscribe", async function(req, res) {
-  let roomID = req.body.roomID;
-  let uid = req.body.uid;
-
-  await UserProps.findOneAndUpdate(
-    { "userID": uid, "ownedRooms": { $nin: roomID } },
-    {
-      $pull: {
-        subscribedRooms: roomID,
-        favoritedRooms: roomID
-      }
-    },
-    { new: true }
-  )
-    .then(async userprops => {
-      await Room.findByIdAndUpdate(roomID, { $pull: { subscribers: uid } })
-        .then(room => {
-          let updatedUserProps = {
-            "subscribedRooms": userprops.subscribedRooms,
-            "favoritedRooms": userprops.favoritedRooms
-          };
-          let updatedRoom = { "subscribers": room.subscribers };
-          let response = { updatedUserProps, updatedRoom };
-          console.log("response " + response);
-          res.send(response);
-        })
-        .catch(error =>
-          res.status(400).send("Unsubscribing (in Room) failed.")
-        );
-    })
-    .catch(error =>
-      res.status(400).send("Unsubscribing in (UserProps) failed.")
-    );
-});
-
-router.put("/subscribed-rooms/subscribe", async function(req, res) {
-  let roomID = req.body.roomID;
-  let uid = req.body.uid;
-
-  await UserProps.findOneAndUpdate(
-    { "userID": uid },
-    {
-      $addToSet: {
-        subscribedRooms: roomID
-        // favorited_rooms: roomID
-      }
-    },
-    { new: true }
-  )
-    .then(async userprops => {
-      await Room.findByIdAndUpdate(roomID, { $addToSet: { subscribers: uid } })
-        .then(room => {
-          let updatedUserProps = {
-            "subscribedRooms": userprops.subscribedRooms,
-            "favoritedRooms": userprops.favoritedRooms
-          };
-          let updatedRoom = { "subscribers": room.subscribers };
-          let response = { updatedUserProps, updatedRoom };
-          console.log("response " + response);
-          res.send(response);
-        })
-        .catch(error => res.status(400).send("Subscribing (in Room) failed."));
-    })
-    .catch(error => res.status(400).send("Subscribing in (UserProps) failed."));
-});
-
 // ---------------------------------------------------------- FAVORITE / UNFAVORITE ----------------------------------------------------------
 
-router.put("/favorite-rooms/favorite", async function(req, res) {
-  let roomID = req.body.roomID;
-  let uid = req.body.uid;
+router.put("/favorite/:uid/:roomID", async function(req, res) {
+  let roomID = req.params.roomID;
+  let uid = req.params.uid;
 
   let favorite;
   await UserProps.findOne({ "userID": uid }, function(error, userprops) {
@@ -214,9 +156,9 @@ router.put("/favorite-rooms/favorite", async function(req, res) {
   });
 });
 
-router.get("/favorite-rooms/is-favorited", async function(req, res) {
-  let roomID = req.query.roomID;
-  let uid = req.query.uid;
+router.get("/favorited/:uid/:roomID", async function(req, res) {
+  let roomID = req.params.roomID;
+  let uid = req.params.uid;
 
   await UserProps.findOne({
     "userID": uid,
@@ -241,7 +183,8 @@ router.put("/new-notification", async function(req, res) {
   let notification = { title: title, message: message };
   await UserProps.findOneAndUpdate(
     { userID: uid },
-    { $push: { notifications: notification } }
+    { $push: { notifications: notification } },
+    { runValidators: true, new: true }
   )
     .then(document => res.send(document))
     .catch(error => res.status(400).send("New notification failed."));
@@ -252,7 +195,8 @@ router.put("/delete-notification", async function(req, res) {
   let nid = req.body.nid;
   await UserProps.findOneAndUpdate(
     { userID: uid },
-    { $pull: { notifications: { _id: nid } } }
+    { $pull: { notifications: { _id: nid } } },
+    { runValidators: true, new: true }
   )
     .then(document => res.send(document))
     .catch(error => res.status(400).send("Delete notification failed."));

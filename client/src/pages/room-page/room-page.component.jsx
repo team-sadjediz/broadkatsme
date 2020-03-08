@@ -58,9 +58,7 @@ class RoomPage extends Component {
     console.log(this.state.exists);
     console.log(this.state.isFetching);
     await axios
-      .get(`${BASE_API_URL}/room/room-exists`, {
-        params: { "roomID": this.props.match.params.id }
-      })
+      .get(`${BASE_API_URL}/room/valid/${this.props.match.params.id}`)
       .then(res => {
         this.setState({ exists: res.data, isFetching: false });
         // console.log(this.state);
@@ -115,10 +113,7 @@ class RoomPage extends Component {
 
     let roomDetails, isFavorited;
     await axios
-      .get(`${BASE_API_URL}/room/find-room`, {
-        // params: { "roomID": this.props.selectedRoom }
-        params: { "roomID": this.props.match.params.id }
-      })
+      .get(`${BASE_API_URL}/room/find/${this.props.match.params.id}`)
       .then(res => {
         roomDetails = res.data;
       })
@@ -128,13 +123,9 @@ class RoomPage extends Component {
     // console.log(roomDetails);
     // await axiosConfig
     await axios
-      .get(`${BASE_API_URL}/userprops/favorite-rooms/is-favorited`, {
-        params: {
-          "uid": this.props.currentUser.uid,
-          // "roomID": this.props.selectedRoom
-          "roomID": this.props.match.params.id
-        }
-      })
+      .get(
+        `${BASE_API_URL}/userprops/favorited/${this.props.currentUser.uid}/${this.props.match.params.id}`
+      )
       .then(res => {
         isFavorited = res.data;
         // this.setState({ isFavorited: res.data });
@@ -176,7 +167,9 @@ class RoomPage extends Component {
       "roomID": this.props.match.params.id
     };
     await axios
-      .put(`${BASE_API_URL}/userprops/favorite-rooms/favorite`, request)
+      .put(
+        `${BASE_API_URL}/userprops/favorite-room/${this.props.currentUser.uid}/${this.props.match.params.id}`
+      )
       .then(res => this.setState({ isFavorited: res.data.favorited }))
       .catch(error => console.error(error));
   };
@@ -223,6 +216,7 @@ class RoomPage extends Component {
               text={tag}
               onChangeTag={this.onChangeTag}
               roomID={this.props.match.params.id}
+              uid={this.props.currentUser.uid}
             ></Tag>
           );
         });
@@ -231,6 +225,7 @@ class RoomPage extends Component {
             type="add"
             roomID={this.props.match.params.id}
             onChangeTag={this.onChangeTag}
+            uid={this.props.currentUser.uid}
           ></Tag>
         );
         return (
@@ -243,6 +238,7 @@ class RoomPage extends Component {
                   owned={true}
                   tags={tags}
                   addTag={addTag}
+                  uid={this.props.currentUser.uid}
                   roomName={this.state.roomName}
                 ></RoomSettings>
               </div>

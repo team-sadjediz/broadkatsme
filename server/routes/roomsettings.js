@@ -2,56 +2,70 @@ const express = require("express");
 const router = express.Router();
 
 const Room = require("../models/room.model");
+const UserProps = require("../models/userprops.model");
 
 // ---------------------------------------------------------- NAME ----------------------------------------------------------
 
+// How To Use
+// axios.put(`${BASE_API_URL}/roomsettings/change-name/${roomID}/${uid}`, null, { params: { name: STRING }})
+// returns modified resource (as per convention)
 router.put("/change-name/:roomID/:uid", async function(req, res) {
   let roomID = req.params.roomID;
   let uid = req.params.uid;
   let name = req.query.name;
   await Room.findOneAndUpdate(
-    { _id: roomID, roomAdmins: uid },
+    { _id: roomID, "settings.access.roomAdmins": uid },
     { $set: { name: name } },
-    { new: true }
+    { runValidators: true, new: true }
   )
     .then(document => res.send(document.name))
-    .catch(error => res.status(400).send("Room name change failed."));
-  res.send("Room name updated.");
+    .catch(error => res.status(400).send(error));
 });
 
 // ---------------------------------------------------------- ROOMSIZE ----------------------------------------------------------
 
+// How To Use
+// axios.put(`${BASE_API_URL}/roomsettings/change-roomsize/${roomID}/${uid}`, null, { params: { size: INT }})
+// returns modified resource (as per convention)
 router.put("/change-roomsize/:roomID/:uid", async function(req, res) {
   let roomID = req.params.roomID;
   let uid = req.params.uid;
   let size = req.query.size;
   await Room.findOneAndUpdate(
-    { _id: roomID, roomAdmins: uid },
+    { _id: roomID, "settings.access.roomAdmins": uid },
     { $set: { "settings.roomSize": size } },
-    { new: true }
+    { runValidators: true, new: true }
   )
-    .then(document => res.send(document.settings.roomSize))
-    .catch(error => res.status(400).send("Remove tag failed."));
+    .then(document => {
+      res.send("" + document.settings.roomSize);
+    })
+    .catch(error => res.status(400).send(error));
 });
 
 // ---------------------------------------------------------- PRIVACY ----------------------------------------------------------
 
+// How To Use
+// axios.put(`${BASE_API_URL}/roomsettings/change-privacy/${roomID}/${uid}`, null, { params: { privacy: true || false}})
+// returns modified resource (as per convention)
 router.put("/change-privacy/:roomID/:uid", async function(req, res) {
   let roomID = req.params.roomID;
   let uid = req.params.uid;
   let privacy = req.query.privacy;
   await Room.findOneAndUpdate(
-    { _id: roomID, roomAdmins: uid },
+    { _id: roomID, "settings.access.roomAdmins": uid },
     { $set: { "settings.privacy": privacy } },
-    { new: true }
+    { runValidators: true, new: true }
   )
     .then(document => res.send(document.privacy))
-    .catch(error => res.status(400).send("Remove tag failed."));
+    .catch(error => res.status(400).send(error));
 });
 
 // ---------------------------------------------------------- ADMINS ----------------------------------------------------------
 
-router.put("/admins/:roomID/:uid/:admin", async function(req, res) {
+// How To Use
+// axios.put(`${BASE_API_URL}/roomsettings/admins/${roomID}/${adminID}/${uid}`, null, { params: {action: "delete" || "add"}})
+// returns modified resource (as per convention)
+router.put("/admins/:roomID/:admin/:uid", async function(req, res) {
   let roomID = req.params.roomID;
   let uid = req.params.uid;
   let admin = req.params.admin;
@@ -61,18 +75,25 @@ router.put("/admins/:roomID/:uid/:admin", async function(req, res) {
     await Room.findOneAndUpdate(
       { _id: roomID, ownerID: uid },
       { $pull: { "settings.access.roomAdmins": admin } },
-      { new: true }
+      { runValidators: true, new: true }
     )
       .then(document => res.send(document.settings.access.roomAdmins))
-      .catch(error => res.status(400).send("Admin removal failed."));
+      .catch(error => res.status(400).send(error));
   } else if (action == "add") {
-    await Room.findOneAndUpdate(
-      { _id: roomID, ownerID: uid },
-      { $push: { "settings.access.roomAdmins": admin } },
-      { new: true }
-    )
+    await UserProps.exists({ userID: admin })
+      .then(exists => {
+        return Room.findOneAndUpdate(
+          {
+            _id: roomID,
+            ownerID: uid,
+            "settings.access.bans": { $nin: admin }
+          },
+          { $addToSet: { "settings.access.roomAdmins": admin } },
+          { runValidators: true, new: true }
+        );
+      })
       .then(document => res.send(document.settings.access.roomAdmins))
-      .catch(error => res.status(400).send("Admin addition failed."));
+      .catch(error => res.status(400).send(error));
   } else {
     res.status(404).send("Bad request.");
   }
@@ -80,7 +101,10 @@ router.put("/admins/:roomID/:uid/:admin", async function(req, res) {
 
 // ---------------------------------------------------------- OPERATORS ----------------------------------------------------------
 
-router.put("/operators/:roomID/:uid/:operator", async function(req, res) {
+// How To Use
+// axios.put(`${BASE_API_URL}/roomsettings/operators/${roomID}/${operatorID}/${uid}`, null, { params: {action: "delete" || "add"}})
+// returns modified resource (as per convention)
+router.put("/operators/:roomID/:operator/:uid", async function(req, res) {
   let roomID = req.params.roomID;
   let uid = req.params.uid;
   let operator = req.params.operator;
@@ -88,20 +112,31 @@ router.put("/operators/:roomID/:uid/:operator", async function(req, res) {
 
   if (action == "delete") {
     await Room.findOneAndUpdate(
-      { _id: roomID, roomAdmins: uid },
+      {
+        _id: roomID,
+        "settings.access.roomAdmins": uid,
+        ownerID: { $ne: operator }
+      },
       { $pull: { "settings.access.operators": operator } },
-      { new: true }
+      { runValidators: true, new: true }
     )
       .then(document => res.send(document.settings.access.operators))
-      .catch(error => res.status(400).send("Operator removal failed."));
+      .catch(error => res.status(400).send(error));
   } else if (action == "add") {
-    await Room.findOneAndUpdate(
-      { _id: roomID, roomAdmins: uid },
-      { $push: { "settings.access.operators": operator } },
-      { new: true }
-    )
+    await UserProps.exists({ userID: operator })
+      .then(exists => {
+        return Room.findOneAndUpdate(
+          {
+            _id: roomID,
+            "settings.access.roomAdmins": uid,
+            "settings.access.bans": { $nin: admin }
+          },
+          { $addToSet: { "settings.access.operators": operator } },
+          { runValidators: true, new: true }
+        );
+      })
       .then(document => res.send(document.settings.access.operators))
-      .catch(error => res.status(400).send("Operator addition failed."));
+      .catch(error => res.status(400).send(error));
   } else {
     res.status(404).send("Bad request.");
   }
@@ -109,7 +144,10 @@ router.put("/operators/:roomID/:uid/:operator", async function(req, res) {
 
 // ---------------------------------------------------------- INVITES ----------------------------------------------------------
 
-router.put("/inviter/:roomID/:uid/:inviter", async function(req, res) {
+// How To Use
+// axios.put(`${BASE_API_URL}/roomsettings/inviters/${roomID}/${inviterID}/${uid}`, null, { params: {action: "delete" || "add"}})
+// returns modified resource (as per convention)
+router.put("/inviters/:roomID/:inviter/:uid", async function(req, res) {
   let roomID = req.params.roomID;
   let uid = req.params.uid;
   let inviter = req.params.inviter;
@@ -117,20 +155,31 @@ router.put("/inviter/:roomID/:uid/:inviter", async function(req, res) {
 
   if (action == "delete") {
     await Room.findOneAndUpdate(
-      { _id: roomID, roomAdmins: uid },
+      {
+        _id: roomID,
+        "settings.access.roomAdmins": uid,
+        ownerID: { $ne: inviter }
+      },
       { $pull: { "settings.access.invitations": inviter } },
-      { new: true }
+      { runValidators: true, new: true }
     )
       .then(document => res.send(document.settings.access.invitations))
-      .catch(error => res.status(400).send("Inviter removal failed."));
+      .catch(error => res.status(400).send(error));
   } else if (action == "add") {
-    await Room.findOneAndUpdate(
-      { _id: roomID, roomAdmins: uid },
-      { $push: { "settings.access.invitations": inviter } },
-      { new: true }
-    )
+    await UserProps.exists({ userID: inviter })
+      .then(exists => {
+        return Room.findOneAndUpdate(
+          {
+            _id: roomID,
+            "settings.access.roomAdmins": uid,
+            "settings.access.bans": { $nin: admin }
+          },
+          { $addToSet: { "settings.access.invitations": inviter } },
+          { runValidators: true, new: true }
+        );
+      })
       .then(document => res.send(document.settings.access.invitations))
-      .catch(error => res.status(400).send("Inviter addition failed."));
+      .catch(error => res.status(400).send(error));
   } else {
     res.status(404).send("Bad request.");
   }
@@ -138,7 +187,10 @@ router.put("/inviter/:roomID/:uid/:inviter", async function(req, res) {
 
 // ---------------------------------------------------------- BANS ----------------------------------------------------------
 
-router.put("/ban/:roomID/:uid/:banned", async function(req, res) {
+// How To Use
+// axios.put(`${BASE_API_URL}/roomsettings/ban/${roomID}/${bannedID}/${uid}`, null, { params: {action: "delete" || "add"}})
+// returns modified resource (as per convention)
+router.put("/ban/:roomID/:banned/:uid", async function(req, res) {
   let roomID = req.params.roomID;
   let uid = req.params.uid;
   let banned = req.params.banned;
@@ -146,43 +198,61 @@ router.put("/ban/:roomID/:uid/:banned", async function(req, res) {
 
   if (action == "delete") {
     await Room.findOneAndUpdate(
-      { _id: roomID },
-      { $pull: { "settings.access.bans": delBan } },
-      { new: true }
+      { _id: roomID, "settings.access.roomAdmins": uid },
+      { $pull: { "settings.access.bans": banned } },
+      { runValidators: true, new: true }
     )
       .then(document => res.send(document.settings.access.bans))
-      .catch(error => res.status(400).send("Banner removal failed."));
+      .catch(error => res.status(400).send(error));
   } else if (action == "add") {
-    await Room.findOneAndUpdate(
-      { _id: roomID },
-      { $push: { "settings.access.bans": newBan } },
-      { new: true }
-    )
-      .then(document => res.send(document.settings.access.bans))
-      .catch(error => res.status(400).send("Banner addition failed."));
+    let response;
+    await UserProps.exists({ userID: banned })
+      .then(exists => {
+        return Room.findOneAndUpdate(
+          {
+            _id: roomID,
+            "settings.access.roomAdmins": uid,
+            ownerID: { $ne: banned },
+            "settings.access.roomAdmins": { $nin: banned }
+          },
+          {
+            $addToSet: { "settings.access.bans": banned },
+            $pull: { "settings.access.roomAdmins": banned },
+            $pull: { "settings.access.operators": banned },
+            $pull: { "settings.access.invitations": banned },
+            $pull: { subscribers: banned }
+          },
+          { runValidators: true, new: true }
+        );
+      })
+      .then(document => {
+        reponse = document.settings.access.bans;
+        return UserProps.findOneAndUpdate(
+          { userID: banned },
+          {
+            $pull: { subscribedRooms: roomID },
+            $pull: { favoritedRooms: roomID }
+          },
+          { runValidators: true, new: true }
+        );
+        // res.send(document.settings.access.bans);
+      })
+      .then(document =>
+        res.send({
+          banned: {
+            subscribedRooms: document.subscribedRooms,
+            favoritedRooms: document.favoritedRooms
+          },
+          room: {
+            bans: response
+          }
+        })
+      )
+      .catch(error => res.status(400).send(error));
   } else {
+    // YOU STILL HAVE TO FIX IF ONE SENDS BUT THE OTHER DOES NOT
     res.status(404).send("Bad request.");
   }
 });
-
-// ---------------------------------------------------------- CHATS ----------------------------------------------------------
-
-// router.get("/get-chats", async function(req, res) {
-//   let roomID = req.body.roomID;
-//   await Chat.findOne({ room_ID: roomID }, function(error, chat) {
-//     if (error) {
-//       res.send(error);
-//     } else {
-//       res.send(chat);
-//     }
-//   });
-// });
-
-// router.put("/clear-chat", async function(req, res) {
-//   let roomID = req.body.roomID;
-//   await Chat.findOneAndUpdate({ roomID: roomID }, { $set: { log: [] } })
-//     .then(document => res.send(document))
-//     .catch(error => res.status(400).send("Clear chat failed."));
-// });
 
 module.exports = router;

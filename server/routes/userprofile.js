@@ -20,18 +20,20 @@ const User = require("../models/user.model");
 
 // ---------------------------------------------------------- FIND USER PROFILE ----------------------------------------------------------
 
-router.get("/user-profile/:uid", async function(req, res) {
+// How To Use
+// axios.get(${BASE_API_URL}/userprofile/details/${uid})
+router.get("/details/:uid", async function(req, res) {
   let uid = req.params.uid;
   await UserProfile.findOne({ userID: uid })
     .then(userprofile => {
-      let response = userprofile;
-      res.send(response);
+      res.send(userprofile);
     })
-    .catch(res.status(404).send(`User ${uid} profile is not found.`));
+    .catch(error => res.status(404).send(error));
 });
 
 // ---------------------------------------------------------- UPLOAD USER PROF PIC ----------------------------------------------------------
 
+// in progress
 // send json with: { folder: ..., uid: ..., image: ...}
 // order is required
 router.post("/upload-prof-img", function(req, res, next) {
@@ -53,6 +55,8 @@ router.post("/upload-prof-img", function(req, res, next) {
     }
   });
 });
+
+// ---------------------------------------------------------- USERNAME ----------------------------------------------------------
 
 router.get("/set-username", async function(req, res, next) {
   let newUsername = req.query.requestedUsername;
@@ -84,7 +88,6 @@ router.get("/validate-username", async (req, res, next) => {
       res.status(200).send("good");
     })
     .catch(error => {
-      console.log(error);
       const errorList = error.errors;
       const errorKeys = Object.keys(errorList);
       console.log("ALL ERRORS", errorKeys);

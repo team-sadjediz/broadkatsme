@@ -11,58 +11,67 @@ const UserProps = require("../models/userprops.model");
 
 // ---------------------------------------------------------- FIND ROOMS ----------------------------------------------------------
 
+// How To Use:
+// axios.put(`${BASE_API_URI}/room/${roomID})
+// returns TRUE or FALSE if room exists
 router.get("/valid/:roomID", async function(req, res) {
   let roomID = req.params.roomID;
-  if (mongoose.Types.ObjectId.isValid(roomID)) {
-    await Room.exists({ _id: roomID })
-      .then(exists => {
-        res.send(exists);
-      })
-      .catch(error => res.status(404).send(`Room ${roomID} is not found.`));
-  } else {
-    res.send(false);
-  }
+  await Room.exists({ _id: roomID })
+    .then(exists => {
+      res.send(exists);
+    })
+    .catch(error => res.status(404).send(error));
 });
 
 // ---------------------------------------------------------- FIND ROOMS ----------------------------------------------------------
 
+// How To Use:
+// axios.put(`${BASE_API_URI}/room/${roomID})
+// returns entire document if found
 router.get("/find/:roomID", async function(req, res) {
   let roomID = req.params.roomID;
-  if (mongoose.Types.ObjectId.isValid(roomID)) {
-    await Room.findById(roomID, function(error, room) {
-      if (error) {
-        res.status(404).send(`Room ${roomID} is not found.`);
-      } else {
-        res.json(room);
-      }
+  await Room.findById(roomID)
+    .then(room => {
+      res.json(room);
+    })
+    .catch(error => {
+      res.status(404).send(error);
     });
-  }
 });
 
 // ---------------------------------------------------------- UPDATE STATUS ----------------------------------------------------------
 
-router.put("/update-active/:roomID", async function(req, res) {
+// How To Use:
+// axios.put(`${BASE_API_URI}/room/${roomID})
+// returns active status of document
+router.put("/active/:roomID/:uid", async function(req, res) {
   let roomID = req.params.roomID;
-  let active = req.body.active;
+  let uid = req.params.uid;
+  let active = req.query.active;
 
-  if (mongoose.Types.ObjectId.isValid(roomID)) {
-    await Room.findOneAndUpdate({ _id: roomID }, { active: active })
-      .then(document => res.send(document.active))
-      .catch(error =>
-        res.send(404).send(`Room ${roomID} status could not be updated.`)
-      );
-  }
+  await Room.findOneAndUpdate(
+    { _id: roomID, "settings.access.roomAdmins": uid },
+    { active: active },
+    { runValidators: true, new: true }
+  )
+    .then(document => {
+      res.send(document.active);
+    })
+    .catch(error => res.status(404).send(error));
 });
 
 // ---------------------------------------------------------- CREATE FIND ROOMS ----------------------------------------------------------
 
+// How To Use:
+// axios.post(`${BASE_API_URI}/room/create`, { body })
+// returns new subscribed rooms
 router.post("/create", async function(req, res) {
   let name = req.body.roomName;
   let ownerID = req.body.uid;
   let thumbnailUrl = "default1.png";
   let active = false;
   let subscribers = [req.body.uid];
-  let tags = req.body.tags;
+  let tags = [];
   let roomSize = req.body.roomSize;
   let privacy = req.body.privacy;
   let deleteUser = req.body.uid;
@@ -72,82 +81,78 @@ router.post("/create", async function(req, res) {
   let bans = [];
 
   let newRoom = new Room({
-    name: name,
-    ownerID: ownerID,
-    thumbnailUrl: thumbnailUrl,
-    active: active,
-    subscribers: subscribers,
-    tags: tags,
+    name,
+    ownerID,
+    thumbnailUrl,
+    active,
+    subscribers,
+    tags,
     settings: {
-      roomSize: roomSize,
-      privacy: privacy,
+      roomSize,
+      privacy,
       access: {
         delete: deleteUser,
-        roomAdmins: roomAdmins,
-        operators: operators,
-        invitations: invitations,
-        bans: bans
+        roomAdmins,
+        operators,
+        invitations,
+        bans
       }
     }
   });
 
   await newRoom
     .save()
-    .then(async newRoom => {
+    .then(newRoom => {
       let roomID = newRoom._id;
-      await UserProps.findOneAndUpdate(
+      return UserProps.findOneAndUpdate(
         { userID: ownerID },
         { $addToSet: { ownedRooms: roomID, subscribedRooms: roomID } },
-        { new: true }
-      )
-        .then(document => {
-          console.log(document.subscribedRooms);
-          res.send(document.subscribedRooms);
-        })
-        .catch(error =>
-          res.status(400).send("New room insert added to user props failed.")
-        );
+        { runValidators: true, new: true }
+      );
     })
-    .catch(error => res.status(400).send("New room insert failed."));
+    .then(document => {
+      // Conventially returns location of entity referring to request status & new resource
+      res.status(201).send(document.subscribedRooms);
+    })
+    .catch(error => {
+      res.status(400).send(error);
+    });
 });
 
 // ---------------------------------------------------------- DELETE ROOMS ----------------------------------------------------------
 
+// How To Use:
+// axios.delete(`${BASE_API_URI}/room/delete/${roomID}/${uid}`)
+// returns empty body (as per convention)
 router.delete("/delete/:roomID/:uid", async function(req, res) {
   let roomID = req.params.roomID;
   let uid = req.params.uid;
 
-  if (mongoose.Types.ObjectId.isValid(roomID)) {
-    await Room.findOneAndDelete({ _id: roomID, ownerID: uid })
-      .then(async document => {
-        console.log(document);
-        // let subscribers = document.subscriber;
-        await UserProps.findOneAndUpdate(
-          {
+  await Room.findOneAndDelete({ _id: roomID, ownerID: uid })
+    .then(document => {
+      return UserProps.findOneAndUpdate(
+        {
+          subscribedRooms: roomID
+        },
+        {
+          $pull: {
             subscribedRooms: roomID,
-            ownedRooms: roomID
-          },
-          {
-            $pull: {
-              subscribedRooms: roomID,
-              ownedRooms: roomID,
-              favoritedRooms: roomID
-            }
+            ownedRooms: roomID,
+            favoritedRooms: roomID
           }
-        )
-          .then(response => {
-            console.log("# of matching user props: " + response.n);
-            console.log("# of documents modified: " + response.nModified);
-            res.status(204).send();
-          })
-          .catch(res.status(404).send(`Room ${roomID} could not be found.`));
-      })
-      .catch(res.status(404).send(`Room ${roomID} could not be found.`));
-  }
+        },
+        { runValidators: true }
+      );
+    })
+    .then(response => {
+      res.status(204).send();
+    })
+    .catch(error => res.status(404).send(error));
 });
 
 // ---------------------------------------------------------- UPLOAD / GET THUMBNAILS ----------------------------------------------------------
 
+// in progress
 // send json with: { folder: ..., uid: ..., image: ...}
 // order is required
 router.put("/upload-thumnail", function(req, res) {
@@ -169,7 +174,7 @@ router.put("/upload-thumnail", function(req, res) {
   });
 });
 
-// How to Use:
+// How To Use:
 // <img src={`http://localhost:5000/api/room/get-thumbnail?thumbnail_url=${thumbnail_url}`} />
 router.get("/get-thumbnail", async function(req, res) {
   let s3 = new aws.S3();
@@ -183,55 +188,35 @@ router.get("/get-thumbnail", async function(req, res) {
 
 // ---------------------------------------------------------- ADD / REMOVE TAGS ----------------------------------------------------------
 
-router.put("/tags/:uid/:roomID", async function(req, res) {
+// How To Use:
+// axios.put(`${BASE_API_URI}/room/tags/${roomID}/${uid}`)
+// returns updated resources (as per convention)
+router.put("/tags/:roomID/:uid", async function(req, res) {
   let roomID = req.params.roomID;
   let uid = req.params.uid;
   let tags = req.query.tags;
   let action = req.query.action;
-
   if (action == "delete") {
     await Room.findOneAndUpdate(
-      { _id: roomID, roomAdmins: uid },
+      { _id: roomID, "settings.access.roomAdmins": uid },
       { $pull: { tags: tags } },
-      { new: true }
+      { runValidators: true, new: true }
     )
-      .then(document => res.send(document.tags))
-      .catch(error => res.status(400).send("Remove tag failed."));
+      .then(document => {
+        res.send(document.tags);
+      })
+      .catch(error => res.status(400).send(error));
   } else if (action == "add") {
     await Room.findOneAndUpdate(
-      { _id: roomID, roomAdmins: uid },
+      { _id: roomID, "settings.access.roomAdmins": uid },
       { $addToSet: { tags: tags } },
-      { new: true }
+      { runValidators: true, new: true }
     )
       .then(document => res.send(document.tags))
-      .catch(error => res.status(400).send("Add tag failed."));
+      .catch(error => res.status(400).send(error));
   } else {
     res.status(400).send("Bad request.");
   }
-});
-
-router.put("/add-tags/:roomID", async function(req, res) {
-  let roomID = req.params.roomID;
-  let newTag = req.body.newTag;
-  await Room.findOneAndUpdate(
-    { _id: roomID },
-    { $addToSet: { tags: newTag } },
-    { new: true }
-  )
-    .then(document => res.send(document.tags))
-    .catch(error => res.status(400).send("Add tag failed."));
-});
-
-router.put("/remove-tags/:roomID", async function(req, res) {
-  let roomID = req.params.roomID;
-  let delTag = req.body.delTag;
-  await Room.findOneAndUpdate(
-    { _id: roomID },
-    { $pull: { tags: delTag } },
-    { new: true }
-  )
-    .then(document => res.send(document.tags))
-    .catch(error => res.status(400).send("Remove tag failed."));
 });
 
 module.exports = router;
