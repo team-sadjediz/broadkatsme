@@ -12,7 +12,7 @@ const UserProps = require("../models/userprops.model");
 // ---------------------------------------------------------- FIND ROOMS ----------------------------------------------------------
 
 // How To Use:
-// axios.put(`${BASE_API_URI}/room/${roomID})
+// axios.get(`${BASE_API_URI}/room/${roomID})
 // returns TRUE or FALSE if room exists
 router.get("/valid/:roomID", async function(req, res) {
   let roomID = req.params.roomID;
@@ -26,7 +26,7 @@ router.get("/valid/:roomID", async function(req, res) {
 // ---------------------------------------------------------- FIND ROOMS ----------------------------------------------------------
 
 // How To Use:
-// axios.put(`${BASE_API_URI}/room/${roomID})
+// axios.get(`${BASE_API_URI}/room/${roomID})
 // returns entire document if found
 router.get("/find/:roomID", async function(req, res) {
   let roomID = req.params.roomID;

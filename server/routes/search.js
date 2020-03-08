@@ -42,7 +42,7 @@ const Room = require("../models/room.model");
 // ---------------------------------------------------------- SEARCH BY NAME ----------------------------------------------------------
 
 // How To Use
-// axios.put(`${BASE_API_URL}/search/name/${name}`)
+// axios.get(`${BASE_API_URL}/search/name/${name}`)
 // returns all documents matching name (as per convention)
 router.get("/name/:name", async function(req, res) {
   let name = req.params.name;
@@ -58,8 +58,7 @@ router.get("/name/:name", async function(req, res) {
 // ---------------------------------------------------------- SEARCH BY TAGS ----------------------------------------------------------
 
 // How To Use
-// axios.put(`${BASE_API_URL}/search/tags/${tags}`)
-// where tags = [String]
+// axios.get(`${BASE_API_URL}/search/tags`, null, { params: { tags: tags }})
 // returns all documents containing at least 2 of the send tags (as per convention)
 router.get("/tags", async function(req, res) {
   let tags = req.query.tags;
@@ -76,7 +75,7 @@ router.get("/tags", async function(req, res) {
     }
   ])
     .then(documents => res.send(documents))
-    .catch(error => res.status(400).send("Search by tags failed."));
+    .catch(error => res.status(400).send(error));
 });
 
 module.exports = router;

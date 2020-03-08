@@ -8,7 +8,7 @@ const Room = require("../models/room.model");
 // ---------------------------------------------------------- FIND PROPS ----------------------------------------------------------
 
 // How To Use
-// axios.put(`${BASE_API_URL}/userprops/props/${uid}`)
+// axios.get(`${BASE_API_URL}/userprops/props/${uid}`)
 // returns user props of uid (as per convention)
 router.get("/props/:uid", async function(req, res) {
   let uid = req.params.uid;
@@ -25,7 +25,7 @@ router.get("/props/:uid", async function(req, res) {
 // ---------------------------------------------------------- FIND USERS ROOMS ----------------------------------------------------------
 
 // How To Use
-// axios.put(`${BASE_API_URL}/userprops/rooms/${uid}`)
+// axios.get(`${BASE_API_URL}/userprops/rooms/${uid}`)
 // returns list of all rooms a user is subscribed to (as per convnetion)
 router.get("/rooms/:uid", async function(req, res) {
   let uid = req.params.uid;
@@ -265,7 +265,7 @@ router.put("/favorite/:roomID/:uid", async function(req, res) {
 });
 
 // How To Use
-// axios.put(`${BASE_API_URL}/userprops/favorited/${roomID}/${uid}`)
+// axios.get(`${BASE_API_URL}/userprops/favorited/${roomID}/${uid}`)
 // returns if room is favorited(as per convention)
 router.get("/favorited/:roomID/:uid", async function(req, res) {
   let roomID = req.params.roomID;
