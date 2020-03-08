@@ -3,6 +3,9 @@ import PropTypes from "prop-types";
 
 // components:
 import NewRoom from "../new-room/new-room.component";
+import Chat from "../chat/chat.component";
+import RoomSubscribe from "../room-subscribe/room-subscribe.component";
+import HeaderInfo from "../header-info/header-info.component";
 
 // mui components:
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -24,11 +27,15 @@ function TabPanel(props) {
     <div
       style={{
         flexGrow: 1,
-        margin: "0.5em"
+        margin: "0.2em",
+        whiteSpace: "pre-wrap",
+        width: 200
       }}
       hidden={value !== index}
     >
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div
+        style={{ display: "flex", justifyContent: "center", height: "100%" }}
+      >
         {children}
       </div>
     </div>
@@ -137,13 +144,19 @@ export default function DrawerTabs({ drawerOpen }) {
         </TabNav>
 
         <TabPanel value={value} index={0}>
-          yellowyyyoysoydfsjldfjs
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <HeaderInfo />
+            <RoomSubscribe />
+          </div>
+
+          {/* <Chat drawerOpen={drawerOpen} /> */}
+          {/* yellowyyyoysoydfsjldfjs */}
         </TabPanel>
         <TabPanel value={value} index={1}>
           <NewRoom />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          schoolsux
+          <Chat drawerOpen={drawerOpen} />
         </TabPanel>
       </div>
     </div>

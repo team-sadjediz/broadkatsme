@@ -27,9 +27,9 @@ import ContactPage from "./pages/contact-page/contact-page.component";
 import ResetPassPage from "./pages/reset-password-page/reset-password-page.component";
 
 import Test from "./components/test-component/test.component";
+import Chat from "./components/chat/chat.component";
 
 import "./App.scss";
-import RoomPrivateRoute from "./pages/room-page/room-private-route";
 
 const theme = createMuiTheme({
   palette: {
@@ -105,8 +105,9 @@ class App extends Component {
                       )
                     }
                   />
+                  {/* <Route path="/lobby" component={Chat} /> */}
                   <Route path="/lobby" component={LobbyPage} />
-                  <RoomPrivateRoute path="/room/id=:id" component={RoomPage} />
+                  <Route path="/room/id=:id" component={RoomPage} />
                   <Route path="/about" component={AboutPage} />
                   <Route path="/contact" component={ContactPage} />
                   <Route path="/codeofconduct" component={CodeOfConductPage} />

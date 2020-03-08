@@ -1,182 +1,315 @@
 var express = require("express");
 var router = express.Router();
 
-const UserProfile = require("../models/userprofile.model");
+// const UserProfile = require("../models/userprofile.model");
 const UserProps = require("../models/userprops.model");
 const Room = require("../models/room.model");
 
 // ---------------------------------------------------------- FIND PROPS ----------------------------------------------------------
 
-router.get("/user-props", async function(req, res) {
-  let uid = req.query.uid;
+// How To Use
+// axios.put(`${BASE_API_URL}/userprops/props/${uid}`)
+// returns user props of uid (as per convention)
+router.get("/props/:uid", async function(req, res) {
+  let uid = req.params.uid;
   await UserProps.findOne({ userID: uid })
-    .then(userprops => res.send({ userprops }))
-    .catch(res.status(404).send(`User ${uid} props is not found.`));
+    .then(userprops => {
+      res.send({ userprops });
+    })
+    .catch(error => {
+      error.additional = "Error has occured in /userprops/props/:uid";
+      res.status(404).send(error);
+    });
 });
 
 // ---------------------------------------------------------- FIND USERS ROOMS ----------------------------------------------------------
 
-router.get("/users-rooms", async function(req, res) {
-  let uid = req.query.uid;
-  let roomUrls = [];
+// How To Use
+// axios.put(`${BASE_API_URL}/userprops/rooms/${uid}`)
+// returns list of all rooms a user is subscribed to (as per convnetion)
+router.get("/rooms/:uid", async function(req, res) {
+  let uid = req.params.uid;
 
-  let exists = null;
   await UserProps.findOne({ userID: uid })
-    .then(document => (exists = document))
-    .catch(error => console.log(error));
-
-  if (exists !== null) {
-    await UserProps.findOne({ userID: uid })
-      .populate("subscribedRooms")
-      .exec((error, populatedProps) => {
-        let rooms = populatedProps.subscribedRooms;
-        rooms.forEach(function(room) {
-          roomUrls.push({
-            "roomID": room._id,
-            "name": room.name,
-            "thumbnailUrl": room.thumbnailUrl,
-            "tags": room.tags
-          });
+    .then(document => {
+      return UserProps.findOne({ userID: uid }).populate("subscribedRooms");
+    })
+    .then(populatedProps => {
+      let rooms = populatedProps.subscribedRooms;
+      let roomUrls = [];
+      rooms.forEach(function(room) {
+        roomUrls.push({
+          "roomID": room._id,
+          "name": room.name,
+          "thumbnailUrl": room.thumbnailUrl,
+          "tags": room.tags
         });
-        console.log(roomUrls);
-        res.send(roomUrls);
       });
-  } else {
-    res.send([]);
-  }
+      res.send(roomUrls);
+    })
+    .catch(error => {
+      error.additional = "Error has occured in /userprops/rooms/:uid";
+      res.status(404).send(error);
+    });
 });
 
 // ---------------------------------------------------------- UN/SUBSCRIBE TO ROOM ----------------------------------------------------------
 
-router.put("/subscribed-rooms/unsubscribe", async function(req, res) {
-  let roomID = req.body.roomID;
-  let uid = req.body.uid;
+// How To Use
+// axios.put(`${BASE_API_URL}/userprops/search/${room}/${uid}`, null, { params: { action: "unsubscribe" || "subscribe" }})
+// returns updated list of subscribed rooms (as per convention)
 
-  await UserProps.findOneAndUpdate(
-    { "userID": uid, "ownedRooms": { $nin: roomID } },
-    {
-      $pull: {
-        subscribedRooms: roomID,
-        favoritedRooms: roomID
-      }
-    },
-    { new: true }
-  )
-    .then(async userprops => {
-      await Room.findByIdAndUpdate(roomID, { $pull: { subscribers: uid } })
-        .then(room => {
-          let updatedUserProps = {
-            "subscribedRooms": userprops.subscribedRooms,
-            "favoritedRooms": userprops.favoritedRooms
-          };
-          let updatedRoom = { "subscribers": room.subscribers };
-          let response = { updatedUserProps, updatedRoom };
-          console.log("response " + response);
-          res.send(response);
-        })
-        .catch(error =>
-          res.status(400).send("Unsubscribing (in Room) failed.")
+// ISSUE IN SUBSCRIBE: DOES NOT THROW ERROR IF CANNOT ADD BEYOND ROOM LIMIT
+// RETURNS MOST UPDATED LIST OF SUBSCRIBED ROOMS, ETC.
+// IN PROGRESS
+router.put("/subscribe/:roomID/:uid", async function(req, res) {
+  let roomID = req.params.roomID;
+  let uid = req.params.uid;
+  let action = req.query.action;
+
+  if (action == "unsubscribe") {
+    let updatedUserProps;
+    let updatedRoom;
+    await UserProps.findOneAndUpdate(
+      { "userID": uid, "ownedRooms": { $nin: roomID } },
+      {
+        $pull: {
+          subscribedRooms: roomID,
+          favoritedRooms: roomID
+        }
+      },
+      { runValidators: true, new: true }
+    )
+      .then(userprops => {
+        updatedUserProps = userprops;
+        return Room.findByIdAndUpdate(
+          roomID,
+          { $pull: { subscribers: uid } },
+          { runValidators: true, new: true }
         );
-    })
-    .catch(error =>
-      res.status(400).send("Unsubscribing in (UserProps) failed.")
-    );
+      })
+      .then(room => {
+        updatedRoom = room;
+        let response = {
+          updatedUserProps: {
+            "subscribedRooms": updatedUserProps.subscribedRooms,
+            "favoritedRooms": updatedUserProps.favoritedRooms
+          },
+          updatedRoom: { "subscribers": room.subscribers }
+        };
+        console.log("response " + response);
+        res.send(response);
+      })
+      .catch(async error => {
+        // If user's props have been updated for unsubscribe, but room has failed, readd to user props.
+        // POSSIBLE LEAK: DATA CORRUPTION IF THIS FAILS. SOLUTION: LOOP - NOT IMPLEMENTED / EXPENSIVE
+        let additional = `Error has occured in /userprops/subscribe/:roomID/:uid under action = '${action}'`;
+        if (updatedUserProps && updatedRoom == null) {
+          await UserProps.findOneAndUpdate(
+            { "userID": uid, "ownedRooms": { $nin: roomID } },
+            {
+              $addToSet: {
+                subscribedRooms: roomID,
+                favoritedRooms: roomID
+              }
+            },
+            { runValidators: true, new: true }
+          ).then(
+            room => (additional += ` ; ${roomID} readded to ${uid} props`)
+          );
+        }
+        error.additional = additional;
+        res.status(400).send(error);
+      });
+    // ----------------------------------------------------------------------------------
+  } else if (action == "subscribe") {
+    let updatedUserProps;
+    let updatedRoom;
+    await Room.findOneAndUpdate(
+      {
+        _id: roomID,
+        "settings.access.bans": { $nin: uid },
+        subscribers: { $ne: uid },
+        "settings.privacy": false
+      },
+      {
+        // CHANGE
+        $push: { subscribers: { $each: [uid], $slice: 5 } }
+      },
+      { runValidators: true }
+    )
+      .then(room => {
+        updatedRoom = room;
+        if (room.subscribers.length == 5) {
+          return UserProps.findOne({ "userID": uid });
+        } else {
+          updatedRoom.subscribers.push(uid);
+          return UserProps.findOneAndUpdate(
+            { "userID": uid },
+            {
+              $addToSet: {
+                subscribedRooms: roomID
+              }
+            },
+            { runValidators: true, new: true }
+          );
+        }
+      })
+      .then(userprops => {
+        updatedUserProps = userprops;
+        let response = {
+          updatedUserProps: {
+            "subscribedRooms": updatedUserProps.subscribedRooms
+          },
+          updatedRoom: { "subscribers": updatedRoom.subscribers }
+        };
+        console.log("response " + response);
+        res.send(response);
+      })
+      // await UserProps.findOneAndUpdate(
+      //   { "userID": uid },
+      //   {
+      //     $addToSet: {
+      //       subscribedRooms: roomID
+      //       // favorited_rooms: roomID
+      //     }
+      //   },
+      //   { runValidators: true, new: true }
+      // )
+      //   .then(userprops => {
+      //     updatedUserProps = userprops;
+      //     return Room.findOneAndUpdate(
+      //       {
+      //         _id: roomID,
+      //         "settings.access.bans": { $nin: uid },
+      //         subscribers: { $ne: uid }
+      //       },
+      //       {
+      //         // CHANGE
+      //         $push: { subscribers: { $each: [uid], $slice: 5 } }
+      //       },
+      //       { runValidators: true, new: true }
+      //     );
+      //   })
+      //   .then(room => {
+      //     updatedRoom = room;
+      //     let response = {
+      //       updatedUserProps: {
+      //         "subscribedRooms": updatedUserProps.subscribedRooms,
+      //         "favoritedRooms": updatedUserProps.favoritedRooms
+      //       },
+      //       updatedRoom: { "subscribers": room.subscribers }
+      //     };
+      //     console.log("response " + response);
+      //     res.send(response);
+      //   })
+      .catch(async error => {
+        // If user's props have been updated for subscribe, but room has failed, remove from props.
+        // POSSIBLE LEAK: DATA CORRUPTION IF THIS FAILS. SOLUTION: LOOP - NOT IMPLEMENTED / EXPENSIVE
+        let additional = `Error has occured in /userprops/subscribe/:roomID/:uid under action = '${action}'`;
+        if (updatedUserProps && updatedRoom == null) {
+          await UserProps.findOneAndUpdate(
+            { "userID": uid },
+            {
+              $pull: {
+                subscribedRooms: roomID
+              }
+            },
+            { runValidators: true, new: true }
+          ).then(
+            room => (additional += ` ; ${roomID} removed from ${uid} props`)
+          );
+        }
+        error.additional = additional;
+        res.status(400).send(error);
+      });
+  } else {
+    res
+      .status(400)
+      .send(
+        `Bad request in /roomsettings/admins/:roomID/:admin/:uid, action is ${action}`
+      );
+  }
 });
 
-router.put("/subscribed-rooms/subscribe", async function(req, res) {
-  let roomID = req.body.roomID;
-  let uid = req.body.uid;
+// ---------------------------------------------------------- FAVORITE  ----------------------------------------------------------
 
-  await UserProps.findOneAndUpdate(
-    { "userID": uid },
-    {
-      $addToSet: {
-        subscribedRooms: roomID
-        // favorited_rooms: roomID
-      }
-    },
-    { new: true }
-  )
-    .then(async userprops => {
-      await Room.findByIdAndUpdate(roomID, { $addToSet: { subscribers: uid } })
-        .then(room => {
-          let updatedUserProps = {
-            "subscribedRooms": userprops.subscribedRooms,
-            "favoritedRooms": userprops.favoritedRooms
-          };
-          let updatedRoom = { "subscribers": room.subscribers };
-          let response = { updatedUserProps, updatedRoom };
-          console.log("response " + response);
-          res.send(response);
-        })
-        .catch(error => res.status(400).send("Subscribing (in Room) failed."));
-    })
-    .catch(error => res.status(400).send("Subscribing in (UserProps) failed."));
-});
-
-// ---------------------------------------------------------- FAVORITE / UNFAVORITE ----------------------------------------------------------
-
-router.put("/favorite-rooms/favorite", async function(req, res) {
-  let roomID = req.body.roomID;
-  let uid = req.body.uid;
+// How To Use
+// axios.put(`${BASE_API_URL}/userprops/favorite/${roomID}/${uid}`)
+// favorites room depending on current status (as per convention)
+router.put("/favorite/:roomID/:uid", async function(req, res) {
+  let roomID = req.params.roomID;
+  let uid = req.params.uid;
 
   let favorite;
-  await UserProps.findOne({ "userID": uid }, function(error, userprops) {
-    if (userprops.favoritedRooms.includes(roomID)) {
-      userprops.favoritedRooms.pull(roomID);
-      favorite = false;
-    } else {
-      userprops.favoritedRooms.addToSet(roomID);
-      favorite = true;
-    }
-    userprops.save();
-    console.log({ userprops: userprops, favorited: favorite });
-    res.json({ userprops: userprops, favorited: favorite });
-  });
+  await Room.exists({ _id: roomID })
+    .then(exists => {
+      return UserProps.findOne({ "userID": uid });
+    })
+    .then(userprops => {
+      if (userprops.favoritedRooms.includes(roomID)) {
+        userprops.favoritedRooms.pull(roomID);
+        favorite = false;
+      } else {
+        userprops.favoritedRooms.addToSet(roomID);
+        favorite = true;
+      }
+      userprops.save();
+      // console.log({ userprops: userprops, favorited: favorite });
+      res.json({ userprops: userprops, favorited: favorite });
+    })
+    .catch(error => {
+      error.additional = `Error has occured in /userprops/favorite/:roomID/:uid`;
+      res.status(404).send(error);
+    });
 });
 
-router.get("/favorite-rooms/is-favorited", async function(req, res) {
-  let roomID = req.query.roomID;
-  let uid = req.query.uid;
+// How To Use
+// axios.put(`${BASE_API_URL}/userprops/favorited/${roomID}/${uid}`)
+// returns if room is favorited(as per convention)
+router.get("/favorited/:roomID/:uid", async function(req, res) {
+  let roomID = req.params.roomID;
+  let uid = req.params.uid;
 
   await UserProps.findOne({
-    "userID": uid,
-    favoritedRooms: { $in: roomID }
+    "userID": uid
   })
     .then(document => {
-      if (document == null) {
-        res.send(false);
-      } else {
+      if (document.favoritedRooms.includes(roomID)) {
         res.send(true);
+      } else {
+        res.send(false);
       }
     })
-    .catch(error => res.status(400).send("Getting favorited status failed."));
+    .catch(error => res.status(400).send(error));
 });
 
 // ---------------------------------------------------------- ADD / REMOVE NOTIFICATIONS ----------------------------------------------------------
 
-router.put("/new-notification", async function(req, res) {
-  let uid = req.body.uid;
-  let title = req.body.title;
-  let message = req.body.message;
-  let notification = { title: title, message: message };
-  await UserProps.findOneAndUpdate(
-    { userID: uid },
-    { $push: { notifications: notification } }
-  )
-    .then(document => res.send(document))
-    .catch(error => res.status(400).send("New notification failed."));
-});
+// router.put("/new-notification", async function(req, res) {
+//   let uid = req.body.uid;
+//   let title = req.body.title;
+//   let message = req.body.message;
+//   let notification = { title: title, message: message };
+//   await UserProps.findOneAndUpdate(
+//     { userID: uid },
+//     { $push: { notifications: notification } },
+//     { runValidators: true, new: true }
+//   )
+//     .then(document => res.send(document))
+//     .catch(error => res.status(400).send("New notification failed."));
+// });
 
-router.put("/delete-notification", async function(req, res) {
-  let uid = req.body.uid;
-  let nid = req.body.nid;
-  await UserProps.findOneAndUpdate(
-    { userID: uid },
-    { $pull: { notifications: { _id: nid } } }
-  )
-    .then(document => res.send(document))
-    .catch(error => res.status(400).send("Delete notification failed."));
-});
+// router.put("/delete-notification", async function(req, res) {
+//   let uid = req.body.uid;
+//   let nid = req.body.nid;
+//   await UserProps.findOneAndUpdate(
+//     { userID: uid },
+//     { $pull: { notifications: { _id: nid } } },
+//     { runValidators: true, new: true }
+//   )
+//     .then(document => res.send(document))
+//     .catch(error => res.status(400).send("Delete notification failed."));
+// });
 
 module.exports = router;

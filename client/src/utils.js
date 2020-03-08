@@ -1,19 +1,30 @@
-const DEVELOPMENT_API_CALL_URL = "http://localhost:5000/api";
-const PRODUCTION_API_CALL_URL = "http://broadkatsme.herokuapp.com/api";
-let baseUrl;
+const URL_DEVELOPMENT = "http://localhost:5000";
+const URL_PRODUCTION = "http://broadkatsme.herokuapp.com";
+
+// will be changed later:
+const URL_CHAT_DEVELOPMENT = "http://localhost:5000";
+const URL_CHAT_PRODUCTION = "http://broadkatsme.herokuapp.com";
+
+let BASE_API_URL;
+let CHAT_SERVER;
 
 switch (process.env.NODE_ENV) {
   case "development":
-    baseUrl = DEVELOPMENT_API_CALL_URL;
+    BASE_API_URL = URL_DEVELOPMENT + "/api";
+    CHAT_SERVER = URL_CHAT_DEVELOPMENT;
     break;
   case "production":
-    baseUrl = PRODUCTION_API_CALL_URL;
+    BASE_API_URL = URL_PRODUCTION + "/api";
+    CHAT_SERVER = URL_CHAT_PRODUCTION;
+
     break;
   case "test":
-    baseUrl = DEVELOPMENT_API_CALL_URL;
+    BASE_API_URL = URL_DEVELOPMENT + "/api";
+    CHAT_SERVER = URL_CHAT_DEVELOPMENT;
+
     break;
   default:
-    baseUrl = "we did an oopsie";
+    BASE_API_URL = "we did an oopsie";
 }
 
-export let BASE_API_URL = baseUrl;
+module.exports = { BASE_API_URL, CHAT_SERVER };
