@@ -68,7 +68,7 @@ router.put("/change-privacy/:roomID/:uid", async function(req, res) {
     { $set: { "settings.privacy": privacy } },
     { runValidators: true, new: true }
   )
-    .then(document => res.send(document.privacy))
+    .then(document => res.send(document.settings.privacy))
     .catch(error => {
       error.additional =
         "Error had occured in /roomsettings/change-privacy/:roomID/:uid";
