@@ -62,7 +62,14 @@ const Room = new mongoose.Schema({
   },
   subscribers: {
     type: [String],
-    required: true
+    required: true,
+    validate: {
+      validator: function() {
+        console.log(this.subscribers.length > 1 && this.subscribers.length < 5);
+        return this.subscribers.length > 1 && this.subscribers.length < 5;
+      },
+      message: "{PATH} exceends limit of (5)"
+    }
   },
   tags: [{ type: String }],
   settings: RoomSettings

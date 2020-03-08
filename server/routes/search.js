@@ -3,6 +3,10 @@ var router = express.Router();
 
 const Room = require("../models/room.model");
 
+// ---------------------------------------------------------- SEARCH W/NAME & TAGS ----------------------------------------------------------
+
+// IN PROGRESS
+
 // router.get("/search-rooms", async function(req, res) {
 //   let query = {};
 //   let tags = [];
@@ -35,9 +39,13 @@ const Room = require("../models/room.model");
 //     .catch(error => res.status(400).send("Search failed."));
 // });
 
-router.get("/search-by-name", async function(req, res) {
-  // Query DB for all rooms with these tags, send back room name, thumbnail, and tags
-  let name = req.query.name;
+// ---------------------------------------------------------- SEARCH BY NAME ----------------------------------------------------------
+
+// How To Use
+// axios.put(`${BASE_API_URL}/search/name/${name}`)
+// returns all documents matching name (as per convention)
+router.get("/name/:name", async function(req, res) {
+  let name = req.params.name;
   await Room.find({ name: name }, function(error, room) {
     if (error) {
       res.send(error);
@@ -45,10 +53,15 @@ router.get("/search-by-name", async function(req, res) {
       res.send(room);
     }
   });
-  res.send("Rooms with requested tags sent back");
 });
 
-router.get("/search-by-tags", async function(req, res) {
+// ---------------------------------------------------------- SEARCH BY TAGS ----------------------------------------------------------
+
+// How To Use
+// axios.put(`${BASE_API_URL}/search/tags/${tags}`)
+// where tags = [String]
+// returns all documents containing at least 2 of the send tags (as per convention)
+router.get("/tags", async function(req, res) {
   let tags = req.query.tags;
   await Room.aggregate([
     { $match: { "tags.1": { $exists: true } } },

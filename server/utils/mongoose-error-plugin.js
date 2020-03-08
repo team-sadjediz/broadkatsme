@@ -45,6 +45,7 @@ module.exports = function(schema, options) {
       "findOneAndUpdate",
       "findByIdAndUpdate",
       // "findRandom",
+      "updateOne",
       "validate",
       // "save",
       "findOneAndDelete",
@@ -104,7 +105,8 @@ module.exports = function(schema, options) {
           reason: reason,
           //   model: error.model,
           type: error.errors[errorKeys[0]].type,
-          filters: error.errors[errorKeys[0]].filters
+          filters: error.errors[errorKeys[0]].filters,
+          additional: undefined
         };
         next(errorRes);
         // --------------------------------------------------------------------------------------------------
@@ -151,7 +153,8 @@ module.exports = function(schema, options) {
           reason: reason,
           //   model: error.model,
           type: error.type,
-          filters: error.filters
+          filters: error.filters,
+          additional: undefined
         };
         next(errorRes);
       } else {

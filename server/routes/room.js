@@ -50,7 +50,8 @@ router.put("/active/:roomID/:uid", async function(req, res) {
   let active = req.query.active;
 
   await Room.findOneAndUpdate(
-    { _id: roomID, "settings.access.roomAdmins": uid },
+    // { _id: roomID, "settings.access.roomAdmins": uid },
+    { _id: roomID },
     { active: active },
     { runValidators: true, new: true }
   )
