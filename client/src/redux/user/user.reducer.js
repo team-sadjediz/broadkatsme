@@ -29,10 +29,15 @@ const userReducer = (state = INITIAL_STATE, action) => {
         ...state,
         currentUser: action.payload
       };
-    case UserActionTypes.SET_USER_PROPS:
+    case UserActionTypes.SET_FRIENDSLIST:
       return {
         ...state,
-        userProps: action.payload
+        friendslist: action.payload
+      };
+    case UserActionTypes.SET_NOTIFICATION:
+      return {
+        ...state,
+        notifications: action.payload
       };
     case UserActionTypes.SET_SOCKET:
       return {

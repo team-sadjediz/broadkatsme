@@ -12,9 +12,14 @@ export const setCurrentUser = user => ({
   payload: user
 });
 
-export const setUserProps = userprops => ({
-  type: UserActionTypes.SET_USER_PROPS,
-  payload: userprops
+export const setFriendsList = friendslist => ({
+  type: UserActionTypes.SET_FRIENDSLIST,
+  payload: friendslist
+});
+
+export const setNotifications = notifications => ({
+  type: UserActionTypes.SET_NOTIFICATION,
+  payload: notifications
 });
 
 export const setSocket = socket => ({
@@ -37,20 +42,34 @@ export const updateCurrentUser = userID => {
   };
 };
 
-export const updateUserProps = userID => {
-  console.log("updateUserProps", userID);
+export const updateFriendslist = userID => {
   return dispatch => {
-    console.log("inside dispatch");
     axios
-      .get(`${BASE_API_URL}/userprops/user-props`, {
+      .get(`${BASE_API_URL}/userprops/friends-list`, {
         params: { uid: userID }
       })
       .then(res => {
         console.log("REZ", res);
-        dispatch(setUserProps(res.data));
+        dispatch(setFriendsList(res.data));
       })
       .catch(err => {
         console.error(err);
       });
   };
 };
+
+// export const updateNotifications = userID => {
+//   return dispatch => {
+//     axios
+//       .get(`${BASE_API_URL}/userprops/user-props`, {
+//         params: { uid: userID }
+//       })
+//       .then(res => {
+//         console.log("REZ", res);
+//         dispatch(setUserProps(res.data));
+//       })
+//       .catch(err => {
+//         console.error(err);
+//       });
+//   };
+// };

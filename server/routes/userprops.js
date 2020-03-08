@@ -19,6 +19,35 @@ router.get("/user-props", async function(req, res) {
     });
 });
 
+// router.get("/friends-list", async function(req, res) {
+//   let uid = req.query.uid;
+
+//   let friendslist = await UserProps.findOne({ userID: uid })
+//     .then(document => document)
+//     .catch(error => console.log(error));
+
+//   if (friendslist) {
+//     await UserProps.findOne({ userID: uid })
+//       .populate("friends")
+//       .exec((error, populatedProps) => {
+//         let friendsListDetailed = [];
+//         let friendslist = populatedProps.friends;
+//         friendslist.forEach(function(room) {
+//           friendsListDetailed.push({
+//             "userID": room._id,
+//             "username": room.name,
+//             "photoURL": room.thumbnailUrl,
+//             "chatColor": room.tags
+//           });
+//         });
+//         console.log("friendslist:", friendslist);
+//         res.send(friendslist);
+//       });
+//   } else {
+//     res.send([]);
+//   }
+// });
+
 // ---------------------------------------------------------- FIND USERS ROOMS ----------------------------------------------------------
 
 router.get("/users-rooms", async function(req, res) {
