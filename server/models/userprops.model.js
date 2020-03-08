@@ -7,8 +7,7 @@ const UserProps = new mongoose.Schema({
     required: true
   },
   friends: {
-    type: [String],
-    required: true
+    type: [String]
   },
   ownedRooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
   subscribedRooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
