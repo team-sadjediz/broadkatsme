@@ -60,7 +60,7 @@ module.exports = function(schema, options) {
           "-----------------------------------------------------------------------------------"
         );
         console.log(
-          "1.This error message has been printed from the plugin. For full error, details, \nuncomment line 11 in /server/utils/mongoose-plugin.js. If a value is undefined, then \nthe error received did not contain that property."
+          "1.This error message has been printed from the plugin. For full error, details, \nuncomment line 56 in /server/utils/mongoose-plugin.js. If a value is undefined, then \nthe error received did not contain that property."
         );
         let errorKeys = Object.keys(error.errors);
         errorKeys.forEach(errorKey => {
@@ -122,7 +122,7 @@ module.exports = function(schema, options) {
           "-----------------------------------------------------------------------------------"
         );
         console.log(
-          "2.This error message has been printed from the plugin. For full error, details, \nuncomment line 11 in /server/utils/mongoose-plugin.js. If a value is undefined, then \nthe error received did not contain that property."
+          "2.This error message has been printed from the plugin. For full error, details, \nuncomment line 56 in /server/utils/mongoose-plugin.js. If a value is undefined, then \nthe error received did not contain that property."
         );
         console.log(
           "------- Error: -------------------------------------------------------------------"
