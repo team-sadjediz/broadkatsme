@@ -24,7 +24,6 @@ const initialState = {
   isFavorited: false,
   volume: 50,
   roomName: "",
-  // roomID: null,
   ownerID: "",
   showInitial: true,
   showSettings: false,

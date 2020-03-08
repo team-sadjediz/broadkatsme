@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
@@ -91,6 +91,25 @@ TabPanel.propTypes = {
   index: PropTypes.any.isRequired,
   value: PropTypes.any.isRequired
 };
+
+class RoomSettings extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: 0,
+      open: true
+    };
+  }
+
+  handleChange = (event, newValue) => {
+    this.setState({ value: newValue });
+  };
+
+  handleClose = () => {
+    this.props.toggleSettingsModal();
+    this.state({ open: false });
+  };
+}
 
 export default function RoomSettings(props) {
   const classes = useStyles();
