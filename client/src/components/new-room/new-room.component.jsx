@@ -4,8 +4,10 @@ import axios from "axios";
 
 // redux:
 import { connect } from "react-redux";
-// import { setSubscribedRooms } from "../../redux/room/room.actions";
-import { updateUserProps } from "../../redux/user/user.actions";
+import {
+  setSubscribedRooms,
+  updateSubscribedRooms
+} from "../../redux/room/room.actions";
 
 // components:
 import FormInput from "../form-input/form-input.component";
@@ -50,10 +52,13 @@ class NewRoom extends React.Component {
         // });
         // this.props.setSubscribedRooms(results.data);
 
-        this.props.updateUserProps(this.props.userAuth.uid);
+        this.props.updateSubscribedRooms(this.props.userAuth.uid);
       })
       .catch(error => {
         console.error(error);
+        if (error.response) {
+          console.log(error.response);
+        }
       });
 
     this.setState({
@@ -122,7 +127,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateUserProps: uid => dispatch(updateUserProps(uid))
+  updateSubscribedRooms: uid => dispatch(updateSubscribedRooms(uid))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewRoom);

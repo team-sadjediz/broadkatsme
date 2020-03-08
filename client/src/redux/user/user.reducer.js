@@ -2,14 +2,18 @@ import { UserActionTypes } from "./user.types";
 
 const INITIAL_STATE = {
   userAuth: null,
-  currentUser: null,
-  userProps: {
-    friends: [],
-    ownedRooms: [],
-    subscribedRooms: [],
-    favoritedRooms: [],
-    notifications: []
+  currentUser: {
+    userID: "",
+    username: "",
+    chatColor: "",
+    photoURL: "",
+    biography: "",
+    tags: [],
+    favorites: { movies: "", music: "", websites: "" },
+    privacy: true
   },
+  friendslist: [],
+  notifications: [],
   socket: { id: null }
 };
 

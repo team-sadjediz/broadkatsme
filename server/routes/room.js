@@ -83,9 +83,10 @@ router.post("/create-room", async function(req, res) {
           console.log(document.subscribedRooms);
           res.send(document.subscribedRooms);
         })
-        .catch(error =>
-          res.status(400).send("New room insert added to user props failed.")
-        );
+        .catch(error => {
+          console.log(error);
+          res.status(400).send("New room insert added to user props failed.");
+        });
     })
     .catch(error => res.status(400).send("New room insert failed."));
 });
