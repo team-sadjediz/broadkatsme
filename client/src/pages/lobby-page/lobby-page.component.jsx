@@ -30,7 +30,8 @@ class LobbyPage extends React.Component {
       userRooms: [],
       activeRooms: [],
       search: "",
-      filterBy: "roomName"
+      filterBy: "",
+      selectedRoom: ""
     };
   }
 
@@ -42,6 +43,10 @@ class LobbyPage extends React.Component {
     this.setState({filterBy: e.target.value});
   }
 
+  handleSelectRoom = e => {
+    // this.setState({selectedRoom: e.target.value});
+    console.log(e.target.value);
+  }
   componentDidMount() {
     // Get Random Rooms for Feature Rooms
     axios
@@ -66,25 +71,51 @@ class LobbyPage extends React.Component {
         // console.log("oof");
       });
   }
-
-
+  // handleUnsubscribe(uid, roomID) {
+  //   let request = {
+  //     "uid": uid,
+  //     // "roomID": this.state.roomID
+  //     "roomID": roomID
+  //   };
+  //   console.log(request);
+  //   axios
+  //     .put(`${BASE_API_URL}/userprops/subscribed-rooms/unsubscribe`, request)
+  //     .then(res => console.log(res))
+  //     .catch(error => console.error(error));
+  //   console.log("hello" + roomID);
+  //   // console.log(this.state);
+  //   // console.log(this.props);
+  //   // console.log(e.target.value);
+  // }
   render() {
+
     let filteredUserRooms = this.state.userRooms.filter(
       (room) => {
-        // console.log(room.name);
-        // console.log(this.state.search);
         if (this.state.filterBy === "tags") {
-          // rooms.map((value, index) => {
-          //   return
-
-          // })
+          let found = false;
           for (let tag = 0; tag < room.tags.length; tag++){
-            return room.tags[tag].toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1;
+            if (room.tags[tag].toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1){
+              found = true;
+            }
           }
+          return found;
         }
         if (this.state.filterBy === "roomName") {
           return room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1;
         }
+        if (this.state.filterBy === "") {
+          let found = false;
+          for (let tag = 0; tag < room.tags.length; tag++){
+            if (room.tags[tag].toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1){
+              found = true;
+            }
+          }
+          if (room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1){
+            found = true;
+          }
+          return found;
+        }
+        return -1;
       }
     );
     return (
@@ -104,33 +135,35 @@ class LobbyPage extends React.Component {
           <div id="active_header" className="header">
             ACTIVE ROOMS
             <input value={this.state.search} onChange={this.handleFilter.bind(this)}></input>
-            <FormControl variant="outlined">
-            <Select
-              labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
-              value={this.state.filterBy}
-              onChange={this.handleSelect.bind(this)}
-              // labelWidth={labelWidth}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={"roomName"}>room name</MenuItem>
-              <MenuItem value={"tags"}>tags</MenuItem>
-            </Select>
-          </FormControl>
+
+            <FormControl variant="outlined" >
+              <InputLabel id="demo-simple-select-outlined-label">
+                filter by
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={this.state.filterBy}
+                onChange={this.handleSelect.bind(this)}
+              >
+                <MenuItem value={"roomName"}>room name</MenuItem>
+                <MenuItem value={"tags"}>tags</MenuItem>
+              </Select>
+            </FormControl>
           </div>
           <div className="cards-grid">
           {
               filteredUserRooms.map(property=> 
-              <div className="zoom" key={ property.roomID }>
-                  {/* <p className='title'>{property.name}</p> */}
+              <div className="card-grid-container" key={ property.roomID }>
                   <Card 
+                  uid={ this.state.uid }
                   roomID={ property.roomID } 
-                  name={ property.name} 
-                  tags={property.tags} 
-                  thumbnailUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}`}></Card>
-                  {/* <p className='title'>Tags: {property.tags}</p> */}
+                  name={ property.name } 
+                  tags={ property.tags } 
+                  thumbnailUrl={ `${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}` }
+                  onMouseEnter={this.handleSelectRoom.bind(property.roomID)}
+                  // unsubscribe={this.handleUnsubscribe}
+                  ></Card>
               </div>
               )
           }

@@ -21,10 +21,19 @@ import { BASE_API_URL } from "../../utils";
 import Popper from '@material-ui/core/Popper';
 import Poppity from "../poppity/poppity.component";
 import { Link } from "react-router-dom";
+import { emphasize } from "@material-ui/core/styles/colorManipulator";
+import Content from "./card-content.component";
+import { ReactComponent as Live } from "../../assets/icons/live.svg";
+
 
 const useStyles = makeStyles(theme => ({
   root: {
-    maxWidth: 345,
+    maxWidth: 400,
+    // '&:hover': {
+    //   transform: 'scale(1.1)',
+    //   opacity: 0.85,
+    //   transition: 'opacity 350ms ease',
+    // }
   },
   media: {
     height: 0,
@@ -47,7 +56,6 @@ const useStyles = makeStyles(theme => ({
 
 const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid}) => {
 
-
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const [openLink, setOpen] = React.useState(false);
@@ -60,22 +68,17 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid}) => {
     setOpen(!openLink);
   };
 
-  function favoriteRoom(e) {
-    let request = {
-      "uid": {uid},
-      "roomID": e
-    };
-    let response;
-    axios
-      .put(`${BASE_API_URL}/userprops/favorite-rooms/favorite`, request)
-      .then(res => this.setState({ isFavorited: res.data.favorited }))
-      .catch(error => console.error(error));
-  };
+  // const handleClose = () => {
+  //   setOpen(!openLink);
+  // };
+
 
   const roomTags = tags;
 
   return (
+    <div>
     <Card className={classes.root}>
+      <Live className="live-box" />
       <CardMedia
         className={classes.media}
         image={thumbnailUrl}
@@ -90,15 +93,15 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid}) => {
       </CardContent>
 
       <CardActions disableSpacing>
-        <Link to={`/room/id/${roomID}`}>
+        <Link to={`/room/id=${roomID}`}>
         <IconButton>
           <div>join</div>
         </IconButton>
         </Link>
         <IconButton aria-label="share">
-        <Poppity style={{'width': '100px'}} alignArrow="center" content={<input value={`${BASE_API_URL}/room/id=${roomID}`}/>}>
+        {/* <Poppity style={{'width': '100px', 'position' : 'absolute'}} alignArrow="center" content={<input value={`${BASE_API_URL}/room/id=${roomID}`}/>}> */}
           <ShareIcon onClick={handleShareLink}/>
-          </Poppity>
+          {/* </Poppity> */}
           {/* <ShareIcon onClick={handleShareLink}/> */}
           {/* <Popper open={openLink} anchorEl='bottom'>
             <div>The content of the Popper.</div>
@@ -115,12 +118,13 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid}) => {
           <ExpandMoreIcon />
         </IconButton>
       </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          {/* insert description */}
-        </CardContent>
-      </Collapse>
+
+
     </Card>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <Content show={expanded} name={name} thumbnailUrl={thumbnailUrl} tags={tags}/>
+        </Collapse>
+        </div>
   );
 }
 

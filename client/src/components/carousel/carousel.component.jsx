@@ -6,6 +6,9 @@ import { Link } from "react-router-dom";
 import { BASE_API_URL } from "../../utils";
 import { ReactComponent as NextBtn } from "../../assets/icons/caret-right-solid.svg";
 import { ReactComponent as BackBtn } from "../../assets/icons/caret-left-solid.svg";
+import { makeStyles } from '@material-ui/core/styles';
+
+
 class Carousel extends React.Component {
     constructor(props){
         super(props);
@@ -19,17 +22,19 @@ class Carousel extends React.Component {
   render() {
     // console.log(JSON.stringify(this.props.properties));
     // console.log(this.props.cardType);
+    console.log(this.state.activeCard);
     return (
-    <div style={{"padding":"0px 45px","maxWidth":1000,"margin":"0 auto"}}>
+    <div style={{"padding":"0px 45px","maxWidth":1000,"margin":"0 auto","position": "relative"}}>
     <ItemsCarousel
+        style={{"position": "absolute"}}
         infiniteLoop={true}
         gutter={12}
         activePosition={'center'}
         chevronWidth={60}
         disableSwipe={false}
         alwaysShowChevrons={false}
-        numberOfCards={5}
-        slidesToScroll={3}
+        numberOfCards={3}
+        slidesToScroll={2}
         outsideChevron={true}
         showSlither={false}
         firstAndLastGutter={false}
@@ -41,7 +46,7 @@ class Carousel extends React.Component {
 
       {Array.from(this.props.properties).map((property) =>
         // <Link to={`/room/id/${property.roomID}`}>
-            <CardTwo
+            <Card
             key={property.roomID}
             roomID={property.roomID} 
             name={property.name} 
