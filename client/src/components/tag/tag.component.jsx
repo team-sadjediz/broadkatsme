@@ -94,6 +94,12 @@ class Tag extends Component {
       type: this.props.type,
       input: ""
     };
+    this.cancelToken = axios.CancelToken;
+    this.source = this.cancelToken.source();
+  }
+
+  componentWillUnmount() {
+    this.source.cancel("Operations cancelled. Component unmounting.");
   }
 
   addOnClick = e => {
@@ -106,10 +112,13 @@ class Tag extends Component {
     // let request = { "newTag": tag, "roomID": this.props.roomID };
     axios
       .put(
-        `${BASE_API_URL}/room/tags/${this.props.uid}/${this.props.roomID}`,
+        `${BASE_API_URL}/room/tags/${this.props.roomID}/${this.props.uid}`,
         null,
         {
           params: { tags: tag, action: "add" }
+        },
+        {
+          cancelToken: this.source.token
         }
       )
       .then(res => {
@@ -126,10 +135,13 @@ class Tag extends Component {
     // console.log("removing " + tag);
     axios
       .put(
-        `${BASE_API_URL}/room/tags/${this.props.uid}/${this.props.roomID}`,
+        `${BASE_API_URL}/room/tags/${this.props.roomID}/${this.props.uid}`,
         null,
         {
           params: { tags: tag, action: "delete" }
+        },
+        {
+          cancelToken: this.source.token
         }
       )
       .then(res => this.props.onChangeTag(res.data))
@@ -157,52 +169,14 @@ class Tag extends Component {
               placeholder="Add tag"
             />
           }
-          // onDelete={null}
-          // onDelete={this.addOnClick}
-          // deleteIcon={
-          //   <AddCircleIcon onClick={this.addOnClick} className={classes.svg} />
-          // }
           icon={
             <AddCircleIcon onClick={this.addOnClick} className={classes.svg} />
           }
           variant="outlined"
         ></Chip>
-        // <div
-        //   className={`tag-properties ${
-        //     this.props.className ? this.props.className : ""
-        //   }`}
-        // >
-        //   <form onSubmit={this.addOnClick}>
-        //     {/* <div onClick={addOnClick()} className="tag-button">
-        //       <PlusIcon />
-        //     </div> */}
-        //     <button className="tag-button" type="submit">
-        //       <PlusIcon />
-        //     </button>
-        //     <input
-        //       type="text"
-        //       maxlength="8"
-        //       value={this.state.input}
-        //       required
-        //       onChange={this.handleChange}
-        //     ></input>
-        //   </form>
-        // </div>
       );
     } else if (this.state.type === "remove") {
       return (
-        // <div
-        //   className={`tag-properties ${
-        //     this.props.className ? this.props.className : ""
-        //   }`}
-        // >
-        //   <div className="tag-properties-minus">
-        //     <div onClick={this.removeOnClick} className="tag-button">
-        //       <MinusIcon />
-        //     </div>
-        //     <div className="tag-label">{this.props.text}</div>
-        //   </div>
-        // </div>
         <Chip
           // do an if check to see if they have the permissions and if not, disable
           // disabled

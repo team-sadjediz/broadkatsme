@@ -28,18 +28,7 @@ const initialState = {
   showInitial: true,
   showSettings: false,
   subscribers: [],
-  tags: [],
-  settings: {
-    roomSize: 1,
-    private: true,
-    access: {
-      delete: null,
-      roomAdmins: [],
-      operators: [],
-      invitations: [],
-      banneds: []
-    }
-  }
+  tags: []
 };
 
 class RoomPage extends Component {
@@ -47,17 +36,25 @@ class RoomPage extends Component {
     super(props);
     this.state = initialState;
     this.timer = null;
+    this.cancelToken = axios.CancelToken;
+    this.source = this.cancelToken.source();
   }
 
   componentDidMount() {
     this.validate();
   }
 
+  componentWillUnmount() {
+    this.source.cancel("Operations cancelled. Component unmounting.");
+  }
+
   validate = async () => {
     console.log(this.state.exists);
     console.log(this.state.isFetching);
     await axios
-      .get(`${BASE_API_URL}/room/valid/${this.props.match.params.id}`)
+      .get(`${BASE_API_URL}/room/valid/${this.props.match.params.id}`, {
+        cancelToken: this.source.token
+      })
       .then(res => {
         this.setState({ exists: res.data, isFetching: false });
         // console.log(this.state);
@@ -65,7 +62,7 @@ class RoomPage extends Component {
           this.fetchData();
         }
       })
-      .catch(error => this.setState({ exists: false }));
+      .catch(error => this.setState({ isFetching: false, exists: false }));
     console.log(this.state);
   };
 
@@ -80,8 +77,6 @@ class RoomPage extends Component {
     let showSettings = this.state.showSettings !== nextState.showSettings;
     let subscribers = this.state.subscribers !== nextState.subscribers;
     let tags = this.state.tags !== nextState.tags;
-    let settings = this.state.settings !== nextState.settings;
-    // let showSettings = this.state.showSettings !== nextState.showSettings;
     return (
       isFetching ||
       exists ||
@@ -93,9 +88,7 @@ class RoomPage extends Component {
       showSettings ||
       subscribers ||
       subscribers ||
-      tags ||
-      settings
-      // showSettings
+      tags
     );
   }
 
@@ -106,45 +99,37 @@ class RoomPage extends Component {
   }
 
   fetchData = async () => {
-    // if (this.props.selectedRoom === null) {
-    //   return;
-    // }
-
     let roomDetails, isFavorited;
     await axios
-      .get(`${BASE_API_URL}/room/find/${this.props.match.params.id}`)
+      .get(`${BASE_API_URL}/room/find/${this.props.match.params.id}`, {
+        cancelToken: this.source.token
+      })
       .then(res => {
         roomDetails = res.data;
+        return axios.get(
+          `${BASE_API_URL}/userprops/favorited/${this.props.match.params.id}/${this.props.currentUser.uid}`,
+          {
+            cancelToken: this.source.token
+          }
+        );
+      })
+      .then(res => {
+        isFavorited = res.data;
       })
       .catch(error => {
         console.error(error);
       });
-    // console.log(roomDetails);
-    // await axiosConfig
-    await axios
-      .get(
-        `${BASE_API_URL}/userprops/favorited/${this.props.currentUser.uid}/${this.props.match.params.id}`
-      )
-      .then(res => {
-        isFavorited = res.data;
-        // this.setState({ isFavorited: res.data });
-      })
-      .catch(error => console.error(error));
     this.setState({
       roomName: roomDetails.name,
       roomID: roomDetails._id,
       ownerID: roomDetails.ownerID,
-      // showInitial: true,
-      // showSettings: false,
       subscribers: roomDetails.subscriber,
       tags: roomDetails.tags,
-      settings: roomDetails.settings,
       isFavorited: isFavorited
     });
   };
 
   closeInit = () => {
-    console.log("close init called");
     this.setState({ showInitial: false });
   };
 
@@ -153,49 +138,31 @@ class RoomPage extends Component {
     this.setState({ showSettings: !currentSettingsState });
   };
 
-  exit = () => {
-    const home = "/";
-    this.props.history.push(home);
-  };
-
   favoriteRoom = async e => {
-    let request = {
-      "uid": this.props.currentUser.uid,
-      // "roomID": this.state.roomID
-      // "roomID": this.props.selectedRoom
-      "roomID": this.props.match.params.id
-    };
     await axios
       .put(
-        `${BASE_API_URL}/userprops/favorite-room/${this.props.currentUser.uid}/${this.props.match.params.id}`
+        `${BASE_API_URL}/userprops/favorite/${this.props.match.params.id}/${this.props.currentUser.uid}`,
+        {
+          cancelToken: this.source.token
+        }
       )
       .then(res => this.setState({ isFavorited: res.data.favorited }))
       .catch(error => console.error(error));
   };
 
   unsubscribe = async () => {
-    let request = {
-      "roomID": this.props.match.params.id,
-      "uid": this.props.currentUser.uid
-    };
     await axios
-      .put(`${BASE_API_URL}/userprops/subscribed-rooms/unsubscribe`, request)
+      .put(
+        `${BASE_API_URL}/userprops/subscribe/${this.props.match.params.id}/${this.props.currentUser.uid}`,
+        null,
+        { params: { action: "unsubscribe" } },
+        {
+          cancelToken: this.source.token
+        }
+      )
       .then(res =>
         console.log("Unsubscribed from " + this.props.match.params.id)
       )
-      .catch(error => console.error(error));
-  };
-
-  deleteRoom = async () => {
-    let request = {
-      params: {
-        "roomID": this.props.match.params.id,
-        "uid": this.props.currentUser.uid
-      }
-    };
-    await axios
-      .delete(`${BASE_API_URL}/room/delete-room`, request)
-      .then(res => console.log(`Deleted room ${this.props.match.params.id}`))
       .catch(error => console.error(error));
   };
 
@@ -203,8 +170,8 @@ class RoomPage extends Component {
     this.setState({ tags: tags });
   };
 
-  onChangeTitle = e => {
-    this.setState({ roomName: e.target.value });
+  onChangeTitle = newName => {
+    this.setState({ roomName: newName });
     //axios call to save title changes here & return true -> flashes when saved/true is returned?
   };
 
@@ -225,8 +192,8 @@ class RoomPage extends Component {
   };
 
   render() {
-    console.log(this.state.exists);
-    console.log(this.state.isFetching);
+    // console.log(this.state.exists);
+    // console.log(this.state.isFetching);
     if (this.state.isFetching) {
       return <div> LOADING </div>;
     } else {
@@ -260,11 +227,12 @@ class RoomPage extends Component {
                 <RoomSettings
                   toggleSettingsModal={this.toggleSettingsModal}
                   // HEEEEREEEEEE
+                  roomID={this.props.match.params.id}
                   owned={true}
                   tags={tags}
                   addTag={addTag}
                   uid={this.props.currentUser.uid}
-                  roomName={this.state.roomName}
+                  onChangeTitle={this.onChangeTitle}
                 ></RoomSettings>
               </div>
             ) : null}
@@ -280,6 +248,7 @@ class RoomPage extends Component {
                     isFavorited={this.state.isFavorited}
                     onChangeTag={this.onChangeTag}
                     onChangeTitle={this.onChangeTitle}
+                    unsubscribe={this.unsubscribe}
                   />
                 </div>
                 {this.state.showInitial ? (

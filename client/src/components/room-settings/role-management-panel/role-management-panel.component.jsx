@@ -22,6 +22,8 @@ import FlagOutlinedIcon from "@material-ui/icons/FlagOutlined";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import BlockIcon from "@material-ui/icons/Block";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
+import SettingsRemoteIcon from "@material-ui/icons/SettingsRemote";
+import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 
 // import { BASE_API_URL } from "../../../utils";
 
@@ -48,7 +50,41 @@ export default function RoleManagementPanel(props) {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const generate = (items, owned) => {
+  const generate = (items, owned, roomAdmin) => {
+    let list = items.map(item => {
+      return (
+        <ListItem className={classes.listItem}>
+          <ListItemAvatar>
+            <Avatar>
+              <AccountCircleIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary={item.username}
+            secondary={owned ? "View Reports" : null}
+          ></ListItemText>
+          <ListItemSecondaryAction>
+            {roomAdmin ? (
+              <IconButton>
+                <RemoveCircleIcon></RemoveCircleIcon>
+              </IconButton>
+            ) : null}
+            {roomAdmin ? (
+              <IconButton>
+                <BlockIcon></BlockIcon>
+              </IconButton>
+            ) : null}
+            <IconButton>
+              <FlagOutlinedIcon></FlagOutlinedIcon>
+            </IconButton>
+          </ListItemSecondaryAction>
+        </ListItem>
+      );
+    });
+    return list;
+  };
+
+  const generateAdmins = (items, owned, roomAdmin) => {
     let list = items.map(item => {
       return (
         <ListItem className={classes.listItem}>
@@ -67,7 +103,46 @@ export default function RoleManagementPanel(props) {
                 <RemoveCircleIcon></RemoveCircleIcon>
               </IconButton>
             ) : null}
+            {roomAdmin ? (
+              <IconButton>
+                <BlockIcon></BlockIcon>
+              </IconButton>
+            ) : null}
+            <IconButton>
+              <FlagOutlinedIcon></FlagOutlinedIcon>
+            </IconButton>
+          </ListItemSecondaryAction>
+        </ListItem>
+      );
+    });
+    return list;
+  };
+
+  const generateUsers = (items, owned, roomAdmin) => {
+    let list = items.map(item => {
+      return (
+        <ListItem className={classes.listItem}>
+          <ListItemAvatar>
+            <Avatar>
+              <AccountCircleIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary={item.username}
+            secondary={owned ? "View Reports" : null}
+          ></ListItemText>
+          <ListItemSecondaryAction>
             {owned ? (
+              <IconButton>
+                <SupervisorAccountIcon></SupervisorAccountIcon>
+              </IconButton>
+            ) : null}
+            {roomAdmin ? (
+              <IconButton>
+                <SettingsRemoteIcon></SettingsRemoteIcon>
+              </IconButton>
+            ) : null}
+            {roomAdmin ? (
               <IconButton>
                 <BlockIcon></BlockIcon>
               </IconButton>
@@ -130,7 +205,7 @@ export default function RoleManagementPanel(props) {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <List className={classes.list}>
-              {generate(props.admins, props.owned)}
+              {generateAdmins(props.admins, props.owned, props.roomAdmin)}
             </List>
           </ExpansionPanelDetails>
         </ExpansionPanel>
@@ -151,7 +226,7 @@ export default function RoleManagementPanel(props) {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <List className={classes.list}>
-              {generate(props.operators, props.owned)}
+              {generate(props.operators, props.owned, props.roomAdmin)}
             </List>
           </ExpansionPanelDetails>
         </ExpansionPanel>
@@ -172,13 +247,36 @@ export default function RoleManagementPanel(props) {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <List className={classes.list}>
-              {generate(props.invitations, props.owned)}
+              {generate(props.invitations, props.owned, props.roomAdmin)}
             </List>
           </ExpansionPanelDetails>
         </ExpansionPanel>
       </div>
-      {props.owned ? <Divider variant="fullWidth" /> : null}
-      {props.owned ? (
+      <Divider variant="fullWidth" />
+      <div className="role-management-boxes">
+        <ExpansionPanel
+          expanded={expanded === "Subscribers"}
+          onChange={handleChange("Subscribers")}
+        >
+          <ExpansionPanelSummary
+            className={classes.summary}
+            expandIcon={<ExpandMoreIcon />}
+            id="Subscribers"
+          >
+            <div className="role-management-boxes-title">Subscribers</div>
+            <div className="role-management-boxes-description">
+              view all users currently subscribed to room
+            </div>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <List className={classes.list}>
+              {generateUsers(props.users, props.owned, props.roomAdmin)}
+            </List>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+      </div>
+      {props.owned || props.roomAdmin ? <Divider variant="fullWidth" /> : null}
+      {props.owned || props.roomAdmin ? (
         <div className="role-management-boxes">
           <ExpansionPanel
             expanded={expanded === "BannedUsers"}

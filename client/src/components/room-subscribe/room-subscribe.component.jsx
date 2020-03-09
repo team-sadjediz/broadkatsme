@@ -33,7 +33,7 @@ const RoomSubscribe = ({
       //   uid: currentUser.uid
       // });
       await axios.put(
-        `${BASE_API_URL}/userprops/subscribe/${currentUser.uid}/${roomId}`,
+        `${BASE_API_URL}/userprops/subscribe/${roomId}/${currentUser.uid}`,
         null,
         { params: { action: "subscribe" } }
       );
@@ -62,9 +62,15 @@ const RoomSubscribe = ({
       //     console.log(error);
       //   });
 
+      // await axios
+      //   .put(
+      //     `${BASE_API_URL}/userprops/subscribe/${currentUser.uid}/${roomId}`,
+      //     null,
+      //     { params: { action: "unsubscribe" } }
+      //   )
       await axios
         .put(
-          `${BASE_API_URL}/userprops/subscribe/${currentUser.uid}/${roomId}`,
+          `${BASE_API_URL}/userprops/subscribe/${this.props.match.params.id}/${this.props.currentUser.uid}`,
           null,
           { params: { action: "unsubscribe" } }
         )

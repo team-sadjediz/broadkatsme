@@ -129,7 +129,7 @@ router.put("/subscribe/:roomID/:uid", async function(req, res) {
       {
         _id: roomID,
         "settings.access.bans": { $nin: uid },
-        subscribers: { $ne: uid },
+        subscribers: { $nin: uid },
         "settings.privacy": false
       },
       {

@@ -156,8 +156,10 @@ router.delete("/delete/:roomID/:uid", async function(req, res) {
 // in progress
 // send json with: { folder: ..., uid: ..., image: ...}
 // order is required
-router.put("/upload-thumnail", function(req, res) {
-  singleUpload(req, res, error => {
+router.put("/upload-thumbnail/:roomID/:uid", async function(req, res) {
+  req.query.folder = "room_thumbnail/";
+  singleUpload(req, res, async error => {
+    let imageName, imageLocation;
     if (error) {
       console.log(error);
       res.json({ error: error });
@@ -166,10 +168,21 @@ router.put("/upload-thumnail", function(req, res) {
         console.log("Error: No File Selected");
         res.json("Error: No File Selected");
       } else {
-        const imageName = req.file.key;
-        const imageLocation = req.file.location;
-
-        res.json({ image: imageName, location: imageLocation });
+        imageName = req.file.key;
+        imageLocation = req.file.location;
+        await Room.findOneAndUpdate(
+          { _id: req.params.roomID },
+          { thumbnailUrl: imageName },
+          {
+            runValidators: true,
+            new: true
+          }
+        )
+          .then(room => {
+            console.log(room);
+            res.send(room.thumbnailUrl);
+          })
+          .catch(error => res.status(404).send(error));
       }
     }
   });
