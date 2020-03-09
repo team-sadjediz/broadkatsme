@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 // import axios from "axios";
 
 import VolumeSlider from "./volume-slider/volume-slider.component";
 
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 
 import "./browser-overlay.style.scss";
 

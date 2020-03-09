@@ -35,6 +35,12 @@ const useStyles = makeStyles(theme => ({
     borderRight: "1px solid #e0e0e0",
     minWidth: "max-content"
   },
+  indicator: {
+    width: 5
+  },
+  activeTab: {
+    background: "#efefef"
+  },
   panelContainer: {
     width: "100%",
     display: "grid",
@@ -95,26 +101,10 @@ export default function RoomSettings(props) {
     setValue(newValue);
   };
 
-  // const handleOpen = () => {
-  //   setOpen(true);
-  // };
-
   const handleClose = () => {
     props.toggleSettingsModal();
     setOpen(false);
   };
-
-  // const tabs = props.tabs.map((tab, index) => {
-  //   return <Tab label={tab} id={`vertical-tab-${index}`}></Tab>;
-  // });
-
-  // const panels = props.panels.map((panel, index) => {
-  //   return (
-  //     <TabPanel className={classes.panel} value={value} index={index}>
-  //       {panel}
-  //     </TabPanel>
-  //   );
-  // });
 
   return (
     <Modal
@@ -132,7 +122,10 @@ export default function RoomSettings(props) {
           variant="scrollable"
           value={value}
           onChange={handleChange}
-          className={classes.tabs}
+          className={`${classes.tabs}`}
+          classes={{ indicator: classes.indicator }}
+          inkBarStyle={classes.activeTab}
+          textColor="secondary"
         >
           {/* {tabs} */}
           <Tab label="General" id={`vertical-tab-${0}`}></Tab>

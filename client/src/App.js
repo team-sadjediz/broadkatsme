@@ -3,11 +3,13 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { auth } from "./firebase/firebase.utils";
 
 // axios
+// import axios from "axios";
 import { setAuthorization } from "./firebase/firebase.sdk";
+// import { BASE_API_URL } from "./utils";
 
 // redux stuff:
 import { connect } from "react-redux";
-import { setCurrentUser } from "./redux/user/user.actions";
+import { setUserAuth } from "./redux/user/user.actions";
 
 // components:
 import CustomDrawer from "./components/custom-drawer/custom-drawer.component";
@@ -25,8 +27,10 @@ import ContactPage from "./pages/contact-page/contact-page.component";
 import ResetPassPage from "./pages/reset-password-page/reset-password-page.component";
 
 import Test from "./components/test-component/test.component";
+import Chat from "./components/chat/chat.component";
 
 import "./App.scss";
+import RoomPrivateRoute from "./pages/room-page/room-private-route";
 
 const theme = createMuiTheme({
   palette: {
@@ -64,28 +68,32 @@ class App extends Component {
 
   componentDidMount() {
     this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-      this.props.setCurrentUser(user);
+      // this.props.setCurrentUser(user);
+      this.props.setUserAuth(user);
     });
   }
 
   componentWillUnmount() {
     this.unsubscribeFromAuth();
+    // this.props.setUserAuth(null);
+
     console.log("logged out");
   }
 
   async authorize() {
-    let idToken = await this.props.currentUser.getIdToken(false);
+    let idToken = await this.props.userAuth.getIdToken(false);
     setAuthorization(idToken);
   }
 
   render() {
-    if (this.props.currentUser) {
+    if (this.props.userAuth) {
       this.authorize();
     }
+    console.log(this.props.userAuth);
     return (
       <ThemeProvider theme={theme}>
         <div className="App">
-          {this.props.currentUser ? (
+          {this.props.userAuth ? (
             <BrowserRouter>
               {/* <NavBar /> */}
               <ButtonAppBar />
@@ -95,15 +103,16 @@ class App extends Component {
                     exact
                     path="/login"
                     render={() =>
-                      this.props.currentUser ? (
+                      this.props.userAuth ? (
                         <Redirect to="/" />
                       ) : (
                         <LoginRegisterPage />
                       )
                     }
                   />
+                  {/* <Route path="/lobby" component={Chat} /> */}
                   <Route path="/lobby" component={LobbyPage} />
-                  <Route path="/room" component={RoomPage} />
+                  <RoomPrivateRoute path="/room/id=:id" component={RoomPage} />
                   <Route path="/about" component={AboutPage} />
                   <Route path="/contact" component={ContactPage} />
                   <Route path="/codeofconduct" component={CodeOfConductPage} />
@@ -127,11 +136,11 @@ class App extends Component {
 }
 
 const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser
+  userAuth: user.userAuth
 });
 
 const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
+  setUserAuth: user => dispatch(setUserAuth(user))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

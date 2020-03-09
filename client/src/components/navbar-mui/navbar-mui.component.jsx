@@ -33,6 +33,7 @@ import "./navbar-mui.styles.scss";
 
 // utils:
 import { BASE_API_URL } from "../../utils";
+import { updateUserProps } from "../../redux/user/user.actions";
 
 // const useStyles = makeStyles(theme => ({
 //   root: {
@@ -100,18 +101,7 @@ class ButtonAppBar extends React.Component {
   }
 
   async componentDidMount() {
-    console.log(
-      "current user:",
-      this.props.currentUser.uid,
-      this.props.currentUser
-    );
-
-    let results = await axios.get(`${BASE_API_URL}/userprops/users-rooms`, {
-      params: { uid: this.props.currentUser.uid }
-    });
-    console.log(results);
-
-    this.props.setSubscribedRooms(results.data);
+    this.props.updateUserProps(this.props.userAuth.uid);
   }
 
   render() {
@@ -154,12 +144,13 @@ class ButtonAppBar extends React.Component {
                   <AddIcon></AddIcon>
                 </RoomNavButton>
               </MouseOverPopover>
-              {/* {console.log("before map:", this.state.roomList)} */}
 
-              {this.props.subscribedRooms.map(room => (
+              {/* {console.log("yellow", this.props.userProps)} */}
+              {this.props.userProps.subscribedRooms.map((room, i) => (
                 <Link
                   style={{ position: "relative" }}
-                  to={`/room/id/${room.roomID}`}
+                  to={`/room/id=${room.roomID}`}
+                  key={i}
                 >
                   {this.props.selectedRoom === room.roomID ? (
                     <div className="room-selected">
@@ -173,7 +164,7 @@ class ButtonAppBar extends React.Component {
                       this.props.setSelectedRoom(room.roomID);
                     }}
                     iconHover={<PlayCircleFilledIcon />}
-                    bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${room.thumbnailUrl}`}
+                    bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=default1.png`}
                   ></ImageButton>
                 </Link>
               ))}
@@ -206,13 +197,13 @@ class ButtonAppBar extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  currentUser: state.user.currentUser,
-  subscribedRooms: state.room.subscribedRooms,
+  userAuth: state.user.userAuth,
+  userProps: state.user.userProps,
   selectedRoom: state.room.selectedRoom
 });
 
 const mapDispatchToProps = dispatch => ({
-  setSubscribedRooms: subRoomList => dispatch(setSubscribedRooms(subRoomList)),
+  updateUserProps: uid => dispatch(updateUserProps(uid)),
   setSelectedRoom: roomID => dispatch(setSelectedRoom(roomID))
 });
 

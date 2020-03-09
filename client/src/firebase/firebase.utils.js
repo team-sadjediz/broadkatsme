@@ -29,6 +29,7 @@ provider.setCustomParameters({ prompt: "select_account" });
 export const signInWithGoogle = () =>
   auth.signInWithPopup(provider).then(async userCredential => {
     let isNewUser = userCredential.additionalUserInfo.isNewUser;
+    console.log("isNewUser:", isNewUser);
     if (isNewUser) {
       let newUser = {
         "uid": userCredential.user.uid,

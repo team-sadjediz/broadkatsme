@@ -4,7 +4,8 @@ import axios from "axios";
 
 // redux:
 import { connect } from "react-redux";
-import { setSubscribedRooms } from "../../redux/room/room.actions";
+// import { setSubscribedRooms } from "../../redux/room/room.actions";
+import { updateUserProps } from "../../redux/user/user.actions";
 
 // components:
 import FormInput from "../form-input/form-input.component";
@@ -29,23 +30,9 @@ class NewRoom extends React.Component {
 
   handleSubmit = async event => {
     event.preventDefault();
-    // const room = {
-    //   uid: this.props.currentUser.uid,
-    //   room_name: this.state.room_name,
-    //   tags: this.state.tags,
-    //   room_size: this.state.room_size,
-    //   privacy: this.state.privacy
-    // };
-
-    // axios
-    //   .post(`${utils.BASE_API_URL}/room/createroom`, room)
-    //   .then(() => console.log("Room posted to backend/created."))
-    //   .catch(error => {
-    //     console.error(error);
-    //   });
 
     const room = {
-      uid: this.props.currentUser.uid,
+      uid: this.props.userAuth.uid,
       roomName: this.state.roomName,
       tags: this.state.tags,
       roomSize: this.state.roomSize,
@@ -56,7 +43,15 @@ class NewRoom extends React.Component {
 
     axios
       .post(`${BASE_API_URL}/room/create-room`, room)
-      .then(() => console.log("Room posted to backend/created."))
+      .then(async res => {
+        console.log("Room posted for user:", this.props.userAuth.uid);
+        // let results = await axios.get(`${BASE_API_URL}/userprops/users-rooms`, {
+        //   params: { uid: this.props.currentUser.uid }
+        // });
+        // this.props.setSubscribedRooms(results.data);
+
+        this.props.updateUserProps(this.props.userAuth.uid);
+      })
       .catch(error => {
         console.error(error);
       });
@@ -123,12 +118,11 @@ class NewRoom extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  currentUser: state.user.currentUser
+  userAuth: state.user.userAuth
 });
 
 const mapDispatchToProps = dispatch => ({
-  setSubscribedRooms: subscribedRoomList =>
-    dispatch(setSubscribedRooms(subscribedRoomList))
+  updateUserProps: uid => dispatch(updateUserProps(uid))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewRoom);
