@@ -13,14 +13,14 @@
     // overflow-x: hidden;
     display: grid;
     // grid-template-columns: minmax(100%, auto);
-    grid-template-columns: 0.25fr 8fr 0.25fr;
+    // grid-template-columns: 0.25fr 8fr 0.25fr;
     grid-template-rows: 500px 500px;
     // grid-template-columns: fit-content;
     // grid-template-rows: 1fr 2fr 1fr;
     // background-color: $french_laundry_blue;
     grid-template-areas:
-      ". featured ."
-      ". active .";
+      "active"
+      "featured";
 
     .active-container {
         grid-area: active;
@@ -28,7 +28,7 @@
         overflow-y: hidden;
         position: relative;
         grid-area: active;
-        padding-top: 20px;
+        // padding-top: 20px;
         margin: 0;
     }
 

@@ -84,6 +84,10 @@ class Card extends React.Component {
       roomTags: this.props.tags,
       roomName: this.props.name,
       hover: false,
+      delete: false,
+      add: false,
+      invite: false,
+      zoom: false
     }
   }
   handleMouseEnter = event => {
@@ -94,46 +98,52 @@ class Card extends React.Component {
     this.setState({hover: false});
     // console.log(hover);
   }
-  // handleUnsubscribe = event => {
-  //   let request = {
-  //     "uid": this.state.uid,
-  //     // "roomID": this.state.roomID
-  //     "roomID": this.state.roomID
-  //   };
-  //   console.log(request);
-  //   axios
-  //     .put(`${BASE_API_URL}/userprops/subscribed-rooms/unsubscribe`, request)
-  //     .then(res => console.log(res))
-  //     .catch(error => console.error(error));
-  //   // console.log("hello" + roomID);
-  //   // console.log(this.state);
-  //   // console.log(this.props);
-  //   // console.log(e.target.value);
-  // }
+  handleUnsubscribe = event => {
+    let request = {
+      "uid": this.state.uid,
+      // "roomID": this.state.roomID
+      "roomID": this.state.roomID
+    };
+    console.log(request);
+    axios
+      .put(`${BASE_API_URL}/userprops/subscribed-rooms/unsubscribe`, request)
+      .then(res => console.log(res))
+      .catch(error => console.error(error));
+    // console.log("hello" + roomID);
+    // console.log(this.state);
+    // console.log(this.props);
+    // console.log(e.target.value);
+  }
   render() {
     const roomTags = this.props.tags;
     return (
     <div 
       key={this.state.roomID} 
-      className="card shadow"
+      className={this.state.zoom ? "card shadow" : "card"}
       onMouseEnter={this.handleMouseEnter}
       onMouseLeave={this.handleMouseLeave}
       >
         {this.state.hover && 
           <div className="buttons-container">
+            {this.state.delete &&
             <CircleBtn
             className="room-card-buttons"
             icon={<ClearIcon />}
             onClick={this.handleUnsubscribe}
             />
+            }
+            {this.state.invite &&
             <CircleBtn
             className="room-card-buttons"
             icon={<PersonAddIcon />} 
             />
+            }
+            {this.state.chat &&
             <CircleBtn
             className="room-card-buttons"
             icon={<ChatIcon />} 
             />
+            }
           </div>}
         <Link to={`/room/id=${this.state.roomID}`}>
           <div className="img-container">

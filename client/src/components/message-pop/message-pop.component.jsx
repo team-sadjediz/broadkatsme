@@ -9,10 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 // }
 
 const MessagePop = (pop, message, severity) => {
-    const [open, setOpen] = React.useState(false);
-    if (pop) {
-        setOpen(true);
-    }
+    const [open, setOpen] = React.useState(pop);
     const useStyles = makeStyles(theme => ({
         root: {
             width: '100%',

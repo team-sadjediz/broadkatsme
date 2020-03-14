@@ -24,7 +24,8 @@ class LobbyPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      uid: this.props.currentUser.uid,
+      // uid: this.props.currentUser.uid,
+      uid: "h2pO0PwXsycrNuOHKenZSAaKRl42",
       featureRooms: [],
       featureSize: 8,
       userRooms: [],
