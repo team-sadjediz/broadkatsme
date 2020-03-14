@@ -24,6 +24,7 @@ import RoomPage from "./pages/room-page/room-page.component";
 import AboutPage from "./pages/about-page/about-page.component";
 import CodeOfConductPage from "./pages/code-of-conduct-page/code-of-conduct-page.component";
 import ContactPage from "./pages/contact-page/contact-page.component";
+import UserProfilePage from "./pages/user-profile-page/user-profile-page.component";
 import ResetPassPage from "./pages/reset-password-page/reset-password-page.component";
 
 import Test from "./components/test-component/test.component";
@@ -116,6 +117,7 @@ class App extends Component {
                   <Route path="/about" component={AboutPage} />
                   <Route path="/contact" component={ContactPage} />
                   <Route path="/codeofconduct" component={CodeOfConductPage} />
+                  <Route path="/userprofile" component={UserProfilePage} />
                 </Switch>
               </CustomDrawer>
             </BrowserRouter>
