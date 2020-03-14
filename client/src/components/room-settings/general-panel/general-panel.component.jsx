@@ -26,24 +26,33 @@ const useStyles = makeStyles(theme => ({
 
 export default function GeneralPanel(props) {
   const classes = useStyles();
-  const [file, setFile] = React.useState(null);
+  const [thumbnailUrl, setThumbnailUrl] = React.useState(props.thumbnailUrl);
 
-  const fileUploadHandler = async () => {
+  const fileUploadHandler = async files => {
     const formData = new FormData();
-    formData.append("image", file);
+    formData.append("uid", props.owner);
+    formData.append("image", files);
     const config = {
       headers: {
         "content-type": "multipart/form-data"
       }
     };
     await axios
-      .put(`${BASE_API_URL}/room/upload-thumbnail`, formData, config)
-      .then(res => console.log("shouldve worked"))
-      .catch(error => console.log("fuck"));
+      .put(
+        `${BASE_API_URL}/room/upload-thumbnail/${props.roomID}/${props.ownerID}`,
+        formData,
+        config
+      )
+      .then(res => {
+        console.log(res.data);
+        props.onChangeThumbnail(res.data);
+        setThumbnailUrl(res.data);
+      })
+      .catch(error => console.error(error));
   };
 
   const onChange = async e => {
-    await setFile(e.target.files[0]).then(() => fileUploadHandler());
+    fileUploadHandler(e.target.files[0]);
   };
 
   return (
@@ -52,22 +61,26 @@ export default function GeneralPanel(props) {
       <Divider variant="fullWidth" />
       <div className="room-general">
         <form className="room-general-upload-btn">
-          <label htmlFor="upload">
-            <IconButton className={classes.iconButton} color="primary">
+          <label htmlFor="upload" for="upload">
+            <IconButton
+              className={classes.iconButton}
+              color="primary"
+              component="span"
+            >
               <AddAPhotoIcon></AddAPhotoIcon>
             </IconButton>
           </label>
           <input
-            className="room-hide"
             type="file"
             id="upload"
             name="roompic"
+            accept="image/png, image/jpeg"
             onChange={onChange}
           ></input>
         </form>
         <div className="room-general-upload">
           <img
-            src={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${props.thumbnailUrl}`}
+            src={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${thumbnailUrl}`}
             alt="Thumbnail"
           />
         </div>
@@ -76,9 +89,9 @@ export default function GeneralPanel(props) {
             <div className="room-general-title">Room</div>
             <input
               type="text"
-              value={props.name}
-              // value={this.props.roomName}
-              // onChange={this.props.onChangeTitle}
+              placeholder={props.name}
+              onChange={props.onChangeTitle}
+              onBlur={props.onBlurTitle}
             />
           </div>
           <Divider variant="fullWidth" />

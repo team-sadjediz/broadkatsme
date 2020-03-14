@@ -36,6 +36,7 @@ const port = process.env.PORT || 5000;
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "client/build")));
 
+mongoose.plugin(require("./server/utils/mongoose-error-plugin"));
 // --------------------------------- V E R I F Y () ---------------------------------
 
 const verifyAuthToken = async function(req, res, next) {

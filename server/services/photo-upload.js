@@ -62,7 +62,7 @@ const upload = multer({
     key: function(req, file, cb) {
       var newFilename = req.body.uid;
       var fullPath =
-        req.body.folder + newFilename + path.extname(file.originalname);
+        req.query.folder + newFilename + path.extname(file.originalname);
       cb(null, fullPath);
     },
     limits: { fileSize: 2000000 }
