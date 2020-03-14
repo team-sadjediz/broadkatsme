@@ -33,12 +33,33 @@ router.get("/details/:uid", async function(req, res) {
 
 // ---------------------------------------------------------- UPLOAD USER PROF PIC ----------------------------------------------------------
 
-// in progress
-// send json with: { folder: ..., uid: ..., image: ...}
-// order is required
-router.post("/upload-prof-img", function(req, res, next) {
+// How To Use
+// Create File Upload Handler w/async files argument
+
+// const fileUploadHandler = async files => {
+//  const formData = new formData();
+//  formData.append("uid", { YOUR UID HERE });
+//  formData.append("image", files);
+//  const config = {
+//   headers: {
+//     "content-type": "multipart/form-data"
+//     }
+//   };
+//  await axios.put(`${BASE_API_URL}/userprofile/upload-profile-image/${uid})1, formData, config)
+//        .then(res => console.log(res.data)).catch(error => console.log(error));
+// }
+
+// const onChangeImg = e => {
+//   fileUploadHandler(e.target.files[0]);
+// }
+
+// Utilize <form> <input type="file" accept="image/png, image/jpeg" onChange={onChangeImg} /> </form>
+
+router.post("/upload-profile-image/:uid", function(req, res, next) {
   // to-do: do a check to see if the UID exists as either png or jpg
-  singleUpload(req, res, error => {
+  req.query.folder = "profile_img/";
+  singleUpload(req, res, async error => {
+    let imageName, imageLocation;
     if (error) {
       console.log(error);
       res.json({ error: error });
@@ -47,10 +68,19 @@ router.post("/upload-prof-img", function(req, res, next) {
         console.log("Error: No File Selected");
         res.json("Error: No File Selected");
       } else {
-        const imageName = req.file.key;
-        const imageLocation = req.file.location;
+        imageName = req.file.key;
+        imageLocation = req.file.location;
 
-        res.json({ image: imageName, location: imageLocation });
+        await User.findOneAndUpdate(
+          { userID: req.params.uid },
+          { photoURL: imageName },
+          { runValidators: true, new: true }
+        )
+          .then(user => {
+            console.log(user);
+            res.send(user.photoURL);
+          })
+          .catch(error => res.status(404).send(error));
       }
     }
   });

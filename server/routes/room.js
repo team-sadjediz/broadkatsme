@@ -156,7 +156,7 @@ router.delete("/delete/:roomID/:uid", async function(req, res) {
 // in progress
 // send json with: { folder: ..., uid: ..., image: ...}
 // order is required
-router.put("/upload-thumbnail/:roomID/:uid", async function(req, res) {
+router.put("/upload-thumbnail/:roomID/:uid", function(req, res) {
   req.query.folder = "room_thumbnail/";
   singleUpload(req, res, async error => {
     let imageName, imageLocation;
