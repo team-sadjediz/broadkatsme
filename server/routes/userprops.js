@@ -166,43 +166,6 @@ router.put("/subscribe/:roomID/:uid", async function(req, res) {
         console.log("response " + response);
         res.send(response);
       })
-      // await UserProps.findOneAndUpdate(
-      //   { "userID": uid },
-      //   {
-      //     $addToSet: {
-      //       subscribedRooms: roomID
-      //       // favorited_rooms: roomID
-      //     }
-      //   },
-      //   { runValidators: true, new: true }
-      // )
-      //   .then(userprops => {
-      //     updatedUserProps = userprops;
-      //     return Room.findOneAndUpdate(
-      //       {
-      //         _id: roomID,
-      //         "settings.access.bans": { $nin: uid },
-      //         subscribers: { $ne: uid }
-      //       },
-      //       {
-      //         // CHANGE
-      //         $push: { subscribers: { $each: [uid], $slice: 5 } }
-      //       },
-      //       { runValidators: true, new: true }
-      //     );
-      //   })
-      //   .then(room => {
-      //     updatedRoom = room;
-      //     let response = {
-      //       updatedUserProps: {
-      //         "subscribedRooms": updatedUserProps.subscribedRooms,
-      //         "favoritedRooms": updatedUserProps.favoritedRooms
-      //       },
-      //       updatedRoom: { "subscribers": room.subscribers }
-      //     };
-      //     console.log("response " + response);
-      //     res.send(response);
-      //   })
       .catch(async error => {
         // If user's props have been updated for subscribe, but room has failed, remove from props.
         // POSSIBLE LEAK: DATA CORRUPTION IF THIS FAILS. SOLUTION: LOOP - NOT IMPLEMENTED / EXPENSIVE

@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
 
 const UserProps = require("../models/userprops.model");
 
@@ -103,5 +104,52 @@ router.put("/update/:uid/:friendID", async function(req, res) {
     res.status(400).send("Action undefined.");
   }
 });
+
+router.put("/updatetest/:uid/:friendID", async function(req, res) {
+  let userID = req.params.uid;
+  let friendID = req.params.friendID;
+  let action = req.query.action;
+
+  // --------------------------------------------------------------------------
+  if (action == "delete") {
+    try {
+      await deleteFriend(userID, friendID);
+    } catch (error) {
+      console.log(error);
+    }
+    // --------------------------------------------------------------------------
+  } else if (action == "add") {
+  } else {
+    res.status(400).send("Action undefined.");
+  }
+});
+
+async function deleteFriend(userID, friendID) {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    const opts = { session, new: true, runValidators: true };
+
+    let userProps = await UserProps.findOneAndUpdate(
+      { userID: userID, friends: friendID },
+      { $pull: { friends: friendID } },
+      opts
+    );
+
+    let friendProps = await UserProps.findOneAndUpdate(
+      { userID: friendID, friends: userID },
+      { $pull: { friends: userID } },
+      opts
+    );
+
+    console.log(userProps);
+    console.log(friendProps);
+    await session.commitTransaction();
+  } catch (error) {
+    console.log(error);
+    await session.abortTransaction();
+  }
+  session.endSession();
+}
 
 module.exports = router;
