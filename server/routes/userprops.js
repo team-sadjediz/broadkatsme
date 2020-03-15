@@ -22,6 +22,35 @@ router.get("/props/:uid", async function(req, res) {
     });
 });
 
+// router.get("/friends-list", async function(req, res) {
+//   let uid = req.query.uid;
+
+//   let friendslist = await UserProps.findOne({ userID: uid })
+//     .then(document => document)
+//     .catch(error => console.log(error));
+
+//   if (friendslist) {
+//     await UserProps.findOne({ userID: uid })
+//       .populate("friends")
+//       .exec((error, populatedProps) => {
+//         let friendsListDetailed = [];
+//         let friendslist = populatedProps.friends;
+//         friendslist.forEach(function(room) {
+//           friendsListDetailed.push({
+//             "userID": room._id,
+//             "username": room.name,
+//             "photoURL": room.thumbnailUrl,
+//             "chatColor": room.tags
+//           });
+//         });
+//         console.log("friendslist:", friendslist);
+//         res.send(friendslist);
+//       });
+//   } else {
+//     res.send([]);
+//   }
+// });
+
 // ---------------------------------------------------------- FIND USERS ROOMS ----------------------------------------------------------
 
 // How To Use
@@ -29,7 +58,7 @@ router.get("/props/:uid", async function(req, res) {
 // returns list of all rooms a user is subscribed to (as per convnetion)
 router.get("/rooms/:uid", async function(req, res) {
   let uid = req.params.uid;
-
+  console.log("uid", uid);
   await UserProps.findOne({ userID: uid })
     .then(document => {
       return UserProps.findOne({ userID: uid }).populate("subscribedRooms");

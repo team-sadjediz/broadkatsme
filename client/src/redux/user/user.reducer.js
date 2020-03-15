@@ -2,14 +2,18 @@ import { UserActionTypes } from "./user.types";
 
 const INITIAL_STATE = {
   userAuth: null,
-  currentUser: null,
-  userProps: {
-    friends: [],
-    ownedRooms: [],
-    subscribedRooms: [],
-    favoritedRooms: [],
-    notifications: []
+  currentUser: {
+    userID: "",
+    username: "",
+    chatColor: "",
+    photoURL: "",
+    biography: "",
+    tags: [],
+    favorites: { movies: "", music: "", websites: "" },
+    privacy: true
   },
+  friendslist: [],
+  notifications: [],
   socket: { id: null }
 };
 
@@ -25,10 +29,15 @@ const userReducer = (state = INITIAL_STATE, action) => {
         ...state,
         currentUser: action.payload
       };
-    case UserActionTypes.SET_USER_PROPS:
+    case UserActionTypes.SET_FRIENDSLIST:
       return {
         ...state,
-        userProps: action.payload
+        friendslist: action.payload
+      };
+    case UserActionTypes.SET_NOTIFICATION:
+      return {
+        ...state,
+        notifications: action.payload
       };
     case UserActionTypes.SET_SOCKET:
       return {
