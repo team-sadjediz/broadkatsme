@@ -156,33 +156,34 @@ router.put("/subscribe/:roomID/:uid", async function(req, res) {
     let updatedRoom;
     await Room.findOneAndUpdate(
       {
-        _id: roomID,
-        "settings.access.bans": { $nin: uid },
-        subscribers: { $nin: uid },
-        "settings.privacy": false
+        _id: roomID
+        // "settings.access.bans": { $nin: uid },
+        // subscribers: { $nin: uid },
+        // "settings.privacy": false
       },
       {
         // CHANGE
-        $push: { subscribers: { $each: [uid], $slice: 5 } }
+        // $push: { subscribers: { $each: [uid], $slice: 5 } }
+        $push: { subscribers: uid }
       },
       { runValidators: true }
     )
       .then(room => {
         updatedRoom = room;
-        if (room.subscribers.length == 5) {
-          return UserProps.findOne({ "userID": uid });
-        } else {
-          updatedRoom.subscribers.push(uid);
-          return UserProps.findOneAndUpdate(
-            { "userID": uid },
-            {
-              $addToSet: {
-                subscribedRooms: roomID
-              }
-            },
-            { runValidators: true, new: true }
-          );
-        }
+        // if (room.subscribers.length == 5) {
+        //   return UserProps.findOne({ "userID": uid });
+        // } else {
+        updatedRoom.subscribers.push(uid);
+        return UserProps.findOneAndUpdate(
+          { "userID": uid },
+          {
+            $addToSet: {
+              subscribedRooms: roomID
+            }
+          },
+          { runValidators: true, new: true }
+        );
+        // }
       })
       .then(userprops => {
         updatedUserProps = userprops;
