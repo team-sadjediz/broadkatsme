@@ -101,11 +101,17 @@ class Tag extends Component {
     console.log(this.props.roomID);
     let tag = this.state.input;
 
-    console.log("adding " + tag);
-    console.log("to " + this.props.roomID);
-    let request = { "newTag": tag, "roomID": this.props.roomID };
+    // console.log("adding " + tag);
+    // console.log("to " + this.props.roomID);
+    // let request = { "newTag": tag, "roomID": this.props.roomID };
     axios
-      .put(`${BASE_API_URL}/room/add-tags`, request)
+      .put(
+        `${BASE_API_URL}/room/tags/${this.props.uid}/${this.props.roomID}`,
+        null,
+        {
+          params: { tags: tag, action: "add" }
+        }
+      )
       .then(res => {
         this.props.onChangeTag(res.data);
         this.setState({ input: "" });
@@ -116,10 +122,16 @@ class Tag extends Component {
   removeOnClick = e => {
     e.preventDefault();
     let tag = this.props.text;
-    let request = { "delTag": tag, "roomID": this.props.roomID };
-    console.log("removing " + tag);
+    // let request = { "delTag": tag, "roomID": this.props.roomID };
+    // console.log("removing " + tag);
     axios
-      .put(`${BASE_API_URL}/room/remove-tags`, request)
+      .put(
+        `${BASE_API_URL}/room/tags/${this.props.uid}/${this.props.roomID}`,
+        null,
+        {
+          params: { tags: tag, action: "delete" }
+        }
+      )
       .then(res => this.props.onChangeTag(res.data))
       .catch(error => console.error(error));
   };

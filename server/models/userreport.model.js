@@ -1,12 +1,25 @@
 const mongoose = require("mongoose");
 
 const Grievance = new mongoose.Schema({
-  date: Date,
-  description: String
+  date: {
+    type: Date,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  }
 });
 
 const UserReport = new mongoose.Schema({
-  userID: String,
+  reporterUID: {
+    type: String,
+    required: true
+  },
+  reportedUID: {
+    type: String,
+    required: true
+  },
   issue: [{ type: Grievance }]
 });
 

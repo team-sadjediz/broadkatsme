@@ -6,9 +6,18 @@
 const mongoose = require("mongoose");
 
 const User = new mongoose.Schema({
-  userID: String,
-  username: String,
-  photoURL: String
+  userID: {
+    type: String,
+    required: true
+  },
+  username: {
+    type: String,
+    required: true
+  },
+  photoURL: {
+    type: String,
+    required: true
+  }
 });
 
 module.exports = mongoose.model("User", User);

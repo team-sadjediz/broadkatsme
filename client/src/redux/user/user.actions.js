@@ -30,9 +30,7 @@ export const setSocket = socket => ({
 export const updateCurrentUser = userID => {
   return dispatch => {
     axios
-      .get(`${BASE_API_URL}/userprofile/user-profile`, {
-        params: { uid: userID }
-      })
+      .get(`${BASE_API_URL}/userprofile/details/${userID}`)
       .then(res => {
         dispatch(setCurrentUser(res.data));
       })
