@@ -16,11 +16,14 @@ export default function SettingsPanel(props) {
 
   const handlePrivacy = e => {
     setState({ ...state, privacy: e.target.checked });
+    props.onTogglePrivacy(e.target.checked);
   };
 
   const handleSize = e => {
     setState({ ...state, size: e.target.value });
+    props.onChangeSize(e.target.value);
   };
+
   return (
     <div>
       <div className="room-settings-panel-title">Settings</div>

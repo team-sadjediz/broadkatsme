@@ -47,7 +47,8 @@ class LobbyPage extends React.Component {
       //   "http://broadkatsme.herokuapp.com/api/home/users-rooms?uid=" +
       //     this.state.uid
       // )
-      .get(`${BASE_API_URL}/userprops/users-rooms?uid=${this.state.uid}`)
+      // .get(`${BASE_API_URL}/userprops/users-rooms?uid=${this.state.uid}`)
+      .get(`${BASE_API_URL}/userprops/rooms/${this.state.uid}`)
       .then(rooms => {
         const properties = rooms.data;
         this.setState({ properties: rooms.data });

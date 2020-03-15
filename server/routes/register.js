@@ -3,7 +3,6 @@ var router = express.Router();
 
 const UserProfile = require("../models/userprofile.model");
 const UserProps = require("../models/userprops.model");
-const User = require("../models/user.model");
 
 router.post("/new-user", async function(req, res) {
   // console.log(req);
