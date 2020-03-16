@@ -12,7 +12,7 @@ const UserProps = require("../models/userprops.model");
 // ---------------------------------------------------------- FIND ROOMS ----------------------------------------------------------
 
 // How To Use:
-// axios.put(`${BASE_API_URI}/room/${roomID})
+// axios.get(`${BASE_API_URI}/room/${roomID})
 // returns TRUE or FALSE if room exists
 router.get("/valid/:roomID", async function(req, res) {
   let roomID = req.params.roomID;
@@ -26,7 +26,7 @@ router.get("/valid/:roomID", async function(req, res) {
 // ---------------------------------------------------------- FIND ROOMS ----------------------------------------------------------
 
 // How To Use:
-// axios.put(`${BASE_API_URI}/room/${roomID})
+// axios.get(`${BASE_API_URI}/room/${roomID})
 // returns entire document if found
 router.get("/find/:roomID", async function(req, res) {
   let roomID = req.params.roomID;
@@ -65,60 +65,68 @@ router.put("/active/:roomID/:uid", async function(req, res) {
 
 // How To Use:
 // axios.post(`${BASE_API_URI}/room/create`, { body })
+// { body } == { roomName, uid, roomSize, privacy}
 // returns new subscribed rooms
 router.post("/create", async function(req, res) {
-  let name = req.body.roomName;
-  let ownerID = req.body.uid;
-  let thumbnailUrl = "default1.png";
-  let active = false;
-  let subscribers = [req.body.uid];
-  let tags = [];
-  let roomSize = req.body.roomSize;
-  let privacy = req.body.privacy;
-  let deleteUser = req.body.uid;
-  let roomAdmins = [req.body.uid];
-  let operators = [req.body.uid];
-  let invitations = [req.body.uid];
-  let bans = [];
-
-  let newRoom = new Room({
-    name,
-    ownerID,
-    thumbnailUrl,
-    active,
-    subscribers,
-    tags,
-    settings: {
-      roomSize,
-      privacy,
-      access: {
-        delete: deleteUser,
-        roomAdmins,
-        operators,
-        invitations,
-        bans
-      }
-    }
-  });
-
-  await newRoom
-    .save()
-    .then(newRoom => {
-      let roomID = newRoom._id;
-      return UserProps.findOneAndUpdate(
-        { userID: ownerID },
-        { $addToSet: { ownedRooms: roomID, subscribedRooms: roomID } },
-        { runValidators: true, new: true }
-      );
-    })
-    .then(document => {
-      // Conventially returns location of entity referring to request status & new resource
-      res.status(201).send(document.subscribedRooms);
-    })
-    .catch(error => {
-      res.status(400).send(error);
-    });
+  try {
+    let newRoom = await createRoom(
+      req.body.roomName,
+      req.body.uid,
+      req.body.roomSize,
+      req.body.privacy
+    );
+    res.send(newRoom);
+  } catch (error) {
+    console.log(error);
+    res.status(400).send(error);
+  }
 });
+
+async function createRoom(roomName, uid, roomSize, privacy) {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    const opts = { session, new: true, runValidators: true };
+
+    let newRoom = new Room({
+      name: roomName,
+      ownerID: uid,
+      thumbnailUrl: "default1.png",
+      active: false,
+      subscribers: [uid],
+      tags: [],
+      settings: {
+        roomSize: roomSize,
+        privacy: privacy,
+        access: {
+          delete: uid,
+          roomAdmins: [uid],
+          operators: [uid],
+          invitations: [uid],
+          bans: []
+        }
+      }
+    });
+
+    let newRoomDocument = await newRoom.save(opts);
+    let newRoomID = newRoomDocument._id;
+    let updatedUserProps = await UserProps.findOneAndUpdate(
+      { userID: uid },
+      { $addToSet: { ownedRooms: newRoomID, subscribedRooms: newRoomID } },
+      opts
+    );
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return updatedUserProps.subscribedRooms;
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    error.additional = "Error has occured in /room/create";
+    throw error;
+  }
+}
 
 // ---------------------------------------------------------- DELETE ROOMS ----------------------------------------------------------
 
@@ -126,30 +134,51 @@ router.post("/create", async function(req, res) {
 // axios.delete(`${BASE_API_URI}/room/delete/${roomID}/${uid}`)
 // returns empty body (as per convention)
 router.delete("/delete/:roomID/:uid", async function(req, res) {
-  let roomID = req.params.roomID;
-  let uid = req.params.uid;
-
-  await Room.findOneAndDelete({ _id: roomID, ownerID: uid })
-    .then(document => {
-      return UserProps.findOneAndUpdate(
-        {
-          subscribedRooms: roomID
-        },
-        {
-          $pull: {
-            subscribedRooms: roomID,
-            ownedRooms: roomID,
-            favoritedRooms: roomID
-          }
-        },
-        { runValidators: true }
-      );
-    })
-    .then(response => {
-      res.status(204).send();
-    })
-    .catch(error => res.status(404).send(error));
+  try {
+    let updatedUserProps = await deleteRoom(req.params.roomID, req.params.uid);
+    res.status(204).send();
+  } catch (error) {
+    res.status(404).send(error);
+  }
 });
+
+async function deleteRoom(roomID, uid) {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    const opts = { session, runValidators: true };
+
+    let deletedRoom = await Room.findOneAndDelete(
+      {
+        _id: roomID,
+        ownerID: uid
+      },
+      opts
+    );
+
+    let updatedUserProps = await UserProps.updateMany(
+      { subscribedRooms: { $in: roomID } },
+      {
+        $pull: {
+          subscribedRooms: roomID,
+          ownedRooms: roomID,
+          favoritedRooms: roomID
+        }
+      },
+      opts
+    );
+
+    await session.commitTransaction();
+    session.endSession();
+    return { updatedUserProps };
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    console.log(error);
+    error.addiotional = `Error has occurred in /room/delete`;
+    throw error;
+  }
+}
 
 // ---------------------------------------------------------- UPLOAD / GET THUMBNAILS ----------------------------------------------------------
 
