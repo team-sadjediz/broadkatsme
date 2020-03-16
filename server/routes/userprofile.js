@@ -55,7 +55,38 @@ router.get("/details/:uid", async function(req, res) {
 
 // Utilize <form> <input type="file" accept="image/png, image/jpeg" onChange={onChangeImg} /> </form>
 
-router.post("/upload-profile-image/:uid", function(req, res, next) {
+// router.post("/upload-profile-image/:uid", function(req, res, next) {
+//   // to-do: do a check to see if the UID exists as either png or jpg
+//   req.query.folder = "profile_img/";
+//   singleUpload(req, res, async error => {
+//     let imageName, imageLocation;
+//     if (error) {
+//       console.log(error);
+//       res.json({ error: error });
+//     } else {
+//       if (req.file === undefined) {
+//         console.log("Error: No File Selected");
+//         res.json("Error: No File Selected");
+//       } else {
+//         imageName = req.file.key;
+//         imageLocation = req.file.location;
+
+//         await User.findOneAndUpdate(
+//           { userID: req.params.uid },
+//           { photoURL: imageName },
+//           { runValidators: true, new: true }
+//         )
+//           .then(user => {
+//             console.log(user);
+//             res.send(user.photoURL);
+//           })
+//           .catch(error => res.status(404).send(error));
+//       }
+//     }
+//   });
+// });
+
+router.put("/upload-profile-image/:uid", function(req, res) {
   // to-do: do a check to see if the UID exists as either png or jpg
   req.query.folder = "profile_img/";
   singleUpload(req, res, async error => {
@@ -85,7 +116,6 @@ router.post("/upload-profile-image/:uid", function(req, res, next) {
     }
   });
 });
-
 // ---------------------------------------------------------- USERNAME ----------------------------------------------------------
 
 router.get("/set-username", async function(req, res, next) {
@@ -137,3 +167,27 @@ router.get("/validate-username", async (req, res, next) => {
 });
 
 module.exports = router;
+
+// ---------------------------------------------------------- UPDATE PROFILE ----------------------------------------------------------
+
+//findoneandupdate(filter, update, options)
+router.put("/edit/:uid", async function(req, res){
+  let uid = req.params.uid;
+  let update = {};
+  let updateSet = {};
+  if(req.query.username) update.username = req.query.username;
+  if(req.query.biography) update.biography = req.query.biography;
+  if(req.query.privacy) update.privacy = req.query.privacy;
+  if(req.query.movies) update.favorites = {movies: req.query.movies};
+  if(req.query.music) update.favorites = {music: req.query.music};
+  if(req.query.website) update.favorites = {website: req.query.website};
+
+  await UserProfile.findOneAndUpdate(
+    {userID: uid},
+    {$set: update},
+    { new: true }
+  )
+  .then(document => res.send(document))
+  .catch(error => res.status(400).send(error));
+
+});

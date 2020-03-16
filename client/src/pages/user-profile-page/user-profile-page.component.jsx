@@ -7,6 +7,7 @@ import FormInput from "../../components/form-input/form-input.component";
 import EditIcon from '@material-ui/icons/Edit';
 import CheckIcon from '@material-ui/icons/Check';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 
 // import EditIcon from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
@@ -25,14 +26,18 @@ class UserProfilePage extends React.Component {
         this.state = {
             uid: "h2pO0PwXsycrNuOHKenZSAaKRl42",
             username: "",
-            profile: "",
+            biography: "",
+            privacy: "",
+            tags: "",
             movies: "",
             websites: "",
-            music: ""
+            music: "",
+            photoURL: ""
             // uid: "5e5c7906a3a4ee0017b7a7a4"
         };
-        this.handleUsername = this.handleUsername.bind(this);
-        this.handleUpdateInfo = this.handleUpdateInfo.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleUpload = this.handleUpload.bind(this);
     }
 
     componentDidMount() {
@@ -42,24 +47,35 @@ class UserProfilePage extends React.Component {
         {
             console.log("success: ");
             console.log(result);
-            this.setState({profile: result.data});
+            // this.setState({profile: result.data});
             this.setState({username: result.data.username});
+            this.setState({photoURL: result.data.photoURL});
+            this.setState({biography: result.data.biography});
+            this.setState({tags: result.data.tags});
             this.setState({movies: result.data.favorites.movies});
             this.setState({websites: result.data.favorites.websites});
             this.setState({music: result.data.favorites.music});
+            this.setState({privacy: result.data.privacy});
             // console.log(this.state.profile.favorites.movies);
         })
         .catch(error => {
             console.log("error: " + error);
         });
     }
-    handleUpdateInfo(e) {
+
+    handleSubmit(e) {
         // this.setState({username: e.target.value});
+        const details = {
+            username: this.state.username,
+            biography: this.state.biography,
+            movies: this.state.movies,
+            websites: this.state.websites,
+            music: this.state.music
+        };
         axios
-        .put(`${BASE_API_URL}/userprofile/edit/${this.state.uid}`,
+        .put(`${BASE_API_URL}/userprofile/edit/${this.state.uid}`, null,
         {
-            username: this.state.username
-                        
+            params: details   
         })
         .then(result =>
         {
@@ -70,56 +86,96 @@ class UserProfilePage extends React.Component {
             console.log("error: " + error);
         });
     }
-    handleUsername(e) {
-        console.log(e);
-        this.setState({username: e.target.value});
+    handleChange = e => {
+        // console.log(e);
+        // this.setState({username: e.target.value});
+        const { value, name } = e.target;
+        // console.log(e.target);
+        this.setState({ [name]: value });
+    }
+
+    handleUpload(e) {
+        console.log(e)
     }
     render(){
         return(
             <div className="profile">
                 <div className="profile-picture">
                     <img
-                     src={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${this.state.profile.photoURL}`}
+                     src={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${this.state.photoURL}`}
                     //  src={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=default1.png`}
                      />
                 </div>
                 <div className="profile-buttons">
-                    <Fab color="primary" aria-label="edit">
+                    <Fab className="edit-button" color="primary" aria-label="edit">
                         <EditIcon />
                     </Fab>
+                    <label htmlFor="upload" for="upload">
+                        <Fab
+                        className="upload-button"
+                        color="primary"
+                        >
+                            <AddAPhotoIcon />
+                        </Fab>
+                    </label>
+                    <input
+                        type="file"
+                        id="upload"
+                        name="roompic"
+                        accept="image/png, image/jpeg"
+                        onChange={handleUpload}
+                    ></input>
                 </div>
                 <div className="profile-details">
                     <form class="profile-details-form">
 
                         <FormInput
                         label="Username"
+                        name="username"
                         value={this.state.username}
-                        handleChange={this.handleUsername}
+                        handleChange={this.handleChange}
                         />
 
                         <FormInput
                         label="Biography"
-                        value={this.state.profile.biography}
+                        name="biography"
+                        value={this.state.biography}
+                        handleChange={this.handleChange}
                         />
 
                         <FormInput
                         label="Tags"
-                        value={this.state.profile.tags}
+                        name="tags"
+                        value={this.state.tags}
+                        // handleChange={this.handleChange}
                         />
 
                         <FormInput
                         label="Movies"
+                        name="movies"
                         value={this.state.movies}
+                        handleChange={this.handleChange}
                         />
 
                         <FormInput
                         label="Music"
+                        name="music"
                         value={this.state.music}
+                        handleChange={this.handleChange}
                         />
 
                         <FormInput
                         label="Websites"
+                        name="websites"
                         value={this.state.websites}
+                        handleChange={this.handleChange}
+                        />
+
+                        <FormInput
+                        label="Privacy"
+                        name="privacy"
+                        value={this.state.privacy}
+                        handleChange={this.handleChange}
                         />
 
                         <Button
@@ -127,7 +183,7 @@ class UserProfilePage extends React.Component {
                             color="secondary"
                             // className={classes.button}
                             startIcon={<CheckIcon />}
-                            onClick={this.handleUpdateInfo}
+                            onClick={this.handleSubmit}
                         >
                         Update
                         </Button>
