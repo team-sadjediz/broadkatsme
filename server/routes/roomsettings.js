@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
 
 const Room = require("../models/room.model");
 const UserProps = require("../models/userprops.model");
@@ -248,104 +249,111 @@ router.put("/inviters/:roomID/:inviter/:uid", async function(req, res) {
 // ---------------------------------------------------------- BANS ----------------------------------------------------------
 
 // How To Use
-// axios.put(`${BASE_API_URL}/roomsettings/ban/${roomID}/${bannedID}/${uid}`, null, { params: {action: "delete" || "add"}})
+// axios.put(`${BASE_API_URL}/roomsettings/ban/${roomID}/${bannedID}/${uid}`, null, { params: {action: "unban" || "ban"}})
 // returns modified resource (as per convention)
+
 router.put("/ban/:roomID/:banned/:uid", async function(req, res) {
   let roomID = req.params.roomID;
-  let uid = req.params.uid;
-  let banned = req.params.banned;
+  let userID = req.params.uid;
+  let bannedID = req.params.banned;
   let action = req.query.action;
-  if (action == "delete") {
-    await Room.findOneAndUpdate(
-      { _id: roomID, "settings.access.roomAdmins": uid },
-      { $pull: { "settings.access.bans": banned } },
-      { runValidators: true, new: true }
-    )
-      .then(document => res.send(document.settings.access.bans))
-      .catch(error => {
-        error.additional = `Error has occured in /roomsettings/ban/:roomID/:banned/:uid under action = ${action}`;
-        res.status(400).send(error);
-      });
-  } else if (action == "add") {
-    let updatedRoom, updatedUserProps;
-    await UserProps.exists({ userID: banned })
-      .then(exists => {
-        return Room.findOneAndUpdate(
-          {
-            _id: roomID,
-            "settings.access.roomAdmins": uid,
-            ownerID: { $ne: banned },
-            subscribers: banned
-            // "settings.access.roomAdmins": { $nin: banned }
-          },
-          {
-            $addToSet: { "settings.access.bans": banned },
-            $pull: {
-              "settings.access.roomAdmins": banned,
-              "settings.access.operators": banned,
-              "settings.access.invitations": banned,
-              subscribers: banned
-            }
-          },
-          { runValidators: true, new: true }
-        );
-      })
-      .then(document => {
-        updatedRoom = document;
-        return UserProps.findOneAndUpdate(
-          { userID: banned },
-          {
-            $pull: { subscribedRooms: roomID, favoritedRooms: roomID }
-          },
-          { runValidators: true, new: true }
-        );
-        // res.send(document.settings.access.bans);
-      })
-      .then(document => {
-        updatedUserProps = document;
-        res.send({
-          banned: {
-            subscribedRooms: document.subscribedRooms,
-            favoritedRooms: document.favoritedRooms
-          },
-          room: {
-            bans: updatedRoom.settings.access.bans
-          }
-        });
-      })
-      .catch(async error => {
-        let additional = `Error has occured in /roomsettings/ban/:roomID/:banned/:uid under action = '${action}'`;
-        if (updatedRoom && updatedUserProps == null) {
-          await Room.findOneAndUpdate(
-            {
-              _id: roomID,
-              "settings.access.roomAdmins": uid,
-              ownerID: { $ne: banned },
-              subscribers: banned,
-              "settings.access.roomAdmins": { $nin: banned }
-            },
-            {
-              $pull: { "settings.access.bans": banned },
-              // ISSUE: NOT PERSISTENT - SHOULD BE FIXED WITH TRANSACTIONS
-              // CURRENT ISSUE IS STOPGAP FIX
-              // $addToSet: { "settings.access.roomAdmins": banned },
-              // $addToSet: { "settings.access.operators": banned },
-              // $addToSet: { "settings.access.invitations": banned },
-              $addToSet: { subscribers: banned }
-            },
-            { runValidators: true, new: true }
-          ).then(
-            room =>
-              (additional += ` ; ${uid} readded to ${roomID} subscribed, etc.`)
-          );
-        }
-        error.additional = additional;
-        res.status(400).send(error);
-      });
+  if (action == "unban") {
+    try {
+      let bannedUsers = await unban(roomID, userID, bannedID);
+      res.send(bannedUsers);
+    } catch (error) {
+      error.additional = `Error has occured in /roomsettings/ban/:roomID/:banned/:uid under action = ${action}`;
+      res.status(400).send(error);
+    }
+  } else if (action == "ban") {
+    try {
+      let bannedResults = await ban(roomID, userID, bannedID);
+      res.send(bannedResults);
+    } catch (error) {
+      error.additional = `Error has occured in /roomsettings/ban/:roomID/:banned/:uid under action = '${action}'`;
+      res.status(400).send(error);
+    }
   } else {
-    // YOU STILL HAVE TO FIX IF ONE SENDS BUT THE OTHER DOES NOT
     res.status(404).send("Bad request.");
   }
 });
+
+async function ban(roomID, userID, bannedID) {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    const opts = { session, new: true, runValidators: true };
+
+    let exists = await UserProps.exists({ userID: bannedID });
+    let updatedRoom, updatedUserProps, response;
+
+    if (exists) {
+      updatedRoom = await Room.findOneAndUpdate(
+        {
+          _id: roomID,
+          "settings.access.roomAdmins": userID,
+          ownerID: { $ne: bannedID }
+          // subscribers: bannedID
+        },
+        {
+          $addToSet: { "settings.access.bans": bannedID },
+          $pull: {
+            "settings.access.roomAdmins": bannedID,
+            "settings.access.operators": bannedID,
+            "settings.access.invitations": bannedID,
+            subscribers: bannedID
+          }
+        },
+        opts
+      );
+
+      updatedUserProps = await UserProps.findOneAndUpdate(
+        { userID: bannedID },
+        { $pull: { subscribedRooms: roomID, favoritedRooms: roomID } },
+        opts
+      );
+
+      response = {
+        bannedUser: {
+          subscribedRooms: updatedUserProps.subscribedRooms,
+          favoritedRooms: updatedUserProps.favoritedRooms
+        },
+        roomBans: { bans: updatedRoom.settings.access.bans }
+      };
+
+      await session.commitTransaction();
+      session.endSession();
+      return response;
+    }
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    console.log(error);
+    error.additional =
+      "Error has occured in /roomsettings/ban/:roomID/:banned/:uid under action='add'";
+    throw error;
+  }
+}
+
+async function unban(roomID, userID, bannedID) {
+  try {
+    const opts = { new: true, runValidators: true };
+
+    let updatedRoom = await Room.findOneAndUpdate(
+      {
+        _id: roomID,
+        "settings.access.roomAdmins": userID
+      },
+      { $pull: { "settings.access.bans": bannedID } },
+      opts
+    );
+
+    return { updatedRoom };
+  } catch (error) {
+    error.additional =
+      "Error has occurred in /roomsettings/ban/:roomID/:banned/:uid with action='delete'";
+    throw error;
+  }
+}
 
 module.exports = router;

@@ -62,6 +62,8 @@ async function deleteFriend(userID, friendID) {
     // console.log(error);
     await session.abortTransaction();
     session.endSession();
+    error.additional =
+      "Error has occured in /friends/update/:uid/:friendID with action='delete'";
     throw error;
     // return error;
   }
@@ -93,6 +95,8 @@ async function addFriend(userID, friendID) {
     // console.log(error);
     await session.abortTransaction();
     session.endSession();
+    error.additional =
+      "Error has occured in /friends/update/:uid/:friendID with action='add'";
     throw error;
     // return error;
   }

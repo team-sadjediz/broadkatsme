@@ -87,9 +87,7 @@ router.post("/new-user", async function(req, res) {
     console.log(response);
     res.send(response);
   } catch (error) {
-    // console.log(error);
-    console.log("?");
-    res.status(400).send(error);
+    res.status(422).send(error);
   }
 });
 
@@ -127,12 +125,9 @@ async function createUser(userID, username, defaulPhotoUrl, defaultChatColor) {
     session.endSession();
     return { savedProfile, savedProps };
   } catch (error) {
-    // console.log(error);
-    // console.log("??");
     await session.abortTransaction();
     session.endSession();
-    console.log("error being thrown");
-    // console.log(error);
+    error.additional = "Error has occurred in /register/new-user";
     throw error;
   }
 }
