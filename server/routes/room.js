@@ -135,30 +135,51 @@ async function createRoom(roomName, uid, roomSize, privacy) {
 // axios.delete(`${BASE_API_URI}/room/delete/${roomID}/${uid}`)
 // returns empty body (as per convention)
 router.delete("/delete/:roomID/:uid", async function(req, res) {
-  let roomID = req.params.roomID;
-  let uid = req.params.uid;
-
-  await Room.findOneAndDelete({ _id: roomID, ownerID: uid })
-    .then(document => {
-      return UserProps.findOneAndUpdate(
-        {
-          subscribedRooms: roomID
-        },
-        {
-          $pull: {
-            subscribedRooms: roomID,
-            ownedRooms: roomID,
-            favoritedRooms: roomID
-          }
-        },
-        { runValidators: true }
-      );
-    })
-    .then(response => {
-      res.status(204).send();
-    })
-    .catch(error => res.status(404).send(error));
+  try {
+    let updatedUserProps = await deleteRoom(req.params.roomID, req.params.uid);
+    res.status(204).send();
+  } catch (error) {
+    res.status(404).send(error);
+  }
 });
+
+async function deleteRoom(roomID, uid) {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    const opts = { session, runValidators: true };
+
+    let deletedRoom = await Room.findOneAndDelete(
+      {
+        _id: roomID,
+        ownerID: uid
+      },
+      opts
+    );
+
+    let updatedUserProps = await UserProps.updateMany(
+      { subscribedRooms: { $in: roomID } },
+      {
+        $pull: {
+          subscribedRooms: roomID,
+          ownedRooms: roomID,
+          favoritedRooms: roomID
+        }
+      },
+      opts
+    );
+
+    await session.commitTransaction();
+    session.endSession();
+    return { updatedUserProps };
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    console.log(error);
+    error.addiotional = `Error has occurred in /room/delete`;
+    throw error;
+  }
+}
 
 // ---------------------------------------------------------- UPLOAD / GET THUMBNAILS ----------------------------------------------------------
 
