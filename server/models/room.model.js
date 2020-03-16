@@ -66,8 +66,10 @@ const Room = new mongoose.Schema({
     validate: {
       // Applies only on creation (save) as validate is not applicable to $addToSet
       validator: function() {
-        console.log(this.subscribers.length > 1 && this.subscribers.length < 5);
-        return this.subscribers.length > 1 && this.subscribers.length < 5;
+        // console.log(
+        //   this.subscribers.length >= 1 && this.subscribers.length <= 5
+        // );
+        return this.subscribers.length >= 1 && this.subscribers.length <= 5;
       },
       message: "{PATH} exceends limit of (5)"
     }

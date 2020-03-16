@@ -65,60 +65,69 @@ router.put("/active/:roomID/:uid", async function(req, res) {
 
 // How To Use:
 // axios.post(`${BASE_API_URI}/room/create`, { body })
+// { body } == { roomName, uid, roomSize, privacy}
 // returns new subscribed rooms
 router.post("/create", async function(req, res) {
-  let name = req.body.roomName;
-  let ownerID = req.body.uid;
-  let thumbnailUrl = "default1.png";
-  let active = false;
-  let subscribers = [req.body.uid];
-  let tags = [];
-  let roomSize = req.body.roomSize;
-  let privacy = req.body.privacy;
-  let deleteUser = req.body.uid;
-  let roomAdmins = [req.body.uid];
-  let operators = [req.body.uid];
-  let invitations = [req.body.uid];
-  let bans = [];
-
-  let newRoom = new Room({
-    name,
-    ownerID,
-    thumbnailUrl,
-    active,
-    subscribers,
-    tags,
-    settings: {
-      roomSize,
-      privacy,
-      access: {
-        delete: deleteUser,
-        roomAdmins,
-        operators,
-        invitations,
-        bans
-      }
-    }
-  });
-
-  await newRoom
-    .save()
-    .then(newRoom => {
-      let roomID = newRoom._id;
-      return UserProps.findOneAndUpdate(
-        { userID: ownerID },
-        { $addToSet: { ownedRooms: roomID, subscribedRooms: roomID } },
-        { runValidators: true, new: true }
-      );
-    })
-    .then(document => {
-      // Conventially returns location of entity referring to request status & new resource
-      res.status(201).send(document.subscribedRooms);
-    })
-    .catch(error => {
-      res.status(400).send(error);
-    });
+  try {
+    console.log("??????");
+    let newRoom = await createRoom(
+      req.body.roomName,
+      req.body.uid,
+      req.body.roomSize,
+      req.body.privacy
+    );
+    res.send(newRoom);
+  } catch (error) {
+    console.log(error);
+    res.status(400).send(error);
+  }
 });
+
+async function createRoom(roomName, uid, roomSize, privacy) {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    const opts = { session, new: true, runValidators: true };
+
+    let newRoom = new Room({
+      name: roomName,
+      ownerID: uid,
+      thumbnailUrl: "default1.png",
+      active: false,
+      subscribers: [uid],
+      tags: [],
+      settings: {
+        roomSize: roomSize,
+        privacy: privacy,
+        access: {
+          delete: uid,
+          roomAdmins: [uid],
+          operators: [uid],
+          invitations: [uid],
+          bans: []
+        }
+      }
+    });
+
+    let newRoomDocument = await newRoom.save(opts);
+    let newRoomID = newRoomDocument._id;
+    let updatedUserProps = await UserProps.findOneAndUpdate(
+      { userID: uid },
+      { $addToSet: { ownedRooms: newRoomID, subscribedRooms: newRoomID } },
+      opts
+    );
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return updatedUserProps.subscribedRooms;
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    error.additional = "Error has occured in /room/create";
+    throw error;
+  }
+}
 
 // ---------------------------------------------------------- DELETE ROOMS ----------------------------------------------------------
 

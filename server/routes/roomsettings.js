@@ -328,7 +328,7 @@ async function ban(roomID, userID, bannedID) {
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
-    console.log(error);
+    // console.log(error);
     error.additional =
       "Error has occured in /roomsettings/ban/:roomID/:banned/:uid under action='add'";
     throw error;
