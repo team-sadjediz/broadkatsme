@@ -69,7 +69,6 @@ router.put("/active/:roomID/:uid", async function(req, res) {
 // returns new subscribed rooms
 router.post("/create", async function(req, res) {
   try {
-    console.log("??????");
     let newRoom = await createRoom(
       req.body.roomName,
       req.body.uid,
