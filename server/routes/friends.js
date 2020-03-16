@@ -55,13 +55,16 @@ async function deleteFriend(userID, friendID) {
     );
 
     await session.commitTransaction();
-    console.log("Friend delete - session committed");
+    session.endSession();
+    // console.log("Friend delete - session committed");
     return { userProps, friendProps };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     await session.abortTransaction();
+    session.endSession();
+    throw error;
+    // return error;
   }
-  session.endSession();
 }
 
 async function addFriend(userID, friendID) {
@@ -83,13 +86,16 @@ async function addFriend(userID, friendID) {
     );
 
     await session.commitTransaction();
-    console.log("Friend add - session committed.");
+    session.endSession();
+    // console.log("Friend add - session committed.");
     return { userProps, friendProps };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     await session.abortTransaction();
+    session.endSession();
+    throw error;
+    // return error;
   }
-  session.endSession();
 
   // try {
   //   const opts = { session, new: true, runValidators: true };
