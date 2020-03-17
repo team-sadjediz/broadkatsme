@@ -15,16 +15,16 @@ import Button from '@material-ui/core/Button';
 // import React from 'react';
 import React, { Component } from "react";
 import axios from 'axios';
-
+import { connect } from "react-redux";
 import { BASE_API_URL } from "../../utils";
-import { FormGroup } from "@material-ui/core";
+
 
 
 class UserProfilePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            uid: "h2pO0PwXsycrNuOHKenZSAaKRl42",
+            uid: this.props.userAuth.uid,
             username: "",
             biography: "",
             privacy: "",
@@ -33,7 +33,6 @@ class UserProfilePage extends React.Component {
             websites: "",
             music: "",
             photoURL: ""
-            // uid: "5e5c7906a3a4ee0017b7a7a4"
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleChangePhoto = this.handleChangePhoto.bind(this);
@@ -58,6 +57,7 @@ class UserProfilePage extends React.Component {
             this.setState({music: result.data.favorites.music});
             this.setState({privacy: result.data.privacy});
             // console.log(this.state.profile.favorites.movies);
+            // console.log(this.props.userAuth.uid);
         })
         .catch(error => {
             console.log("error: " + error);
@@ -225,5 +225,10 @@ class UserProfilePage extends React.Component {
         )
     }
 }
+const mapStateToProps = state => ({
+    // currentUser: state.user.currentUser,
+    userAuth: state.user.userAuth
+  });
 
-export default UserProfilePage;
+export default connect(mapStateToProps)(UserProfilePage);
+
