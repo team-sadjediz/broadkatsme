@@ -1,4 +1,4 @@
-require("dotenv").config(); // injects environment variables from .env file
+// require("dotenv").config(); // injects environment variables from .env file
 const express = require("express");
 const path = require("path");
 const cors = require("cors");

@@ -81,6 +81,20 @@ router.post("/create", async function(req, res) {
   let invitations = [req.body.uid];
   let bans = [];
 
+  console.log("name", name);
+  console.log("ownerID", ownerID);
+  console.log("thumbnailUrl", thumbnailUrl);
+  console.log("active", active);
+  console.log("subscribers", subscribers);
+  console.log("tags", tags);
+  console.log("roomSize", roomSize);
+  console.log("privacy", privacy);
+  console.log("deleteUser", deleteUser);
+  console.log("roomAdmins", roomAdmins);
+  console.log("operators", operators);
+  console.log("invitations", invitations);
+  console.log("bans", bans);
+
   let newRoom = new Room({
     name,
     ownerID,
@@ -100,6 +114,8 @@ router.post("/create", async function(req, res) {
       }
     }
   });
+
+  console.log("newRoom", newRoom);
 
   await newRoom
     .save()

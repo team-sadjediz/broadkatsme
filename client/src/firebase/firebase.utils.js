@@ -26,19 +26,40 @@ export const db = firebase.database();
 const provider = new firebase.auth.GoogleAuthProvider();
 provider.setCustomParameters({ prompt: "select_account" });
 
+export const createUserProfileMongoDB = async (userAuth, additionalData) => {
+  if (!userAuth) return;
+
+  const { username } = additionalData;
+  await axios
+    .post(`${BASE_API_URL}/register/new-user`, {
+      "uid": userAuth.user.uid,
+      "username": username
+    })
+    .then(res => {
+      console.log("Successfully made a MDB user:", res);
+    })
+    .catch(error => {
+      // if we get to this point, it means that someone finished inserting another UserProfile
+      // with values that DID pass the input validation above but are now invalid because of timing
+      if (error.response) {
+        console.error("MONGODB ERROR:", error.response.data.message);
+        console.error(error);
+        userAuth.user.delete(); // deletes the user from firebase
+      }
+    });
+};
+
 export const signInWithGoogle = () =>
   auth.signInWithPopup(provider).then(async userCredential => {
     let isNewUser = userCredential.additionalUserInfo.isNewUser;
-    console.log("isNewUser:", isNewUser);
+    // console.log("isNewUser:", isNewUser);
     if (isNewUser) {
-      let newUser = {
-        "uid": userCredential.user.uid,
-        "username": userCredential.user.displayName
-      };
-      await axios
-        .post(`${BASE_API_URL}/register/new-user`, newUser)
-        .then(res => console.log("User successfully created."))
-        .catch(error => console.error(error));
+      const uid = userCredential.user.uid;
+      const shortenedUID =
+        uid.slice(0, 7) + uid.slice(uid.length - 8, uid.length);
+      createUserProfileMongoDB(userCredential, {
+        username: shortenedUID // using a shortened version of the provided uid as a temp username
+      });
     }
   });
 
