@@ -36,6 +36,7 @@ class UserProfilePage extends React.Component {
             // uid: "5e5c7906a3a4ee0017b7a7a4"
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleChangePhoto = this.handleChangePhoto.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleUpload = this.handleUpload.bind(this);
     }
@@ -72,6 +73,7 @@ class UserProfilePage extends React.Component {
             websites: this.state.websites,
             music: this.state.music
         };
+        console.log(details);
         axios
         .put(`${BASE_API_URL}/userprofile/edit/${this.state.uid}`, null,
         {
@@ -94,15 +96,45 @@ class UserProfilePage extends React.Component {
         this.setState({ [name]: value });
     }
 
-    handleUpload(e) {
-        console.log(e)
+    handleChangePhoto = photoURL => {
+        console.log(this.state.photoURL);
+        console.log(photoURL);
+        this.setState({ photoURL: photoURL });
+      };
+
+    handleUpload = async file => {
+        const photo = file.target.files[0];
+        console.log(file.target.files);
+        const formData = new FormData();
+        formData.append("uid", this.state.uid);
+        formData.append("image", photo);
+        const config = {
+            headers: {
+            "content-type": "multipart/form-data"
+            }
+        };
+
+        await axios
+            .put(
+            `${BASE_API_URL}/userprofile/upload-profile-image/${this.state.uid}`,
+            formData,
+            config
+            )
+            .then(res => {
+            console.log(res);
+            this.handleChangePhoto(res.data);
+            this.setState({photoURL: res.data});
+            })
+            .catch(error => console.error(error));
+          
     }
+
     render(){
         return(
             <div className="profile">
                 <div className="profile-picture">
                     <img
-                     src={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${this.state.photoURL}`}
+                     src={`${BASE_API_URL}/userprofile/get-photo?photoUrl=${this.state.photoURL}`}
                     //  src={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=default1.png`}
                      />
                 </div>
@@ -121,9 +153,9 @@ class UserProfilePage extends React.Component {
                     <input
                         type="file"
                         id="upload"
-                        name="roompic"
+                        name="profile_picture"
                         accept="image/png, image/jpeg"
-                        onChange={handleUpload}
+                        onChange={this.handleUpload}
                     ></input>
                 </div>
                 <div className="profile-details">
@@ -171,12 +203,12 @@ class UserProfilePage extends React.Component {
                         handleChange={this.handleChange}
                         />
 
-                        <FormInput
+                        {/* <FormInput
                         label="Privacy"
                         name="privacy"
                         value={this.state.privacy}
                         handleChange={this.handleChange}
-                        />
+                        /> */}
 
                         <Button
                             variant="contained"

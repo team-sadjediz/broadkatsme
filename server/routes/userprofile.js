@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const aws = require("aws-sdk");
 
 const upload = require("../services/photo-upload");
 const singleUpload = upload.single("image");
@@ -31,7 +32,7 @@ router.get("/details/:uid", async function(req, res) {
     .catch(error => res.status(404).send(error));
 });
 
-// ---------------------------------------------------------- UPLOAD USER PROF PIC ----------------------------------------------------------
+// ---------------------------------------------------------- UPLOAD/GET USER PROF PIC ----------------------------------------------------------
 
 // How To Use
 // Create File Upload Handler w/async files argument
@@ -99,6 +100,7 @@ router.put("/upload-profile-image/:uid", function(req, res) {
         console.log("Error: No File Selected");
         res.json("Error: No File Selected");
       } else {
+        // console.log("here is the file" + JSON.stringify(req.file));
         imageName = req.file.key;
         imageLocation = req.file.location;
 
@@ -108,13 +110,39 @@ router.put("/upload-profile-image/:uid", function(req, res) {
           { runValidators: true, new: true }
         )
           .then(user => {
-            console.log(user);
+            // console.log(user);
             res.send(user.photoURL);
           })
           .catch(error => res.status(404).send(error));
+
+          await UserProfile.findOneAndUpdate(
+            { userID: req.params.uid },
+            { photoURL: imageName },
+            { runValidators: true, new: true }
+          )
+            .then(userprofile => {
+              // console.log(userprofile);
+              res.send(userprofile.photoURL);
+            })
+            .catch(error => res.status(404).send(error));
       }
+      
     }
   });
+});
+
+// How To Use:
+// <img src={`http://localhost:5000/api/userprofile/get-photo=${photo_url}`} />
+router.get("/get-photo", async function(req, res) {
+  let s3 = new aws.S3();
+  let url = req.query.photoUrl;
+  let folder = "profile_img/";
+  console.log(url);
+  let data = await s3.getObject({ Bucket: "broadkats.me", Key: url }).promise();
+  console.log(data);
+  res.writeHead(200, { "Content-Type": "image/png, image/jpg" });
+  res.write(data.Body, "binary");
+  res.end(null, "binary");
 });
 // ---------------------------------------------------------- USERNAME ----------------------------------------------------------
 
@@ -178,9 +206,14 @@ router.put("/edit/:uid", async function(req, res){
   if(req.query.username) update.username = req.query.username;
   if(req.query.biography) update.biography = req.query.biography;
   if(req.query.privacy) update.privacy = req.query.privacy;
-  if(req.query.movies) update.favorites = {movies: req.query.movies};
-  if(req.query.music) update.favorites = {music: req.query.music};
-  if(req.query.website) update.favorites = {website: req.query.website};
+  // if(req.query.movies) update.favorites = {movies: req.query.movies};
+  // if(req.query.music) update.favorites = {music: req.query.music};
+  // if(req.query.websites) update.favorites = {websites: req.query.websites};
+  update.favorites = {
+    movies: req.query.movies,
+    music: req.query.music,
+    websites: req.query.websites
+  };
 
   await UserProfile.findOneAndUpdate(
     {userID: uid},
