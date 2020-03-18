@@ -62,7 +62,13 @@ class LobbyPage extends React.Component {
       });
     // Get User Rooms
     axios
-      .get(`${BASE_API_URL}/userprops/users-rooms?uid=${this.state.uid}`)
+      // .get("http://localhost:5000/api/home/users-rooms?uid=" + this.state.uid)
+      // .get(
+      //   "http://broadkatsme.herokuapp.com/api/home/users-rooms?uid=" +
+      //     this.state.uid
+      // )
+      // .get(`${BASE_API_URL}/userprops/users-rooms?uid=${this.state.uid}`)
+      .get(`${BASE_API_URL}/userprops/rooms/${this.state.uid}`)
       .then(rooms => {
         // console.log("user rooms: " + rooms);
         this.setState({ userRooms: rooms.data });

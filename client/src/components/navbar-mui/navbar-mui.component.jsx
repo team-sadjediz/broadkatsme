@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   setSubscribedRooms,
-  setSelectedRoom
+  setSelectedRoom,
+  updateSubscribedRooms
 } from "../../redux/room/room.actions";
 import axios from "axios";
 
@@ -33,7 +34,6 @@ import "./navbar-mui.styles.scss";
 
 // utils:
 import { BASE_API_URL } from "../../utils";
-import { updateUserProps } from "../../redux/user/user.actions";
 
 // const useStyles = makeStyles(theme => ({
 //   root: {
@@ -101,7 +101,7 @@ class ButtonAppBar extends React.Component {
   }
 
   async componentDidMount() {
-    this.props.updateUserProps(this.props.userAuth.uid);
+    this.props.updateSubscribedRooms(this.props.userAuth.uid);
   }
 
   render() {
@@ -146,7 +146,7 @@ class ButtonAppBar extends React.Component {
               </MouseOverPopover>
 
               {/* {console.log("yellow", this.props.userProps)} */}
-              {this.props.userProps.subscribedRooms.map((room, i) => (
+              {this.props.subscribedRooms.map((room, i) => (
                 <Link
                   style={{ position: "relative" }}
                   to={`/room/id=${room.roomID}`}
@@ -164,7 +164,8 @@ class ButtonAppBar extends React.Component {
                       this.props.setSelectedRoom(room.roomID);
                     }}
                     iconHover={<PlayCircleFilledIcon />}
-                    bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=default1.png`}
+                    // bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=default1.png`}
+                    bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${room.thumbnailUrl}`}
                   ></ImageButton>
                 </Link>
               ))}
@@ -198,12 +199,12 @@ class ButtonAppBar extends React.Component {
 
 const mapStateToProps = state => ({
   userAuth: state.user.userAuth,
-  userProps: state.user.userProps,
+  subscribedRooms: state.room.subscribedRooms,
   selectedRoom: state.room.selectedRoom
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateUserProps: uid => dispatch(updateUserProps(uid)),
+  updateSubscribedRooms: uid => dispatch(updateSubscribedRooms(uid)),
   setSelectedRoom: roomID => dispatch(setSelectedRoom(roomID))
 });
 

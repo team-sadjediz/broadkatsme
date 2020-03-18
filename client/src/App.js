@@ -30,7 +30,6 @@ import Test from "./components/test-component/test.component";
 import Chat from "./components/chat/chat.component";
 
 import "./App.scss";
-import RoomPrivateRoute from "./pages/room-page/room-private-route";
 
 const theme = createMuiTheme({
   palette: {
@@ -67,6 +66,7 @@ class App extends Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
+    console.log("App.js mounted");
     this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
       // this.props.setCurrentUser(user);
       this.props.setUserAuth(user);
@@ -74,9 +74,8 @@ class App extends Component {
   }
 
   componentWillUnmount() {
+    console.log("App.js unmounting");
     this.unsubscribeFromAuth();
-    // this.props.setUserAuth(null);
-
     console.log("logged out");
   }
 
@@ -89,13 +88,12 @@ class App extends Component {
     if (this.props.userAuth) {
       this.authorize();
     }
-    console.log(this.props.userAuth);
+    // console.log(this.props.userAuth);
     return (
       <ThemeProvider theme={theme}>
         <div className="App">
           {this.props.userAuth ? (
             <BrowserRouter>
-              {/* <NavBar /> */}
               <ButtonAppBar />
               <CustomDrawer>
                 <Switch>
@@ -112,7 +110,7 @@ class App extends Component {
                   />
                   {/* <Route path="/lobby" component={Chat} /> */}
                   <Route path="/lobby" component={LobbyPage} />
-                  <RoomPrivateRoute path="/room/id=:id" component={RoomPage} />
+                  <Route path="/room/id=:id" component={RoomPage} />
                   <Route path="/about" component={AboutPage} />
                   <Route path="/contact" component={ContactPage} />
                   <Route path="/codeofconduct" component={CodeOfConductPage} />

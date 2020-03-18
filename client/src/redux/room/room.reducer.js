@@ -1,5 +1,3 @@
-import axios from "axios";
-
 import { RoomActionTypes } from "./room.types";
 
 const INITIAL_STATE = {

@@ -58,6 +58,7 @@ export default function DeletePanel(props) {
             color="secondary"
             size="large"
             startIcon={<DeleteIcon />}
+            onClick={props.delete}
           >
             DELETE
           </Button>

@@ -3,15 +3,16 @@ var router = express.Router();
 
 const UserProfile = require("../models/userprofile.model");
 const UserProps = require("../models/userprops.model");
-const User = require("../models/user.model");
 
 router.post("/new-user", async function(req, res) {
   // console.log(req);
+
   const userID = req.body.uid;
   const username = req.body.username;
   const defaulPhotoUrl = "default1.png";
   const defaultChatColor = "#000000";
 
+  console.log("userid", userID);
   let userProfile = new UserProfile({
     "userID": userID,
     "username": username,
@@ -65,6 +66,7 @@ router.post("/new-user", async function(req, res) {
       .then(document => {
         // console.log(document);
         console.log("Saved UserProp:", document);
+        res.status(200).send("perfect");
         return document.userID;
       })
       .catch(error => res.status(400).send("User Props insert failed."));

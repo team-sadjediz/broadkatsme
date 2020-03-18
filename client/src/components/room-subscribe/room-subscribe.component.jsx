@@ -28,14 +28,22 @@ const RoomSubscribe = ({
   const handleSubscribe = async event => {
     if (roomId) {
       console.log(roomId, currentUser.uid);
-      await axios.put(`${BASE_API_URL}/userprops/subscribed-rooms/subscribe`, {
-        roomID: roomId,
-        uid: currentUser.uid
-      });
+      // await axios.put(`${BASE_API_URL}/userprops/subscribed-rooms/subscribe`, {
+      //   roomID: roomId,
+      //   uid: currentUser.uid
+      // });
+      await axios.put(
+        `${BASE_API_URL}/userprops/subscribe/${roomId}/${currentUser.uid}`,
+        null,
+        { params: { action: "subscribe" } }
+      );
 
-      let results = await axios.get(`${BASE_API_URL}/userprops/users-rooms`, {
-        params: { uid: currentUser.uid }
-      });
+      // let results = await axios.get(`${BASE_API_URL}/userprops/users-rooms`, {
+      //   params: { uid: currentUser.uid }
+      // });
+      let results = await axios.get(
+        `${BASE_API_URL}/userprops/rooms/${currentUser.uid}`
+      );
       setSubscribedRooms(results.data);
       setSelectedRoom(roomId);
     }
@@ -44,19 +52,38 @@ const RoomSubscribe = ({
 
   const handleUnsubscribe = async event => {
     if (roomId) {
-      console.log(roomId, currentUser.uid);
+      // console.log(roomId, currentUser.uid);
+      // await axios
+      //   .put(`${BASE_API_URL}/userprops/subscribed-rooms/unsubscribe`, {
+      //     roomID: roomId,
+      //     uid: currentUser.uid
+      //   })
+      //   .catch(error => {
+      //     console.log(error);
+      //   });
+
+      // await axios
+      //   .put(
+      //     `${BASE_API_URL}/userprops/subscribe/${currentUser.uid}/${roomId}`,
+      //     null,
+      //     { params: { action: "unsubscribe" } }
+      //   )
       await axios
-        .put(`${BASE_API_URL}/userprops/subscribed-rooms/unsubscribe`, {
-          roomID: roomId,
-          uid: currentUser.uid
-        })
+        .put(
+          `${BASE_API_URL}/userprops/subscribe/${this.props.match.params.id}/${this.props.currentUser.uid}`,
+          null,
+          { params: { action: "unsubscribe" } }
+        )
         .catch(error => {
           console.log(error);
         });
 
-      let results = await axios.get(`${BASE_API_URL}/userprops/users-rooms`, {
-        params: { uid: currentUser.uid }
-      });
+      // let results = await axios.get(`${BASE_API_URL}/userprops/users-rooms`, {
+      //   params: { uid: currentUser.uid }
+      // });
+      let results = await axios.get(
+        `${BASE_API_URL}/userprops/rooms/${currentUser.uid}`
+      );
 
       setSubscribedRooms(results.data);
       setSelectedRoom(subscribedRooms[0].roomID);

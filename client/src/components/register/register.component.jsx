@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
-import { auth } from "../../firebase/firebase.utils";
+import { connect } from "react-redux";
+import { auth, createUserProfileMongoDB } from "../../firebase/firebase.utils";
 import { BASE_API_URL } from "../../utils";
 
 // components:
@@ -22,11 +23,11 @@ class Register extends React.Component {
   }
 
   componentDidMount() {
-    console.log("reigster has mounted");
+    console.log("Register has mounted");
   }
 
   componentWillUnmount() {
-    console.log("bye im unmounting");
+    console.log("Register will unmount");
   }
 
   handleSubmit = async event => {
@@ -34,74 +35,57 @@ class Register extends React.Component {
 
     const { username, email, password, confirmPassword } = this.state;
 
+    console.log("checking password match");
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
 
-    // validation for username:
-    let usernameValid = await axios
+    // 1. Validate username:
+    await axios
       .get(`${BASE_API_URL}/userprofile/validate-username`, {
         params: { requestedUsername: username }
       })
+      .then(async res => {
+        // 2. Create a firebase user
+        console.log("Username is VALID");
+        console.log("Starting to create a FIREBASE user");
+        await auth
+          .createUserWithEmailAndPassword(email, password)
+          .then(async userAuth => {
+            // 3. Create a mongoDB user (UserProfile schema/model)
+            console.log(
+              "Successfully created a FIREBASE user:",
+              userAuth.user.uid
+            );
+            console.log("Starting to create a MongoDB user (UserProfile)");
+            await createUserProfileMongoDB(userAuth, {
+              username: this.state.username
+            });
+          });
+      })
       .then(res => {
-        console.log(res);
-        return true; // username is valid
+        // 4. Clear Register component state
+        console.log("Clearing state info");
+        this.setState({
+          uid: "",
+          username: "",
+          email: "",
+          password: "",
+          confirmPassword: ""
+        });
       })
       .catch(error => {
         console.error(error);
-
         if (error.response) {
           console.error("HINT", error.response.data);
           alert(error.response.data.msg);
         }
-
-        return false; // not neccessary but whatever
       });
-
-    console.log("username", usernameValid);
-
-    // firebase register:
-    let newUserAuth;
-    if (usernameValid) {
-      newUserAuth = await auth
-        .createUserWithEmailAndPassword(email, password)
-        .then(async userAuth => {
-          // mongodb register:
-          await axios
-            .post(`${BASE_API_URL}/register/new-user`, {
-              "uid": newUserAuth.user.uid,
-              "username": username
-            })
-            .then(res => console.log("User successfully created."))
-            // if we get to this point, it means that someone finished inserting another UserProfile
-            // with values that
-            .catch(error => {
-              if (error.response) {
-                console.error("MONGODB ERROR:", error.response.data.message);
-                console.error(error);
-                newUserAuth.user.delete(); // deletes the firebase user if
-              }
-            });
-        })
-        .catch(error => {
-          console.error(error);
-          return null;
-        });
-    }
-
-    this.setState({
-      uid: "",
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: ""
-    });
   };
 
   handleChange = event => {
     const { value, name } = event.target;
-    console.log("reg:", event.target.name);
     this.setState({ [name]: value });
   };
 
