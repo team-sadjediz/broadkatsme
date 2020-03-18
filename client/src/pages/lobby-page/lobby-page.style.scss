@@ -24,12 +24,8 @@
 
     .active-container {
         grid-area: active;
-        overflow-x: hidden;
-        overflow-y: hidden;
-        position: relative;
+        overflow: hidden;
         grid-area: active;
-        // padding-top: 20px;
-        margin: 0;
     }
 
     .featured-container {

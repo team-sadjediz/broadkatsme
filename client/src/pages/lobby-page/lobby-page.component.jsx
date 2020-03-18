@@ -5,6 +5,7 @@ import { BASE_API_URL } from "../../utils";
 
 //components
 import Card from "../../components/card/card.component";
+import CardTwo from "../../components/card/card-two.component";
 import Carousel from "../../components/carousel/carousel.component";
 
 //svg and styling
@@ -24,8 +25,8 @@ class LobbyPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // uid: this.props.currentUser.uid,
-      uid: "h2pO0PwXsycrNuOHKenZSAaKRl42",
+      uid: this.props.userAuth.uid,
+      // uid: "h2pO0PwXsycrNuOHKenZSAaKRl42",
       featureRooms: [],
       featureSize: 8,
       userRooms: [],
@@ -51,23 +52,16 @@ class LobbyPage extends React.Component {
   componentDidMount() {
     // Get Random Rooms for Feature Rooms
     axios
-      .get(`${BASE_API_URL}/home/get-random-rooms?size=${this.state.featureSize}`)
+      // .get(`${BASE_API_URL}/home/get-random-rooms?size=${this.state.featureSize}`)
+      .get(`${BASE_API_URL}/userprops/rooms/${this.state.uid}`)
       .then(rooms => {
-        // const properties = rooms.data;
         this.setState({ featureRooms: rooms.data });
-        // console.log(rooms);
       })
       .catch(error => {
         console.error(error);
       });
     // Get User Rooms
     axios
-      // .get("http://localhost:5000/api/home/users-rooms?uid=" + this.state.uid)
-      // .get(
-      //   "http://broadkatsme.herokuapp.com/api/home/users-rooms?uid=" +
-      //     this.state.uid
-      // )
-      // .get(`${BASE_API_URL}/userprops/users-rooms?uid=${this.state.uid}`)
       .get(`${BASE_API_URL}/userprops/rooms/${this.state.uid}`)
       .then(rooms => {
         // console.log("user rooms: " + rooms);
@@ -161,8 +155,9 @@ class LobbyPage extends React.Component {
           <div className="cards-grid">
           {
               filteredUserRooms.map(property=> 
-              <div className="card-grid-container" key={ property.roomID }>
-                  <Card 
+              // <div className="card-grid-container" key={ property.roomID }>
+                  <CardTwo
+                  style={{"padding": "120px", "margin": "0 auto", "flex" : "1"}}
                   uid={ this.state.uid }
                   roomID={ property.roomID } 
                   name={ property.name } 
@@ -170,8 +165,8 @@ class LobbyPage extends React.Component {
                   thumbnailUrl={ `${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}` }
                   onMouseEnter={this.handleSelectRoom.bind(property.roomID)}
                   // unsubscribe={this.handleUnsubscribe}
-                  ></Card>
-              </div>
+                  ></CardTwo>
+              // </div>
               )
           }
           </div>
@@ -182,7 +177,8 @@ class LobbyPage extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  currentUser: state.user.currentUser
+  // currentUser: state.user.currentUser,
+  userAuth: state.user.userAuth
 });
 
 export default connect(mapStateToProps)(LobbyPage);

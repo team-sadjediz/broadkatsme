@@ -14,6 +14,7 @@ import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import IconButton from '@material-ui/core/IconButton';
 import CircleBtn from "../circle-btn/circle-btn.component";
 import ChatIcon from '@material-ui/icons/Chat';
+import AddIcon from '@material-ui/icons/Add';
 
 import axios from "axios";
 // import { connect } from "react-redux";
@@ -84,19 +85,31 @@ class Card extends React.Component {
       roomTags: this.props.tags,
       roomName: this.props.name,
       hover: false,
-      delete: false,
-      add: false,
-      invite: false,
+      delete: true,
+      add: true,
+      // invite: false,
+      chat: true,
       zoom: false
     }
+
+    this.user = {
+      uid: this.props.uid,
+      roomID: this.props.roomID,
+      thumbnailUrl: this.props.thumbnailUrl,
+      roomTags: this.props.tags,
+      roomName: this.props.name,
+    }
+    this.handleMouseEnter = this.handleMouseEnter.bind(this);
+    this.handleMouseLeave = this.handleMouseLeave.bind(this);
+    this.handleUnsubscribe = this.handleUnsubscribe.bind(this);
   }
   handleMouseEnter = event => {
     this.setState({hover: true});
-    // console.log(hover);
+    console.log(this.state.hover);
   }
   handleMouseLeave = event => {
     this.setState({hover: false});
-    // console.log(hover);
+    console.log(this.state.hover);
   }
   handleUnsubscribe = event => {
     let request = {
@@ -119,7 +132,7 @@ class Card extends React.Component {
     return (
     <div 
       key={this.state.roomID} 
-      className={this.state.zoom ? "card shadow" : "card"}
+      className="card shadow"
       onMouseEnter={this.handleMouseEnter}
       onMouseLeave={this.handleMouseLeave}
       >
@@ -132,7 +145,13 @@ class Card extends React.Component {
             onClick={this.handleUnsubscribe}
             />
             }
-            {this.state.invite &&
+            {this.state.add &&
+            <CircleBtn
+            className="room-card-buttons"
+            icon={<AddIcon />} 
+            />
+            }
+            {this.props.invite &&
             <CircleBtn
             className="room-card-buttons"
             icon={<PersonAddIcon />} 
@@ -166,7 +185,8 @@ class Card extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  currentUser: state.user.currentUser
+  currentUser: state.user.currentUser,
+  userAuth: state.user.userAuth
 });
 
 export default Card;

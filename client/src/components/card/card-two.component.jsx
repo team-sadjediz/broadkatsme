@@ -10,10 +10,7 @@ import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Tag from "../../components/tag/tag.component";
 import axios from "axios";
@@ -24,33 +21,30 @@ import { Link } from "react-router-dom";
 import { emphasize } from "@material-ui/core/styles/colorManipulator";
 import Content from "./card-content.component";
 import { ReactComponent as Live } from "../../assets/icons/live.svg";
-
+//Icons
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import ClearIcon from '@material-ui/icons/Clear';
+import CircleBtn from "../circle-btn/circle-btn.component";
+import ChatIcon from '@material-ui/icons/Chat';
+import AddIcon from '@material-ui/icons/Add';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ShareIcon from '@material-ui/icons/Share';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    maxWidth: 400,
-    // '&:hover': {
-    //   transform: 'scale(1.1)',
-    //   opacity: 0.85,
-    //   transition: 'opacity 350ms ease',
-    // }
+    position: "relative",
+    maxWidth: 300,
+    maxHeight: 350,
+    '&:hover': {
+      // transform: 'scale(1.025)',
+      opacity: 0.70,
+      transition: 'opacity 350ms ease',
+    }
   },
   media: {
     height: 0,
     paddingTop: '70%', // 16:9
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
-  avatar: {
-    backgroundColor: red[500],
   },
 }));
 
@@ -60,6 +54,12 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid}) => {
   const [expanded, setExpanded] = React.useState(false);
   const [openLink, setOpen] = React.useState(false);
 
+  const [hover, setHover] = React.useState(false);
+  const [unsubscribe, setUnsubscribe] = React.useState(true);
+  const [subscribe, setSubscribe] = React.useState(true);
+  const [invite, setInvite] = React.useState(true);
+  const [chat, setChat] = React.useState(false);
+  const [zoom, setZoom] = React.useState(true);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -72,13 +72,49 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid}) => {
   //   setOpen(!openLink);
   // };
 
+  const handleMouseEnter = event => {
+    setHover(true);
+    console.log(hover);
+  };
+  const handleMouseLeave = event => {
+    setHover(false);
+    console.log(hover);
+  };
 
   const roomTags = tags;
 
   return (
     <div>
-    <Card className={classes.root}>
+    <Card className={classes.root} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <Live className="live-box" />
+      {hover && 
+          <div className="buttons-container">
+            {unsubscribe &&
+            <CircleBtn
+            className="room-card-buttons"
+            icon={<ClearIcon />}
+            // onClick={this.handleUnsubscribe}
+            />
+            }
+            {subscribe &&
+            <CircleBtn
+            className="room-card-buttons"
+            icon={<AddIcon />} 
+            />
+            }
+            {invite &&
+            <CircleBtn
+            className="room-card-buttons"
+            icon={<PersonAddIcon />} 
+            />
+            }
+            {chat &&
+            <CircleBtn
+            className="room-card-buttons"
+            icon={<ChatIcon />} 
+            />
+            }
+          </div>}
       <CardMedia
         className={classes.media}
         image={thumbnailUrl}
@@ -108,9 +144,7 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid}) => {
           </Popper> */}
         </IconButton>
         <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
+          className="show-more-button"
           onClick={handleExpandClick}
           aria-expanded={expanded}
           aria-label="show more"

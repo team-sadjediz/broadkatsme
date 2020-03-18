@@ -46,7 +46,7 @@ class Carousel extends React.Component {
 
       {Array.from(this.props.properties).map((property) =>
         // <Link to={`/room/id/${property.roomID}`}>
-            <Card
+            <CardTwo
             key={property.roomID}
             roomID={property.roomID} 
             name={property.name} 
