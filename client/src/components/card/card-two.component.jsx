@@ -136,6 +136,7 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid, ...otherProps}) => {
           className={classes.media}
           image={thumbnailUrl}
         />
+      </Link>
         <CardContent>
         <ListItem style={{'padding' : '0', 'zIndex': '5'}}>
           <ListItemAvatar>
@@ -152,7 +153,7 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid, ...otherProps}) => {
             })}
           </Typography> */}
         </CardContent>
-        </Link>
+
 
 
       {/* <CardActions disableSpacing>
