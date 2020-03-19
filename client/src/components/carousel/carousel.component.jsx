@@ -52,6 +52,7 @@ class Carousel extends React.Component {
             name={property.name} 
             thumbnailUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}`}
             tags={property.tags}
+            subscribe
             /> 
         // </Link>
         )}

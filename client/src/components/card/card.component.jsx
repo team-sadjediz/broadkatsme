@@ -1,17 +1,12 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { ReactComponent as Live } from "../../assets/icons/live.svg";
 import Tag from "../../components/tag/tag.component";
 import "./card.style.scss";
 import { Link } from "react-router-dom";
 
 //svgs, icons, button
-import { ReactComponent as NextBtn } from "../../assets/icons/caret-right-solid.svg";
-import { ReactComponent as BackBtn } from "../../assets/icons/caret-left-solid.svg";
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ClearIcon from '@material-ui/icons/Clear';
-import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
-import IconButton from '@material-ui/core/IconButton';
 import CircleBtn from "../circle-btn/circle-btn.component";
 import ChatIcon from '@material-ui/icons/Chat';
 import AddIcon from '@material-ui/icons/Add';
@@ -19,61 +14,6 @@ import AddIcon from '@material-ui/icons/Add';
 import axios from "axios";
 // import { connect } from "react-redux";
 import { BASE_API_URL } from "../../utils";
-
-// const Card = ({ roomID, name, thumbnailUrl, tags}) => {
-//   // const { roomID, name, thumbnail_url, tags } = property;
-//   const roomTags = tags;
-//   // console.log(roomTags.length);
-//   // console.log(roomTags);
-//   const [hover, setHover] = React.useState(false);
-//   // const handleMouse = event => {
-//   //   setHover(!hover);
-//   //   console.log(hover);
-//   // }
-//   const handleMouseEnter = event => {
-//     setHover(true);
-//     // console.log(hover);
-//   }
-//   const handleMouseLeave = event => {
-//     setHover(false);
-//     // console.log(hover);
-//   }
-//   return (
-//     <div 
-//     key={roomID} 
-//     className="card shadow"
-//     onMouseEnter={handleMouseEnter}
-//     onMouseLeave={handleMouseLeave}
-//     >
-//       {hover && 
-//         <div className="buttons-container">
-//           <CircleBtn
-//           className="room-card-buttons"
-//           icon={<ClearIcon />}
-//           />
-//           <CircleBtn
-//           className="room-card-buttons"
-//           icon={<PersonAddIcon />} 
-//           />
-//         </div>}
-//       <Link to={`/room/id=${roomID}`}>
-//         <div className="img-container">
-//           <img src={thumbnailUrl} />
-//           <Live />
-//           {/* <PlayCircleOutlineIcon /> */}
-//         </div>
-//         <div className="description-container">
-//           <p>{name}</p>
-//           <div className="tags">
-//             {roomTags.length !== 0 && roomTags.map((value, index) => {
-//               return <Tag type="label" text={value} />;
-//             })}
-//           </div>
-//         </div>
-//       </Link>
-//     </div>
-//   );
-// };
 
 class Card extends React.Component {
   constructor(props){

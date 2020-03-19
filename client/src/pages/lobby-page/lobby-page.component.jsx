@@ -2,11 +2,20 @@ import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import { BASE_API_URL } from "../../utils";
+import PropTypes from "prop-types";
 
 //components
 import Card from "../../components/card/card.component";
 import CardTwo from "../../components/card/card-two.component";
+import FormInput from "../../components/form-input/form-input.component";
 import Carousel from "../../components/carousel/carousel.component";
+import Grid from '@material-ui/core/Grid';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+
 
 //svg and styling
 import { ReactComponent as NextBtn } from "../../assets/icons/caret-right-solid.svg";
@@ -21,6 +30,41 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
+//////////TO DO//////////
+// - styling issues with the app bar not staying the same size... not dynamic to window size either
+// need media query container
+// - fix the grid... (idk not a priority either)
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      // id={`full-width-tabpanel-${index}`}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box p={3}>{children}</Box>}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired
+};
+
+const style = {
+  // background : '#FFFFFF'
+  background: 'transparent',
+  // position: 'static',
+  width: '100%',
+  boxShadow: 'none',
+  // borderBottom: "1px solid red"
+};
+
 class LobbyPage extends React.Component {
   constructor(props) {
     super(props);
@@ -33,7 +77,8 @@ class LobbyPage extends React.Component {
       activeRooms: [],
       search: "",
       filterBy: "",
-      selectedRoom: ""
+      selectedRoom: "",
+      tabValue: 1
     };
   }
 
@@ -88,6 +133,10 @@ class LobbyPage extends React.Component {
   //   // console.log(this.props);
   //   // console.log(e.target.value);
   // }
+
+  handleChange = (event, newValue) => {
+    this.setState({tabValue: newValue});
+  }
   render() {
 
     let filteredUserRooms = this.state.userRooms.filter(
@@ -121,56 +170,81 @@ class LobbyPage extends React.Component {
     );
     return (
       <div className="container">
-        <div className="featured-container">
-          <div id="featured_header" className="header">
-            FEATURED ROOMS
-          </div>
-          <Carousel
-              properties={this.state.featureRooms}
-          />
+        <div className="lobby-tabs">
+        <AppBar className="app-bar" position="static" style={style}>
+        <Tabs
+          value={this.state.tabValue}
+          onChange={this.handleChange}
+          indicatorColor="primary"
+          textColor="primary"
+          variant="fullWidth"
+          aria-label="tabs"
+          centered
+        >
+          <Tab label="Featured Rooms" id={`full-width-tab-${0}`} />
+          <Tab label="Your Rooms" id={`full-width-tab-${1}`} />
+          <Tab label="Subscribed Rooms" id={`full-width-tab-${2}`} />
+        </Tabs>
+      </AppBar>
+        <TabPanel value={this.state.tabValue} index={0}>
+            <div className="featured-container">
+              <Carousel
+                  properties={this.state.featureRooms}
+              />
+            </div>
+        </TabPanel>
+        <TabPanel value={this.state.tabValue} index={1}>
+                <div className="active-container">
+                    <FormInput className="search-input" label="search" value={this.state.search} handleChange={this.handleFilter.bind(this)}></FormInput>
+                    {/* <FormControl variant="outlined" >
+                      <InputLabel id="demo-simple-select-outlined-label">
+                        filter by
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-outlined-label"
+                        id="demo-simple-select-outlined"
+                        value={this.state.filterBy}
+                        onChange={this.handleSelect.bind(this)}
+                      >
+                        <MenuItem value={"roomName"}>room name</MenuItem>
+                        <MenuItem value={"tags"}>tags</MenuItem>
+                      </Select>
+                    </FormControl> */}
+                  <div>
+                    <Grid container spacing={1}>
+                  {
+                      filteredUserRooms.map(property=> 
+                      // <div className="card-grid-container" key={ property.roomID }>
+                      <Grid item xs={4} zeroMinWidth>
+                          <CardTwo
+                          style={{"margin" : "10px"}}
+                          uid={ this.state.uid }
+                          roomID={ property.roomID } 
+                          name={ property.name } 
+                          tags={ property.tags } 
+                          thumbnailUrl={ `${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}` }
+                          onMouseEnter={this.handleSelectRoom.bind(property.roomID)}
+                          unsubscribe
+                          invite
+                          chat
+                          // unsubscribe={this.handleUnsubscribe}
+                          ></CardTwo>
+                          </Grid>
+                      // </div>
+                      )
+                  }
+                  </Grid>
+                  </div>
+                </div>
+        </TabPanel>
+        <TabPanel value={this.state.tabValue} index={2}>
+          Subscribed Rooms
+        </TabPanel>
         </div>
+
         {/* <BackBtn className="back-btn" onClick={() => this.prevProperty()} />
         <NextBtn className="next-btn" onClick={() => this.nextProperty()} /> */}
 
-        <div className="active-container">
-          <div id="active_header" className="header">
-            ACTIVE ROOMS
-            <input value={this.state.search} onChange={this.handleFilter.bind(this)}></input>
-
-            <FormControl variant="outlined" >
-              <InputLabel id="demo-simple-select-outlined-label">
-                filter by
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-outlined-label"
-                id="demo-simple-select-outlined"
-                value={this.state.filterBy}
-                onChange={this.handleSelect.bind(this)}
-              >
-                <MenuItem value={"roomName"}>room name</MenuItem>
-                <MenuItem value={"tags"}>tags</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-          <div className="cards-grid">
-          {
-              filteredUserRooms.map(property=> 
-              // <div className="card-grid-container" key={ property.roomID }>
-                  <CardTwo
-                  style={{"padding": "120px", "margin": "0 auto", "flex" : "1"}}
-                  uid={ this.state.uid }
-                  roomID={ property.roomID } 
-                  name={ property.name } 
-                  tags={ property.tags } 
-                  thumbnailUrl={ `${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}` }
-                  onMouseEnter={this.handleSelectRoom.bind(property.roomID)}
-                  // unsubscribe={this.handleUnsubscribe}
-                  ></CardTwo>
-              // </div>
-              )
-          }
-          </div>
-        </div>
       </div>
     );
   }

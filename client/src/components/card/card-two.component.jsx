@@ -31,16 +31,28 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
+// import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+
+//TO DO
+// - implement Skeleton component for card
+// - fix linking click on card
+
 const useStyles = makeStyles(theme => ({
   root: {
     position: "relative",
-    maxWidth: 300,
-    maxHeight: 350,
     '&:hover': {
       // transform: 'scale(1.025)',
-      opacity: 0.70,
+      // opacity: 0.70,
       transition: 'opacity 350ms ease',
-    }
+    },
+    // flex: 2,
+    // display: "flex",
+    // padding: "1px",
+    // margin: "10px"
+
   },
   media: {
     height: 0,
@@ -48,18 +60,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid}) => {
-
+const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid, ...otherProps}) => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const [openLink, setOpen] = React.useState(false);
 
   const [hover, setHover] = React.useState(false);
-  const [unsubscribe, setUnsubscribe] = React.useState(true);
-  const [subscribe, setSubscribe] = React.useState(true);
-  const [invite, setInvite] = React.useState(true);
-  const [chat, setChat] = React.useState(false);
-  const [zoom, setZoom] = React.useState(true);
+  const [active, setActive] = React.useState(true);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -82,67 +89,73 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid}) => {
   };
 
   const roomTags = tags;
-
+  console.log(name);
   return (
     <div>
     <Card className={classes.root} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-      <Live className="live-box" />
+      {active && <Live className="live-box" />}
       {hover && 
           <div className="buttons-container">
-            {unsubscribe &&
+            {otherProps.unsubscribe &&
             <CircleBtn
             className="room-card-buttons"
             icon={<ClearIcon />}
             // onClick={this.handleUnsubscribe}
             />
             }
-            {subscribe &&
+            {otherProps.subscribe &&
             <CircleBtn
             className="room-card-buttons"
             icon={<AddIcon />} 
             />
             }
-            {invite &&
+            {otherProps.invite &&
             <CircleBtn
             className="room-card-buttons"
-            icon={<PersonAddIcon />} 
+            icon={<PersonAddIcon />} // or use ShareIcon
             />
             }
-            {chat &&
+            {otherProps.chat &&
             <CircleBtn
             className="room-card-buttons"
             icon={<ChatIcon />} 
             />
             }
+            <IconButton
+              className="show-more-button"
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="show more"
+            >
+              <ExpandMoreIcon />
+            </IconButton>
           </div>}
-      <CardMedia
-        className={classes.media}
-        image={thumbnailUrl}
-      />
-      <CardContent>
-        <div>{name}</div>
-        <Typography variant="body2" color="textSecondary" component="p">
-          {roomTags && roomTags.map((value, index) => {
-            return <Tag type="label" text={value} />;
-          })}
-        </Typography>
-      </CardContent>
 
-      <CardActions disableSpacing>
-        <Link to={`/room/id=${roomID}`}>
-        <IconButton>
-          <div>join</div>
-        </IconButton>
+      <Link to={`/room/id=${roomID}`}>
+        <CardMedia
+          className={classes.media}
+          image={thumbnailUrl}
+        />
+        <CardContent>
+        <ListItem style={{'padding' : '0', 'zIndex': '5'}}>
+          <ListItemAvatar>
+            <Avatar className="profile-picture" src={thumbnailUrl} />
+          </ListItemAvatar>
+          <ListItemText primary={<Typography noWrap>{name}</Typography>} secondary={roomTags && roomTags.map((value, index) => {
+              return <Tag type="label" text={value} />;
+            })} />
+        </ListItem>
+          {/* <Typography noWrap>{name}</Typography>
+          <Typography variant="body2" color="textSecondary" component="p" noWrap>
+            {roomTags && roomTags.map((value, index) => {
+              return <Tag type="label" text={value} />;
+            })}
+          </Typography> */}
+        </CardContent>
         </Link>
-        <IconButton aria-label="share">
-        {/* <Poppity style={{'width': '100px', 'position' : 'absolute'}} alignArrow="center" content={<input value={`${BASE_API_URL}/room/id=${roomID}`}/>}> */}
-          <ShareIcon onClick={handleShareLink}/>
-          {/* </Poppity> */}
-          {/* <ShareIcon onClick={handleShareLink}/> */}
-          {/* <Popper open={openLink} anchorEl='bottom'>
-            <div>The content of the Popper.</div>
-          </Popper> */}
-        </IconButton>
+
+
+      {/* <CardActions disableSpacing>
         <IconButton
           className="show-more-button"
           onClick={handleExpandClick}
@@ -151,14 +164,14 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid}) => {
         >
           <ExpandMoreIcon />
         </IconButton>
-      </CardActions>
+      </CardActions> */}
 
 
     </Card>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <Content show={expanded} name={name} thumbnailUrl={thumbnailUrl} tags={tags}/>
         </Collapse>
-        </div>
+    </div>
   );
 }
 

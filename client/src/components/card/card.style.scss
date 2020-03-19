@@ -2,11 +2,12 @@
 
 .live-box {
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 25%;
-        height: 25%;
-        z-index: 5;
+        top: -10px;
+        left: 7px;
+        // padding-left: 5%;
+        width: 20%;
+        height: 20%;
+        // z-index: 5;
 }
 .cards-carousel-wrapper {
     display: flex;
@@ -29,26 +30,12 @@
     text-overflow: ellipsis;
 }
 .cards-grid {
-    // margin: 30px;
     justify-content: flex-start;
-    // list-style: none;
-    // -ms-box-orient: horizontal;
-    // display: -webkit-box;
-    // display: -moz-box;
-    // display: -ms-flexbox;
-    // display: -moz-flex;
-    // display: -webkit-flex;
+    display: -webkit-flex;
     display: flex;
-    // flex-direction: row;
-    // -webkit-flex-wrap: wrap;
     flex-wrap: wrap;
-    flex: 1
-    // .card {
-    //     flex: 1; //cards are in one row
-    //     // min-width: 200px;
-    //     margin: 20px;
-    // }
 }
+
 .cards-carousel {
     position: relative;
     // max-width: 100%;
@@ -56,6 +43,7 @@
     max-width: 226px;
     margin: auto;
 }
+
 .img-container {
     width: 230px;
     height: 150px;
@@ -66,10 +54,6 @@
 .tag-label {
     background-color: $highlight1;
 }
-
-.zoom:hover {
-
-    }
 
 .shadow:hover {
     -ms-transform: scale(1.1);
@@ -134,23 +118,11 @@
     position: absolute;
     z-index: 2;
     padding-left: 85%;
-    // margin-left:85%;
-    // padding: auto;
-    // display: flex;
-    // justify-content: flex-end;
     opacity: 1;
-    // margin-left:auto; margin-right:0;
-    // float: right;
     .room-card-buttons {
-        // background-color: $foreground;
-        padding: 15px;
         width: 36px;
         height: 36px;
-        // svg {
-        //   path {
-        //     fill: $highlight1;
-        //   }
-        // }
+        margin: 5px;
     }
     .svg {
         width: 200px;

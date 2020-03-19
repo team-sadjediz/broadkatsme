@@ -13,18 +13,23 @@
     // overflow-x: hidden;
     display: grid;
     // grid-template-columns: minmax(100%, auto);
-    // grid-template-columns: 0.25fr 8fr 0.25fr;
-    grid-template-rows: 500px 500px;
+    grid-template-columns: 1200px;
+    // grid-template-rows: 700px 500px;
     // grid-template-columns: fit-content;
     // grid-template-rows: 1fr 2fr 1fr;
     // background-color: $french_laundry_blue;
     grid-template-areas:
-      "active"
-      "featured";
+        "tabs";
 
+    .lobby-tabs {
+        grid-area: tabs;
+    }
+    .app-bar {
+        grid-area: appbar;
+    }
     .active-container {
-        grid-area: active;
-        overflow: hidden;
+        // grid-area: active;
+        // overflow: hidden;
         grid-area: active;
     }
 
