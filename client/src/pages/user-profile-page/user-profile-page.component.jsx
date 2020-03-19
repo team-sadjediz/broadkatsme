@@ -176,7 +176,7 @@ class UserProfilePage extends React.Component {
                         />
 
                         <FormInput
-                        label="Tags"
+                        label="Tags *NOT UPDATING YET"
                         name="tags"
                         value={this.state.tags}
                         // handleChange={this.handleChange}

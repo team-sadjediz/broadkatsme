@@ -140,7 +140,7 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid, ...otherProps}) => {
         <CardContent>
         <ListItem style={{'padding' : '0', 'zIndex': '5'}}>
           <ListItemAvatar>
-            <Avatar className="profile-picture" src={thumbnailUrl} />
+            <Avatar src={thumbnailUrl} />
           </ListItemAvatar>
           <ListItemText primary={<Typography noWrap>{name}</Typography>} secondary={roomTags && roomTags.map((value, index) => {
               return <Tag type="label" text={value} />;
