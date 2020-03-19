@@ -1,53 +1,69 @@
-import React, { Component } from 'react';
-import Card from "../card/card.component";
-import data from "../../pages/lobby-page/data/data"
+import React from 'react';
+import ItemsCarousel from 'react-items-carousel';
+import Card from "../../components/card/card.component";
+import CardTwo from "../../components/card/card-two.component";
+import { Link } from "react-router-dom";
+import { BASE_API_URL } from "../../utils";
+import { ReactComponent as NextBtn } from "../../assets/icons/caret-right-solid.svg";
+import { ReactComponent as BackBtn } from "../../assets/icons/caret-left-solid.svg";
+import { makeStyles } from '@material-ui/core/styles';
 
-class Carousel extends Component {
+
+class Carousel extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-        properties: data.properties, 
-        property: data.properties[0]
-        }
-     }
-
-     nextProperty = () => {
-        const newIndex = this.state.property.index+1;
-        this.setState({
-            property: data.properties[newIndex]
-        })
+            activeCard: 0
+        };
     }
 
-    prevProperty = () => {
-        const newIndex = this.state.property.index-1;
-        this.setState({
-            property: data.properties[newIndex]
-        })
-    }
-     render() {
-         return (
-            <div>
-            {/* <button className='back-btn' onClick={() => this.prevProperty()} disabled={property.index === 0}>
-                    Prev
-                </button>
-                <button className='next-btn' onClick={() => this.nextProperty()} disabled={property.index === data.properties.length-1}>
-                    Next
-                </button> */}
-                <div className="cards-carousel-wrapper">
-                {
-                        this.state.properties.map(property=> 
-                        <div className="zoom">
-                            <Card key={ property.roomID } property={ property }></Card>
-                            <div className="room name"> NAME: { property.name }</div>
-                            <div className="room tags"> TAGS: { property.tags } </div>
-                        </div>
-                        )
-                    }
-                </div>
-            </div>
-         );
-     }
-    
-}
+  changeActiveCard = (activeCard) => this.setState({ activeCard });
+
+  render() {
+    // console.log(JSON.stringify(this.props.properties));
+    // console.log(this.props.cardType);
+    console.log(this.state.activeCard);
+    return (
+    <div style={{"padding":"0px 45px","maxWidth":1000,"margin":"0 auto","position": "relative"}}>
+    <ItemsCarousel
+        style={{"position": "absolute"}}
+        infiniteLoop={true}
+        gutter={12}
+        activePosition={'center'}
+        chevronWidth={60}
+        disableSwipe={false}
+        alwaysShowChevrons={false}
+        numberOfCards={3}
+        slidesToScroll={2}
+        outsideChevron={true}
+        showSlither={false}
+        firstAndLastGutter={false}
+        activeItemIndex={this.state.activeCard}
+        requestToChangeActive={value => this.setState({ activeCard: value })}
+        rightChevron={'>'}
+        leftChevron={'<'}
+    >
+
+      {Array.from(this.props.properties).map((property) =>
+        // <Link to={`/room/id/${property.roomID}`}>
+            <CardTwo
+            key={property.roomID}
+            roomID={property.roomID} 
+            name={property.name} 
+            thumbnailUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}`}
+            tags={property.tags}
+            subscribe
+            /> 
+        // </Link>
+        )}
+    </ItemsCarousel>
+    </div>
+    );  
+  }
+} 
+
+const mapStateToProps = state => ({
+  currentUser: state.user.currentUser
+});
 
 export default Carousel;
