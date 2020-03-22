@@ -2,7 +2,24 @@ import { RoomActionTypes } from "./room.types";
 
 const INITIAL_STATE = {
   subscribedRooms: [],
-  selectedRoom: null
+  selectedRoom: {
+    roomID: null,
+    subscribers: [],
+    tags: [],
+    ownerID: null,
+    thumbnailUrl: "default1.png",
+    settings: {
+      roomSize: null,
+      privacy: false,
+      access: {
+        roomAdmins: [],
+        operators: [],
+        invitations: [],
+        bans: [],
+        delete: null
+      }
+    }
+  }
 };
 
 const roomReducer = (state = INITIAL_STATE, action) => {

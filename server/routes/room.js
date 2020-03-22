@@ -26,7 +26,7 @@ router.get("/valid/:roomID", async function(req, res) {
 // ---------------------------------------------------------- FIND ROOMS ----------------------------------------------------------
 
 // How To Use:
-// axios.put(`${BASE_API_URI}/room/${roomID})
+// axios.put(`${BASE_API_URI}/room/find/${roomID})
 // returns entire document if found
 router.get("/find/:roomID", async function(req, res) {
   let roomID = req.params.roomID;

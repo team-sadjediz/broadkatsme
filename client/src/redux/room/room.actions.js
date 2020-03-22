@@ -8,7 +8,7 @@ export const setSubscribedRooms = subscribedRooms => ({
   payload: subscribedRooms
 });
 
-export const setSelectedRoom = roomID => ({
+export const setSelectedRoomInfo = roomID => ({
   type: RoomActionTypes.SET_SELECTED_ROOM,
   payload: roomID
 });
@@ -23,6 +23,20 @@ export const updateSubscribedRooms = userID => {
       .catch(err => {
         console.error(err);
         console.log(err.response);
+      });
+  };
+};
+
+export const setSelectedRoom = roomID => {
+  return dispatch => {
+    axios
+      .get(`${BASE_API_URL}/room/find/${roomID}`)
+      .then(res => {
+        console.log("h", { roomID: roomID, ...res.data });
+        dispatch(setSelectedRoomInfo({ roomID: roomID, ...res.data }));
+      })
+      .catch(err => {
+        console.error(err);
       });
   };
 };
