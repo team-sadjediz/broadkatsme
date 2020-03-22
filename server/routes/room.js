@@ -187,6 +187,7 @@ async function deleteRoom(roomID, uid) {
 // order is required
 router.put("/upload-thumbnail/:roomID/:uid", function(req, res) {
   req.query.folder = "room_thumbnail/";
+  req.query.filename = req.params.roomID;
   singleUpload(req, res, async error => {
     let imageName, imageLocation;
     if (error) {
@@ -208,7 +209,7 @@ router.put("/upload-thumbnail/:roomID/:uid", function(req, res) {
           }
         )
           .then(room => {
-            console.log(room);
+            // console.log(room);
             res.send(room.thumbnailUrl);
           })
           .catch(error => res.status(404).send(error));
@@ -222,7 +223,7 @@ router.put("/upload-thumbnail/:roomID/:uid", function(req, res) {
 router.get("/get-thumbnail", async function(req, res) {
   let s3 = new aws.S3();
   let url = req.query.thumbnailUrl;
-  console.log(url);
+  // console.log(url);
   let data = await s3.getObject({ Bucket: "broadkats.me", Key: url }).promise();
   res.writeHead(200, { "Content-Type": "image/png, image/jpg" });
   res.write(data.Body, "binary");

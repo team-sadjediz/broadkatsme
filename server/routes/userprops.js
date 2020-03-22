@@ -199,6 +199,11 @@ router.put("/favorites/:roomID/:uid", async function(req, res) {
   } else if (action == "favorite") {
     try {
       let response = await favorite(roomID, userID);
+      if (response.updatedUserProps.favoritedRooms.includes(roomID)) {
+        response = true;
+      } else {
+        response = false;
+      }
       res.send(response);
     } catch (error) {
       res.status(404).send(error);
@@ -206,6 +211,11 @@ router.put("/favorites/:roomID/:uid", async function(req, res) {
   } else if (action == "unfavorite") {
     try {
       let response = await unfavorite(roomID, userID);
+      if (response.updatedUserProps.favoritedRooms.includes(roomID)) {
+        response = true;
+      } else {
+        response = false;
+      }
       res.send(response);
     } catch (error) {
       res.status(404).send(error);

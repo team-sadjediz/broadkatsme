@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 // import axios from "axios";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -42,7 +43,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function RoleManagementPanel(props) {
+const mapStateToProps = state => ({
+  currentUser: state.user.currentUser,
+  selectedRoom: state.room.selectedRoom
+});
+
+const mapDispatchToProps = dispatch => ({
+  // setSubscribedRooms: subRoomList => dispatch(setSubscribedRooms(subRoomList)),
+  // setSelectedRoom: roomID => dispatch(setSelectedRoom(roomID))
+});
+
+function RoleManagementPanel(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
@@ -50,10 +61,15 @@ export default function RoleManagementPanel(props) {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const generate = (items, owned, roomAdmin) => {
+  const temp = temp => {
+    console.log(`clicked with ${temp}`);
+  };
+
+  const generate = (items, owned, roomAdmin, onRemove, onBan, onReport) => {
     let list = items.map(item => {
+      let itemIsAdmin = props.admins.some(admin => admin.uid == item.uid);
       return (
-        <ListItem className={classes.listItem}>
+        <ListItem className={classes.listItem} key={item}>
           <ListItemAvatar>
             <Avatar>
               <AccountCircleIcon />
@@ -64,19 +80,21 @@ export default function RoleManagementPanel(props) {
             secondary={owned ? "View Reports" : null}
           ></ListItemText>
           <ListItemSecondaryAction>
-            {roomAdmin ? (
-              <IconButton>
+            {roomAdmin && !itemIsAdmin ? (
+              <IconButton onClick={() => onRemove(item.uid)}>
                 <RemoveCircleIcon></RemoveCircleIcon>
               </IconButton>
             ) : null}
-            {roomAdmin ? (
-              <IconButton>
+            {roomAdmin && !itemIsAdmin ? (
+              <IconButton onClick={() => onBan(item.uid)}>
                 <BlockIcon></BlockIcon>
               </IconButton>
             ) : null}
-            <IconButton>
-              <FlagOutlinedIcon></FlagOutlinedIcon>
-            </IconButton>
+            {props.currentUser.uid != item.uid ? (
+              <IconButton onClick={() => onReport(item.uid)}>
+                <FlagOutlinedIcon></FlagOutlinedIcon>
+              </IconButton>
+            ) : null}
           </ListItemSecondaryAction>
         </ListItem>
       );
@@ -84,10 +102,18 @@ export default function RoleManagementPanel(props) {
     return list;
   };
 
-  const generateAdmins = (items, owned, roomAdmin) => {
+  const generateAdmins = (
+    items,
+    owned,
+    roomAdmin,
+    onRemove,
+    onBan,
+    onReport
+  ) => {
     let list = items.map(item => {
+      let itemOwner = props.ownerID == item.uid;
       return (
-        <ListItem className={classes.listItem}>
+        <ListItem className={classes.listItem} key={item}>
           <ListItemAvatar>
             <Avatar>
               <AccountCircleIcon />
@@ -98,19 +124,21 @@ export default function RoleManagementPanel(props) {
             secondary={owned ? "View Reports" : null}
           ></ListItemText>
           <ListItemSecondaryAction>
-            {owned ? (
-              <IconButton>
+            {owned && !itemOwner ? (
+              <IconButton onClick={() => onRemove(item.uid)}>
                 <RemoveCircleIcon></RemoveCircleIcon>
               </IconButton>
             ) : null}
-            {roomAdmin ? (
-              <IconButton>
+            {owned && !itemOwner ? (
+              <IconButton onClick={() => onBan(item.uid)}>
                 <BlockIcon></BlockIcon>
               </IconButton>
             ) : null}
-            <IconButton>
-              <FlagOutlinedIcon></FlagOutlinedIcon>
-            </IconButton>
+            {props.currentUser.uid != item.uid ? (
+              <IconButton onClick={() => onReport(item.uid)}>
+                <FlagOutlinedIcon></FlagOutlinedIcon>
+              </IconButton>
+            ) : null}
           </ListItemSecondaryAction>
         </ListItem>
       );
@@ -118,10 +146,20 @@ export default function RoleManagementPanel(props) {
     return list;
   };
 
-  const generateUsers = (items, owned, roomAdmin) => {
+  const generateUsers = (
+    items,
+    owned,
+    roomAdmin,
+    addAdmin,
+    addOperator,
+    onBan,
+    onReport
+  ) => {
     let list = items.map(item => {
+      let itemIsAdmin = props.admins.some(admin => admin.uid == item.uid);
+      let itemOwner = props.ownerID == item.uid;
       return (
-        <ListItem className={classes.listItem}>
+        <ListItem className={classes.listItem} key={item}>
           <ListItemAvatar>
             <Avatar>
               <AccountCircleIcon />
@@ -132,24 +170,26 @@ export default function RoleManagementPanel(props) {
             secondary={owned ? "View Reports" : null}
           ></ListItemText>
           <ListItemSecondaryAction>
-            {owned ? (
-              <IconButton>
+            {owned && !itemOwner ? (
+              <IconButton onClick={() => addAdmin(item.uid)}>
                 <SupervisorAccountIcon></SupervisorAccountIcon>
               </IconButton>
             ) : null}
-            {roomAdmin ? (
-              <IconButton>
+            {roomAdmin && !itemIsAdmin ? (
+              <IconButton onClick={() => addOperator(item.uid)}>
                 <SettingsRemoteIcon></SettingsRemoteIcon>
               </IconButton>
             ) : null}
-            {roomAdmin ? (
-              <IconButton>
+            {roomAdmin && !itemIsAdmin ? (
+              <IconButton onClick={() => onBan(item.uid)}>
                 <BlockIcon></BlockIcon>
               </IconButton>
             ) : null}
-            <IconButton>
-              <FlagOutlinedIcon></FlagOutlinedIcon>
-            </IconButton>
+            {props.currentUser.uid != item.uid ? (
+              <IconButton onClick={() => onReport(item.uid)}>
+                <FlagOutlinedIcon></FlagOutlinedIcon>
+              </IconButton>
+            ) : null}
           </ListItemSecondaryAction>
         </ListItem>
       );
@@ -157,10 +197,10 @@ export default function RoleManagementPanel(props) {
     return list;
   };
 
-  const generateBannedUsers = () => {
+  const generateBannedUsers = (items, owned, roomAdmin, onUnban) => {
     let bannedList = props.bannedUsers.map(banned => {
       return (
-        <ListItem className={classes.listItem}>
+        <ListItem className={classes.listItem} key={banned}>
           <ListItemAvatar>
             <Avatar>
               <AccountCircleIcon />
@@ -171,10 +211,11 @@ export default function RoleManagementPanel(props) {
             secondary={props.owned ? "View Reports" : null}
           ></ListItemText>
           <ListItemSecondaryAction>
-            {/* SET ON CLICK IF OWNED */}
-            <IconButton>
-              <LockOpenIcon></LockOpenIcon>
-            </IconButton>
+            {owned ? (
+              <IconButton onClick={() => onUnban(banned.uid)}>
+                <LockOpenIcon></LockOpenIcon>
+              </IconButton>
+            ) : null}
           </ListItemSecondaryAction>
         </ListItem>
       );
@@ -205,7 +246,14 @@ export default function RoleManagementPanel(props) {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <List className={classes.list}>
-              {generateAdmins(props.admins, props.owned, props.roomAdmin)}
+              {generateAdmins(
+                props.admins,
+                props.owned,
+                props.roomAdmin,
+                temp,
+                temp,
+                temp
+              )}
             </List>
           </ExpansionPanelDetails>
         </ExpansionPanel>
@@ -226,7 +274,14 @@ export default function RoleManagementPanel(props) {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <List className={classes.list}>
-              {generate(props.operators, props.owned, props.roomAdmin)}
+              {generate(
+                props.operators,
+                props.owned,
+                props.roomAdmin,
+                temp,
+                temp,
+                temp
+              )}
             </List>
           </ExpansionPanelDetails>
         </ExpansionPanel>
@@ -247,7 +302,14 @@ export default function RoleManagementPanel(props) {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <List className={classes.list}>
-              {generate(props.invitations, props.owned, props.roomAdmin)}
+              {generate(
+                props.invitations,
+                props.owned,
+                props.roomAdmin,
+                temp,
+                temp,
+                temp
+              )}
             </List>
           </ExpansionPanelDetails>
         </ExpansionPanel>
@@ -270,7 +332,15 @@ export default function RoleManagementPanel(props) {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <List className={classes.list}>
-              {generateUsers(props.users, props.owned, props.roomAdmin)}
+              {generateUsers(
+                props.users,
+                props.owned,
+                props.roomAdmin,
+                temp,
+                temp,
+                temp,
+                temp
+              )}
             </List>
           </ExpansionPanelDetails>
         </ExpansionPanel>
@@ -293,7 +363,14 @@ export default function RoleManagementPanel(props) {
               </div>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-              <List className={classes.list}>{generateBannedUsers()}</List>
+              <List className={classes.list}>
+                {generateBannedUsers(
+                  props.bannedUsers,
+                  props.owned,
+                  props.roomAdmin,
+                  temp
+                )}
+              </List>
             </ExpansionPanelDetails>
           </ExpansionPanel>
         </div>
@@ -301,3 +378,8 @@ export default function RoleManagementPanel(props) {
     </div>
   );
 }
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RoleManagementPanel);

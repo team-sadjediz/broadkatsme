@@ -8,6 +8,7 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import Modal from "@material-ui/core/Modal";
 
 // import "./room-settings.styles.scss";
+import { withRouter } from "react-router-dom";
 
 import GeneralPanel from "./general-panel/general-panel.component";
 import RoleManagementPanel from "./role-management-panel/role-management-panel.component";
@@ -132,6 +133,7 @@ class RoomSettings extends Component {
           this.props.currentUser.uid
         );
         this.setState({ thumbnailUrl: room.data.thumbnailUrl });
+        this.setState({ ownerID: room.data.ownerID });
         this.setState({ owned: owned });
         this.setState({ roomAdmin: roomAdmin });
         this.setState({ roomName: room.data.name });
@@ -172,8 +174,7 @@ class RoomSettings extends Component {
         }
       )
       .then(res => {
-        // console.log(`Deleted room ${this.props.match.params.id}`);
-        // redirect here
+        this.props.history.push("/lobby");
       })
       .catch(error => console.error(error));
   };
@@ -241,8 +242,8 @@ class RoomSettings extends Component {
   };
 
   onChangeThumbnail = thumbnailUrl => {
-    console.log(this.state.thumbnailUrl);
-    console.log(thumbnailUrl);
+    // console.log(this.state.thumbnailUrl);
+    // console.log(thumbnailUrl);
     this.setState({ thumbnailUrl: thumbnailUrl });
   };
 
@@ -348,6 +349,7 @@ class RoomSettings extends Component {
                 >
                   <RoleManagementPanel
                     // owned={true}
+                    ownerID={this.state.ownerID}
                     owned={this.state.owned}
                     roomAdmin={this.state.roomAdmin}
                     admins={this.getUserNames(this.state.roomAdmins)}
@@ -396,7 +398,7 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(useStyles)(RoomSettings));
+)(withRouter(withStyles(useStyles)(RoomSettings)));
 
 // export default function RoomSettings(props) {
 //   const classes = useStyles();

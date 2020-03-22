@@ -1,6 +1,6 @@
-import React from "react";
+import React, { Component } from "react";
 import axios from "axios";
-import { makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 
 import { BASE_API_URL } from "../../../utils";
 
@@ -11,8 +11,9 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
+import { Redshift } from "aws-sdk";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = theme => ({
   iconButton: {
     padding: 0,
     height: 50,
@@ -22,15 +23,16 @@ const useStyles = makeStyles(theme => ({
       width: 40
     }
   }
-}));
+});
 
-export default function GeneralPanel(props) {
-  const classes = useStyles();
-  const [thumbnailUrl, setThumbnailUrl] = React.useState(props.thumbnailUrl);
+class GeneralPanel extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { thumbnailUrl: props.thumbnailUrl };
+  }
 
-  const fileUploadHandler = async files => {
+  fileUploadHandler = async files => {
     const formData = new FormData();
-    formData.append("uid", props.owner);
     formData.append("image", files);
     const config = {
       headers: {
@@ -39,73 +41,81 @@ export default function GeneralPanel(props) {
     };
     await axios
       .put(
-        `${BASE_API_URL}/room/upload-thumbnail/${props.roomID}/${props.ownerID}`,
+        `${BASE_API_URL}/room/upload-thumbnail/${this.props.roomID}/${this.props.ownerID}`,
         formData,
         config
       )
       .then(res => {
-        console.log(res.data);
-        props.onChangeThumbnail(res.data);
-        setThumbnailUrl(res.data);
+        console.log("???" + res.data);
+        this.props.onChangeThumbnail(res.data);
+        this.setState({ thumbnailUrl: res.data });
       })
       .catch(error => console.error(error));
   };
 
-  const onChange = async e => {
-    fileUploadHandler(e.target.files[0]);
+  onChange = async e => {
+    this.fileUploadHandler(e.target.files[0]);
+    e.target.value = null;
   };
 
-  return (
-    <div className="room-general-panel">
-      <div className="room-general-panel-title">General</div>
-      <Divider variant="fullWidth" />
-      <div className="room-general">
-        <form className="room-general-upload-btn">
-          <label htmlFor="upload" for="upload">
-            <IconButton
-              className={classes.iconButton}
-              color="primary"
-              component="span"
-            >
-              <AddAPhotoIcon></AddAPhotoIcon>
-            </IconButton>
-          </label>
-          <input
-            type="file"
-            id="upload"
-            name="roompic"
-            accept="image/png, image/jpeg"
-            onChange={onChange}
-          ></input>
-        </form>
-        <div className="room-general-upload">
-          <img
-            src={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${thumbnailUrl}`}
-            alt="Thumbnail"
-          />
-        </div>
-        <div className="room-general-info">
-          <div className="room-general-info-name">
-            <div className="room-general-title">Room</div>
+  render() {
+    const { classes } = this.props;
+    return (
+      <div className="room-general-panel">
+        <div className="room-general-panel-title">General</div>
+        <Divider variant="fullWidth" />
+        <div className="room-general">
+          <form className="room-general-upload-btn">
+            <label htmlFor="upload" for="upload">
+              <IconButton
+                className={classes.iconButton}
+                color="primary"
+                component="span"
+              >
+                <AddAPhotoIcon></AddAPhotoIcon>
+              </IconButton>
+            </label>
             <input
-              type="text"
-              placeholder={props.name}
-              onChange={props.onChangeTitle}
-              onBlur={props.onBlurTitle}
+              type="file"
+              id="upload"
+              name="roompic"
+              accept="image/png, image/jpeg"
+              onChange={this.onChange}
+            ></input>
+          </form>
+          <div className="room-general-upload">
+            <img
+              src={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${
+                this.state.thumbnailUrl
+              }&?${new Date().getTime()}`}
+              alt="Thumbnail"
             />
           </div>
-          <Divider variant="fullWidth" />
-          <div className="room-general-info-owned-by">
-            <div className="room-general-title">Owner</div>
-            <div className="room-general-description">{props.owner}</div>
-          </div>
-          <Divider variant="fullWidth" />
-          <div className="room-general-info-tags">
-            {props.addTag}
-            {props.tags}
+          <div className="room-general-info">
+            <div className="room-general-info-name">
+              <div className="room-general-title">Room</div>
+              <input
+                type="text"
+                placeholder={this.props.name}
+                onChange={this.props.onChangeTitle}
+                onBlur={this.props.onBlurTitle}
+              />
+            </div>
+            <Divider variant="fullWidth" />
+            <div className="room-general-info-owned-by">
+              <div className="room-general-title">Owner</div>
+              <div className="room-general-description">{this.props.owner}</div>
+            </div>
+            <Divider variant="fullWidth" />
+            <div className="room-general-info-tags">
+              {this.props.addTag}
+              {this.props.tags}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
+
+export default withStyles(useStyles)(GeneralPanel);
