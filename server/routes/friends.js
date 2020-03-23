@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const UserProps = require("../models/userprops.model");
+const UserProfile = require("../models/userprofile.model");
 
 // ---------------------------------------------------------- IN PROGRESS ----------------------------------------------------------
 
@@ -102,6 +103,39 @@ router.put("/update/:uid/:friendID", async function(req, res) {
   } else {
     res.status(400).send("Action undefined.");
   }
+});
+
+// How To Use
+// axios.put(`${BASE_API_URL}/friends/friendslist/${uid}`)
+// returns list of all rooms a user is subscribed to (as per convnetion)
+router.get("/friends-list/:uid", async function(req, res) {
+  let uid = req.params.uid;
+  console.log("uid", uid);
+
+  let friendslist = [];
+  await UserProps.findOne({ userID: uid })
+    .then(async document => {
+      // return UserProps.findOne({ userID: uid }).populate("subscribedRooms");
+      // res.send(document.friends);
+
+      await UserProfile.find({
+        "userID": {
+          $in: document.friends
+        }
+      }).then(friendslistProfiles => {
+        console.log("friendslist profiles:", friendslistProfiles);
+        res.send(friendslistProfiles);
+      });
+
+      // document.friends.forEach(async friend => {
+      //   await UserProfile.findOne({ userID: friend });
+      //   friendslist.push({ friendID: friend });
+      // });
+    })
+    .catch(error => {
+      error.additional = "Error has occured in /friends-list/:uid";
+      res.status(404).send(error);
+    });
 });
 
 module.exports = router;

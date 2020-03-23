@@ -69,7 +69,11 @@ class App extends Component {
   componentDidMount() {
     console.log("App.js mounted");
     this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-      // this.props.setCurrentUser(user);
+      if (!user) {
+        // THIS IS WHERE WE CLEAN UP ALL REDUX VARIABLES AFTER A USER LOGS OUT
+        // THIS IS WHERE WE CLEAN UP ALL REDUX VARIABLES AFTER A USER LOGS OUT
+        // THIS IS WHERE WE CLEAN UP ALL REDUX VARIABLES AFTER A USER LOGS OUT
+      }
       this.props.setUserAuth(user);
     });
   }

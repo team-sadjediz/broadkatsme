@@ -41,9 +41,11 @@ export const updateCurrentUser = userID => {
 };
 
 export const updateFriendslist = userID => {
+  console.log("updateFriendslist called");
   return dispatch => {
+    console.log("nope");
     axios
-      .get(`${BASE_API_URL}/userprops/friends-list`, {
+      .get(`${BASE_API_URL}/friends/friends-list/${userID}`, {
         params: { uid: userID }
       })
       .then(res => {
