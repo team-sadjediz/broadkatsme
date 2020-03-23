@@ -14,6 +14,7 @@ import ImageButton from "../img-btn/img-btn.component";
 import PageDropdown from "../page-dropdown/page-dropdown.component";
 import MouseOverPopover from "../custom-popover/custom-popover.component";
 import NewRoom from "../new-room/new-room.component";
+import RoomListNav from "../room-list-nav/room-list-nav.component";
 
 // mui components:
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -102,6 +103,7 @@ class ButtonAppBar extends React.Component {
 
   async componentDidMount() {
     this.props.updateSubscribedRooms(this.props.userAuth.uid);
+    console.log("navbar sub rooms:", this.props.subscribedRooms);
   }
 
   render() {
@@ -145,8 +147,10 @@ class ButtonAppBar extends React.Component {
                 </RoomNavButton>
               </MouseOverPopover>
 
+              <RoomListNav />
+
               {/* {console.log("yellow", this.props.userProps)} */}
-              {this.props.subscribedRooms.map((room, i) => (
+              {/* {this.props.subscribedRooms.map((room, i) => (
                 <Link
                   style={{ position: "relative" }}
                   to={`/room/id=${room.roomID}`}
@@ -168,7 +172,7 @@ class ButtonAppBar extends React.Component {
                     bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${room.thumbnailUrl}`}
                   ></ImageButton>
                 </Link>
-              ))}
+              ))} */}
             </div>
 
             <MouseOverPopover
