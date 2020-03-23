@@ -74,9 +74,9 @@ class App extends Component {
         // THIS IS WHERE WE CLEAN UP ALL REDUX VARIABLES AFTER A USER LOGS OUT
         // THIS IS WHERE WE CLEAN UP ALL REDUX VARIABLES AFTER A USER LOGS OUT
       } else {
-        this.props.setUserAuth(user);
         this.props.updateCurrentUser(user.uid);
       }
+      this.props.setUserAuth(user);
     });
   }
 
