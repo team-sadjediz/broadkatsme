@@ -17,6 +17,7 @@ import Tab from "@material-ui/core/Tab";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import ChatIcon from "@material-ui/icons/Chat";
 import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
+import BugReportIcon from "@material-ui/icons/BugReport";
 
 // custom style sheet:
 import "./custom-tab-nav.styles.scss";
@@ -103,9 +104,10 @@ const TabNavIconButton = withStyles(theme => ({
 }))(Tab);
 
 const NavItemDetails = [
-  { index: 0, title: "Notification" },
-  { index: 1, title: "Friends List" },
-  { index: 2, title: "Chat" }
+  { index: 0, title: "DEBUG INFO" },
+  { index: 1, title: "Notification" },
+  { index: 2, title: "Friends List" },
+  { index: 3, title: "Chat" }
 ];
 
 // class VerticalTabs extends React.Component {
@@ -137,6 +139,7 @@ export default function DrawerTabs({ drawerOpen }) {
           onChange={handleChange}
           aria-label="vertical tab"
         >
+          <TabNavIconButton icon={<BugReportIcon />}></TabNavIconButton>
           <TabNavIconButton icon={<NotificationsIcon />}></TabNavIconButton>
           <TabNavIconButton
             icon={<SupervisedUserCircleIcon />}
@@ -154,9 +157,12 @@ export default function DrawerTabs({ drawerOpen }) {
           {/* yellowyyyoysoydfsjldfjs */}
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <FriendsList />
+          <div>TO BE IMPLEMENTED</div>
         </TabPanel>
         <TabPanel value={value} index={2}>
+          <FriendsList />
+        </TabPanel>
+        <TabPanel value={value} index={3}>
           <Chat drawerOpen={drawerOpen} />
         </TabPanel>
       </div>

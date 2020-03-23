@@ -7,10 +7,7 @@ import axios from "axios";
 //   setSubscribedRooms,
 //   setSelectedRoom
 // } from "../../redux/room/room.actions";
-import {
-  updateCurrentUser,
-  updateFriendslist
-} from "../../redux/user/user.actions";
+import { updateFriendslist } from "../../redux/user/user.actions";
 
 // custom style sheet:
 import "./friendslist.styles.scss";
@@ -79,7 +76,6 @@ const mapStateToProps = ({ user }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateCurrentUser: userID => dispatch(updateCurrentUser(userID)),
   updateFriendslist: userID => dispatch(updateFriendslist(userID))
 });
 
