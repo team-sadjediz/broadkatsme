@@ -115,11 +115,17 @@ router.put("/admins/:roomID/:admin/:uid", async function(req, res) {
             subscribers: admin,
             "settings.access.bans": { $nin: admin }
           },
-          { $addToSet: { "settings.access.roomAdmins": admin } },
+          {
+            $addToSet: {
+              "settings.access.roomAdmins": admin,
+              "settings.access.operators": admin,
+              "settings.access.invitations": admin
+            }
+          },
           { runValidators: true, new: true }
         );
       })
-      .then(document => res.send(document.settings.access.roomAdmins))
+      .then(document => res.send(document.settings.access))
       .catch(error => {
         error.additional =
           "Error has occured in /roomsettings/admins/:roomID/:admin/:uid under action = 'add'";
@@ -318,7 +324,8 @@ async function ban(roomID, userID, bannedID) {
           subscribedRooms: updatedUserProps.subscribedRooms,
           favoritedRooms: updatedUserProps.favoritedRooms
         },
-        roomBans: { bans: updatedRoom.settings.access.bans }
+        updatedRoomAccess: updatedRoom.settings.access,
+        updatedSubscribers: updatedRoom.subscribers
       };
 
       await session.commitTransaction();
@@ -348,7 +355,7 @@ async function unban(roomID, userID, bannedID) {
       opts
     );
 
-    return { updatedRoom };
+    return updatedRoom.settings.access.bans;
   } catch (error) {
     error.additional =
       "Error has occurred in /roomsettings/ban/:roomID/:banned/:uid with action='delete'";

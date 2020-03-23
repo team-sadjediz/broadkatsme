@@ -100,27 +100,6 @@ async function addFriend(userID, friendID) {
     throw error;
     // return error;
   }
-
-  // try {
-  //   const opts = { session, new: true, runValidators: true };
-  //   mongoose.startSession().then(session => {
-  //     session.withTransaction(async () => {
-  //       let userProps = await UserProps.findOneAndUpdate(
-  //         { userID: userID },
-  //         { $addToSet: { friends: friendID } },
-  //         opts
-  //       );
-
-  //       let friendProps = await UserProps.findOneAndUpdate(
-  //         { userID: friendID },
-  //         { $addToSet: { friends: userID } },
-  //         opts
-  //       );
-  //     });
-  //   });
-  // } catch (error) {
-  //   console.log(error);
-  // }
 }
 
 module.exports = router;
