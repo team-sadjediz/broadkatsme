@@ -9,7 +9,10 @@ import {
   updateSubscribedRooms
 } from "../../redux/room/room.actions";
 
+import HoverPopOver from "../hover-popover/hover-popover.component";
 import ImageButton from "../img-btn/img-btn.component";
+import RoomInfoPreview from "../room-info-preview/room-info-preview.component";
+
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import IconButton from "@material-ui/core/IconButton";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
@@ -122,14 +125,20 @@ class RoomListNav extends React.Component {
               ) : (
                 ""
               )}
-              <ImageButton
-                onClick={() => {
-                  this.props.setSelectedRoom(room.roomID);
-                }}
-                iconHover={<PlayCircleFilledIcon />}
-                // bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=default1.png`}
-                bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${room.thumbnailUrl}`}
-              ></ImageButton>
+              {console.log("from room list", room)}
+              <HoverPopOver content={<RoomInfoPreview roomInfo={room} />}>
+                {/* RANDOM DIV NEEDED TO MAKE THINGS WORK LOL */}
+                <div>
+                  <ImageButton
+                    onClick={() => {
+                      this.props.setSelectedRoom(room.roomID);
+                    }}
+                    iconHover={<PlayCircleFilledIcon />}
+                    // bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=default1.png`}
+                    bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${room.thumbnailUrl}`}
+                  ></ImageButton>
+                </div>
+              </HoverPopOver>
             </Link>
           ))}
         <RoomNavButton onClick={this.next}>

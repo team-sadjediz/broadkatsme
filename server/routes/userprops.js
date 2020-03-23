@@ -69,9 +69,7 @@ router.get("/rooms/:uid", async function(req, res) {
       rooms.forEach(function(room) {
         roomUrls.push({
           "roomID": room._id,
-          "name": room.name,
-          "thumbnailUrl": room.thumbnailUrl,
-          "tags": room.tags
+          ...room._doc
         });
       });
       res.send(roomUrls);

@@ -132,6 +132,7 @@ class ButtonAppBar extends React.Component {
                 </RoomNavButton>
               </Link>
               <MouseOverPopover
+                // popoverMode="hover"
                 anchorOrigin={{
                   vertical: "bottom",
                   horizontal: "center"

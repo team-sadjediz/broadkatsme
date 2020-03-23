@@ -7,6 +7,7 @@ import FriendsList from "../friendslist/friendslist.component";
 import Chat from "../chat/chat.component";
 import RoomSubscribe from "../room-subscribe/room-subscribe.component";
 import HeaderInfo from "../header-info/header-info.component";
+import HoverPopOver from "../hover-popover/hover-popover.component";
 
 // mui components:
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -157,7 +158,10 @@ export default function DrawerTabs({ drawerOpen }) {
           {/* yellowyyyoysoydfsjldfjs */}
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <div>TO BE IMPLEMENTED</div>
+          {/* <div>TO BE IMPLEMENTED</div> */}
+          <HoverPopOver content={<div>yelllllow</div>}>
+            <div>clickhere</div>
+          </HoverPopOver>
         </TabPanel>
         <TabPanel value={value} index={2}>
           <FriendsList />
