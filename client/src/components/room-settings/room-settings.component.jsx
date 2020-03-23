@@ -242,9 +242,32 @@ class RoomSettings extends Component {
   };
 
   onChangeThumbnail = thumbnailUrl => {
-    // console.log(this.state.thumbnailUrl);
-    // console.log(thumbnailUrl);
     this.setState({ thumbnailUrl: thumbnailUrl });
+  };
+
+  updateAll = access => {
+    this.setState({ ...access });
+    console.log(this.state);
+  };
+
+  updateAdmins = roomAdmins => {
+    this.setState({ roomAdmins: roomAdmins });
+  };
+
+  updateOperators = operators => {
+    this.setState({ operators: operators });
+  };
+
+  updateInvitations = invitations => {
+    this.setState({ invitations: invitations });
+  };
+
+  updateBans = bans => {
+    this.setState({ bans: bans });
+  };
+
+  updateSubscribers = subscribers => {
+    this.setState({ subscribers: subscribers });
   };
 
   render() {
@@ -349,14 +372,21 @@ class RoomSettings extends Component {
                 >
                   <RoleManagementPanel
                     // owned={true}
+                    updateAll={this.updateAll}
+                    roomID={this.props.roomID}
                     ownerID={this.state.ownerID}
                     owned={this.state.owned}
                     roomAdmin={this.state.roomAdmin}
                     admins={this.getUserNames(this.state.roomAdmins)}
+                    updateAdmins={this.updateAdmins}
                     operators={this.getUserNames(this.state.operators)}
+                    updateOperators={this.updateOperators}
                     invitations={this.getUserNames(this.state.invitations)}
+                    updateInvitations={this.updateInvitations}
                     bannedUsers={this.getUserNames(this.state.bans)}
+                    updateBans={this.updateBans}
                     users={this.getUserNames(this.state.subscribers)}
+                    updateSubscribers={this.updateSubscribers}
                   />
                 </TabPanel>
                 {this.state.owned ? (

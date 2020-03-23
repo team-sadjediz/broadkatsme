@@ -54,12 +54,29 @@ class RoomPage extends Component {
     console.log(this.state.exists);
     console.log(this.state.isFetching);
     await axios
-      .get(`${BASE_API_URL}/room/valid/${this.props.match.params.id}`, {
+      .get(`${BASE_API_URL}/room/find/${this.props.match.params.id}`, {
         cancelToken: this.source.token
       })
       .then(res => {
-        this.setState({ exists: res.data, isFetching: false });
+        this.setState({ exists: true, isFetching: false });
         // console.log(this.state);
+        if (res.data.subscribers.includes(this.props.currentUser.uid)) {
+          return true;
+        } else {
+          return false;
+        }
+        // if (this.state.exists) {
+        //   this.fetchData();
+        // }
+      })
+      .then(isSubscribed => {
+        if (!isSubscribed) {
+          return axios.put(
+            `${BASE_API_URL}/userprops/subscribe/${this.props.match.params.id}/${this.props.currentUser.uid}`,
+            null,
+            { params: { action: "subscribe" } }
+          );
+        }
         if (this.state.exists) {
           this.fetchData();
         }

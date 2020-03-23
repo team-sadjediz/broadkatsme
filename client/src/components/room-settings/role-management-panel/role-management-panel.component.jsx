@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-// import axios from "axios";
+import axios from "axios";
+import { BASE_API_URL } from "../../../utils";
 
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
@@ -25,8 +26,7 @@ import BlockIcon from "@material-ui/icons/Block";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import SettingsRemoteIcon from "@material-ui/icons/SettingsRemote";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
-
-// import { BASE_API_URL } from "../../../utils";
+import ContactMailIcon from "@material-ui/icons/ContactMail";
 
 import "./role-management-panel.styles.scss";
 
@@ -53,9 +53,14 @@ const mapDispatchToProps = dispatch => ({
   // setSelectedRoom: roomID => dispatch(setSelectedRoom(roomID))
 });
 
+// FIX CANCEL TOKENS!!!
+
 function RoleManagementPanel(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+
+  const cancelToken = axios.CancelToken;
+  const source = cancelToken.source();
 
   const handleChange = panel => (e, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -65,11 +70,135 @@ function RoleManagementPanel(props) {
     console.log(`clicked with ${temp}`);
   };
 
-  const generate = (items, owned, roomAdmin, onRemove, onBan, onReport) => {
+  const onBan = async uid => {
+    await axios
+      .put(
+        `${BASE_API_URL}/roomsettings/ban/${props.roomID}/${uid}/${props.currentUser.uid}`,
+        null,
+        { params: { action: "ban" } },
+        { cancelToken: source.token }
+      )
+      .then(banResult => {
+        let updatedResults = banResult.data.updatedRoomAccess;
+        updatedResults.subscribers = banResult.data.updatedSubscribers;
+        props.updateAll(updatedResults);
+      });
+  };
+
+  const onUnban = async uid => {
+    await axios
+      .put(
+        `${BASE_API_URL}/roomsettings/ban/${props.roomID}/${uid}/${props.currentUser.uid}`,
+        null,
+        { params: { action: "unban" } },
+        { cancelToken: source.token }
+      )
+      .then(banResult => {
+        props.updateBans(banResult.data);
+      });
+  };
+
+  const addAdmin = async uid => {
+    await axios
+      .put(
+        `${BASE_API_URL}/roomsettings/admins/${props.roomID}/${uid}/${props.currentUser.uid}`,
+        null,
+        { params: { action: "add" } },
+        { cancelToken: source.token }
+      )
+      .then(roomAccess => {
+        console.log(roomAccess.data);
+        props.updateAll(roomAccess.data);
+      })
+      .catch(error => console.error(error));
+  };
+
+  const removeAdmin = async uid => {
+    await axios
+      .put(
+        `${BASE_API_URL}/roomsettings/admins/${props.roomID}/${uid}/${props.currentUser.uid}`,
+        null,
+        { params: { action: "delete" } },
+        { cancelToken: source.token }
+      )
+      .then(roomAdmins => {
+        props.updateAdmins(roomAdmins.data);
+      })
+      .catch(error => console.error(error));
+  };
+
+  const addOperator = async uid => {
+    await axios
+      .put(
+        `${BASE_API_URL}/roomsettings/operators/${props.roomID}/${uid}/${props.currentUser.uid}`,
+        null,
+        { params: { action: "add" } },
+        { cancelToken: source.token }
+      )
+      .then(operators => {
+        props.updateOperators(operators.data);
+      })
+      .catch(error => console.error(error));
+  };
+
+  const removeOperator = async uid => {
+    await axios
+      .put(
+        `${BASE_API_URL}/roomsettings/operators/${props.roomID}/${uid}/${props.currentUser.uid}`,
+        null,
+        { params: { action: "delete" } },
+        { cancelToken: source.token }
+      )
+      .then(operators => {
+        props.updateOperators(operators.data);
+      })
+      .catch(error => console.error(error));
+  };
+
+  const addInvitation = async uid => {
+    await axios
+      .put(
+        `${BASE_API_URL}/roomsettings/inviters/${props.roomID}/${uid}/${props.currentUser.uid}`,
+        null,
+        { params: { action: "add" } },
+        { cancelToken: source.token }
+      )
+      .then(inviters => {
+        props.updateInvitations(inviters.data);
+      })
+      .catch(error => console.error(error));
+  };
+
+  const removeInvitation = async uid => {
+    await axios
+      .put(
+        `${BASE_API_URL}/roomsettings/inviters/${props.roomID}/${uid}/${props.currentUser.uid}`,
+        null,
+        { params: { action: "delete" } },
+        { cancelToken: source.token }
+      )
+      .then(inviters => {
+        props.updateInvitations(inviters.data);
+      })
+      .catch(error => console.error(error));
+  };
+
+  const report = async uid => {};
+
+  const generate = (
+    items,
+    key,
+    owned,
+    roomAdmin,
+    onRemove,
+    onBan,
+    onReport
+  ) => {
     let list = items.map(item => {
       let itemIsAdmin = props.admins.some(admin => admin.uid == item.uid);
+      let itemIsOwner = props.ownerID == item.uid;
       return (
-        <ListItem className={classes.listItem} key={item}>
+        <ListItem className={classes.listItem} key={`${key} ${item.uid}`}>
           <ListItemAvatar>
             <Avatar>
               <AccountCircleIcon />
@@ -80,12 +209,12 @@ function RoleManagementPanel(props) {
             secondary={owned ? "View Reports" : null}
           ></ListItemText>
           <ListItemSecondaryAction>
-            {roomAdmin && !itemIsAdmin ? (
+            {roomAdmin && !itemIsAdmin && !itemIsOwner ? (
               <IconButton onClick={() => onRemove(item.uid)}>
                 <RemoveCircleIcon></RemoveCircleIcon>
               </IconButton>
             ) : null}
-            {roomAdmin && !itemIsAdmin ? (
+            {roomAdmin && (!itemIsAdmin || owned) && !itemIsOwner ? (
               <IconButton onClick={() => onBan(item.uid)}>
                 <BlockIcon></BlockIcon>
               </IconButton>
@@ -111,9 +240,12 @@ function RoleManagementPanel(props) {
     onReport
   ) => {
     let list = items.map(item => {
-      let itemOwner = props.ownerID == item.uid;
+      let itemIsOwner = props.ownerID == item.uid;
       return (
-        <ListItem className={classes.listItem} key={item}>
+        <ListItem
+          className={classes.listItem}
+          key={`administrators ${item.uid}`}
+        >
           <ListItemAvatar>
             <Avatar>
               <AccountCircleIcon />
@@ -124,12 +256,12 @@ function RoleManagementPanel(props) {
             secondary={owned ? "View Reports" : null}
           ></ListItemText>
           <ListItemSecondaryAction>
-            {owned && !itemOwner ? (
+            {owned && !itemIsOwner ? (
               <IconButton onClick={() => onRemove(item.uid)}>
                 <RemoveCircleIcon></RemoveCircleIcon>
               </IconButton>
             ) : null}
-            {owned && !itemOwner ? (
+            {owned && !itemIsOwner ? (
               <IconButton onClick={() => onBan(item.uid)}>
                 <BlockIcon></BlockIcon>
               </IconButton>
@@ -152,14 +284,21 @@ function RoleManagementPanel(props) {
     roomAdmin,
     addAdmin,
     addOperator,
+    addInvitation,
     onBan,
     onReport
   ) => {
     let list = items.map(item => {
       let itemIsAdmin = props.admins.some(admin => admin.uid == item.uid);
+      let itemIsOperator = props.operators.some(
+        operator => operator.uid == item.uid
+      );
+      let itemIsInviter = props.invitations.some(
+        inviter => inviter.uid == item.uid
+      );
       let itemOwner = props.ownerID == item.uid;
       return (
-        <ListItem className={classes.listItem} key={item}>
+        <ListItem className={classes.listItem} key={`users ${item.uid}`}>
           <ListItemAvatar>
             <Avatar>
               <AccountCircleIcon />
@@ -170,14 +309,19 @@ function RoleManagementPanel(props) {
             secondary={owned ? "View Reports" : null}
           ></ListItemText>
           <ListItemSecondaryAction>
-            {owned && !itemOwner ? (
+            {owned && !itemOwner && !itemIsAdmin ? (
               <IconButton onClick={() => addAdmin(item.uid)}>
                 <SupervisorAccountIcon></SupervisorAccountIcon>
               </IconButton>
             ) : null}
-            {roomAdmin && !itemIsAdmin ? (
+            {roomAdmin && !itemIsAdmin && !itemIsOperator ? (
               <IconButton onClick={() => addOperator(item.uid)}>
                 <SettingsRemoteIcon></SettingsRemoteIcon>
+              </IconButton>
+            ) : null}
+            {roomAdmin && !itemIsAdmin && !itemIsInviter ? (
+              <IconButton onClick={() => addInvitation(item.uid)}>
+                <ContactMailIcon></ContactMailIcon>
               </IconButton>
             ) : null}
             {roomAdmin && !itemIsAdmin ? (
@@ -200,7 +344,7 @@ function RoleManagementPanel(props) {
   const generateBannedUsers = (items, owned, roomAdmin, onUnban) => {
     let bannedList = props.bannedUsers.map(banned => {
       return (
-        <ListItem className={classes.listItem} key={banned}>
+        <ListItem className={classes.listItem} key={`banned ${banned.uid}`}>
           <ListItemAvatar>
             <Avatar>
               <AccountCircleIcon />
@@ -250,8 +394,8 @@ function RoleManagementPanel(props) {
                 props.admins,
                 props.owned,
                 props.roomAdmin,
-                temp,
-                temp,
+                removeAdmin,
+                onBan,
                 temp
               )}
             </List>
@@ -276,10 +420,11 @@ function RoleManagementPanel(props) {
             <List className={classes.list}>
               {generate(
                 props.operators,
+                "operators",
                 props.owned,
                 props.roomAdmin,
-                temp,
-                temp,
+                removeOperator,
+                onBan,
                 temp
               )}
             </List>
@@ -304,10 +449,11 @@ function RoleManagementPanel(props) {
             <List className={classes.list}>
               {generate(
                 props.invitations,
+                "invitations",
                 props.owned,
                 props.roomAdmin,
-                temp,
-                temp,
+                removeInvitation,
+                onBan,
                 temp
               )}
             </List>
@@ -336,9 +482,10 @@ function RoleManagementPanel(props) {
                 props.users,
                 props.owned,
                 props.roomAdmin,
-                temp,
-                temp,
-                temp,
+                addAdmin,
+                addOperator,
+                addInvitation,
+                onBan,
                 temp
               )}
             </List>
@@ -368,7 +515,7 @@ function RoleManagementPanel(props) {
                   props.bannedUsers,
                   props.owned,
                   props.roomAdmin,
-                  temp
+                  onUnban
                 )}
               </List>
             </ExpansionPanelDetails>
