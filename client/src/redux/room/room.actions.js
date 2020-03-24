@@ -14,14 +14,13 @@ export const setSelectedRoomInfo = roomID => ({
 });
 
 export const updateSubscribedRooms = userID => {
-  console.log("updateSubRooms for ", userID);
+  // console.log("updateSubRooms for ", userID);
   return dispatch => {
-    console.log("dispatches");
-
+    // console.log("dispatches");
     axios
       .get(`${BASE_API_URL}/userprops/rooms/${userID}`)
       .then(res => {
-        console.log("dispatch done", res.data);
+        // console.log("dispatch done", res.data);
         dispatch(setSubscribedRooms(res.data));
       })
       .catch(err => {

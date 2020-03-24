@@ -3,7 +3,9 @@ import PropTypes from "prop-types";
 
 // components:
 import NewRoom from "../new-room/new-room.component";
-import FriendsList from "../friendslist/friendslist.component";
+import FriendsList from "../friends-list/friends-list.component";
+// import FriendsList from "../friendslist/friendslist.component";
+
 import Chat from "../chat/chat.component";
 import RoomSubscribe from "../room-subscribe/room-subscribe.component";
 import HeaderInfo from "../header-info/header-info.component";
