@@ -14,31 +14,27 @@ const UserProps = require("../models/userprops.model");
 // How To Use:
 // axios.get(`${BASE_API_URI}/room/${roomID})
 // returns TRUE or FALSE if room exists
-router.get("/valid/:roomID", async function(req, res) {
+router.get("/valid/:roomID", async function (req, res) {
   let roomID = req.params.roomID;
   await Room.exists({ _id: roomID })
-    .then(exists => {
+    .then((exists) => {
       res.send(exists);
     })
-    .catch(error => res.status(404).send(error));
+    .catch((error) => res.status(404).send(error));
 });
 
 // ---------------------------------------------------------- FIND ROOMS ----------------------------------------------------------
 
 // How To Use:
-<<<<<<< HEAD
-// axios.put(`${BASE_API_URI}/room/find/${roomID})
-=======
 // axios.get(`${BASE_API_URI}/room/${roomID})
->>>>>>> room-page
 // returns entire document if found
-router.get("/find/:roomID", async function(req, res) {
+router.get("/find/:roomID", async function (req, res) {
   let roomID = req.params.roomID;
   await Room.findById(roomID)
-    .then(room => {
+    .then((room) => {
       res.json(room);
     })
-    .catch(error => {
+    .catch((error) => {
       res.status(404).send(error);
     });
 });
@@ -48,7 +44,7 @@ router.get("/find/:roomID", async function(req, res) {
 // How To Use:
 // axios.put(`${BASE_API_URI}/room/${roomID})
 // returns active status of document
-router.put("/active/:roomID/:uid", async function(req, res) {
+router.put("/active/:roomID/:uid", async function (req, res) {
   let roomID = req.params.roomID;
   let uid = req.params.uid;
   let active = req.query.active;
@@ -59,10 +55,10 @@ router.put("/active/:roomID/:uid", async function(req, res) {
     { active: active },
     { runValidators: true, new: true }
   )
-    .then(document => {
+    .then((document) => {
       res.send(document.active);
     })
-    .catch(error => res.status(404).send(error));
+    .catch((error) => res.status(404).send(error));
 });
 
 // ---------------------------------------------------------- CREATE FIND ROOMS ----------------------------------------------------------
@@ -71,7 +67,7 @@ router.put("/active/:roomID/:uid", async function(req, res) {
 // axios.post(`${BASE_API_URI}/room/create`, { body })
 // { body } == { roomName, uid, roomSize, privacy}
 // returns new subscribed rooms
-router.post("/create", async function(req, res) {
+router.post("/create", async function (req, res) {
   try {
     let newRoom = await createRoom(
       req.body.roomName,
@@ -107,9 +103,9 @@ async function createRoom(roomName, uid, roomSize, privacy) {
           roomAdmins: [uid],
           operators: [uid],
           invitations: [uid],
-          bans: []
-        }
-      }
+          bans: [],
+        },
+      },
     });
 
     let newRoomDocument = await newRoom.save(opts);
@@ -137,7 +133,7 @@ async function createRoom(roomName, uid, roomSize, privacy) {
 // How To Use:
 // axios.delete(`${BASE_API_URI}/room/delete/${roomID}/${uid}`)
 // returns empty body (as per convention)
-router.delete("/delete/:roomID/:uid", async function(req, res) {
+router.delete("/delete/:roomID/:uid", async function (req, res) {
   try {
     let updatedUserProps = await deleteRoom(req.params.roomID, req.params.uid);
     res.status(204).send();
@@ -155,7 +151,7 @@ async function deleteRoom(roomID, uid) {
     let deletedRoom = await Room.findOneAndDelete(
       {
         _id: roomID,
-        ownerID: uid
+        ownerID: uid,
       },
       opts
     );
@@ -166,8 +162,8 @@ async function deleteRoom(roomID, uid) {
         $pull: {
           subscribedRooms: roomID,
           ownedRooms: roomID,
-          favoritedRooms: roomID
-        }
+          favoritedRooms: roomID,
+        },
       },
       opts
     );
@@ -189,10 +185,10 @@ async function deleteRoom(roomID, uid) {
 // in progress
 // send json with: { folder: ..., uid: ..., image: ...}
 // order is required
-router.put("/upload-thumbnail/:roomID/:uid", function(req, res) {
+router.put("/upload-thumbnail/:roomID/:uid", function (req, res) {
   req.query.folder = "room_thumbnail/";
   req.query.filename = req.params.roomID;
-  singleUpload(req, res, async error => {
+  singleUpload(req, res, async (error) => {
     let imageName, imageLocation;
     if (error) {
       console.log(error);
@@ -209,14 +205,14 @@ router.put("/upload-thumbnail/:roomID/:uid", function(req, res) {
           { thumbnailUrl: imageName },
           {
             runValidators: true,
-            new: true
+            new: true,
           }
         )
-          .then(room => {
+          .then((room) => {
             // console.log(room);
             res.send(room.thumbnailUrl);
           })
-          .catch(error => res.status(404).send(error));
+          .catch((error) => res.status(404).send(error));
       }
     }
   });
@@ -224,7 +220,7 @@ router.put("/upload-thumbnail/:roomID/:uid", function(req, res) {
 
 // How To Use:
 // <img src={`http://localhost:5000/api/room/get-thumbnail?thumbnail_url=${thumbnail_url}`} />
-router.get("/get-thumbnail", async function(req, res) {
+router.get("/get-thumbnail", async function (req, res) {
   let s3 = new aws.S3();
   let url = req.query.thumbnailUrl;
   // console.log(url);
@@ -239,7 +235,7 @@ router.get("/get-thumbnail", async function(req, res) {
 // How To Use:
 // axios.put(`${BASE_API_URI}/room/tags/${roomID}/${uid}`)
 // returns updated resources (as per convention)
-router.put("/tags/:roomID/:uid", async function(req, res) {
+router.put("/tags/:roomID/:uid", async function (req, res) {
   let roomID = req.params.roomID;
   let uid = req.params.uid;
   let tags = req.query.tags;
@@ -250,18 +246,18 @@ router.put("/tags/:roomID/:uid", async function(req, res) {
       { $pull: { tags: tags } },
       { runValidators: true, new: true }
     )
-      .then(document => {
+      .then((document) => {
         res.send(document.tags);
       })
-      .catch(error => res.status(400).send(error));
+      .catch((error) => res.status(400).send(error));
   } else if (action == "add") {
     await Room.findOneAndUpdate(
       { _id: roomID, "settings.access.roomAdmins": uid },
       { $addToSet: { tags: tags } },
       { runValidators: true, new: true }
     )
-      .then(document => res.send(document.tags))
-      .catch(error => res.status(400).send(error));
+      .then((document) => res.send(document.tags))
+      .catch((error) => res.status(400).send(error));
   } else {
     res.status(400).send("Bad request.");
   }
