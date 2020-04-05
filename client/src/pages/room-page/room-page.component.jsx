@@ -9,10 +9,12 @@ import { Redirect } from "react-router-dom";
 import "./room-page.styles.scss";
 
 import Tag from "../../components/tag/tag.component";
+import RoomTitle from "../../components/room-title/room-title.component";
 import RoomBar from "../../components/room-bar/room-bar.component";
 import BrowserOverlay from "../../components/browser-overlay/browser-overlay.component";
 import BrowserInit from "../../components/browser-init/browser-init.component";
 import RoomSettings from "../../components/room-settings/room-settings.component";
+import Divider from "@material-ui/core/Divider";
 
 // import Modal from "@material-ui/core/Modal";
 
@@ -52,12 +54,29 @@ class RoomPage extends Component {
     console.log(this.state.exists);
     console.log(this.state.isFetching);
     await axios
-      .get(`${BASE_API_URL}/room/valid/${this.props.match.params.id}`, {
+      .get(`${BASE_API_URL}/room/find/${this.props.match.params.id}`, {
         cancelToken: this.source.token
       })
       .then(res => {
-        this.setState({ exists: res.data, isFetching: false });
+        this.setState({ exists: true, isFetching: false });
         // console.log(this.state);
+        if (res.data.subscribers.includes(this.props.currentUser.uid)) {
+          return true;
+        } else {
+          return false;
+        }
+        // if (this.state.exists) {
+        //   this.fetchData();
+        // }
+      })
+      .then(isSubscribed => {
+        if (!isSubscribed) {
+          return axios.put(
+            `${BASE_API_URL}/userprops/subscribe/${this.props.match.params.id}/${this.props.currentUser.uid}`,
+            null,
+            { params: { action: "subscribe" } }
+          );
+        }
         if (this.state.exists) {
           this.fetchData();
         }
@@ -99,15 +118,20 @@ class RoomPage extends Component {
   }
 
   fetchData = async () => {
-    let roomDetails, isFavorited;
+    let roomDetails;
+    let isFavorited = this.state.isFavorited;
     await axios
       .get(`${BASE_API_URL}/room/find/${this.props.match.params.id}`, {
         cancelToken: this.source.token
       })
       .then(res => {
         roomDetails = res.data;
-        return axios.get(
-          `${BASE_API_URL}/userprops/favorited/${this.props.match.params.id}/${this.props.currentUser.uid}`,
+        return axios.put(
+          `${BASE_API_URL}/userprops/favorites/${this.props.match.params.id}/${this.props.currentUser.uid}`,
+          null,
+          {
+            params: { action: "exists" }
+          },
           {
             cancelToken: this.source.token
           }
@@ -119,6 +143,7 @@ class RoomPage extends Component {
       .catch(error => {
         console.error(error);
       });
+
     this.setState({
       roomName: roomDetails.name,
       roomID: roomDetails._id,
@@ -139,15 +164,28 @@ class RoomPage extends Component {
   };
 
   favoriteRoom = async e => {
+    let action;
+    if (this.state.isFavorited) {
+      action = "unfavorite";
+    } else {
+      action = "favorite";
+    }
     await axios
       .put(
-        `${BASE_API_URL}/userprops/favorite/${this.props.match.params.id}/${this.props.currentUser.uid}`,
+        `${BASE_API_URL}/userprops/favorites/${this.props.match.params.id}/${this.props.currentUser.uid}`,
+        null,
+        {
+          params: { action }
+        },
         {
           cancelToken: this.source.token
         }
       )
-      .then(res => this.setState({ isFavorited: res.data.favorited }))
-      .catch(error => console.error(error));
+      .then(res => {
+        console.log(res.data);
+        this.setState({ isFavorited: res.data });
+      })
+      .catch(error => console.log("not favorited"));
   };
 
   unsubscribe = async () => {
@@ -226,7 +264,6 @@ class RoomPage extends Component {
               <div className="room-settings-container">
                 <RoomSettings
                   toggleSettingsModal={this.toggleSettingsModal}
-                  // HEEEEREEEEEE
                   roomID={this.props.match.params.id}
                   owned={true}
                   tags={tags}
@@ -239,8 +276,12 @@ class RoomPage extends Component {
 
             <div className="room-page-container">
               <div className="room-page">
-                <div className="room-bar-area">
-                  <RoomBar
+                <div className="room-title-area">
+                  <RoomTitle
+                    roomName={this.state.roomName}
+                    onChangeTitle={this.onChangeTitle}
+                  />
+                  {/* <RoomBar
                     roomName={this.state.roomName}
                     roomID={this.props.match.params.id}
                     toggleSettingsModal={this.toggleSettingsModal}
@@ -249,7 +290,7 @@ class RoomPage extends Component {
                     onChangeTag={this.onChangeTag}
                     onChangeTitle={this.onChangeTitle}
                     unsubscribe={this.unsubscribe}
-                  />
+                  /> */}
                 </div>
                 {this.state.showInitial ? (
                   <div className="room-screen-init">
@@ -273,7 +314,16 @@ class RoomPage extends Component {
                     <div className="hide" />
                   )}
                 </div>
+                <div className="room-bar-area">
+                  <RoomBar
+                    toggleSettingsModal={this.toggleSettingsModal}
+                    favoriteRoom={this.favoriteRoom}
+                    isFavorited={this.state.isFavorited}
+                    unsubscribe={this.unsubscribe}
+                  />
+                </div>
                 <div className="room-tags-area">
+                  <Divider className="room-tag-divider" variant="fullWidth" />
                   {addTag}
                   {tags}
                 </div>

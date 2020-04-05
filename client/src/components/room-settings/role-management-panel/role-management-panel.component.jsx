@@ -1,5 +1,7 @@
 import React from "react";
-// import axios from "axios";
+import { connect } from "react-redux";
+import axios from "axios";
+import { BASE_API_URL } from "../../../utils";
 
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
@@ -24,8 +26,7 @@ import BlockIcon from "@material-ui/icons/Block";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import SettingsRemoteIcon from "@material-ui/icons/SettingsRemote";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
-
-// import { BASE_API_URL } from "../../../utils";
+import ContactMailIcon from "@material-ui/icons/ContactMail";
 
 import "./role-management-panel.styles.scss";
 
@@ -42,18 +43,162 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function RoleManagementPanel(props) {
+const mapStateToProps = state => ({
+  currentUser: state.user.currentUser,
+  selectedRoom: state.room.selectedRoom
+});
+
+const mapDispatchToProps = dispatch => ({
+  // setSubscribedRooms: subRoomList => dispatch(setSubscribedRooms(subRoomList)),
+  // setSelectedRoom: roomID => dispatch(setSelectedRoom(roomID))
+});
+
+// FIX CANCEL TOKENS!!!
+
+function RoleManagementPanel(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+
+  const cancelToken = axios.CancelToken;
+  const source = cancelToken.source();
 
   const handleChange = panel => (e, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const generate = (items, owned, roomAdmin) => {
+  const temp = temp => {
+    console.log(`clicked with ${temp}`);
+  };
+
+  const onBan = async uid => {
+    await axios
+      .put(
+        `${BASE_API_URL}/roomsettings/ban/${props.roomID}/${uid}/${props.currentUser.uid}`,
+        null,
+        { params: { action: "ban" } },
+        { cancelToken: source.token }
+      )
+      .then(banResult => {
+        let updatedResults = banResult.data.updatedRoomAccess;
+        updatedResults.subscribers = banResult.data.updatedSubscribers;
+        props.updateAll(updatedResults);
+      });
+  };
+
+  const onUnban = async uid => {
+    await axios
+      .put(
+        `${BASE_API_URL}/roomsettings/ban/${props.roomID}/${uid}/${props.currentUser.uid}`,
+        null,
+        { params: { action: "unban" } },
+        { cancelToken: source.token }
+      )
+      .then(banResult => {
+        props.updateBans(banResult.data);
+      });
+  };
+
+  const addAdmin = async uid => {
+    await axios
+      .put(
+        `${BASE_API_URL}/roomsettings/admins/${props.roomID}/${uid}/${props.currentUser.uid}`,
+        null,
+        { params: { action: "add" } },
+        { cancelToken: source.token }
+      )
+      .then(roomAccess => {
+        console.log(roomAccess.data);
+        props.updateAll(roomAccess.data);
+      })
+      .catch(error => console.error(error));
+  };
+
+  const removeAdmin = async uid => {
+    await axios
+      .put(
+        `${BASE_API_URL}/roomsettings/admins/${props.roomID}/${uid}/${props.currentUser.uid}`,
+        null,
+        { params: { action: "delete" } },
+        { cancelToken: source.token }
+      )
+      .then(roomAdmins => {
+        props.updateAdmins(roomAdmins.data);
+      })
+      .catch(error => console.error(error));
+  };
+
+  const addOperator = async uid => {
+    await axios
+      .put(
+        `${BASE_API_URL}/roomsettings/operators/${props.roomID}/${uid}/${props.currentUser.uid}`,
+        null,
+        { params: { action: "add" } },
+        { cancelToken: source.token }
+      )
+      .then(operators => {
+        props.updateOperators(operators.data);
+      })
+      .catch(error => console.error(error));
+  };
+
+  const removeOperator = async uid => {
+    await axios
+      .put(
+        `${BASE_API_URL}/roomsettings/operators/${props.roomID}/${uid}/${props.currentUser.uid}`,
+        null,
+        { params: { action: "delete" } },
+        { cancelToken: source.token }
+      )
+      .then(operators => {
+        props.updateOperators(operators.data);
+      })
+      .catch(error => console.error(error));
+  };
+
+  const addInvitation = async uid => {
+    await axios
+      .put(
+        `${BASE_API_URL}/roomsettings/inviters/${props.roomID}/${uid}/${props.currentUser.uid}`,
+        null,
+        { params: { action: "add" } },
+        { cancelToken: source.token }
+      )
+      .then(inviters => {
+        props.updateInvitations(inviters.data);
+      })
+      .catch(error => console.error(error));
+  };
+
+  const removeInvitation = async uid => {
+    await axios
+      .put(
+        `${BASE_API_URL}/roomsettings/inviters/${props.roomID}/${uid}/${props.currentUser.uid}`,
+        null,
+        { params: { action: "delete" } },
+        { cancelToken: source.token }
+      )
+      .then(inviters => {
+        props.updateInvitations(inviters.data);
+      })
+      .catch(error => console.error(error));
+  };
+
+  const report = async uid => {};
+
+  const generate = (
+    items,
+    key,
+    owned,
+    roomAdmin,
+    onRemove,
+    onBan,
+    onReport
+  ) => {
     let list = items.map(item => {
+      let itemIsAdmin = props.admins.some(admin => admin.uid == item.uid);
+      let itemIsOwner = props.ownerID == item.uid;
       return (
-        <ListItem className={classes.listItem}>
+        <ListItem className={classes.listItem} key={`${key} ${item.uid}`}>
           <ListItemAvatar>
             <Avatar>
               <AccountCircleIcon />
@@ -64,19 +209,21 @@ export default function RoleManagementPanel(props) {
             secondary={owned ? "View Reports" : null}
           ></ListItemText>
           <ListItemSecondaryAction>
-            {roomAdmin ? (
-              <IconButton>
+            {roomAdmin && !itemIsAdmin && !itemIsOwner ? (
+              <IconButton onClick={() => onRemove(item.uid)}>
                 <RemoveCircleIcon></RemoveCircleIcon>
               </IconButton>
             ) : null}
-            {roomAdmin ? (
-              <IconButton>
+            {roomAdmin && (!itemIsAdmin || owned) && !itemIsOwner ? (
+              <IconButton onClick={() => onBan(item.uid)}>
                 <BlockIcon></BlockIcon>
               </IconButton>
             ) : null}
-            <IconButton>
-              <FlagOutlinedIcon></FlagOutlinedIcon>
-            </IconButton>
+            {props.currentUser.uid != item.uid ? (
+              <IconButton onClick={() => onReport(item.uid)}>
+                <FlagOutlinedIcon></FlagOutlinedIcon>
+              </IconButton>
+            ) : null}
           </ListItemSecondaryAction>
         </ListItem>
       );
@@ -84,10 +231,21 @@ export default function RoleManagementPanel(props) {
     return list;
   };
 
-  const generateAdmins = (items, owned, roomAdmin) => {
+  const generateAdmins = (
+    items,
+    owned,
+    roomAdmin,
+    onRemove,
+    onBan,
+    onReport
+  ) => {
     let list = items.map(item => {
+      let itemIsOwner = props.ownerID == item.uid;
       return (
-        <ListItem className={classes.listItem}>
+        <ListItem
+          className={classes.listItem}
+          key={`administrators ${item.uid}`}
+        >
           <ListItemAvatar>
             <Avatar>
               <AccountCircleIcon />
@@ -98,19 +256,21 @@ export default function RoleManagementPanel(props) {
             secondary={owned ? "View Reports" : null}
           ></ListItemText>
           <ListItemSecondaryAction>
-            {owned ? (
-              <IconButton>
+            {owned && !itemIsOwner ? (
+              <IconButton onClick={() => onRemove(item.uid)}>
                 <RemoveCircleIcon></RemoveCircleIcon>
               </IconButton>
             ) : null}
-            {roomAdmin ? (
-              <IconButton>
+            {owned && !itemIsOwner ? (
+              <IconButton onClick={() => onBan(item.uid)}>
                 <BlockIcon></BlockIcon>
               </IconButton>
             ) : null}
-            <IconButton>
-              <FlagOutlinedIcon></FlagOutlinedIcon>
-            </IconButton>
+            {props.currentUser.uid != item.uid ? (
+              <IconButton onClick={() => onReport(item.uid)}>
+                <FlagOutlinedIcon></FlagOutlinedIcon>
+              </IconButton>
+            ) : null}
           </ListItemSecondaryAction>
         </ListItem>
       );
@@ -118,10 +278,27 @@ export default function RoleManagementPanel(props) {
     return list;
   };
 
-  const generateUsers = (items, owned, roomAdmin) => {
+  const generateUsers = (
+    items,
+    owned,
+    roomAdmin,
+    addAdmin,
+    addOperator,
+    addInvitation,
+    onBan,
+    onReport
+  ) => {
     let list = items.map(item => {
+      let itemIsAdmin = props.admins.some(admin => admin.uid == item.uid);
+      let itemIsOperator = props.operators.some(
+        operator => operator.uid == item.uid
+      );
+      let itemIsInviter = props.invitations.some(
+        inviter => inviter.uid == item.uid
+      );
+      let itemOwner = props.ownerID == item.uid;
       return (
-        <ListItem className={classes.listItem}>
+        <ListItem className={classes.listItem} key={`users ${item.uid}`}>
           <ListItemAvatar>
             <Avatar>
               <AccountCircleIcon />
@@ -132,24 +309,31 @@ export default function RoleManagementPanel(props) {
             secondary={owned ? "View Reports" : null}
           ></ListItemText>
           <ListItemSecondaryAction>
-            {owned ? (
-              <IconButton>
+            {owned && !itemOwner && !itemIsAdmin ? (
+              <IconButton onClick={() => addAdmin(item.uid)}>
                 <SupervisorAccountIcon></SupervisorAccountIcon>
               </IconButton>
             ) : null}
-            {roomAdmin ? (
-              <IconButton>
+            {roomAdmin && !itemIsAdmin && !itemIsOperator ? (
+              <IconButton onClick={() => addOperator(item.uid)}>
                 <SettingsRemoteIcon></SettingsRemoteIcon>
               </IconButton>
             ) : null}
-            {roomAdmin ? (
-              <IconButton>
+            {roomAdmin && !itemIsAdmin && !itemIsInviter ? (
+              <IconButton onClick={() => addInvitation(item.uid)}>
+                <ContactMailIcon></ContactMailIcon>
+              </IconButton>
+            ) : null}
+            {roomAdmin && !itemIsAdmin ? (
+              <IconButton onClick={() => onBan(item.uid)}>
                 <BlockIcon></BlockIcon>
               </IconButton>
             ) : null}
-            <IconButton>
-              <FlagOutlinedIcon></FlagOutlinedIcon>
-            </IconButton>
+            {props.currentUser.uid != item.uid ? (
+              <IconButton onClick={() => onReport(item.uid)}>
+                <FlagOutlinedIcon></FlagOutlinedIcon>
+              </IconButton>
+            ) : null}
           </ListItemSecondaryAction>
         </ListItem>
       );
@@ -157,10 +341,10 @@ export default function RoleManagementPanel(props) {
     return list;
   };
 
-  const generateBannedUsers = () => {
+  const generateBannedUsers = (items, owned, roomAdmin, onUnban) => {
     let bannedList = props.bannedUsers.map(banned => {
       return (
-        <ListItem className={classes.listItem}>
+        <ListItem className={classes.listItem} key={`banned ${banned.uid}`}>
           <ListItemAvatar>
             <Avatar>
               <AccountCircleIcon />
@@ -171,10 +355,11 @@ export default function RoleManagementPanel(props) {
             secondary={props.owned ? "View Reports" : null}
           ></ListItemText>
           <ListItemSecondaryAction>
-            {/* SET ON CLICK IF OWNED */}
-            <IconButton>
-              <LockOpenIcon></LockOpenIcon>
-            </IconButton>
+            {owned ? (
+              <IconButton onClick={() => onUnban(banned.uid)}>
+                <LockOpenIcon></LockOpenIcon>
+              </IconButton>
+            ) : null}
           </ListItemSecondaryAction>
         </ListItem>
       );
@@ -205,7 +390,14 @@ export default function RoleManagementPanel(props) {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <List className={classes.list}>
-              {generateAdmins(props.admins, props.owned, props.roomAdmin)}
+              {generateAdmins(
+                props.admins,
+                props.owned,
+                props.roomAdmin,
+                removeAdmin,
+                onBan,
+                temp
+              )}
             </List>
           </ExpansionPanelDetails>
         </ExpansionPanel>
@@ -226,7 +418,15 @@ export default function RoleManagementPanel(props) {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <List className={classes.list}>
-              {generate(props.operators, props.owned, props.roomAdmin)}
+              {generate(
+                props.operators,
+                "operators",
+                props.owned,
+                props.roomAdmin,
+                removeOperator,
+                onBan,
+                temp
+              )}
             </List>
           </ExpansionPanelDetails>
         </ExpansionPanel>
@@ -247,7 +447,15 @@ export default function RoleManagementPanel(props) {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <List className={classes.list}>
-              {generate(props.invitations, props.owned, props.roomAdmin)}
+              {generate(
+                props.invitations,
+                "invitations",
+                props.owned,
+                props.roomAdmin,
+                removeInvitation,
+                onBan,
+                temp
+              )}
             </List>
           </ExpansionPanelDetails>
         </ExpansionPanel>
@@ -270,7 +478,16 @@ export default function RoleManagementPanel(props) {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <List className={classes.list}>
-              {generateUsers(props.users, props.owned, props.roomAdmin)}
+              {generateUsers(
+                props.users,
+                props.owned,
+                props.roomAdmin,
+                addAdmin,
+                addOperator,
+                addInvitation,
+                onBan,
+                temp
+              )}
             </List>
           </ExpansionPanelDetails>
         </ExpansionPanel>
@@ -293,7 +510,14 @@ export default function RoleManagementPanel(props) {
               </div>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-              <List className={classes.list}>{generateBannedUsers()}</List>
+              <List className={classes.list}>
+                {generateBannedUsers(
+                  props.bannedUsers,
+                  props.owned,
+                  props.roomAdmin,
+                  onUnban
+                )}
+              </List>
             </ExpansionPanelDetails>
           </ExpansionPanel>
         </div>
@@ -301,3 +525,8 @@ export default function RoleManagementPanel(props) {
     </div>
   );
 }
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RoleManagementPanel);
