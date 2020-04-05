@@ -14,6 +14,7 @@ import Button from "@material-ui/core/Button";
 import "./room-subscribe.styles.scss";
 
 const RoomSubscribe = ({
+  userAuth,
   currentUser,
   setSubscribedRooms,
   setSelectedRoom,
@@ -27,13 +28,14 @@ const RoomSubscribe = ({
 
   const handleSubscribe = async event => {
     if (roomId) {
-      console.log(roomId, currentUser.uid);
+      console.log(roomId, userAuth.uid);
       // await axios.put(`${BASE_API_URL}/userprops/subscribed-rooms/subscribe`, {
       //   roomID: roomId,
       //   uid: currentUser.uid
       // });
+      console.log("sdlkfjlksdjfjfjjjjjjjjjjjjjjjjjjjjjjjjjjjj", roomId);
       await axios.put(
-        `${BASE_API_URL}/userprops/subscribe/${roomId}/${currentUser.uid}`,
+        `${BASE_API_URL}/userprops/subscribe/${roomId}/${userAuth.uid}`,
         null,
         { params: { action: "subscribe" } }
       );
@@ -42,7 +44,7 @@ const RoomSubscribe = ({
       //   params: { uid: currentUser.uid }
       // });
       let results = await axios.get(
-        `${BASE_API_URL}/userprops/rooms/${currentUser.uid}`
+        `${BASE_API_URL}/userprops/rooms/${userAuth.uid}`
       );
       setSubscribedRooms(results.data);
       setSelectedRoom(roomId);
@@ -113,6 +115,7 @@ const RoomSubscribe = ({
 };
 
 const mapStateToProps = state => ({
+  userAuth: state.user.userAuth,
   currentUser: state.user.currentUser,
   subscribedRooms: state.room.subscribedRooms
 });

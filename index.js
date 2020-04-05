@@ -36,7 +36,7 @@ const port = process.env.PORT || 5000;
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "client/build")));
 
-mongoose.plugin(require("./server/utils/mongoose-error-plugin"));
+// mongoose.plugin(require("./server/utils/mongoose-error-plugin"));
 // --------------------------------- V E R I F Y () ---------------------------------
 
 const verifyAuthToken = async function(req, res, next) {
@@ -132,12 +132,12 @@ const io = socketio(server);
 io.on("connection", socket => {
   console.log(`New connection: ${socket.id}`);
 
-  socket.on("join", ({ name, room, date }, callback) => {
+  socket.on("join", ({ id, name, room, date }, callback) => {
     console.log(
       `SERVER: socket: ${socket.id} / user (${name}) -> room [${room}]`
     );
 
-    const { error, user } = addUser({ id: socket.id, name, room });
+    const { error, user } = addUser({ socketID: socket.id, id, name, room });
 
     if (error) return callback(error);
 
@@ -167,6 +167,7 @@ io.on("connection", socket => {
     const msg = [
       ...getMessagesFromRoom(user.room),
       addMessageToRoom(user.room, {
+        userID: user.id,
         user: user.name,
         text: message.msg,
         date: message.date

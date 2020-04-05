@@ -38,7 +38,7 @@ const CustomTextField = withStyles(theme => ({
 
 let socket;
 
-const Chat = ({ userAuth, selectedRoom, drawerOpen }) => {
+const Chat = ({ currentUser, userAuth, selectedRoom, drawerOpen }) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
@@ -51,7 +51,12 @@ const Chat = ({ userAuth, selectedRoom, drawerOpen }) => {
 
     socket.emit(
       "join",
-      { name: userAuth.uid, room: selectedRoom, date: new Date() },
+      {
+        id: userAuth.uid,
+        name: currentUser.username,
+        room: selectedRoom.roomID,
+        date: new Date()
+      },
       error => {
         console.log("someone joined");
         if (error) {
@@ -119,7 +124,8 @@ const Chat = ({ userAuth, selectedRoom, drawerOpen }) => {
                 <Message
                   key={i}
                   message={message.msg}
-                  sender={message.sender}
+                  senderID={message.senderID}
+                  senderName={message.senderName}
                   date={message.date}
                 ></Message>
               );
@@ -145,6 +151,7 @@ const Chat = ({ userAuth, selectedRoom, drawerOpen }) => {
 };
 
 const mapStateToProps = state => ({
+  currentUser: state.user.currentUser,
   userAuth: state.user.userAuth,
   selectedRoom: state.room.selectedRoom
 });

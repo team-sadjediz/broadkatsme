@@ -39,7 +39,7 @@ const FriendsList = () => {
 
   return (
     <div className="friends-list-container">
-      {console.log("FL", friendslist)}
+      {/* {console.log("FL", friendslist)} */}
       {friendslist.map((friend, i) => (
         <div key={i} className="friend-item">
           <ImageButton
