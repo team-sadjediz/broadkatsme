@@ -12,6 +12,7 @@ const addMessageToRoom = (roomId, message) => {
     roomId: roomId,
     senderID: message.userID,
     senderName: message.user,
+    senderChatColor: message.chatColor,
     msg: message.text,
     date: message.date
   };

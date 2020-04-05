@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 // components:
 import NewRoom from "../new-room/new-room.component";
 import FriendsList from "../friends-list/friends-list.component";
+import ChatColorChange from "../chat-color-change/chat-color-change.component";
 // import FriendsList from "../friendslist/friendslist.component";
 
 import Chat from "../chat/chat.component";
@@ -154,6 +155,7 @@ export default function DrawerTabs({ drawerOpen }) {
           <div style={{ display: "flex", flexDirection: "column" }}>
             <HeaderInfo />
             <RoomSubscribe />
+            <ChatColorChange />
           </div>
 
           {/* <Chat drawerOpen={drawerOpen} /> */}

@@ -132,12 +132,18 @@ const io = socketio(server);
 io.on("connection", socket => {
   console.log(`New connection: ${socket.id}`);
 
-  socket.on("join", ({ id, name, room, date }, callback) => {
+  socket.on("join", ({ id, name, chatColor, room, date }, callback) => {
     console.log(
       `SERVER: socket: ${socket.id} / user (${name}) -> room [${room}]`
     );
 
-    const { error, user } = addUser({ socketID: socket.id, id, name, room });
+    const { error, user } = addUser({
+      socketID: socket.id,
+      id,
+      name,
+      chatColor,
+      room
+    });
 
     if (error) return callback(error);
 
@@ -169,6 +175,7 @@ io.on("connection", socket => {
       addMessageToRoom(user.room, {
         userID: user.id,
         user: user.name,
+        chatColor: user.chatColor,
         text: message.msg,
         date: message.date
       })

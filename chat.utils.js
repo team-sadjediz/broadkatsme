@@ -1,8 +1,14 @@
 const users = [
-  { socketID: "socketIDadmin", id: "adminID", name: "admin", room: "masteroom" }
+  {
+    socketID: "socketIDadmin",
+    id: "adminID",
+    name: "admin",
+    chatColor: "#000000",
+    room: "masteroom"
+  }
 ];
 
-const addUser = ({ socketID, id, name, room }) => {
+const addUser = ({ socketID, id, name, chatColor, room }) => {
   // id = id.trim().toLowerCase();
   // room = room.trim().toLowerCase();
 
@@ -11,7 +17,7 @@ const addUser = ({ socketID, id, name, room }) => {
   if (!id || !room) return { error: "Username and room are required." };
   if (existingUser) return { error: "Username is taken." };
 
-  const user = { socketID, id, name, room };
+  const user = { socketID, id, name, chatColor, room };
 
   users.push(user);
 

@@ -54,6 +54,7 @@ const Chat = ({ currentUser, userAuth, selectedRoom, drawerOpen }) => {
       {
         id: userAuth.uid,
         name: currentUser.username,
+        chatColor: currentUser.chatColor,
         room: selectedRoom.roomID,
         date: new Date()
       },
@@ -113,7 +114,7 @@ const Chat = ({ currentUser, userAuth, selectedRoom, drawerOpen }) => {
 
   return (
     <div className="chat-container">
-      {selectedRoom ? (
+      {selectedRoom.roomID ? (
         <React.Fragment>
           <div className="chat-header-container">
             {drawerOpen ? selectedRoom.roomID : ""}
@@ -126,6 +127,7 @@ const Chat = ({ currentUser, userAuth, selectedRoom, drawerOpen }) => {
                   message={message.msg}
                   senderID={message.senderID}
                   senderName={message.senderName}
+                  chatColor={message.senderChatColor}
                   date={message.date}
                 ></Message>
               );

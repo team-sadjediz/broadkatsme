@@ -115,18 +115,17 @@ router.put("/upload-profile-image/:uid", function(req, res) {
           })
           .catch(error => res.status(404).send(error));
 
-          await UserProfile.findOneAndUpdate(
-            { userID: req.params.uid },
-            { photoURL: imageName },
-            { runValidators: true, new: true }
-          )
-            .then(userprofile => {
-              // console.log(userprofile);
-              res.send(userprofile.photoURL);
-            })
-            .catch(error => res.status(404).send(error));
+        await UserProfile.findOneAndUpdate(
+          { userID: req.params.uid },
+          { photoURL: imageName },
+          { runValidators: true, new: true }
+        )
+          .then(userprofile => {
+            // console.log(userprofile);
+            res.send(userprofile.photoURL);
+          })
+          .catch(error => res.status(404).send(error));
       }
-      
     }
   });
 });
@@ -199,13 +198,13 @@ module.exports = router;
 // ---------------------------------------------------------- UPDATE PROFILE ----------------------------------------------------------
 
 //findoneandupdate(filter, update, options)
-router.put("/edit/:uid", async function(req, res){
+router.put("/edit/:uid", async function(req, res) {
   let uid = req.params.uid;
   let update = {};
   let updateSet = {};
-  if(req.query.username) update.username = req.query.username;
-  if(req.query.biography) update.biography = req.query.biography;
-  if(req.query.privacy) update.privacy = req.query.privacy;
+  if (req.query.username) update.username = req.query.username;
+  if (req.query.biography) update.biography = req.query.biography;
+  if (req.query.privacy) update.privacy = req.query.privacy;
   // if(req.query.movies) update.favorites = {movies: req.query.movies};
   // if(req.query.music) update.favorites = {music: req.query.music};
   // if(req.query.websites) update.favorites = {websites: req.query.websites};
@@ -216,11 +215,32 @@ router.put("/edit/:uid", async function(req, res){
   };
 
   await UserProfile.findOneAndUpdate(
-    {userID: uid},
-    {$set: update},
+    { userID: uid },
+    { $set: update },
     { new: true }
   )
-  .then(document => res.send(document))
-  .catch(error => res.status(400).send(error));
+    .then(document => res.send(document))
+    .catch(error => res.status(400).send(error));
+});
 
+router.put("/setChatColor/:uid/", async function(req, res) {
+  // let uid = req.params.uid;
+  // let chatColor = req.params.color;
+
+  // console.log("req.query", req.query);
+  // console.log("req.params", req.params);
+  // console.log("chatcolor test", req.params.uid, req.query.color);
+  await UserProfile.findOneAndUpdate(
+    { userID: req.params.uid },
+    { chatColor: req.query.color },
+    { runValidators: true, new: true }
+  )
+    .then(userprofile => {
+      // console.log(userprofile);
+
+      res.send(
+        `user ${userprofile.username} has selected ${userprofile.chatColor}`
+      );
+    })
+    .catch(error => res.status(404).send(error));
 });

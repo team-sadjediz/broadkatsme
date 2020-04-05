@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import Timestamp from "react-timestamp";
-import axios from "axios";
-import { BASE_API_URL } from "../../utils";
+// import axios from "axios";
+// import { BASE_API_URL } from "../../utils";
 
 // mui components:
 
@@ -13,6 +13,7 @@ const Message = ({
   message,
   senderID,
   senderName,
+  chatColor,
   date,
   userAuth,
   currentUser
@@ -23,7 +24,23 @@ const Message = ({
   const [orientation, setOrientation] = useState("");
   const [textAlign, setTextAlign] = useState("");
 
-  useEffect(async () => {
+  // const getChatColor = async userID => {
+  //   let chatColor = "white";
+  //   await axios
+  //     .get(`${BASE_API_URL}/userprofile/details/${userID}`)
+  //     .then(async res => {
+  //       console.log("chatcolor", res.data.chatColor);
+
+  //       chatColor = await res.data.chatColor;
+  //     })
+  //     .catch(err => {
+  //       console.error(err);
+  //     });
+
+  //   return chatColor;
+  // };
+
+  useEffect(() => {
     let isSentByCurrentUser = false;
 
     if (userAuth.uid === senderID) {
@@ -39,36 +56,22 @@ const Message = ({
     } else {
       setFlexDirection("flex-row");
 
-      let chatColor = "black"; // for admins
-      if (senderName !== "admin") {
-        chatColor = await getChatColor(senderID);
-      }
+      // let chatColor = "black"; // for admins
+      // if (senderName !== "admin") {
+      //   // getChatColor(senderID).then(res => {
+      //   //   chatColor = res;
+      //   // });
+      //   chatColor = chatColor;
+      // }
 
       console.log("chatCOLOR", chatColor);
 
-      setBorder({ borderLeft: `5px solid ${chatColor}` });
+      setBorder({ borderLeft: `5px solid ${chatColor || "black"}` });
       setBgColor("bgc-rec");
       setOrientation("align-left");
       setTextAlign("text-right");
     }
   }, []);
-
-  const getChatColor = async userID => {
-    let chatColor = "white";
-    await axios
-      .get(`${BASE_API_URL}/userprofile/details/${userID}`)
-      .then(res => {
-        console.log("hellllllllllllllllo", res.data);
-        console.log("chatcolor", res.data.chatColor);
-
-        chatColor = res.data.chatColor;
-      })
-      .catch(err => {
-        console.error(err);
-      });
-
-    return chatColor;
-  };
 
   // let isSentByCurrentUser = false;
 
