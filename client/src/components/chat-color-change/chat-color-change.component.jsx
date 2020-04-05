@@ -11,21 +11,30 @@ import Button from "@material-ui/core/Button";
 import "./chat-color-change.styles.scss";
 import { updateCurrentUser } from "../../redux/user/user.actions";
 
-const ChatColorChange = ({ userAuth, currentUser, updateCurrentUser }) => {
+const ChatColorChange = ({
+  userAuth,
+  currentUser,
+  updateCurrentUser,
+  socket,
+}) => {
   const [chatColor, setChatColor] = useState("");
 
   // useEffect(async () => {}, []);
 
-  const handleSubmit = async event => {
-    console.log("whats my chat color input", chatColor);
+  const handleSubmit = async (event) => {
+    // console.log("whats my chat color input", chatColor);
     await axios
       .put(`${BASE_API_URL}/userprofile/setChatColor/${userAuth.uid}`, null, {
-        params: { "color": chatColor }
+        params: { "color": chatColor },
       })
-      .then(res => {
+      .then((res) => {
         updateCurrentUser(userAuth.uid);
+        // console.log("CHAT COLORRRR", chatColor);
+        socket.emit("update", chatColor, () => {
+          // setMessage("");
+        });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
@@ -49,7 +58,7 @@ const ChatColorChange = ({ userAuth, currentUser, updateCurrentUser }) => {
           "#dce775",
           "#ff8a65",
           "#ba68c8",
-          "#000000"
+          "#000000",
         ]}
         onChangeComplete={handleChangeComplete}
       />
@@ -60,13 +69,14 @@ const ChatColorChange = ({ userAuth, currentUser, updateCurrentUser }) => {
   );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   userAuth: state.user.userAuth,
-  currentUser: state.user.currentUser
+  currentUser: state.user.currentUser,
+  socket: state.user.socket,
 });
 
-const mapDispatchToProps = dispatch => ({
-  updateCurrentUser: userID => dispatch(updateCurrentUser(userID))
+const mapDispatchToProps = (dispatch) => ({
+  updateCurrentUser: (userID) => dispatch(updateCurrentUser(userID)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatColorChange);

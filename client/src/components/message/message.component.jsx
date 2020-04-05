@@ -16,13 +16,14 @@ const Message = ({
   chatColor,
   date,
   userAuth,
-  currentUser
+  currentUser,
 }) => {
   const [flexDirection, setFlexDirection] = useState("");
   const [border, setBorder] = useState({});
   const [bgColor, setBgColor] = useState("");
   const [orientation, setOrientation] = useState("");
   const [textAlign, setTextAlign] = useState("");
+  const [fontStyle, setFontStyle] = useState({});
 
   // const getChatColor = async userID => {
   //   let chatColor = "white";
@@ -64,13 +65,15 @@ const Message = ({
       //   chatColor = chatColor;
       // }
 
-      console.log("chatCOLOR", chatColor);
+      // console.log("chatCOLOR", chatColor);
 
       setBorder({ borderLeft: `5px solid ${chatColor || "black"}` });
       setBgColor("bgc-rec");
       setOrientation("align-left");
       setTextAlign("text-right");
     }
+
+    setFontStyle({ color: `${chatColor || "gray"}` });
   }, []);
 
   // let isSentByCurrentUser = false;
@@ -109,7 +112,7 @@ const Message = ({
           // style={{ borderRight: "10px solid black" }}
           style={border}
         >
-          {senderName}
+          <span style={fontStyle}>{senderName}</span>
         </div>
         {/* <div className={`msg-timestamp ${textAlign}`}>{date}</div> */}
         <Timestamp
@@ -146,8 +149,8 @@ const Message = ({
   // );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   userAuth: state.user.userAuth,
-  currentUser: state.user.currentUser
+  currentUser: state.user.currentUser,
 });
 export default connect(mapStateToProps)(Message);

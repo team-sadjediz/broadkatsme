@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import io from "socket.io-client";
 import ScrollToBottom from "react-scroll-to-bottom";
+import { setSocket } from "../../redux/user/user.actions";
 
 // mui components:
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -17,28 +18,34 @@ import { CHAT_SERVER } from "../../utils";
 
 const textBoxBorderRadius = 3;
 
-const CustomTextField = withStyles(theme => ({
+const CustomTextField = withStyles((theme) => ({
   root: {
     marginBottom: 2,
     "& .MuiFilledInput-underline:before": {
       // borderBottomColor: "green"
-      borderBottom: "none"
+      borderBottom: "none",
     },
     "& .MuiFilledInput-underline:after": {
       // borderBottomColor: "green"
       borderBottom: `4px solid ${theme.palette.secondary.main}`,
       borderBottomRightRadius: textBoxBorderRadius,
-      borderBottomLeftRadius: textBoxBorderRadius
+      borderBottomLeftRadius: textBoxBorderRadius,
     },
     "& .MuiFilledInput-root": {
-      borderRadius: textBoxBorderRadius
-    }
-  }
+      borderRadius: textBoxBorderRadius,
+    },
+  },
 }))(TextField);
 
 let socket;
 
-const Chat = ({ currentUser, userAuth, selectedRoom, drawerOpen }) => {
+const Chat = ({
+  currentUser,
+  userAuth,
+  selectedRoom,
+  drawerOpen,
+  setSocket,
+}) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
@@ -49,6 +56,8 @@ const Chat = ({ currentUser, userAuth, selectedRoom, drawerOpen }) => {
     console.log("MOUNT", messages);
     socket = io(endpoint);
 
+    setSocket(socket);
+
     socket.emit(
       "join",
       {
@@ -56,9 +65,9 @@ const Chat = ({ currentUser, userAuth, selectedRoom, drawerOpen }) => {
         name: currentUser.username,
         chatColor: currentUser.chatColor,
         room: selectedRoom.roomID,
-        date: new Date()
+        date: new Date(),
       },
-      error => {
+      (error) => {
         console.log("someone joined");
         if (error) {
           console.log("ERROR", error);
@@ -66,7 +75,7 @@ const Chat = ({ currentUser, userAuth, selectedRoom, drawerOpen }) => {
       }
     );
 
-    socket.on("message", message => {
+    socket.on("message", (message) => {
       // console.log("on rec", messages);
       console.log("Array of messsages from this room:", message);
       // setMessages([...message]);
@@ -77,6 +86,7 @@ const Chat = ({ currentUser, userAuth, selectedRoom, drawerOpen }) => {
 
     return () => {
       // setMessages([]);
+      setSocket(null);
       socket.disconnect();
       console.log("DISMOUNT", messages);
       console.log("**************************************************");
@@ -93,7 +103,7 @@ const Chat = ({ currentUser, userAuth, selectedRoom, drawerOpen }) => {
   //   });
   // });
 
-  const sendMessage = event => {
+  const sendMessage = (event) => {
     event.preventDefault();
     if (message) {
       socket.emit("sendMessage", { msg: message, date: new Date() }, () => {
@@ -102,11 +112,11 @@ const Chat = ({ currentUser, userAuth, selectedRoom, drawerOpen }) => {
     }
   };
 
-  const handleChange = event => {
+  const handleChange = (event) => {
     setMessage(event.target.value);
   };
 
-  const handleKeyPress = event => {
+  const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       return sendMessage(event);
     }
@@ -152,10 +162,14 @@ const Chat = ({ currentUser, userAuth, selectedRoom, drawerOpen }) => {
   );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   currentUser: state.user.currentUser,
   userAuth: state.user.userAuth,
-  selectedRoom: state.room.selectedRoom
+  selectedRoom: state.room.selectedRoom,
 });
 
-export default connect(mapStateToProps)(Chat);
+const mapDispatchToProps = (dispatch) => ({
+  setSocket: (socketID) => dispatch(setSocket(socketID)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chat);
