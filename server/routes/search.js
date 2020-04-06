@@ -80,3 +80,21 @@ router.get("/tags", async function(req, res) {
 });
 
 module.exports = router;
+
+// ---------------------------------------------------------- SEARCH BY ALL ----------------------------------------------------------
+router.get('/rooms', async function(req, res) {
+  Room.find({}, function(err, rooms) {
+    var roomUrls = [];
+
+    rooms.forEach(function(room) {
+      roomUrls.push({
+        "roomID": room._id,
+        "name": room.name,
+        "thumbnailUrl": room.thumbnailUrl,
+        "tags": room.tags
+      });
+    });
+
+    res.send(roomUrls);  
+  });
+});

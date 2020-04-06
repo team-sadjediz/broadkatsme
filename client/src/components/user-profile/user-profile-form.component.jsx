@@ -1,27 +1,89 @@
-//Styles
-import "./user-profile-page.style.scss";
-// import { makeStyles } from '@material-ui/core/styles';
-import Fab from '@material-ui/core/Fab';
+import React, {Component} from 'react';
 
+
+//components
 import FormInput from "../../components/form-input/form-input.component";
 import Button from '@material-ui/core/Button';
 import Switch from '@material-ui/core/Switch';
-import EditIcon from '@material-ui/icons/Edit';
-import CheckIcon from '@material-ui/icons/Check';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
-
-// import EditIcon from '@material-ui/icons/Edit';
-
-// import React from 'react';
-import React, { Component } from "react";
-import axios from 'axios';
-import { connect } from "react-redux";
-import { BASE_API_URL } from "../../utils";
 
 
+const UserProfile = ({username, biography, tags, favorites, privacy, handleChange, handleSubmit}) => {
 
-class UserProfilePage extends React.Component {
+    return(
+        <form class="profile-details-form">
+
+        <FormInput
+        label="Username"
+        name="username"
+        value={username}
+        handleChange={handleChange}
+        />
+
+        <FormInput
+        label="Biography"
+        name="biography"
+        value={biography}
+        handleChange={handleChange}
+        />
+
+        <FormInput
+        label="Tags *NOT UPDATING YET"
+        name="tags"
+        value={tags}
+        // handleChange={this.handleChange}
+        />
+
+        <FormInput
+        label="Movies"
+        name="movies"
+        value={favorites.movies}
+        handleChange={handleChange}
+        />
+
+        <FormInput
+        label="Music"
+        name="music"
+        value={favorites.music}
+        handleChange={handleChange}
+        />
+
+        <FormInput
+        label="Websites"
+        name="websites"
+        value={favorites.websites}
+        handleChange={handleChange}
+        />
+
+        {/* <FormInput
+        label="Privacy"
+        name="privacy"
+        value={this.state.privacy}
+        handleChange={this.handleChange}
+        /> */}
+        <Switch
+        checked={privacy}
+        onChange={handleChange}
+        color="primary"
+        name="Privacy"
+        inputProps={{ 'aria-label': 'primary checkbox' }}
+        />
+
+        <Button
+            variant="contained"
+            color="secondary"
+            // className={classes.button}
+            startIcon={<CheckIcon />}
+            onClick={handleSubmit}
+        >
+        Update
+        </Button>
+    </form>
+    );
+
+}
+
+export default UserProfile;
+class UserProfileForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -36,7 +98,6 @@ class UserProfilePage extends React.Component {
             photoURL: ""
         };
         this.handleChange = this.handleChange.bind(this);
-        this.handleCheck = this.handleCheck.bind(this);
         this.handleChangePhoto = this.handleChangePhoto.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleUpload = this.handleUpload.bind(this);
@@ -74,8 +135,7 @@ class UserProfilePage extends React.Component {
             biography: this.state.biography,
             movies: this.state.movies,
             websites: this.state.websites,
-            music: this.state.music,
-            privacy: this.state.privacy
+            music: this.state.music
         };
         console.log(details);
         axios
@@ -98,10 +158,6 @@ class UserProfilePage extends React.Component {
         const { value, name } = e.target;
         // console.log(e.target);
         this.setState({ [name]: value });
-    }
-    handleCheck = e => {
-        const { value, name } = e.target;
-        this.setState({ [name]: e.target.checked});
     }
 
     handleChangePhoto = photoURL => {
@@ -167,74 +223,7 @@ class UserProfilePage extends React.Component {
                     ></input>
                 </div>
                 <div className="profile-details">
-                        <form class="profile-details-form">
 
-                        <FormInput
-                        label="Username"
-                        name="username"
-                        value={this.state.username}
-                        handleChange={this.handleChange}
-                        />
-
-                        <FormInput
-                        label="Biography"
-                        name="biography"
-                        value={this.state.biography}
-                        handleChange={this.handleChange}
-                        />
-
-                        <FormInput
-                        label="Tags *NOT UPDATING YET"
-                        name="tags"
-                        value={this.state.tags}
-                        // handleChange={this.handleChange}
-                        />
-
-                        <FormInput
-                        label="Movies"
-                        name="movies"
-                        value={this.state.movies}
-                        handleChange={this.handleChange}
-                        />
-
-                        <FormInput
-                        label="Music"
-                        name="music"
-                        value={this.state.music}
-                        handleChange={this.handleChange}
-                        />
-
-                        <FormInput
-                        label="Websites"
-                        name="websites"
-                        value={this.state.websites}
-                        handleChange={this.handleChange}
-                        />
-
-                        {/* <FormInput
-                        label="Privacy"
-                        name="privacy"
-                        value={this.state.privacy}
-                        handleChange={this.handleChange}
-                        /> */}
-                        <Switch
-                        checked={this.state.privacy}
-                        onChange={this.handleCheck}
-                        color="primary"
-                        name="privacy"
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                        />
-
-                        <Button
-                            variant="contained"
-                            color="secondary"
-                            // className={classes.button}
-                            startIcon={<CheckIcon />}
-                            onClick={this.handleSubmit}
-                        >
-                        Update
-                        </Button>
-                    </form>
                 </div>
             </div>
         )
@@ -245,5 +234,4 @@ const mapStateToProps = state => ({
     userAuth: state.user.userAuth
   });
 
-export default connect(mapStateToProps)(UserProfilePage);
-
+export default connect(mapStateToProps)(UserProfileForm);

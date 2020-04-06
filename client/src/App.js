@@ -20,6 +20,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 // pages:
 import LoginRegisterPage from "./pages/login-register-page/login-register-page.component";
 import LobbyPage from "./pages/lobby-page/lobby-page.component";
+import SearchPage from "./pages/search-page/search-page.component";
 import RoomPage from "./pages/room-page/room-page.component";
 import AboutPage from "./pages/about-page/about-page.component";
 import CodeOfConductPage from "./pages/code-of-conduct-page/code-of-conduct-page.component";
@@ -111,6 +112,7 @@ class App extends Component {
                   />
                   {/* <Route path="/lobby" component={Chat} /> */}
                   <Route path="/lobby" component={LobbyPage} />
+                  <Route path="/search" component={SearchPage} />
                   <Route path="/room/id=:id" component={RoomPage} />
                   <Route path="/about" component={AboutPage} />
                   <Route path="/contact" component={ContactPage} />
