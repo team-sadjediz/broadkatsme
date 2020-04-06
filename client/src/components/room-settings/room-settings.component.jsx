@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
@@ -20,8 +20,13 @@ import Tag from "../../components/tag/tag.component";
 import axios from "axios";
 import { BASE_API_URL } from "../../utils";
 import { connect } from "react-redux";
+import {
+  setSubscribedRooms,
+  setSelectedRoom,
+  updateSubscribedRooms,
+} from "../../redux/room/room.actions";
 
-const useStyles = theme => ({
+const useStyles = (theme) => ({
   root: {
     backgroundColor: "white",
     display: "flex",
@@ -30,23 +35,23 @@ const useStyles = theme => ({
     maxHeight: "800px",
     maxWidth: "1280px",
     border: "none",
-    outline: 0
+    outline: 0,
   },
   modal: {
     display: "flex",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   tabs: {
     borderRight: "1px solid #e0e0e0",
     minWidth: "max-content",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   indicator: {
-    width: 5
+    width: 5,
   },
   activeTab: {
-    background: "#efefef"
+    background: "#efefef",
   },
   panelContainer: {
     width: "100%",
@@ -55,13 +60,13 @@ const useStyles = theme => ({
     paddingTop: 10,
     paddingBottom: 10,
     marginLeft: 10,
-    overflowY: "auto"
+    overflowY: "auto",
   },
   panel: {
     height: "100%",
     width: "100%",
     // backgroundColor: "black",
-    gridColumn: 1
+    gridColumn: 1,
     // overflowY: "auto"
   },
   exit: {
@@ -70,13 +75,13 @@ const useStyles = theme => ({
     gridColumn: 2,
     cursor: "pointer",
     "&:hover": {
-      color: "#ef5350"
+      color: "#ef5350",
       // background: "#ef5350",
       // "& svg": {
       //   fill: "#ef5350 !important"
       // }
-    }
-  }
+    },
+  },
 });
 
 function TabPanel(props) {
@@ -96,7 +101,7 @@ function TabPanel(props) {
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired
+  value: PropTypes.any.isRequired,
 };
 
 class RoomSettings extends Component {
@@ -107,7 +112,7 @@ class RoomSettings extends Component {
       error: false,
       value: 0,
       open: true,
-      owned: false
+      owned: false,
     };
     this.cancelToken = axios.CancelToken;
     this.source = this.cancelToken.source();
@@ -122,33 +127,55 @@ class RoomSettings extends Component {
   }
 
   fetchData = async () => {
-    await axios
-      .get(`${BASE_API_URL}/room/find/${this.props.roomID}`, {
-        cancelToken: this.source.token
+    // await axios
+    //   .get(`${BASE_API_URL}/room/find/${this.props.roomID}`, {
+    //     cancelToken: this.source.token,
+    //   })
+    //   .then((room) => {
+    //     // console.log(room);
+    //     let owned = room.data.ownerID == this.props.userAuth.uid;
+    //     let roomAdmin = room.data.subscribers.includes(this.props.userAuth.uid);
+    //     this.setState({ thumbnailUrl: room.data.thumbnailUrl });
+    //     this.setState({ ownerID: room.data.ownerID });
+    //     this.setState({ owned: owned });
+    //     this.setState({ roomAdmin: roomAdmin });
+    //     this.setState({ roomName: room.data.name });
+    //     this.setState({ tags: room.data.tags });
+    //     this.setState({ privacy: room.data.settings.privacy });
+    //     this.setState({ roomSize: room.data.settings.roomSize });
+    //     this.setState({ subscribers: room.data.subscribers });
+    //     this.setState(room.data.settings.access);
+    //   })
+    //   .catch((error) => {
+    //     this.setState({ error: true });
+    //     console.log(error);
+    //   });
+    // this.setState({ loading: false });
+    // console.log(this.state);
+
+    let owned = this.props.selectedRoom.ownerID == this.props.userAuth.uid;
+    let roomAdmin = this.props.selectedRoom.settings.access.roomAdmins.includes(
+      this.props.userAuth.uid
+    );
+
+    await this.getUserNames(this.props.roomID)
+      .then((accesses) => {
+        this.setState({
+          thumbnailUrl: this.props.selectedRoom.thumbnailUrl,
+          ownerID: this.props.selectedRoom.ownerID,
+          owned: owned,
+          roomAdmin: roomAdmin,
+          roomName: this.props.selectedRoom.name,
+          tags: this.props.selectedRoom.tags,
+          privacy: this.props.selectedRoom.settings.privacy,
+          roomSize: this.props.selectedRoom.settings.roomSize,
+          delete: this.props.selectedRoom.settings.access.delete,
+          ...accesses,
+          loading: false,
+        });
+        console.log(this.state);
       })
-      .then(room => {
-        console.log(room);
-        let owned = room.data.ownerID == this.props.currentUser.uid;
-        let roomAdmin = room.data.subscribers.includes(
-          this.props.currentUser.uid
-        );
-        this.setState({ thumbnailUrl: room.data.thumbnailUrl });
-        this.setState({ ownerID: room.data.ownerID });
-        this.setState({ owned: owned });
-        this.setState({ roomAdmin: roomAdmin });
-        this.setState({ roomName: room.data.name });
-        this.setState({ tags: room.data.tags });
-        this.setState({ privacy: room.data.settings.privacy });
-        this.setState({ roomSize: room.data.settings.roomSize });
-        this.setState({ subscribers: room.data.subscribers });
-        this.setState(room.data.settings.access);
-      })
-      .catch(error => {
-        this.setState({ error: true });
-        console.log(error);
-      });
-    this.setState({ loading: false });
-    console.log(this.state);
+      .catch((error) => this.setState({ error: true, loading: false }));
   };
 
   handleChange = (event, newValue) => {
@@ -160,7 +187,7 @@ class RoomSettings extends Component {
     this.setState({ open: false });
   };
 
-  onChangeTag = tags => {
+  onChangeTag = (tags) => {
     this.setState({ tags: tags });
   };
 
@@ -168,106 +195,126 @@ class RoomSettings extends Component {
     console.log("called");
     await axios
       .delete(
-        `${BASE_API_URL}/room/delete/${this.props.roomID}/${this.props.currentUser.uid}`,
+        `${BASE_API_URL}/room/delete/${this.props.roomID}/${this.props.userAuth.uid}`,
         {
-          cancelToken: this.source.token
+          cancelToken: this.source.token,
         }
       )
-      .then(res => {
+      .then((res) => {
+        this.props.updateSubscribedRooms(this.props.userAuth.uid);
+        this.props.setSelectedRoom(null);
         this.props.history.push("/lobby");
       })
-      .catch(error => console.error(error));
+      .catch((error) => console.error(error));
   };
 
-  getUserNames = uids => {
-    // some call to get username
-    let users = uids.map(uid => {
-      return { username: uid, uid: uid };
-    });
-    return users;
+  getUserNames = async (roomID) => {
+    let usernames;
+    await axios
+      .get(`${BASE_API_URL}/room/accesses/${this.props.roomID}`, {
+        cancelToken: this.source.token,
+      })
+      .then((res) => {
+        usernames = res.data;
+      })
+      .catch((error) => console.error(error));
+    return usernames;
   };
 
-  onChangeTitle = e => {
+  onChangeTitle = (e) => {
     this.setState({ roomName: e.target.value });
   };
 
-  onBlurTitle = async e => {
+  onBlurTitle = async (e) => {
     await axios
       .put(
-        `${BASE_API_URL}/roomsettings/change-name/${this.props.roomID}/${this.props.currentUser.uid}`,
+        `${BASE_API_URL}/roomsettings/change-name/${this.props.roomID}/${this.props.userAuth.uid}`,
         null,
         { params: { name: this.state.roomName } },
         {
-          cancelToken: this.source.token
+          cancelToken: this.source.token,
         }
       )
-      .then(newName => {
+      .then((newName) => {
+        this.props.updateSubscribedRooms(this.props.userAuth.uid);
+        this.props.setSelectedRoom(this.props.roomID);
         this.setState({ roomName: newName.data });
         this.props.onChangeTitle(this.state.roomName);
       })
-      .catch(error => console.error(error));
-    console.log(this.state.roomName);
+      .catch((error) => console.error(error));
+    // console.log(this.state.roomName);
   };
 
-  onTogglePrivacy = async privacy => {
+  onTogglePrivacy = async (privacy) => {
     await axios
       .put(
-        `${BASE_API_URL}/roomsettings/change-privacy/${this.props.roomID}/${this.props.currentUser.uid}`,
+        `${BASE_API_URL}/roomsettings/change-privacy/${this.props.roomID}/${this.props.userAuth.uid}`,
         null,
         { params: { privacy: privacy } },
         {
-          cancelToken: this.source.token
+          cancelToken: this.source.token,
         }
       )
-      .then(newPrivacy => {
+      .then((newPrivacy) => {
+        this.props.updateSubscribedRooms(this.props.userAuth.uid);
+        this.props.setSelectedRoom(this.props.roomID);
         this.setState({ privacy: newPrivacy });
       })
-      .catch(error => console.error(error));
+      .catch((error) => console.error(error));
   };
 
-  onChangeSize = async size => {
+  onChangeSize = async (size) => {
     await axios
       .put(
-        `${BASE_API_URL}/roomsettings/change-roomsize/${this.props.roomID}/${this.props.currentUser.uid}`,
+        `${BASE_API_URL}/roomsettings/change-roomsize/${this.props.roomID}/${this.props.userAuth.uid}`,
         null,
         { params: { size: size } },
         {
-          cancelToken: this.source.token
+          cancelToken: this.source.token,
         }
       )
-      .then(newSize => {
+      .then((newSize) => {
+        this.props.updateSubscribedRooms(this.props.userAuth.uid);
+        this.props.setSelectedRoom(this.props.roomID);
         this.setState({ roomSize: newSize });
       })
-      .catch(error => console.error(error));
+      .catch((error) => console.error(error));
   };
 
-  onChangeThumbnail = thumbnailUrl => {
+  onChangeThumbnail = (thumbnailUrl) => {
     this.setState({ thumbnailUrl: thumbnailUrl });
   };
 
-  updateAll = access => {
-    this.setState({ ...access });
-    console.log(this.state);
+  updateAll = async () => {
+    await this.getUserNames(this.props.roomID)
+      .then((accesses) => this.setState({ ...accesses }))
+      .catch((error) => console.log(error));
+    // console.log(this.state);
   };
 
-  updateAdmins = roomAdmins => {
-    this.setState({ roomAdmins: roomAdmins });
+  updateAdmins = async (roomAdmins) => {
+    let newAdmins = await this.getUserNames(roomAdmins);
+    this.setState({ roomAdmins: newAdmins.roomAdmins });
   };
 
-  updateOperators = operators => {
-    this.setState({ operators: operators });
+  updateOperators = async (operators) => {
+    let newOperators = await this.getUserNames(operators);
+    this.setState({ operators: newOperators.operators });
   };
 
-  updateInvitations = invitations => {
-    this.setState({ invitations: invitations });
+  updateInvitations = async (invitations) => {
+    let newInvitations = await this.getUserNames(invitations);
+    this.setState({ invitations: newInvitations.invitations });
   };
 
-  updateBans = bans => {
-    this.setState({ bans: bans });
+  updateBans = async (bans) => {
+    let newBans = await this.getUserNames(bans);
+    this.setState({ bans: newBans.bans });
   };
 
-  updateSubscribers = subscribers => {
-    this.setState({ subscribers: subscribers });
+  updateSubscribers = async (subscribers) => {
+    let newSubscribers = await this.getUserNames(subscribers);
+    this.setState({ subscribers: newSubscribers.subscribers });
   };
 
   render() {
@@ -278,7 +325,7 @@ class RoomSettings extends Component {
       if (this.state.error) {
         return <div> ERROR </div>;
       } else {
-        let tags = this.state.tags.map(tag => {
+        let tags = this.state.tags.map((tag) => {
           return (
             <Tag
               key={tag}
@@ -286,7 +333,7 @@ class RoomSettings extends Component {
               text={tag}
               onChangeTag={this.onChangeTag}
               roomID={this.props.roomID}
-              uid={this.props.currentUser.uid}
+              uid={this.props.userAuth.uid}
             />
           );
         });
@@ -329,8 +376,8 @@ class RoomSettings extends Component {
                     name={this.state.roomName}
                     onChangeTitle={this.onChangeTitle}
                     onBlurTitle={this.onBlurTitle}
-                    owner={this.props.currentUser.displayName}
-                    ownerID={this.props.currentUser.uid}
+                    owner={this.props.currentUser.username}
+                    ownerID={this.props.userAuth.uid}
                     tags={tags}
                     roomID={this.props.roomID}
                     onChangeThumbnail={this.onChangeThumbnail}
@@ -339,7 +386,7 @@ class RoomSettings extends Component {
                         type="add"
                         roomID={this.props.roomID}
                         onChangeTag={this.onChangeTag}
-                        uid={this.props.currentUser.uid}
+                        uid={this.props.userAuth.uid}
                       ></Tag>
                     }
                   />
@@ -377,15 +424,15 @@ class RoomSettings extends Component {
                     ownerID={this.state.ownerID}
                     owned={this.state.owned}
                     roomAdmin={this.state.roomAdmin}
-                    admins={this.getUserNames(this.state.roomAdmins)}
+                    admins={this.state.roomAdmins}
                     updateAdmins={this.updateAdmins}
-                    operators={this.getUserNames(this.state.operators)}
+                    operators={this.state.operators}
                     updateOperators={this.updateOperators}
-                    invitations={this.getUserNames(this.state.invitations)}
+                    invitations={this.state.invitations}
                     updateInvitations={this.updateInvitations}
-                    bannedUsers={this.getUserNames(this.state.bans)}
+                    bannedUsers={this.state.bans}
                     updateBans={this.updateBans}
-                    users={this.getUserNames(this.state.subscribers)}
+                    users={this.state.subscribers}
                     updateSubscribers={this.updateSubscribers}
                   />
                 </TabPanel>
@@ -415,132 +462,19 @@ class RoomSettings extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
+  userAuth: state.user.userAuth,
+  subscribedRooms: state.room.subscribedRooms,
+  selectedRoom: state.room.selectedRoom,
   currentUser: state.user.currentUser,
-  selectedRoom: state.room.selectedRoom
 });
 
-const mapDispatchToProps = dispatch => ({
-  // setSubscribedRooms: subRoomList => dispatch(setSubscribedRooms(subRoomList)),
-  // setSelectedRoom: roomID => dispatch(setSelectedRoom(roomID))
+const mapDispatchToProps = (dispatch) => ({
+  updateSubscribedRooms: (uid) => dispatch(updateSubscribedRooms(uid)),
+  setSelectedRoom: (roomID) => dispatch(setSelectedRoom(roomID)),
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(withRouter(withStyles(useStyles)(RoomSettings)));
-
-// export default function RoomSettings(props) {
-//   const classes = useStyles();
-//   const [value, setValue] = React.useState(0);
-//   const [open, setOpen] = React.useState(true);
-
-//   const handleChange = (event, newValue) => {
-//     setValue(newValue);
-//   };
-
-//   const handleClose = () => {
-//     props.toggleSettingsModal();
-//     setOpen(false);
-//   };
-
-//   return (
-//     <Modal
-//       className={classes.modal}
-//       open={open}
-//       onClose={handleClose}
-//       disablePortal
-//       keepMounted
-//       //   hideBackdrop
-//     >
-//       <div className={classes.root}>
-//         <Tabs
-//           // contentContainerStyle={classes.container}
-//           orientation="vertical"
-//           variant="scrollable"
-//           value={value}
-//           onChange={handleChange}
-//           className={`${classes.tabs}`}
-//           classes={{ indicator: classes.indicator }}
-//           // inkBarStyle={classes.activeTab}
-//           textColor="secondary"
-//         >
-//           {/* {tabs} */}
-//           <Tab label="General" id={`vertical-tab-${0}`}></Tab>
-//           <Tab label="Notifications" id={`vertical-tab-${1}`}></Tab>
-//           <Tab label="Settings" id={`vertical-tab-${2}`}></Tab>
-//           <Tab label="Role Management" id={`vertical-tab-${3}`}></Tab>
-//           {props.owned ? (
-//             <Tab label="Delete" id={`vertical-tab-${4}`}></Tab>
-//           ) : null}
-//         </Tabs>
-//         <div className={classes.panelContainer}>
-//           {/* {panels} */}
-//           <TabPanel className={classes.panel} value={value} index={0}>
-//             <GeneralPanel
-//               thumbnailUrl="default3.png"
-//               name="Shokugeki"
-//               owner="Julie"
-//               // tags="Tags Tags Tags"
-//               tags={props.tags}
-//               addTag={props.addTag}
-//             />
-//           </TabPanel>
-//           <TabPanel className={classes.panel} value={value} index={1}>
-//             <NotificationsPanel allowNotifications={true}></NotificationsPanel>
-//           </TabPanel>
-//           <TabPanel className={classes.panel} value={value} index={2}>
-//             <SettingsPanel privacy={true} size={2}></SettingsPanel>
-//           </TabPanel>
-//           <TabPanel className={classes.panel} value={value} index={3}>
-//             <RoleManagementPanel
-//               // owned={true}
-//               owned={props.owned}
-//               admins={[
-//                 { username: "a", uid: "auid" },
-//                 { username: "b", uid: "buid" },
-//                 { username: "c", uid: "cuid" },
-//                 { username: "d", uid: "duid" },
-//                 { username: "e", uid: "euid" }
-//               ]}
-//               operators={[
-//                 { username: "d", uid: "fuid" },
-//                 { username: "e", uid: "guid" },
-//                 { username: "f", uid: "huid" },
-//                 { username: "g", uid: "iuid" },
-//                 { username: "h", uid: "juid" }
-//               ]}
-//               invitations={[
-//                 { username: "i", uid: "kuid" },
-//                 { username: "j", uid: "luid" },
-//                 { username: "k", uid: "muid" },
-//                 { username: "l", uid: "nuid" },
-//                 { username: "m", uid: "ouid" }
-//               ]}
-//               bannedUsers={[
-//                 { username: "n", uid: "puid" },
-//                 { username: "o", uid: "quid" },
-//                 { username: "p", uid: "ruid" },
-//                 { username: "q", uid: "suid" },
-//                 { username: "r", uid: "tuid" }
-//               ]}
-//             />
-//           </TabPanel>
-//           {props.owned ? (
-//             <TabPanel className={classes.panel} value={value} index={4}>
-//               <DeletePanel
-//                 roomName={props.roomName}
-//                 delete={props.delete}
-//               ></DeletePanel>
-//             </TabPanel>
-//           ) : null}
-
-//           <CancelIcon
-//             className={classes.exit}
-//             onClick={handleClose}
-//           ></CancelIcon>
-//         </div>
-//       </div>
-//     </Modal>
-//   );
-// }

@@ -21,15 +21,15 @@ import SettingsIcon from "@material-ui/icons/Settings";
 
 import CircleBtn from "../circle-btn/circle-btn.component";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     transform: "translateZ(0px)",
-    height: 36
+    height: 36,
     // flexGrow: 1
   },
   fab: {
     height: 36,
-    width: 36
+    width: 36,
   },
   speedDial: {
     // height: 36,
@@ -37,12 +37,12 @@ const useStyles = makeStyles(theme => ({
     // position: "absolute",
     "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
       bottom: theme.spacing(2),
-      right: theme.spacing(2)
+      right: theme.spacing(2),
     },
     "& svg": {
       height: 20,
-      width: 20
-    }
+      width: 20,
+    },
     // "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
     //   top: theme.spacing(2),
     //   left: theme.spacing(2)
@@ -51,9 +51,9 @@ const useStyles = makeStyles(theme => ({
   activeBtn: {
     background: "#ef5350 !important",
     "& svg": {
-      fill: "#fff !important"
-    }
-  }
+      fill: "#fff !important",
+    },
+  },
 }));
 
 export default function RoomBar(props) {
@@ -66,26 +66,26 @@ export default function RoomBar(props) {
     { icon: <RefreshIcon />, name: "Refresh", active: false },
     {
       icon: <PersonAddIcon />,
-      name: "Invite"
+      name: "Invite",
     },
-    {
-      icon: <FavoriteIcon />,
-      name: "Favorite",
-      active: props.isFavorited,
-      onClick: props.favoriteRoom
-    },
+    // {
+    //   icon: <FavoriteIcon />,
+    //   name: "Favorite",
+    //   active: props.isFavorited,
+    //   onClick: props.favoriteRoom
+    // },
     {
       icon: <SettingsIcon />,
       name: "Settings",
       active: false,
-      onClick: props.toggleSettingsModal
+      onClick: props.toggleSettingsModal,
     },
     {
       icon: <DeleteForeverIcon />,
       name: "Unsubscribe",
       active: false,
-      onClick: props.unsubscribe
-    }
+      onClick: props.unsubscribe,
+    },
   ];
   // const handleHiddenChange = e => {
   //   setHidden(e.target.checked);
@@ -116,7 +116,7 @@ export default function RoomBar(props) {
           open={open}
           direction="right"
         >
-          {actions.map(action => (
+          {actions.map((action) => (
             <SpeedDialAction
               className={action.active ? classes.activeBtn : null}
               key={action.name}

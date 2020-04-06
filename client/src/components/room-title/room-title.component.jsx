@@ -9,8 +9,6 @@ export default function RoomTitle(props) {
       type="text"
       value={props.roomName}
       onChange={props.onChangeTitle}
-      // placeholder={this.props.roomName}
-      // onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';"
     />
   );
 }

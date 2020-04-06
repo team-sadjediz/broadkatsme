@@ -3,6 +3,12 @@ import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
 
 import { BASE_API_URL } from "../../../utils";
+import { connect } from "react-redux";
+import {
+  setSubscribedRooms,
+  setSelectedRoom,
+  updateSubscribedRooms,
+} from "../../../redux/room/room.actions";
 
 import "./general-panel.styles.scss";
 
@@ -11,18 +17,18 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
-import { Redshift } from "aws-sdk";
+// import { Redshift } from "aws-sdk";
 
-const useStyles = theme => ({
+const useStyles = (theme) => ({
   iconButton: {
     padding: 0,
     height: 50,
     width: 50,
     "&s svg": {
       height: 40,
-      width: 40
-    }
-  }
+      width: 40,
+    },
+  },
 });
 
 class GeneralPanel extends Component {
@@ -31,13 +37,13 @@ class GeneralPanel extends Component {
     this.state = { thumbnailUrl: props.thumbnailUrl };
   }
 
-  fileUploadHandler = async files => {
+  fileUploadHandler = async (files) => {
     const formData = new FormData();
     formData.append("image", files);
     const config = {
       headers: {
-        "content-type": "multipart/form-data"
-      }
+        "content-type": "multipart/form-data",
+      },
     };
     await axios
       .put(
@@ -45,15 +51,16 @@ class GeneralPanel extends Component {
         formData,
         config
       )
-      .then(res => {
-        console.log("???" + res.data);
+      .then((res) => {
+        this.props.updateSubscribedRooms(this.props.userAuth.uid);
+        this.props.setSelectedRoom(this.props.roomID);
         this.props.onChangeThumbnail(res.data);
         this.setState({ thumbnailUrl: res.data });
       })
-      .catch(error => console.error(error));
+      .catch((error) => console.error(error));
   };
 
-  onChange = async e => {
+  onChange = async (e) => {
     this.fileUploadHandler(e.target.files[0]);
     e.target.value = null;
   };
@@ -66,7 +73,7 @@ class GeneralPanel extends Component {
         <Divider variant="fullWidth" />
         <div className="room-general">
           <form className="room-general-upload-btn">
-            <label htmlFor="upload" for="upload">
+            <label htmlFor="upload">
               <IconButton
                 className={classes.iconButton}
                 color="primary"
@@ -118,4 +125,19 @@ class GeneralPanel extends Component {
   }
 }
 
-export default withStyles(useStyles)(GeneralPanel);
+const mapStateToProps = (state) => ({
+  userAuth: state.user.userAuth,
+  subscribedRooms: state.room.subscribedRooms,
+  selectedRoom: state.room.selectedRoom,
+  currentUser: state.user.currentUser,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  updateSubscribedRooms: (uid) => dispatch(updateSubscribedRooms(uid)),
+  setSelectedRoom: (roomID) => dispatch(setSelectedRoom(roomID)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(useStyles)(GeneralPanel));
