@@ -84,6 +84,7 @@ class RoomPage extends Component {
         //     { params: { action: "subscribe" } }
         //   );
         // }
+        console.log(this.state.exists);
         if (subscribed) {
           this.props.updateSubscribedRooms(this.props.userAuth.uid);
         }

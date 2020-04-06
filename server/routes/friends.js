@@ -11,7 +11,7 @@ const UserProfile = require("../models/userprofile.model");
 // axios.put(`${BASE_API_URI}/friends/${uid}/${friendID}, null, { params: { action: "" }})
 // action = "add" || "delete"
 
-router.put("/update/:uid/:friendID", async function(req, res) {
+router.put("/update/:uid/:friendID", async function (req, res) {
   let userID = req.params.uid;
   let friendID = req.params.friendID;
   let action = req.query.action;

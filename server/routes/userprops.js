@@ -11,13 +11,13 @@ const Room = require("../models/room.model");
 // How To Use
 // axios.get(`${BASE_API_URL}/userprops/props/${uid}`)
 // returns user props of uid (as per convention)
-router.get("/props/:uid", async function(req, res) {
+router.get("/props/:uid", async function (req, res) {
   let uid = req.params.uid;
   await UserProps.findOne({ userID: uid })
-    .then(userprops => {
+    .then((userprops) => {
       res.send({ userprops });
     })
-    .catch(error => {
+    .catch((error) => {
       error.additional = "Error has occured in /userprops/props/:uid";
       res.status(404).send(error);
     });
@@ -57,25 +57,25 @@ router.get("/props/:uid", async function(req, res) {
 // How To Use
 // axios.get(`${BASE_API_URL}/userprops/rooms/${uid}`)
 // returns list of all rooms a user is subscribed to (as per convnetion)
-router.get("/rooms/:uid", async function(req, res) {
+router.get("/rooms/:uid", async function (req, res) {
   let uid = req.params.uid;
   console.log("uid", uid);
   await UserProps.findOne({ userID: uid })
-    .then(document => {
+    .then((document) => {
       return UserProps.findOne({ userID: uid }).populate("subscribedRooms");
     })
-    .then(populatedProps => {
+    .then((populatedProps) => {
       let rooms = populatedProps.subscribedRooms;
       let roomUrls = [];
-      rooms.forEach(function(room) {
+      rooms.forEach(function (room) {
         roomUrls.push({
           "roomID": room._id,
-          ...room._doc
+          ...room._doc,
         });
       });
       res.send(roomUrls);
     })
-    .catch(error => {
+    .catch((error) => {
       error.additional = "Error has occured in /userprops/rooms/:uid";
       res.status(404).send(error);
     });
@@ -86,7 +86,7 @@ router.get("/rooms/:uid", async function(req, res) {
 // How To Use
 // axios.put(`${BASE_API_URL}/userprops/search/${room}/${uid}`, null, { params: { action: "unsubscribe" || "subscribe" }})
 // returns updated list of subscribed rooms (as per convention)
-router.put("/subscribe/:roomID/:uid", async function(req, res) {
+router.put("/subscribe/:roomID/:uid", async function (req, res) {
   let roomID = req.params.roomID;
   let userID = req.params.uid;
   let action = req.query.action;
@@ -126,7 +126,7 @@ async function unsubscribe(roomID, userID) {
     let updatedUserProps = await UserProps.findOneAndUpdate(
       {
         userID: userID,
-        ownedRooms: { $nin: roomID }
+        ownedRooms: { $nin: roomID },
       },
       { $pull: { subscribedRooms: roomID, favoritedRooms: roomID } },
       opts
@@ -141,11 +141,11 @@ async function unsubscribe(roomID, userID) {
     let response = {
       updatedUserProps: {
         subscribedRooms: updatedUserProps.subscribedRooms,
-        favoritedRooms: updatedUserProps.favoritedRooms
+        favoritedRooms: updatedUserProps.favoritedRooms,
       },
       updatedRoom: {
-        subscribers: updatedRoom.subscribers
-      }
+        subscribers: updatedRoom.subscribers,
+      },
     };
 
     await session.commitTransaction();
@@ -170,7 +170,7 @@ async function subscribe(roomID, userID) {
         _id: roomID,
         "settings.access.bans": { $nin: userID },
         "settings.privacy": false,
-        $expr: { $lt: [{ "$size": "$subscribers" }, "$settings.roomSize"] }
+        $expr: { $lt: [{ "$size": "$subscribers" }, "$settings.roomSize"] },
         // $and: [
         //   {
         //     $expr: { $lt: [{ "$size": "$subscribers" }, "$settings.roomSize"] }
@@ -192,7 +192,7 @@ async function subscribe(roomID, userID) {
 
     let response = {
       updatedUserProps: { subscribedRooms: updatedUserProps.subscribedRooms },
-      updatedRoom: { subscribers: updatedRoom.subscribers }
+      updatedRoom: { subscribers: updatedRoom.subscribers },
     };
 
     await session.commitTransaction();
@@ -211,7 +211,7 @@ async function subscribe(roomID, userID) {
 // How To Use
 // axios.put(`${BASE_API_URL}/userprops/favorites/${roomID}/${uid}`, null, { params: { action: "" }})
 // action == "exists" || "favorite" || "unfavorite"
-router.put("/favorites/:roomID/:uid", async function(req, res) {
+router.put("/favorites/:roomID/:uid", async function (req, res) {
   let roomID = req.params.roomID;
   let userID = req.params.uid;
   let action = req.query.action;
@@ -257,7 +257,7 @@ async function checkFavoriteRoom(roomID, userID) {
   try {
     favorited = await UserProps.exists({
       userID: userID,
-      favoritedRooms: { $in: roomID }
+      favoritedRooms: { $in: roomID },
     });
     return favorited;
   } catch (error) {
@@ -286,7 +286,7 @@ async function favorite(roomID, userID) {
     await session.commitTransaction();
     session.endSession();
     return {
-      updatedUserProps: { favoritedRooms: updatedUserProps.favoritedRooms }
+      updatedUserProps: { favoritedRooms: updatedUserProps.favoritedRooms },
     };
   } catch (error) {
     await session.abortTransaction();
@@ -312,7 +312,7 @@ async function unfavorite(roomID, userID) {
     await session.commitTransaction();
     session.endSession();
     return {
-      updatedUserProps: { favoritedRooms: updatedUserProps.favoritedRooms }
+      updatedUserProps: { favoritedRooms: updatedUserProps.favoritedRooms },
     };
   } catch (error) {
     await session.abortTransaction();

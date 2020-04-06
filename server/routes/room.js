@@ -8,6 +8,7 @@ const singleUpload = upload.single("image");
 
 const Room = require("../models/room.model");
 const UserProps = require("../models/userprops.model");
+const UserProfile = require("../models/userprofile.model");
 
 // ---------------------------------------------------------- FIND ROOMS ----------------------------------------------------------
 
@@ -261,6 +262,73 @@ router.put("/tags/:roomID/:uid", async function (req, res) {
   } else {
     res.status(400).send("Bad request.");
   }
+});
+
+// ---------------------------------------------------------- GET SUBSCRIBER USERNAMES ----------------------------------------------------------
+
+router.get("/accesses/:roomID", async function (req, res) {
+  let roomID = req.params.roomID;
+
+  let subscribers, roomAdmins, operators, invitations, bans;
+
+  await Room.findOne({ _id: roomID })
+    .then(async (document) => {
+      await UserProfile.find(
+        { userID: { $in: document.subscribers } },
+        { userID: 1, username: 1, _id: 0 }
+      )
+        .then((results) => {
+          // console.log(results);
+          subscribers = results;
+        })
+        .catch((error) => res.send(400).send(error));
+
+      await UserProfile.find(
+        { userID: { $in: document.settings.access.roomAdmins } },
+        { userID: 1, username: 1, _id: 0 }
+      )
+        .then((results) => {
+          // console.log("roomadmins");
+          // console.log(results);
+          roomAdmins = results;
+        })
+        .catch((error) => res.send(400).send(error));
+
+      await UserProfile.find(
+        { userID: { $in: document.settings.access.operators } },
+        { userID: 1, username: 1, _id: 0 }
+      )
+        .then((results) => {
+          // console.log(results);
+          operators = results;
+        })
+        .catch((error) => res.send(400).send(error));
+
+      await UserProfile.find(
+        { userID: { $in: document.settings.access.invitations } },
+        { userID: 1, username: 1, _id: 0 }
+      )
+        .then((results) => {
+          // console.log(results);
+          invitations = results;
+        })
+        .catch((error) => res.send(400).send(error));
+
+      await UserProfile.find(
+        { userID: { $in: document.settings.access.bans } },
+        { userID: 1, username: 1, _id: 0 }
+      )
+        .then((results) => {
+          // console.log(results);
+          bans = results;
+        })
+        .catch((error) => res.send(400).send(error));
+
+      res.send({ subscribers, roomAdmins, operators, invitations, bans });
+    })
+    .catch((error) => {
+      res.status(400).send(error);
+    });
 });
 
 module.exports = router;
