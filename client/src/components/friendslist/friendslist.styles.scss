@@ -1,2 +1,66 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
+
+.friends-list-container {
+  // background-color: salmon;
+  width: 100%;
+
+  height: fit-content;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  font-family: "Karla", sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: $highlight1;
+
+  .friend-item {
+    margin: 3px;
+    padding: 3px 3px;
+
+    height: fit-content;
+    width: 100%;
+    background-color: $foreground2;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    span {
+      flex-grow: 1;
+
+      margin-left: 1em;
+    }
+
+    .send-invitation {
+      cursor: pointer;
+      margin-right: 1em;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .status {
+      // flex-grow: 1;
+      display: flex;
+      justify-content: flex-end;
+
+      .circle {
+        margin-right: 1em;
+        width: 1em;
+        height: 1em;
+        border-radius: 50%;
+      }
+
+      .green {
+        background-color: rgb(36, 190, 113);
+      }
+
+      .red {
+        background-color: $highlight2;
+      }
+    }
+  }
+}

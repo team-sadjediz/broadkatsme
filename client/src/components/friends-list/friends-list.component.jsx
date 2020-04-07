@@ -21,16 +21,16 @@ const FriendsList = () => {
   // const [message, setMessage] = useState("");
   // const [messages, setMessages] = useState([]);
 
-  const userAuth = useSelector(state => state.user.userAuth);
-  const friendslist = useSelector(state => state.user.friendslist);
+  const userAuth = useSelector((state) => state.user.userAuth);
+  const friendslist = useSelector((state) => state.user.friendslist);
   const dispatch = useDispatch();
 
   useEffect(async () => {
     // console.log("BEFORE UE FL:", friendslist);
-    await dispatch(updateFriendslist(userAuth.uid));
+    dispatch(updateFriendslist(userAuth.uid));
     // console.log("AFTER UE FL:", friendslist);
 
-    return () => {};
+    // return () => {};
   }, [userAuth.uid]);
 
   // const handleChange = event => {

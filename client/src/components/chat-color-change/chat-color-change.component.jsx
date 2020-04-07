@@ -63,7 +63,7 @@ const ChatColorChange = ({
         onChangeComplete={handleChangeComplete}
       />
       <Button variant="contained" color="primary" onClick={handleSubmit}>
-        Submit
+        Change Chat Color
       </Button>
     </div>
   );

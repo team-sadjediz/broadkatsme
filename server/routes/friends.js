@@ -7,9 +7,9 @@ const UserProfile = require("../models/userprofile.model");
 // ---------------------------------------------------------- IN PROGRESS ----------------------------------------------------------
 
 // How To Use:
-// axios.put(`${BASE_API_URI}/friends/${uid}/${friendID}, null, { params: { action: "" }})
+// axios.put(`${BASE_API_URI}/friends/update/${uid}/${friendID}, null, { params: { action: "" }})
 // action = "add" || "delete"
-router.put("/update/:uid/:friendID", async function(req, res) {
+router.put("/update/:uid/:friendID", async function (req, res) {
   let userID = req.params.uid;
   let friendID = req.params.friendID;
   let action = req.query.action;
@@ -23,12 +23,12 @@ router.put("/update/:uid/:friendID", async function(req, res) {
     await UserProps.findOneAndUpdate(
       {
         userID: userID,
-        friends: friendID
+        friends: friendID,
       },
       { $pull: { friends: friendID } },
       { runValidators: true, new: true }
     )
-      .then(document => {
+      .then((document) => {
         // Error should throw and catch before here if no document is found/updated.
         userpropsDoc = document;
         return UserProps.findOneAndUpdate(
@@ -37,22 +37,22 @@ router.put("/update/:uid/:friendID", async function(req, res) {
           { runValidators: true, new: true }
         );
       })
-      .then(document => {
+      .then((document) => {
         // Error should throw and catch before here if no document is found/updated.
         friendpropsDoc = document;
         res.send({
           userpropsDoc: userpropsDoc.friends,
-          friendpropsDoc: friendpropsDoc.friends
+          friendpropsDoc: friendpropsDoc.friends,
         });
       })
-      .catch(async error => {
+      .catch(async (error) => {
         // If friend was removed from users list, but user was not removed from friends list (error was caught in the second update), re-add friend to users list.
         // POSSIBLE LEAK: DATA CORRUPTION IF THIS FAILS. SOLUTION: LOOP - NOT IMPLEMENTED / EXPENSIVE
         if (userpropsDoc && !friendpropsDoc) {
           await UserProps.findOneAndUpdate(
             {
               userID: userID,
-              friends: friendID
+              friends: friendID,
             },
             { $addToSet: { friends: friendID } },
             { runValidators: true, new: true }
@@ -71,7 +71,7 @@ router.put("/update/:uid/:friendID", async function(req, res) {
       { $addToSet: { friends: friendID } },
       { new: true }
     )
-      .then(document => {
+      .then((document) => {
         // Error should throw and catch before here if no document is found/updated.
         userpropsDoc = document;
         return UserProps.findOneAndUpdate(
@@ -80,15 +80,15 @@ router.put("/update/:uid/:friendID", async function(req, res) {
           { runValidators: true, new: true }
         );
       })
-      .then(document => {
+      .then((document) => {
         // Error should throw and catch before here if no document is found/updated.
         friendpropsDoc = document;
         res.send({
           userpropsDoc: userpropsDoc.friends,
-          friendpropsDoc: friendpropsDoc.friends
+          friendpropsDoc: friendpropsDoc.friends,
         });
       })
-      .catch(async error => {
+      .catch(async (error) => {
         // If friend was added to users list, but user was not added to friends list (error was caught in the second update), remove friend from users list.
         // POSSIBLE LEAK: DATA CORRUPTION IF THIS FAILS. SOLUTION: LOOP - NOT IMPLEMENTED / EXPENSIVE
         if (userpropsDoc && friendpropsDoc == null) {
@@ -108,21 +108,21 @@ router.put("/update/:uid/:friendID", async function(req, res) {
 // How To Use
 // axios.put(`${BASE_API_URL}/friends/friendslist/${uid}`)
 // returns list of all rooms a user is subscribed to (as per convnetion)
-router.get("/friends-list/:uid", async function(req, res) {
+router.get("/friends-list/:uid", async function (req, res) {
   let uid = req.params.uid;
   console.log("uid", uid);
 
   let friendslist = [];
   await UserProps.findOne({ userID: uid })
-    .then(async document => {
+    .then(async (document) => {
       // return UserProps.findOne({ userID: uid }).populate("subscribedRooms");
       // res.send(document.friends);
 
       await UserProfile.find({
         "userID": {
-          $in: document.friends
-        }
-      }).then(friendslistProfiles => {
+          $in: document.friends,
+        },
+      }).then((friendslistProfiles) => {
         console.log("friendslist profiles:", friendslistProfiles);
         res.send(friendslistProfiles);
       });
@@ -132,7 +132,7 @@ router.get("/friends-list/:uid", async function(req, res) {
       //   friendslist.push({ friendID: friend });
       // });
     })
-    .catch(error => {
+    .catch((error) => {
       error.additional = "Error has occured in /friends-list/:uid";
       res.status(404).send(error);
     });

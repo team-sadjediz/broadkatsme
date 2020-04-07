@@ -54,6 +54,7 @@ const Message = ({
       setBgColor("bgc-sent");
       setOrientation("align-right");
       setTextAlign("text-left");
+      setFontStyle({ color: `${currentUser.chatColor}` });
     } else {
       setFlexDirection("flex-row");
 
@@ -67,13 +68,12 @@ const Message = ({
 
       // console.log("chatCOLOR", chatColor);
 
-      setBorder({ borderLeft: `5px solid ${chatColor || "black"}` });
+      setBorder({ borderLeft: `5px solid ${chatColor || "#3a4660"}` });
       setBgColor("bgc-rec");
       setOrientation("align-left");
       setTextAlign("text-right");
+      setFontStyle({ color: `${chatColor || "#3a4660"}` });
     }
-
-    setFontStyle({ color: `${chatColor || "gray"}` });
   }, []);
 
   // let isSentByCurrentUser = false;
