@@ -84,25 +84,52 @@ const Access = new mongoose.Schema({
   operators: [String], // ID's of operators
   invitations: [String], // ID's of those who can invite
   //   kick: [{ type: String }], // ID's of those who can kick
-  bans: [String] // ID of those who are banned
+  bans: [String], // ID of those who are banned
 });
 
 const RoomSettings = new mongoose.Schema({
   roomSize: Number,
   privacy: Boolean,
-  access: Access
+  access: Access,
 });
 
 // Room ID is identified by the naturally generated _id value
 const Room = new mongoose.Schema({
   //   room_ID: String,
-  name: String,
-  ownerID: String,
-  thumbnailUrl: String,
-  active: Boolean,
-  subscribers: [String],
-  tags: [String],
-  settings: RoomSettings
+  name: {
+    type: String,
+    required: true,
+  },
+  ownerID: {
+    type: String,
+    required: true,
+  },
+  thumbnailUrl: {
+    type: String,
+    required: true,
+  },
+  active: {
+    type: Boolean,
+    required: true,
+  },
+  subscribers: {
+    type: [String],
+    required: true,
+    validate: {
+      // Applies only on creation (save) as validate is not applicable to $addToSet
+      validator: function () {
+        // console.log(
+        //   this.subscribers.length >= 1 && this.subscribers.length <= 5
+        // );
+        return this.subscribers.length >= 1 && this.subscribers.length <= 5;
+      },
+      message: "{PATH} exceends limit of (5)",
+    },
+  },
+  tags: {
+    type: [String],
+  },
+  settings: RoomSettings,
 });
 
 Room.plugin(random);

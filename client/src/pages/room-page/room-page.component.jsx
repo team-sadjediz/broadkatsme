@@ -4,15 +4,22 @@ import axios from "axios";
 
 import { BASE_API_URL } from "../../utils";
 import { connect } from "react-redux";
+import {
+  setSubscribedRooms,
+  setSelectedRoom,
+  updateSubscribedRooms,
+} from "../../redux/room/room.actions";
 import { Redirect } from "react-router-dom";
 
 import "./room-page.styles.scss";
 
 import Tag from "../../components/tag/tag.component";
+import RoomTitle from "../../components/room-title/room-title.component";
 import RoomBar from "../../components/room-bar/room-bar.component";
 import BrowserOverlay from "../../components/browser-overlay/browser-overlay.component";
 import BrowserInit from "../../components/browser-init/browser-init.component";
 import RoomSettings from "../../components/room-settings/room-settings.component";
+import Divider from "@material-ui/core/Divider";
 
 // import Modal from "@material-ui/core/Modal";
 
@@ -28,7 +35,7 @@ const initialState = {
   showInitial: true,
   showSettings: false,
   subscribers: [],
-  tags: []
+  tags: [],
 };
 
 class RoomPage extends Component {
@@ -49,21 +56,44 @@ class RoomPage extends Component {
   }
 
   validate = async () => {
-    console.log(this.state.exists);
-    console.log(this.state.isFetching);
+    //checks if the rooms subscribers include the owner
+    //if not subscribed then they subscribe
+    // otherwise if subscribed...
     await axios
-      .get(`${BASE_API_URL}/room/valid/${this.props.match.params.id}`, {
-        cancelToken: this.source.token
+      .get(`${BASE_API_URL}/room/find/${this.props.match.params.id}`, {
+        cancelToken: this.source.token,
       })
-      .then(res => {
-        this.setState({ exists: res.data, isFetching: false });
-        // console.log(this.state);
+      .then((res) => {
+        this.setState({ exists: true, isFetching: false });
+        if (res.data.subscribers.includes(this.props.userAuth.uid)) {
+          return false;
+        } else {
+          // return false;
+          return axios.put(
+            `${BASE_API_URL}/userprops/subscribe/${this.props.match.params.id}/${this.props.userAuth.uid}`,
+            null,
+            { params: { action: "subscribe" } }
+          );
+        }
+      })
+      .then((subscribed) => {
+        // if (!isSubscribed) {
+        //   return axios.put(
+        //     `${BASE_API_URL}/userprops/subscribe/${this.props.match.params.id}/${this.props.userAuth.uid}`,
+        //     null,
+        //     { params: { action: "subscribe" } }
+        //   );
+        // }
+        console.log(this.state.exists);
+        if (subscribed) {
+          this.props.updateSubscribedRooms(this.props.userAuth.uid);
+        }
         if (this.state.exists) {
+          this.props.setSelectedRoom(this.props.match.params.id);
           this.fetchData();
         }
       })
-      .catch(error => this.setState({ isFetching: false, exists: false }));
-    console.log(this.state);
+      .catch((error) => this.setState({ isFetching: false, exists: false }));
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -99,33 +129,57 @@ class RoomPage extends Component {
   }
 
   fetchData = async () => {
-    let roomDetails, isFavorited;
-    await axios
-      .get(`${BASE_API_URL}/room/find/${this.props.match.params.id}`, {
-        cancelToken: this.source.token
-      })
-      .then(res => {
-        roomDetails = res.data;
-        return axios.get(
-          `${BASE_API_URL}/userprops/favorited/${this.props.match.params.id}/${this.props.currentUser.uid}`,
-          {
-            cancelToken: this.source.token
-          }
-        );
-      })
-      .then(res => {
-        isFavorited = res.data;
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    // let roomDetails;
+    // let isFavorited = this.state.isFavorited;
+    // await axios
+    //   .get(`${BASE_API_URL}/room/find/${this.props.match.params.id}`, {
+    //     cancelToken: this.source.token,
+    //   })
+    //   .then((res) => {
+    //     roomDetails = res.data;
+    //     return axios.put(
+    //       `${BASE_API_URL}/userprops/favorites/${this.props.match.params.id}/${this.props.userAuth.uid}`,
+    //       null,
+    //       {
+    //         params: { action: "exists" },
+    //       },
+    //       {
+    //         cancelToken: this.source.token,
+    //       }
+    //     );
+    //   })
+    //   .then((res) => {
+    //     isFavorited = res.data;
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
+
+    // await axios
+    //   .put(
+    //     `${BASE_API_URL}/userprops/favorites/${this.props.match.params.id}/${this.props.user.userAuth.uid}`,
+    //     null,
+    //     {
+    //       params: { action: "exists" },
+    //     },
+    //     {
+    //       cancelToken: this.source.token,
+    //     }
+    //   )
+    //   .then((res) => {
+    //     isFavorited = res.data;
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
+
     this.setState({
-      roomName: roomDetails.name,
-      roomID: roomDetails._id,
-      ownerID: roomDetails.ownerID,
-      subscribers: roomDetails.subscriber,
-      tags: roomDetails.tags,
-      isFavorited: isFavorited
+      roomName: this.props.selectedRoom.name,
+      roomID: this.props.selectedRoom._id,
+      ownerID: this.props.selectedRoom.ownerID,
+      subscribers: this.props.selectedRoom.subscribers,
+      tags: this.props.selectedRoom.tags,
+      // isFavorited: isFavorited
     });
   };
 
@@ -138,44 +192,56 @@ class RoomPage extends Component {
     this.setState({ showSettings: !currentSettingsState });
   };
 
-  favoriteRoom = async e => {
-    await axios
-      .put(
-        `${BASE_API_URL}/userprops/favorite/${this.props.match.params.id}/${this.props.currentUser.uid}`,
-        {
-          cancelToken: this.source.token
-        }
-      )
-      .then(res => this.setState({ isFavorited: res.data.favorited }))
-      .catch(error => console.error(error));
-  };
+  // favoriteRoom = async (e) => {
+  //   let action;
+  //   if (this.state.isFavorited) {
+  //     action = "unfavorite";
+  //   } else {
+  //     action = "favorite";
+  //   }
+  //   await axios
+  //     .put(
+  //       `${BASE_API_URL}/userprops/favorites/${this.props.match.params.id}/${this.props.user.userAuth.uid}`,
+  //       null,
+  //       {
+  //         params: { action },
+  //       },
+  //       {
+  //         cancelToken: this.source.token,
+  //       }
+  //     )
+  //     .then((res) => {
+  //       this.setState({ isFavorited: res.data });
+  //     })
+  //     .catch((error) => console.log("not favorited"));
+  // };
 
   unsubscribe = async () => {
     await axios
       .put(
-        `${BASE_API_URL}/userprops/subscribe/${this.props.match.params.id}/${this.props.currentUser.uid}`,
+        `${BASE_API_URL}/userprops/subscribe/${this.props.match.params.id}/${this.props.userAuth.uid}`,
         null,
         { params: { action: "unsubscribe" } },
         {
-          cancelToken: this.source.token
+          cancelToken: this.source.token,
         }
       )
-      .then(res =>
+      .then((res) =>
         console.log("Unsubscribed from " + this.props.match.params.id)
       )
-      .catch(error => console.error(error));
+      .catch((error) => console.error(error));
   };
 
-  onChangeTag = tags => {
+  onChangeTag = (tags) => {
     this.setState({ tags: tags });
   };
 
-  onChangeTitle = newName => {
+  onChangeTitle = (newName) => {
     this.setState({ roomName: newName });
     //axios call to save title changes here & return true -> flashes when saved/true is returned?
   };
 
-  handleMouseMove = e => {
+  handleMouseMove = (e) => {
     e.preventDefault();
     this.setState({ isMouseMoving: true });
     (() => {
@@ -187,20 +253,18 @@ class RoomPage extends Component {
     })();
   };
 
-  handleVolume = volume => {
+  handleVolume = (volume) => {
     this.setState({ volume: volume });
   };
 
   render() {
-    // console.log(this.state.exists);
-    // console.log(this.state.isFetching);
     if (this.state.isFetching) {
       return <div> LOADING </div>;
     } else {
       if (!this.state.exists) {
         return <Redirect to="/lobby" />;
       } else {
-        let tags = this.state.tags.map(tag => {
+        let tags = this.state.tags.map((tag) => {
           return (
             <Tag
               key={tag}
@@ -208,7 +272,7 @@ class RoomPage extends Component {
               text={tag}
               onChangeTag={this.onChangeTag}
               roomID={this.props.match.params.id}
-              uid={this.props.currentUser.uid}
+              uid={this.props.userAuth.uid}
             ></Tag>
           );
         });
@@ -217,7 +281,7 @@ class RoomPage extends Component {
             type="add"
             roomID={this.props.match.params.id}
             onChangeTag={this.onChangeTag}
-            uid={this.props.currentUser.uid}
+            uid={this.props.userAuth.uid}
           ></Tag>
         );
         return (
@@ -226,12 +290,11 @@ class RoomPage extends Component {
               <div className="room-settings-container">
                 <RoomSettings
                   toggleSettingsModal={this.toggleSettingsModal}
-                  // HEEEEREEEEEE
                   roomID={this.props.match.params.id}
                   owned={true}
                   tags={tags}
                   addTag={addTag}
-                  uid={this.props.currentUser.uid}
+                  uid={this.props.userAuth.uid}
                   onChangeTitle={this.onChangeTitle}
                 ></RoomSettings>
               </div>
@@ -239,16 +302,10 @@ class RoomPage extends Component {
 
             <div className="room-page-container">
               <div className="room-page">
-                <div className="room-bar-area">
-                  <RoomBar
+                <div className="room-title-area">
+                  <RoomTitle
                     roomName={this.state.roomName}
-                    roomID={this.props.match.params.id}
-                    toggleSettingsModal={this.toggleSettingsModal}
-                    favoriteRoom={this.favoriteRoom}
-                    isFavorited={this.state.isFavorited}
-                    onChangeTag={this.onChangeTag}
                     onChangeTitle={this.onChangeTitle}
-                    unsubscribe={this.unsubscribe}
                   />
                 </div>
                 {this.state.showInitial ? (
@@ -261,7 +318,7 @@ class RoomPage extends Component {
                 ) : null}
                 <div
                   className="room-screen-area"
-                  onMouseMove={e => this.handleMouseMove(e)}
+                  onMouseMove={(e) => this.handleMouseMove(e)}
                 >
                   {this.state.isMouseMoving ? (
                     <BrowserOverlay
@@ -273,7 +330,16 @@ class RoomPage extends Component {
                     <div className="hide" />
                   )}
                 </div>
+                <div className="room-bar-area">
+                  <RoomBar
+                    toggleSettingsModal={this.toggleSettingsModal}
+                    favoriteRoom={this.favoriteRoom}
+                    isFavorited={this.state.isFavorited}
+                    unsubscribe={this.unsubscribe}
+                  />
+                </div>
                 <div className="room-tags-area">
+                  <Divider className="room-tag-divider" variant="fullWidth" />
                   {addTag}
                   {tags}
                 </div>
@@ -286,14 +352,16 @@ class RoomPage extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
+  userAuth: state.user.userAuth,
+  subscribedRooms: state.room.subscribedRooms,
+  selectedRoom: state.room.selectedRoom,
   currentUser: state.user.currentUser,
-  selectedRoom: state.room.selectedRoom
 });
 
-const mapDispatchToProps = dispatch => ({
-  // setSubscribedRooms: subRoomList => dispatch(setSubscribedRooms(subRoomList)),
-  // setSelectedRoom: roomID => dispatch(setSelectedRoom(roomID))
+const mapDispatchToProps = (dispatch) => ({
+  updateSubscribedRooms: (uid) => dispatch(updateSubscribedRooms(uid)),
+  setSelectedRoom: (roomID) => dispatch(setSelectedRoom(roomID)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RoomPage);

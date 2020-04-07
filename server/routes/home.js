@@ -9,7 +9,7 @@ const Room = require("../models/room.model");
 // ---------------------------------------------------------- GET RANDOM ROOMS ----------------------------------------------------------
 
 // How To Use:
-// axios.put(`${BASE_API_URI}/home/rooms, null, { params: { query: "" }})
+// axios.get(`${BASE_API_URI}/home/rooms, null, { params: { query: "" }})
 // action = int (some int number)
 
 // NOT HOOKED UP TO ERROR VALIDATION

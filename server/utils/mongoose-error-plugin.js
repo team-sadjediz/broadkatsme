@@ -11,6 +11,7 @@ module.exports = function(schema, options) {
       // "validate",
       // "save",
       "findOneAndDelete",
+      "updateMany",
       "exists"
     ],
     { query: true },
@@ -49,6 +50,7 @@ module.exports = function(schema, options) {
       "validate",
       // "save",
       "findOneAndDelete",
+      "updateMany",
       "exists"
     ],
     function(error, res, next) {

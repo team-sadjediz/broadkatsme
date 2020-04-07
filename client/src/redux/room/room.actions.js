@@ -31,15 +31,54 @@ export const updateSubscribedRooms = (userID) => {
 };
 
 export const setSelectedRoom = (roomID) => {
-  return (dispatch) => {
-    axios
-      .get(`${BASE_API_URL}/room/find/${roomID}`)
-      .then((res) => {
-        console.log("h", { roomID: roomID, ...res.data });
-        dispatch(setSelectedRoomInfo({ roomID: roomID, ...res.data }));
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
+  if (roomID) {
+    return (dispatch) => {
+      axios
+        .get(`${BASE_API_URL}/room/find/${roomID}`)
+        .then((res) => {
+          console.log("h", { roomID: roomID, ...res.data });
+          dispatch(setSelectedRoomInfo({ roomID: roomID, ...res.data }));
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    };
+  } else {
+    return (dispatch) => {
+      let blankstate = {
+        subscribedRooms: [],
+        selectedRoom: {
+          roomID: null,
+          subscribers: [],
+          tags: [],
+          ownerID: null,
+          thumbnailUrl: "default1.png",
+          settings: {
+            roomSize: null,
+            privacy: false,
+            access: {
+              roomAdmins: [],
+              operators: [],
+              invitations: [],
+              bans: [],
+              delete: null,
+            },
+          },
+        },
+      };
+      dispatch(setSelectedRoomInfo(blankstate));
+    };
+  }
+
+  // return (dispatch) => {
+  //   axios
+  //     .get(`${BASE_API_URL}/room/find/${roomID}`)
+  //     .then((res) => {
+  //       console.log("h", { roomID: roomID, ...res.data });
+  //       dispatch(setSelectedRoomInfo({ roomID: roomID, ...res.data }));
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  // };
 };

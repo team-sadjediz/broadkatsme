@@ -31,15 +31,21 @@
 .room-page {
   display: grid;
   grid-template-columns: min-content;
-  grid-template-rows: 2em min-content 15px max-content 2em min-content auto;
+  grid-template-rows: 2em min-content 15px max-content 15px min-content 2em min-content auto;
   grid-template-areas:
     "    .     "
-    " room-bar "
+    " room-title "
     "    .     "
     "room-screen"
     "     .     "
+    "  room-bar "
+    "     .     "
     " room-tags "
     "     .     ";
+}
+
+.room-title-area {
+  grid-area: room-title;
 }
 
 .room-bar-area {
@@ -74,6 +80,9 @@
 
 .room-tags-area {
   grid-area: room-tags;
+  .room-tag-divider {
+    margin-bottom: 1em;
+  }
 }
 
 .browser-overlay {
