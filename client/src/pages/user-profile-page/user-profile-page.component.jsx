@@ -40,7 +40,11 @@ class UserProfilePage extends React.Component {
             movies: "",
             websites: "",
             music: "",
-            photoURL: ""
+            photoURL: "",
+            subscribedRooms: "",
+            ownedRooms: "",
+            isEditing: false,
+            isUser: true,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleChangePhoto = this.handleChangePhoto.bind(this);
