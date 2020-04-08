@@ -18,9 +18,7 @@ import Typography from '@material-ui/core/Typography';
 
 
 //svg and styling
-import { ReactComponent as NextBtn } from "../../assets/icons/caret-right-solid.svg";
-import { ReactComponent as BackBtn } from "../../assets/icons/caret-left-solid.svg";
-import "./lobby-page.style.scss";
+
 
 // for filter
 import { makeStyles } from '@material-ui/core/styles';
@@ -45,7 +43,7 @@ function TabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box p={3}>{children}</Box>}
+      {value === index && <Box p={1}>{children}</Box>}
     </div>
   );
 }
@@ -65,7 +63,7 @@ const style = {
   // borderBottom: "1px solid red"
 };
 
-class LobbyPage extends React.Component {
+class SearchPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -92,51 +90,27 @@ class LobbyPage extends React.Component {
 
   handleSelectRoom = e => {
     // this.setState({selectedRoom: e.target.value});
-    console.log(e.target.value);
+    // console.log(e.target.value);
   }
   componentDidMount() {
-    // Get Random Rooms for Feature Rooms
-    axios
-      // .get(`${BASE_API_URL}/home/get-random-rooms?size=${this.state.featureSize}`)
-      .get(`${BASE_API_URL}/userprops/rooms/${this.state.uid}`)
-      .then(rooms => {
-        this.setState({ featureRooms: rooms.data });
-      })
-      .catch(error => {
-        console.error(error);
-      });
     // Get User Rooms
     axios
-      .get(`${BASE_API_URL}/userprops/rooms/${this.state.uid}`)
+      .get(`${BASE_API_URL}/search/rooms`)
       .then(rooms => {
         // console.log("user rooms: " + rooms);
         this.setState({ userRooms: rooms.data });
+        // console.log(rooms.data);
       })
       .catch(error => {
         console.error(error);
         // console.log("oof");
       });
   }
-  // handleUnsubscribe(uid, roomID) {
-  //   let request = {
-  //     "uid": uid,
-  //     // "roomID": this.state.roomID
-  //     "roomID": roomID
-  //   };
-  //   console.log(request);
-  //   axios
-  //     .put(`${BASE_API_URL}/userprops/subscribed-rooms/unsubscribe`, request)
-  //     .then(res => console.log(res))
-  //     .catch(error => console.error(error));
-  //   console.log("hello" + roomID);
-  //   // console.log(this.state);
-  //   // console.log(this.props);
-  //   // console.log(e.target.value);
-  // }
 
   handleChange = (event, newValue) => {
     this.setState({tabValue: newValue});
   }
+
   render() {
 
     let filteredUserRooms = this.state.userRooms.filter(
@@ -171,32 +145,9 @@ class LobbyPage extends React.Component {
     return (
       <div className="container">
         <div className="lobby-tabs">
-        <AppBar className="app-bar" position="static" style={style}>
-        <Tabs
-          value={this.state.tabValue}
-          onChange={this.handleChange}
-          indicatorColor="primary"
-          textColor="primary"
-          variant="fullWidth"
-          aria-label="tabs"
-          centered
-        >
-          <Tab label="Featured Rooms" id={`full-width-tab-${0}`} />
-          <Tab label="Your Rooms" id={`full-width-tab-${1}`} />
-          <Tab label="Subscribed Rooms" id={`full-width-tab-${2}`} />
-        </Tabs>
-      </AppBar>
-        <TabPanel value={this.state.tabValue} index={0}>
-            <div className="featured-container">
-              <Carousel
-                  properties={this.state.featureRooms}
-              />
-            </div>
-        </TabPanel>
-        <TabPanel value={this.state.tabValue} index={1}>
                 <div className="active-container">
                     <FormInput className="search-input" label="search" value={this.state.search} handleChange={this.handleFilter.bind(this)}></FormInput>
-                    {/* <FormControl variant="outlined" >
+                    <FormControl variant="outlined" >
                       <InputLabel id="demo-simple-select-outlined-label">
                         filter by
                       </InputLabel>
@@ -209,7 +160,7 @@ class LobbyPage extends React.Component {
                         <MenuItem value={"roomName"}>room name</MenuItem>
                         <MenuItem value={"tags"}>tags</MenuItem>
                       </Select>
-                    </FormControl> */}
+                    </FormControl>
                   <div>
                     <Grid container spacing={1}>
                   {
@@ -224,9 +175,7 @@ class LobbyPage extends React.Component {
                           tags={ property.tags } 
                           thumbnailUrl={ `${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}` }
                           onMouseEnter={this.handleSelectRoom.bind(property.roomID)}
-                          unsubscribe
-                          invite
-                          chat
+                          subscribe
                           // unsubscribe={this.handleUnsubscribe}
                           ></CardTwo>
                           </Grid>
@@ -236,10 +185,6 @@ class LobbyPage extends React.Component {
                   </Grid>
                   </div>
                 </div>
-        </TabPanel>
-        <TabPanel value={this.state.tabValue} index={2}>
-          Subscribed Rooms
-        </TabPanel>
         </div>
 
         {/* <BackBtn className="back-btn" onClick={() => this.prevProperty()} />
@@ -255,4 +200,4 @@ const mapStateToProps = state => ({
   userAuth: state.user.userAuth
 });
 
-export default connect(mapStateToProps)(LobbyPage);
+export default connect(mapStateToProps)(SearchPage);

@@ -96,11 +96,11 @@ const CardTwo = ({
 
   const handleMouseEnter = (event) => {
     setHover(true);
-    console.log(hover);
+    // console.log(hover);
   };
   const handleMouseLeave = (event) => {
     setHover(false);
-    console.log(hover);
+    // console.log(hover);
   };
 
   const handleUnsubscribe = async (event) => {
@@ -132,7 +132,7 @@ const CardTwo = ({
   };
 
   const roomTags = tags;
-  console.log(name);
+  // console.log(name);
   return (
     <div>
       <Card

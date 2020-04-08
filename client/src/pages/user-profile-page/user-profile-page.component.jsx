@@ -43,8 +43,6 @@ class UserProfilePage extends React.Component {
             photoURL: "",
             subscribedRooms: "",
             ownedRooms: "",
-            feedback: false,
-            feedbackMessage: "",
             isEditing: false,
             isUser: true,
         };
