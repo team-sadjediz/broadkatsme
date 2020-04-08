@@ -83,15 +83,15 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid, ...otherProps}) => {
 
   const handleMouseEnter = event => {
     setHover(true);
-    console.log(hover);
+    // console.log(hover);
   };
   const handleMouseLeave = event => {
     setHover(false);
-    console.log(hover);
+    // console.log(hover);
   };
 
   const roomTags = tags;
-  console.log(name);
+  // console.log(name);
   return (
     <div>
     <Card className={classes.root} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
