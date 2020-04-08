@@ -168,8 +168,8 @@ async function subscribe(roomID, userID) {
     let updatedRoom = await Room.findOneAndUpdate(
       {
         _id: roomID,
-        "settings.access.bans": { $nin: userID },
-        "settings.privacy": false,
+        // "settings.access.bans": { $nin: userID },
+        // "settings.privacy": false,
         $expr: { $lt: [{ "$size": "$subscribers" }, "$settings.roomSize"] },
         // $and: [
         //   {
