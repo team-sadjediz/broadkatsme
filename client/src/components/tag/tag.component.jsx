@@ -2,6 +2,12 @@ import React, { Component } from "react";
 import axios from "axios";
 
 import { BASE_API_URL } from "../../utils";
+import { connect } from "react-redux";
+import {
+  setSubscribedRooms,
+  setSelectedRoom,
+  updateSubscribedRooms,
+} from "../../redux/room/room.actions";
 
 import Chip from "@material-ui/core/Chip";
 import { withStyles } from "@material-ui/core/styles";
@@ -15,7 +21,7 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 // REQUIRED PROPS: RoomID, text (if type == remove), onChangeTag
 // onChangeTag is a function from the parent tag (if you remove a tag, you want to setState to change which tags are being displayed)
 
-const useStyles = theme => ({
+const useStyles = (theme) => ({
   root: {
     marginLeft: 3,
     marginRight: 3,
@@ -25,21 +31,21 @@ const useStyles = theme => ({
     color: "#3a4660",
     background: "#fff",
     "& svg": {
-      fill: "#3a4660 !important"
+      fill: "#3a4660 !important",
     },
     "&:hover": {
       color: "#fff",
       background: "#ef5350",
       "& svg": {
-        fill: "#fff !important"
-      }
+        fill: "#fff !important",
+      },
     },
     "&:focus": {
       backgroundColor: "#ef5350 !important",
       "& svg": {
-        fill: "#fff !important"
-      }
-    }
+        fill: "#fff !important",
+      },
+    },
   },
   input: {
     width: "4em",
@@ -52,12 +58,12 @@ const useStyles = theme => ({
     "&:focus": {
       backgroundColor: "transparent !important",
       "& svg": {
-        fill: "#fff !important"
-      }
-    }
+        fill: "#fff !important",
+      },
+    },
   },
   svg: {
-    fill: "#3a4660 !important"
+    fill: "#3a4660 !important",
   },
   add: {
     marginLeft: 3,
@@ -68,9 +74,9 @@ const useStyles = theme => ({
       color: "#fff",
       background: "#ef5350",
       "& svg": {
-        fill: "#fff !important"
-      }
-    }
+        fill: "#fff !important",
+      },
+    },
   },
   label: {
     marginLeft: 3,
@@ -82,9 +88,9 @@ const useStyles = theme => ({
     color: "#fff",
     "&:hover": {
       color: "#fff",
-      background: "#ef5350"
-    }
-  }
+      background: "#ef5350",
+    },
+  },
 });
 
 class Tag extends Component {
@@ -92,7 +98,7 @@ class Tag extends Component {
     super(props);
     this.state = {
       type: this.props.type,
-      input: ""
+      input: "",
     };
     this.cancelToken = axios.CancelToken;
     this.source = this.cancelToken.source();
@@ -102,53 +108,53 @@ class Tag extends Component {
     this.source.cancel("Operations cancelled. Component unmounting.");
   }
 
-  addOnClick = e => {
+  addOnClick = (e) => {
     e.preventDefault();
-    console.log(this.props.roomID);
     let tag = this.state.input;
 
-    // console.log("adding " + tag);
-    // console.log("to " + this.props.roomID);
-    // let request = { "newTag": tag, "roomID": this.props.roomID };
     axios
       .put(
         `${BASE_API_URL}/room/tags/${this.props.roomID}/${this.props.uid}`,
         null,
         {
-          params: { tags: tag, action: "add" }
+          params: { tags: tag, action: "add" },
         },
         {
-          cancelToken: this.source.token
+          cancelToken: this.source.token,
         }
       )
-      .then(res => {
+      .then((res) => {
+        this.props.updateSubscribedRooms(this.props.roomID);
+        this.props.setSelectedRoom(this.props.roomID);
         this.props.onChangeTag(res.data);
         this.setState({ input: "" });
       })
-      .catch(error => console.error(error));
+      .catch((error) => console.error(error));
   };
 
-  removeOnClick = e => {
+  removeOnClick = (e) => {
     e.preventDefault();
     let tag = this.props.text;
-    // let request = { "delTag": tag, "roomID": this.props.roomID };
-    // console.log("removing " + tag);
     axios
       .put(
         `${BASE_API_URL}/room/tags/${this.props.roomID}/${this.props.uid}`,
         null,
         {
-          params: { tags: tag, action: "delete" }
+          params: { tags: tag, action: "delete" },
         },
         {
-          cancelToken: this.source.token
+          cancelToken: this.source.token,
         }
       )
-      .then(res => this.props.onChangeTag(res.data))
-      .catch(error => console.error(error));
+      .then((res) => {
+        this.props.updateSubscribedRooms(this.props.roomID);
+        this.props.setSelectedRoom(this.props.roomID);
+        this.props.onChangeTag(res.data);
+      })
+      .catch((error) => console.error(error));
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     this.setState({ input: e.target.value });
   };
 
@@ -161,7 +167,6 @@ class Tag extends Component {
           label={
             <input
               className={classes.input}
-              // className="tag-add-input"
               id="add-tag"
               type="text"
               value={this.state.input}
@@ -192,10 +197,19 @@ class Tag extends Component {
   }
 }
 
-export default withStyles(useStyles)(Tag);
-// const StyledTags = withStyles(useStyles)(Tag);
-// export default (
-//   <MuiThemeProvider theme={themeTag}>
-//     {withStyles(useStyles)(Tag)}
-//   </MuiThemeProvider>
-// );
+const mapStateToProps = (state) => ({
+  userAuth: state.user.userAuth,
+  subscribedRooms: state.room.subscribedRooms,
+  selectedRoom: state.room.selectedRoom,
+  currentUser: state.user.currentUser,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  updateSubscribedRooms: (uid) => dispatch(updateSubscribedRooms(uid)),
+  setSelectedRoom: (roomID) => dispatch(setSelectedRoom(roomID)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(useStyles)(Tag));

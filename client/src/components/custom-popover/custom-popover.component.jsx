@@ -15,15 +15,18 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     // padding: theme.spacing(1),
+
     borderRadius: "3px",
     margin: 0,
     padding: 0,
     borderTop: `8px solid ${theme.palette.primary.main}`,
-    marginTop: "1em"
+    marginTop: "1em",
+    zIndex: 5000
   }
 }));
 
 export default function MouseOverPopover({
+  popoverMode = "default",
   anchorOrigin,
   transformOrigin,
   children,
@@ -51,14 +54,28 @@ export default function MouseOverPopover({
   const open = Boolean(anchorEl);
 
   // console.log("child", children);
-  let newChildWithOnClick = React.cloneElement(children, {
-    onClick: togglePopover
-  });
+  let newChildWithOnClick;
+  let newContent;
 
-  let newContent = React.cloneElement(content, {
-    onMouseLeave: handlePopoverClose,
-    onClick: togglePopover
-  });
+  if (popoverMode === "default") {
+    newChildWithOnClick = React.cloneElement(children, {
+      onClick: togglePopover
+    });
+
+    newContent = React.cloneElement(content, {
+      onMouseLeave: handlePopoverClose,
+      onClick: togglePopover
+    });
+  } else if (popoverMode === "hover") {
+    newChildWithOnClick = React.cloneElement(children, {
+      onMouseOver: handlePopoverOpen
+    });
+
+    newContent = React.cloneElement(content, {
+      onMouseEnter: handlePopoverOpen,
+      onMouseLeave: handlePopoverClose
+    });
+  }
 
   return (
     <div>

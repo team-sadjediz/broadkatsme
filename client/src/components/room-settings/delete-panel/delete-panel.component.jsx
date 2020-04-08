@@ -53,7 +53,6 @@ export default function DeletePanel(props) {
         {state.confirm ? (
           <Button
             className={classes.root}
-            // className="delete-panel-button"
             variant="contained"
             color="secondary"
             size="large"

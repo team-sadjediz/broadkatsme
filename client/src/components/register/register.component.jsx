@@ -3,6 +3,7 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { auth, createUserProfileMongoDB } from "../../firebase/firebase.utils";
 import { BASE_API_URL } from "../../utils";
+import { updateCurrentUser } from "../../redux/user/user.actions";
 
 // components:
 import FormInput from "../form-input/form-input.component";
@@ -62,6 +63,8 @@ class Register extends React.Component {
             await createUserProfileMongoDB(userAuth, {
               username: this.state.username
             });
+
+            this.props.updateCurrentUser(userAuth.user.uid);
           });
       })
       .then(res => {
@@ -162,4 +165,12 @@ class Register extends React.Component {
   }
 }
 
-export default Register;
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
+});
+
+const mapDispatchToProps = dispatch => ({
+  updateCurrentUser: userID => dispatch(updateCurrentUser(userID))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Register);

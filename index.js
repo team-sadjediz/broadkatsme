@@ -10,14 +10,15 @@ const {
   addUser,
   removeUser,
   getUser,
+  updateUser,
   getUsersInRoom,
-  getAllUsers
+  getAllUsers,
 } = require("./chat.utils");
 
 const {
   addMessageToRoom,
   getMessagesFromRoom,
-  getAllMessages
+  getAllMessages,
 } = require("./room.utils");
 
 // console.log("root index.js envs:", process.env);
@@ -36,10 +37,10 @@ const port = process.env.PORT || 5000;
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "client/build")));
 
-mongoose.plugin(require("./server/utils/mongoose-error-plugin"));
+// mongoose.plugin(require("./server/utils/mongoose-error-plugin"));
 // --------------------------------- V E R I F Y () ---------------------------------
 
-const verifyAuthToken = async function(req, res, next) {
+const verifyAuthToken = async function (req, res, next) {
   // console.log(req);
   const idToken = req.headers.authorization;
   // console.log("???? " + req.headers.authorization);
@@ -129,15 +130,21 @@ const io = socketio(server);
 //   console.log(`App listening on port ${port}`);
 // });
 
-io.on("connection", socket => {
+io.on("connection", (socket) => {
   console.log(`New connection: ${socket.id}`);
 
-  socket.on("join", ({ name, room, date }, callback) => {
+  socket.on("join", ({ id, name, chatColor, room, date }, callback) => {
     console.log(
       `SERVER: socket: ${socket.id} / user (${name}) -> room [${room}]`
     );
 
-    const { error, user } = addUser({ id: socket.id, name, room });
+    const { error, user } = addUser({
+      socketID: socket.id,
+      id,
+      name,
+      chatColor,
+      room,
+    });
 
     if (error) return callback(error);
 
@@ -146,8 +153,8 @@ io.on("connection", socket => {
       addMessageToRoom(user.room, {
         user: "admin",
         text: `${user.name} has joined!`,
-        date: date
-      })
+        date: date,
+      }),
     ];
 
     socket.emit("message", msg);
@@ -167,15 +174,34 @@ io.on("connection", socket => {
     const msg = [
       ...getMessagesFromRoom(user.room),
       addMessageToRoom(user.room, {
+        userID: user.id,
         user: user.name,
+        chatColor: user.chatColor,
         text: message.msg,
-        date: message.date
-      })
+        date: message.date,
+      }),
     ];
 
     io.to(user.room).emit("message", msg);
 
     socket.emit("message", msg);
+
+    callback();
+  });
+
+  socket.on("update", (chatColor, callback) => {
+    // console.log("updating chat color for user", chatColor);
+    const user = getUser(socket.id);
+
+    // console.log("user:", user);
+    updateUser({
+      socketID: socket.id,
+      id: user.id,
+      name: user.name,
+      chatColor, // only thing updated
+      room: user.room,
+    });
+    // console.log("user after update:", getUser(socket.id));
 
     callback();
   });
@@ -194,8 +220,8 @@ io.on("connection", socket => {
         addMessageToRoom(user.room, {
           user: "admin",
           text: `${user.name} has left.`,
-          date: new Date()
-        })
+          date: new Date(),
+        }),
       ]);
       // io.to(user.room).emit("roomData", {
       //   room: user.room,
@@ -223,7 +249,10 @@ try {
 
 const databaseURI = uri || process.env.MONGODB_URI;
 
-mongoose.connect(databaseURI, { useNewUrlParser: true });
+mongoose.connect(databaseURI, {
+  useNewUrlParser: true,
+  useFindAndModify: false
+});
 
 const connection = mongoose.connection;
 
