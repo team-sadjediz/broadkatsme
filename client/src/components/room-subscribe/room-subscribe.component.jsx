@@ -46,6 +46,7 @@ const RoomSubscribe = ({
       let results = await axios.get(
         `${BASE_API_URL}/userprops/rooms/${userAuth.uid}`
       );
+
       setSubscribedRooms(results.data);
       setSelectedRoom(roomId);
     }
@@ -84,7 +85,7 @@ const RoomSubscribe = ({
       //   params: { uid: currentUser.uid }
       // });
       let results = await axios.get(
-        `${BASE_API_URL}/userprops/rooms/${currentUser.uid}`
+        `${BASE_API_URL}/userprops/rooms/${userAuth.uid}`
       );
 
       setSubscribedRooms(results.data);

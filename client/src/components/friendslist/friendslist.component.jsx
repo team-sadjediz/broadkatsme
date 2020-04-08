@@ -44,7 +44,8 @@ class FriendsList extends React.Component {
         {this.props.friendslist.map((friend, i) => (
           <div key={i} className="friend-item">
             <ImageButton
-              bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=default2.jpg`}
+              // src={`${BASE_API_URL}/userprofile/get-photo?photoUrl=${this.state.photoURL}`}
+              bgImageUrl={`${BASE_API_URL}/userprofile/get-photo?photoUrl=${friend.photoURL}`}
             ></ImageButton>
             <span>{friend.username}</span>
 
