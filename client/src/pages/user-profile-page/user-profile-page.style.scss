@@ -1,14 +1,109 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
 
+.profile {
+  position: relative;
+}
+
+.profile-show {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: minmax(5em, 1fr) auto minmax(5em, 1fr);
+  grid-template-areas:
+    "fav bio ."
+    "subs subs subs"
+    "owned owned owned";
+  margin-top: 100px;
+  // justify-items: center;
+
+  // width: 1200px;
+  // height: 800px;
+}
+ 
+.profile-show {
+  grid-column: 1 / end;
+  grid-row: 2 / end;
+  background-color: white;
+}
+
 .profile-picture {
-    grid-area: upload;
+    // grid-area: profpic;
+    position: absolute;
     height: 200px;
     width: 100%;
+    margin-left: 25px;
     img {
       width: 200px;
       height: 200px;
       border-radius: 50%;
       object-fit: cover;
     }
+
+    // background-color: white;
   }
+  .profile-buttons {
+    position: absolute;
+    z-index: 3;
+    margin-left: 175px;
+    display: inline-block;
+    input[type="file"] {
+      display: none;
+    }
+  }
+
+.profile-biography {
+  grid-area: bio;
+  margin-top: 10px;
+  font-size: 25px;
+  .profile-tags {
+
+  }
+}
+
+
+.username-title {
+  position: absolute;
+  margin-left: 250px;
+  margin-top: 30px;
+  font-weight: bold;
+  font-size: 50px;
+  .bio {
+    font-size: 25px;
+    font-weight: normal;
+    display: inline;
+    margin-left: 20px;
+  }
+}
+
+.subscribed-rooms {
+  grid-area: subs;
+
+}
+.subscribed-title {
+  font-size: 25px;
+  margin-left: 38%;
+}
+.owned-title {
+  font-size: 25px;
+  margin-left: 38%;
+}
+.owned-rooms {
+  grid-area: owned;
+
+}
+.profile-biography {
+  grid-area: bio;
+}
+.profile-favorites {
+  grid-area: fav;
+  margin-top: 100px;
+}
+// .message-bubble {
+//   grid-area: bio;
+//   width: 300px;
+//   height: 100px;
+// }
+.profile-details-form {
+  margin-top: 250px;
+}
+
