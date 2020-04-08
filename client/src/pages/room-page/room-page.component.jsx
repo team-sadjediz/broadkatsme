@@ -27,8 +27,7 @@ const initialState = {
   isFetching: true,
   exists: false,
   isMouseMoving: false,
-  image: null,
-  isFavorited: false,
+  // isFavorited: false,
   volume: 50,
   roomName: "",
   ownerID: "",
@@ -91,28 +90,56 @@ class RoomPage extends Component {
         if (this.state.exists) {
           this.props.setSelectedRoom(this.props.match.params.id);
           this.fetchData();
+          console.log(this.state);
         }
       })
       .catch((error) => this.setState({ isFetching: false, exists: false }));
   };
 
   shouldComponentUpdate(nextProps, nextState) {
+    console.log(
+      `!!!!!!!!!!!!!!!!!       ${this.props.match.params.id}             ${nextProps.match.params.id}       `
+    );
+    console.log("THIS CURRENT PROPS SELECTED ROOM");
+    console.log(this.props.selectedRoom);
+    console.log("NEXT PROPS SELECTED ROOM");
+    console.log(nextProps.selectedRoom);
     let isFetching = this.state.isFetching !== nextState.isFetching;
     let exists = this.state.exists !== nextState.exists;
     let roomID = this.props.match.params.id !== nextProps.match.params.id;
+    let selectedRoomId =
+      this.props.selectedRoom._id !== nextProps.selectedRoom._id;
     let isMouseMoving = this.state.isMouseMoving !== nextState.isMouseMoving;
-    let isFavorited = this.state.isFavorited !== nextState.isFavorited;
+    // let isFavorited = this.state.isFavorited !== nextState.isFavorited;
     let roomName = this.state.roomName !== nextState.roomName;
     let showInitial = this.state.showInitial !== nextState.showInitial;
     let showSettings = this.state.showSettings !== nextState.showSettings;
     let subscribers = this.state.subscribers !== nextState.subscribers;
     let tags = this.state.tags !== nextState.tags;
+    console.log(
+      `isFetching ${isFetching} - exists ${exists} - roomID ${roomID} - isMouseMoving ${isMouseMoving} - roomName ${roomName} - showInitial ${showInitial} - show Settings ${showSettings} - subscribers ${subscribers} - tags ${tags} - selectedRoomId ${selectedRoomId}`
+    );
+    console.log(
+      isFetching ||
+        exists ||
+        roomID ||
+        isMouseMoving ||
+        // isFavorited ||
+        selectedRoomId ||
+        roomName ||
+        showInitial ||
+        showSettings ||
+        subscribers ||
+        subscribers ||
+        tags
+    );
     return (
       isFetching ||
       exists ||
       roomID ||
       isMouseMoving ||
-      isFavorited ||
+      // isFavorited ||
+      selectedRoomId ||
       roomName ||
       showInitial ||
       showSettings ||
@@ -120,11 +147,20 @@ class RoomPage extends Component {
       subscribers ||
       tags
     );
+    // return this.state !== nextState;
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.id !== prevProps.match.params.id) {
+    if (
+      this.props.match.params.id !== prevProps.match.params.id ||
+      this.props.selectedRoom._id !== prevProps.selectedRoom._id
+    ) {
+      console.log(this.props.selectedRoom);
+      console.log(
+        `COMPONENT HAS CHANGED DATA FROM ${this.props.match.params.id} TO ${prevProps.match.params.id}`
+      );
       this.fetchData();
+      console.log(this.state);
     }
   }
 
@@ -172,7 +208,7 @@ class RoomPage extends Component {
     //   .catch((error) => {
     //     console.error(error);
     //   });
-
+    console.log(this.props.selectedRoom);
     this.setState({
       roomName: this.props.selectedRoom.name,
       roomID: this.props.selectedRoom._id,
@@ -181,6 +217,7 @@ class RoomPage extends Component {
       tags: this.props.selectedRoom.tags,
       // isFavorited: isFavorited
     });
+    console.log(this.state);
   };
 
   closeInit = () => {
