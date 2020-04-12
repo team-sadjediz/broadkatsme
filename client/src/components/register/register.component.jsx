@@ -101,6 +101,7 @@ class Register extends React.Component {
           this.props.className ? this.props.className : ""
         }`}
       >
+        {/* <p className="register-title">account registration</p> */}
         <form className="form-container" onSubmit={this.handleSubmit}>
           <FormInput
             className="username-field field-spacing-bottom"

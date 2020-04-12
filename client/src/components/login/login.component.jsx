@@ -42,6 +42,7 @@ const LogIn = ({ className, ...otherProps }) => {
 
   return (
     <div className={`login-container ${className ? className : ""}`}>
+      {/* <p className="login-title">account login</p> */}
       <form className="form-container">
         <FormInput
           className="email-field field-spacing-bottom"

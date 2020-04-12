@@ -1,6 +1,6 @@
 @import "../../assets/colors";
 
-.login-register-modal {
+.modal-container {
   position: fixed;
   width: 100%;
   height: 100%;
@@ -19,6 +19,7 @@
     width: 100%;
     height: 100%;
     background-color: rgba(black, 0.5);
+
     &:hover {
       // background-color: red;
     }
@@ -28,8 +29,8 @@
     background-color: $foreground;
     z-index: 10;
 
-    width: 35em;
-    padding: 3em;
+    // width: 35em;
+    // padding: 3em;
     border-radius: 5px;
 
     display: flex;

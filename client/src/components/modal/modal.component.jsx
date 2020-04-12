@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 
 // custom components:
-import LogIn from "../login/login.component";
-import Register from "../register/register.component";
+// import LogIn from "../login/login.component";
+// import Register from "../register/register.component";
+import LoginRegisterPanel from "../login-register-panel/login-register-panel.component";
 
-import "./login-register-modal.styles.scss";
+import "./modal.styles.scss";
 
-const LoginRegisterModal = ({ className, content, button }) => {
+const Modal = ({ className, content, button }) => {
   const [varA, setVarA] = useState("");
   const [varB, setVarB] = useState([]);
 
@@ -15,15 +16,14 @@ const LoginRegisterModal = ({ className, content, button }) => {
   }, []);
 
   return (
-    <div className="login-register-modal">
+    <div className="modal-container">
       <div className="modal-backdrop"></div>
 
       <div className="modal-content">
-        <LogIn />
-        <Register />
+        <LoginRegisterPanel />
       </div>
     </div>
   );
 };
 
-export default LoginRegisterModal;
+export default Modal;

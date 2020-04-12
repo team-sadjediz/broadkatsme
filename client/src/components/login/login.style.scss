@@ -2,6 +2,16 @@
 @import "../../assets/dimensions.scss";
 
 .login-container {
+  display: flex;
+  flex-direction: column;
+
+  .login-title {
+    text-transform: uppercase;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+
   .form-container {
     background-color: $foreground;
     height: auto;
