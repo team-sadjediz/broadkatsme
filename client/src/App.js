@@ -11,7 +11,7 @@ import { setAuthorization } from "./firebase/firebase.sdk";
 import { connect } from "react-redux";
 import { setUserAuth, updateCurrentUser } from "./redux/user/user.actions";
 
-// components:
+// custom components:
 import CustomDrawer from "./components/custom-drawer/custom-drawer.component";
 import ButtonAppBar from "./components/navbar-mui/navbar-mui.component";
 
@@ -36,14 +36,14 @@ import "./App.scss";
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#3a4660"
+      main: "#3a4660",
     },
     secondary: {
-      main: "#ef5350"
-    }
+      main: "#ef5350",
+    },
   },
   status: {
-    danger: "orange"
+    danger: "orange",
   },
   typography: {
     fontFamily: [
@@ -52,14 +52,14 @@ const theme = createMuiTheme({
       "sans-serif",
       "-apple-system",
       "BlinkMacSystemFont",
-      '"Segoe UI"'
-    ].join(",")
+      '"Segoe UI"',
+    ].join(","),
   },
   mixins: {
     toolbar: {
-      minHeight: 64 // sets the navbar height in pixels
-    }
-  }
+      minHeight: 64, // sets the navbar height in pixels
+    },
+  },
 });
 
 console.log("MUI theme:", theme);
@@ -69,7 +69,7 @@ class App extends Component {
 
   componentDidMount() {
     console.log("App.js mounted");
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
+    this.unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
       if (!user) {
         // THIS IS WHERE WE CLEAN UP ALL REDUX VARIABLES AFTER A USER LOGS OUT
         // THIS IS WHERE WE CLEAN UP ALL REDUX VARIABLES AFTER A USER LOGS OUT
@@ -144,12 +144,12 @@ class App extends Component {
 }
 
 const mapStateToProps = ({ user }) => ({
-  userAuth: user.userAuth
+  userAuth: user.userAuth,
 });
 
-const mapDispatchToProps = dispatch => ({
-  setUserAuth: user => dispatch(setUserAuth(user)),
-  updateCurrentUser: userID => dispatch(updateCurrentUser(userID))
+const mapDispatchToProps = (dispatch) => ({
+  setUserAuth: (user) => dispatch(setUserAuth(user)),
+  updateCurrentUser: (userID) => dispatch(updateCurrentUser(userID)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
