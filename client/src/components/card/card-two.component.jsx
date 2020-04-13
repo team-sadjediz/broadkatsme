@@ -90,6 +90,24 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid, ...otherProps}) => {
     // console.log(hover);
   };
 
+   const handleUnsubscribe = event => {
+    let request = {
+      "uid": uid,
+      // "roomID": this.state.roomID
+      "roomID": roomID,
+      "action": "unsubscribe"
+    };
+    console.log(request);
+    axios
+      .put(`${BASE_API_URL}/userprops/subscribe`, request)
+      .then(res => console.log(res))
+      .catch(error => console.error(error));
+    // console.log("hello" + roomID);
+    // console.log(this.state);
+    // console.log(this.props);
+    // console.log(e.target.value);
+  }
+
   const roomTags = tags;
   // console.log(name);
   return (
@@ -100,7 +118,7 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid, ...otherProps}) => {
           <div className="buttons-container">
             {otherProps.unsubscribe &&
             <Tooltip title='Unsubscribe' placement='left'>
-            <Fab className="room-card-buttons" color="primary" aria-label="unsubscribe">
+            <Fab className="room-card-buttons" color="primary" aria-label="unsubscribe" onClick={handleUnsubscribe}>
                 <ClearIcon />
             </Fab>
             </Tooltip>
