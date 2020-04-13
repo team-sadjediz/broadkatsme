@@ -91,6 +91,10 @@ router.put("/subscribe/:roomID/:uid", async function (req, res) {
   let userID = req.params.uid;
   let action = req.query.action;
 
+  console.log("action:", action);
+  console.log("userID:", userID);
+  console.log("roomID:", roomID);
+
   if (action == "unsubscribe") {
     try {
       let response = await unsubscribe(roomID, userID);
@@ -122,7 +126,6 @@ async function unsubscribe(roomID, userID) {
   session.startTransaction();
   try {
     const opts = { session, new: true, runValidators: true };
-
     let updatedUserProps = await UserProps.findOneAndUpdate(
       {
         userID: userID,
@@ -132,6 +135,7 @@ async function unsubscribe(roomID, userID) {
       opts
     );
 
+    console.log("updatedUserProps", updatedUserProps);
     let updatedRoom = await Room.findByIdAndUpdate(
       roomID,
       { $pull: { subscribers: userID } },
