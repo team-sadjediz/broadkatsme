@@ -65,23 +65,23 @@ const Poppity = ({
 
   const setContentAnchorPoint = () => {
     switch (contentAnchorPoint) {
-      case ANCHOR_POINTS.TOP_LEFT:
+      case ANCHOR_POINTS.TOP_LEFT.engVersion:
         return "cap-top-left";
-      case ANCHOR_POINTS.TOP_MIDDLE:
+      case ANCHOR_POINTS.TOP_MIDDLE.engVersion:
         return "cap-top-middle";
-      case ANCHOR_POINTS.TOP_RIGHT:
+      case ANCHOR_POINTS.TOP_RIGHT.engVersion:
         return "cap-top-right";
-      case ANCHOR_POINTS.MIDDLE_LEFT:
+      case ANCHOR_POINTS.MIDDLE_LEFT.engVersion:
         return "cap-middle-left";
-      case ANCHOR_POINTS.MIDDLE_MIDDLE:
+      case ANCHOR_POINTS.MIDDLE_MIDDLE.engVersion:
         return "cap-middle-middle";
-      case ANCHOR_POINTS.MIDDLE_RIGHT:
+      case ANCHOR_POINTS.MIDDLE_RIGHT.engVersion:
         return "cap-middle-right";
-      case ANCHOR_POINTS.BOTTOM_LEFT:
+      case ANCHOR_POINTS.BOTTOM_LEFT.engVersion:
         return "cap-bottom-left";
-      case ANCHOR_POINTS.BOTTOM_MIDDLE:
+      case ANCHOR_POINTS.BOTTOM_MIDDLE.engVersion:
         return "cap-bottom-middle";
-      case ANCHOR_POINTS.BOTTOM_RIGHT:
+      case ANCHOR_POINTS.BOTTOM_RIGHT.engVersion:
         return "cap-bottom-right";
       default:
         return "cap-top-middle";

@@ -49,6 +49,7 @@
 .poppity-container {
   // background-color: blue;
   position: relative;
+  z-index: 5000;
 
   .custom-backdrop {
     // position: fixed;
@@ -103,7 +104,7 @@
         height: auto;
 
         // to get spacing between the children and content use margin:
-        // margin: 0.5em;
+        margin-top: 0.5em;
 
         background-color: $foreground;
 
