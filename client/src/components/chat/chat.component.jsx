@@ -52,8 +52,8 @@ const Chat = ({
   const endpoint = CHAT_SERVER;
 
   useEffect(() => {
-    console.log("---------------------------------------------------------");
-    console.log("MOUNT", messages);
+    // console.log("---------------------------------------------------------");
+    // console.log("MOUNT", messages);
     socket = io(endpoint);
 
     setSocket(socket);
@@ -77,7 +77,7 @@ const Chat = ({
 
     socket.on("message", (message) => {
       // console.log("on rec", messages);
-      console.log("Array of messsages from this room:", message);
+      // console.log("Array of messsages from this room:", message);
       // setMessages([...message]);
       setMessages(message);
       // console.log("from useEffect", message.text);
@@ -88,8 +88,8 @@ const Chat = ({
       // setMessages([]);
       setSocket(null);
       socket.disconnect();
-      console.log("DISMOUNT", messages);
-      console.log("**************************************************");
+      // console.log("DISMOUNT", messages);
+      // console.log("**************************************************");
     };
     // }, [ENDPOINT, currentUser.uid, selectedRoom]);
   }, [CHAT_SERVER, selectedRoom]);

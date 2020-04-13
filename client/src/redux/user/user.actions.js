@@ -1,6 +1,11 @@
 import { BASE_API_URL, CHAT_SERVER } from "../../utils";
 import axios from "axios";
-import { UserActionTypes } from "./user.types";
+import { UserActionTypes, INITIAL_STATE } from "./user.types";
+
+export const resetUserRedux = () => ({
+  type: UserActionTypes.RESET_USER_REDUX,
+  payload: INITIAL_STATE,
+});
 
 export const setUserAuth = (user) => ({
   type: UserActionTypes.SET_USER_AUTH,

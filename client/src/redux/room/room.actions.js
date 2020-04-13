@@ -1,7 +1,12 @@
 import { BASE_API_URL, CHAT_SERVER } from "../../utils";
 import axios from "axios";
 
-import { RoomActionTypes } from "./room.types";
+import { RoomActionTypes, INITIAL_STATE } from "./room.types";
+
+export const resetRoomRedux = () => ({
+  type: RoomActionTypes.RESET_ROOM_REDUX,
+  payload: INITIAL_STATE,
+});
 
 export const setSubscribedRooms = (subscribedRooms) => ({
   type: RoomActionTypes.SET_SUBSCRIBED_ROOMS,
@@ -45,28 +50,7 @@ export const setSelectedRoom = (roomID) => {
     };
   } else {
     return (dispatch) => {
-      let blankstate = {
-        subscribedRooms: [],
-        selectedRoom: {
-          roomID: null,
-          subscribers: [],
-          tags: [],
-          ownerID: null,
-          thumbnailUrl: "default1.png",
-          settings: {
-            roomSize: null,
-            privacy: false,
-            access: {
-              roomAdmins: [],
-              operators: [],
-              invitations: [],
-              bans: [],
-              delete: null,
-            },
-          },
-        },
-      };
-      dispatch(setSelectedRoomInfo(blankstate));
+      dispatch(setSelectedRoomInfo(INITIAL_STATE.selectedRoom));
     };
   }
 

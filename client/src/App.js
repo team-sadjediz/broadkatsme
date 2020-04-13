@@ -2,21 +2,26 @@ import React, { Component } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { auth } from "./firebase/firebase.utils";
 
-// axios
 // import axios from "axios";
+
 import { setAuthorization } from "./firebase/firebase.sdk";
 // import { BASE_API_URL } from "./utils";
 
-// redux stuff:
+// redux:
 import { connect } from "react-redux";
-import { setUserAuth, updateCurrentUser } from "./redux/user/user.actions";
+import {
+  setUserAuth,
+  updateCurrentUser,
+  resetUserRedux,
+} from "./redux/user/user.actions";
+import { resetRoomRedux } from "./redux/room/room.actions";
 
 // custom components:
 import CustomDrawer from "./components/custom-drawer/custom-drawer.component";
 import ButtonAppBar from "./components/navbar-mui/navbar-mui.component";
-
 // import Drawer from "@material-ui/core/Drawer";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+
 // pages:
 import LoginRegisterPage from "./pages/login-register-page/login-register-page.component";
 import LobbyPage from "./pages/lobby-page/lobby-page.component";
@@ -28,8 +33,8 @@ import ContactPage from "./pages/contact-page/contact-page.component";
 import UserProfilePage from "./pages/user-profile-page/user-profile-page.component";
 import ResetPassPage from "./pages/reset-password-page/reset-password-page.component";
 
-import Test from "./components/test-component/test.component";
-import Chat from "./components/chat/chat.component";
+// import Test from "./components/test-component/test.component";
+// import Chat from "./components/chat/chat.component";
 
 import "./App.scss";
 
@@ -68,23 +73,27 @@ class App extends Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    console.log("App.js mounted");
+    console.log("App mounted");
     this.unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
       if (!user) {
+        console.log("resetting room redux");
         // THIS IS WHERE WE CLEAN UP ALL REDUX VARIABLES AFTER A USER LOGS OUT
         // THIS IS WHERE WE CLEAN UP ALL REDUX VARIABLES AFTER A USER LOGS OUT
         // THIS IS WHERE WE CLEAN UP ALL REDUX VARIABLES AFTER A USER LOGS OUT
+        this.props.resetRoomRedux();
+        this.props.resetUserRedux();
+        // this.props.setUserAuth(user);
       } else {
         this.props.updateCurrentUser(user.uid);
+        this.props.setUserAuth(user);
       }
-      this.props.setUserAuth(user);
     });
   }
 
   componentWillUnmount() {
-    console.log("App.js unmounting");
+    console.log("App unmounting");
     this.unsubscribeFromAuth();
-    console.log("logged out");
+    console.log("User logged out");
   }
 
   async authorize() {
@@ -150,6 +159,13 @@ const mapStateToProps = ({ user }) => ({
 const mapDispatchToProps = (dispatch) => ({
   setUserAuth: (user) => dispatch(setUserAuth(user)),
   updateCurrentUser: (userID) => dispatch(updateCurrentUser(userID)),
+  resetRoomRedux: () => dispatch(resetRoomRedux()),
+  resetUserRedux: () => dispatch(resetUserRedux()),
+
+  // // for reseting:
+  // setFriendsList: (user) => dispatch(setFriendsList(user)),
+  // setNotifications: (user) => dispatch(setNotifications(user)),
+  // setSocket: (user) => dispatch(setSocket(user)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
