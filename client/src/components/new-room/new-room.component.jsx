@@ -41,7 +41,7 @@ class NewRoom extends React.Component {
       privacy: this.state.privacy,
     };
 
-    console.log(room);
+    // console.log(room);
 
     axios
       // .post(`${BASE_API_URL}/room/create-room`, room)

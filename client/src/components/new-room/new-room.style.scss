@@ -43,27 +43,16 @@
   .form-container {
     // width: 100%;
 
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-gap: 0.8em;
-
-    grid-template-areas:
-      "room-title"
-      "room-size"
-      "privacy"
-      "new-room-submit-btn";
+    display: flex;
+    flex-direction: column;
 
     .room-title {
-      grid-area: room-title;
     }
 
     .room-size {
-      grid-area: room-size;
     }
 
     .privacy {
-      grid-area: privacy;
-
       display: flex;
       flex-direction: column;
 
@@ -111,33 +100,4 @@
       margin-top: 1.5em;
     }
   }
-
-  // .toggle-container {
-  //   display: flex;
-  //   flex-direction: row;
-  //   justify-content: center;
-  //   align-items: center;
-  //   margin-bottom: 1em;
-  //   svg:nth-child(1) {
-  //     width: 10px;
-  //     path {
-  //       fill: $white;
-  //     }
-  //   }
-
-  //   .values {
-  //     padding: 0 1em;
-  //     @include font;
-  //     font-size: 15px;
-  //     text-transform: lowercase;
-  //     font-weight: 100;
-  //   }
-
-  //   svg:nth-child(3) {
-  //     width: 10px;
-  //     path {
-  //       fill: $white;
-  //     }
-  //   }
-  // }
 }
