@@ -46,10 +46,18 @@
     display: flex;
     flex-direction: column;
 
-    .room-title {
+    .field-spacing-bottom {
+      margin-bottom: 0.5em;
     }
 
-    .room-size {
+    .field-spacing-top {
+      margin-top: 1em;
+    }
+
+    .new-room-title {
+    }
+
+    .new-room-size {
     }
 
     .privacy {

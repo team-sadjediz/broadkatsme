@@ -21,6 +21,7 @@ import CustomDrawer from "./components/custom-drawer/custom-drawer.component";
 import ButtonAppBar from "./components/navbar-mui/navbar-mui.component";
 // import Drawer from "@material-ui/core/Drawer";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+// import NewRoom from "./components/new-room/new-room.component";
 
 // pages:
 import LoginRegisterPage from "./pages/login-register-page/login-register-page.component";

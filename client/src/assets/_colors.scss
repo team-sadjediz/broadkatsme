@@ -40,6 +40,7 @@ $gray_jaguar: #26262b;
 $gray_material_ui: #eceff1;
 $gray_form_input: #e5e5e5;
 $gray_slightly_darker: #c5cad4;
+
 ///////////////////////////////////////////////////////////////
 // LINEAR GRADIENTS HERE:
 ///////////////////////////////////////////////////////////////
@@ -80,3 +81,14 @@ $foreground2: $gray_material_ui;
 ///////////////////////////////////////////////////////////////
 // $bg_color: #466075;
 // $bg_color: #6786ae;
+
+///////////////////////////////////////////////////////////////
+// FONT STACK:
+///////////////////////////////////////////////////////////////
+@mixin base_font_stack {
+  font-family: "Karla", sans-serif;
+  font-weight: normal;
+  font-size: 17px;
+  font-weight: normal;
+  color: $highlight1; // must be selected from MAIN REFERENCE
+}
