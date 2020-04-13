@@ -19,20 +19,20 @@ import "./custom-drawer.styles.scss";
 
 const drawerWidth = 350;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     height: `calc(100% - ${theme.mixins.toolbar.minHeight}px)`,
-    zIndex: 0
+    zIndex: -500,
   },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
-    whiteSpace: "nowrap" //
+    whiteSpace: "nowrap", //
   },
   drawerPaper: {
     width: drawerWidth,
-    position: "relative"
+    position: "relative",
     // variant: "outlined"
   },
   drawerHeader: {
@@ -40,22 +40,22 @@ const useStyles = makeStyles(theme => ({
     alignItems: "center",
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
-    justifyContent: "flex-end"
+    justifyContent: "flex-end",
   },
   drawerOpen: {
     backgroundColor: "#eceff1",
     width: drawerWidth,
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
+      duration: theme.transitions.duration.enteringScreen,
     }),
-    position: "relative"
+    position: "relative",
   },
   drawerClose: {
     backgroundColor: "white",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
+      duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: "hidden",
     width: "3em",
@@ -64,7 +64,7 @@ const useStyles = makeStyles(theme => ({
     //   width: theme.spacing(9) + 1
     // },
     position: "relative",
-    borderRight: `2px solid ${theme.palette.divider}`
+    borderRight: `2px solid ${theme.palette.divider}`,
   },
   content: {
     overflow: "auto",
@@ -80,30 +80,30 @@ const useStyles = makeStyles(theme => ({
     // margin: "1em",
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    })
+      duration: theme.transitions.duration.leavingScreen,
+    }),
     // marginLeft: -drawerWidth
   },
   contentShift: {
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
-    })
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   toggleBtnPositionOpened: {
     position: "absolute",
     right: 0,
-    margin: `calc((48px - 32px) / 2)`
+    margin: `calc((48px - 32px) / 2)`,
   },
   toggleBtnPositionClosed: {
     position: "absolute",
     marginTop: "calc((48px - 32px) / 2)",
     left: "50%",
-    transform: "translate(-50%, 0)"
-  }
+    transform: "translate(-50%, 0)",
+  },
 }));
 
-const ToggleDrawerButton = withStyles(theme => ({
+const ToggleDrawerButton = withStyles((theme) => ({
   root: {
     // background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
     color: "white",
@@ -114,11 +114,11 @@ const ToggleDrawerButton = withStyles(theme => ({
     "&:hover": { backgroundColor: theme.palette.secondary.main },
     // position: "absolute",
     // right: 0,
-    zIndex: 2001
-  }
+    zIndex: 2001,
+  },
 }))(IconButton);
 
-const CustomDrawer = props => {
+const CustomDrawer = (props) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
 
@@ -144,13 +144,13 @@ const CustomDrawer = props => {
         open={open}
         className={clsx(classes.drawer, {
           [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open
+          [classes.drawerClose]: !open,
         })}
         classes={{
           paper: clsx({
             [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open
-          })
+            [classes.drawerClose]: !open,
+          }),
         }}
       >
         <ToggleDrawerButton
@@ -169,7 +169,7 @@ const CustomDrawer = props => {
 
       <main
         className={clsx(classes.content, {
-          [classes.contentShift]: open
+          [classes.contentShift]: open,
         })}
       >
         {props.children}

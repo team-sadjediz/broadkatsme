@@ -18,7 +18,7 @@ import Tag from "../../components/tag/tag.component";
 import axios from "axios";
 import { BASE_API_URL } from "../../utils";
 import Popper from "@material-ui/core/Popper";
-import Poppity from "../poppity/poppity.component";
+// import Poppity from "../poppity/poppity-1.component";
 import { Link } from "react-router-dom";
 import { emphasize } from "@material-ui/core/styles/colorManipulator";
 import Content from "./card-content.component";
