@@ -4,7 +4,7 @@ import { ReactComponent as PlayIcon } from "../../assets/icons/play-solid.svg";
 
 import "./circle-btn.style.scss";
 
-const CircleBtn = ({
+const CircleButton = ({
   onClick,
   children,
   className,
@@ -16,7 +16,7 @@ const CircleBtn = ({
   <div
     onMouseEnter={otherProps.onMouseEnter}
     onClick={onClick}
-    className={`circle-btn ${className ? className : ""}`}
+    className={`circle-btn-container ${className ? className : ""}`}
   >
     {(() => {
       if (icon) {
@@ -35,4 +35,4 @@ const CircleBtn = ({
   </div>
 );
 
-export default CircleBtn;
+export default CircleButton;

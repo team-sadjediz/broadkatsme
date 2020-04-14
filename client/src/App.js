@@ -9,16 +9,19 @@ import { setAuthorization } from "./firebase/firebase.sdk";
 
 // redux:
 import { connect } from "react-redux";
+
 import {
   setUserAuth,
   updateCurrentUser,
   resetUserRedux,
 } from "./redux/user/user.actions";
+
 import { resetRoomRedux } from "./redux/room/room.actions";
 
 // custom components:
 import CustomDrawer from "./components/custom-drawer/custom-drawer.component";
-import ButtonAppBar from "./components/navbar-mui/navbar-mui.component";
+// import ButtonAppBar from "./components/navbar-mui/navbar-mui.component";
+import Navbar from "./components/navbar/navbar.component";
 // import Drawer from "@material-ui/core/Drawer";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 // import NewRoom from "./components/new-room/new-room.component";
@@ -112,7 +115,8 @@ class App extends Component {
         <div className="App">
           {this.props.userAuth ? (
             <BrowserRouter>
-              <ButtonAppBar />
+              {/* <ButtonAppBar /> */}
+              <Navbar />
               <CustomDrawer>
                 <Switch>
                   <Route
@@ -162,11 +166,6 @@ const mapDispatchToProps = (dispatch) => ({
   updateCurrentUser: (userID) => dispatch(updateCurrentUser(userID)),
   resetRoomRedux: () => dispatch(resetRoomRedux()),
   resetUserRedux: () => dispatch(resetUserRedux()),
-
-  // // for reseting:
-  // setFriendsList: (user) => dispatch(setFriendsList(user)),
-  // setNotifications: (user) => dispatch(setNotifications(user)),
-  // setSocket: (user) => dispatch(setSocket(user)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

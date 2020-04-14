@@ -6,12 +6,13 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 
 import {
   setSelectedRoom,
-  updateSubscribedRooms
+  updateSubscribedRooms,
 } from "../../redux/room/room.actions";
 
 import HoverPopOver from "../hover-popover/hover-popover.component";
 import ImageButton from "../img-btn/img-btn.component";
 import RoomInfoPreview from "../room-info-preview/room-info-preview.component";
+import CircleButton from "../circle-btn/circle-btn.component";
 
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import IconButton from "@material-ui/core/IconButton";
@@ -25,7 +26,7 @@ import "./room-list-nav.styles.scss";
 // utils:
 import { BASE_API_URL, CHAT_SERVER } from "../../utils";
 
-const RoomNavButton = withStyles(theme => ({
+const RoomNavButton = withStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.primary.main,
     fontFamily: `"Karla"`,
@@ -34,8 +35,11 @@ const RoomNavButton = withStyles(theme => ({
     fontSize: "1em",
     // margin: "0 3px",
     color: "white",
-    "&:hover": { backgroundColor: theme.palette.secondary.main, color: "white" }
-  }
+    "&:hover": {
+      backgroundColor: theme.palette.secondary.main,
+      color: "white",
+    },
+  },
 }))(IconButton);
 
 const DISPLAY_MAX = 3;
@@ -46,7 +50,7 @@ class RoomListNav extends React.Component {
 
     this.state = {
       displayStart: 0,
-      displayEnd: DISPLAY_MAX
+      displayEnd: DISPLAY_MAX,
     };
   }
 
@@ -82,7 +86,7 @@ class RoomListNav extends React.Component {
     if (this.state.displayEnd < this.props.subscribedRooms.length) {
       this.setState({
         displayStart: this.state.displayStart + 1,
-        displayEnd: this.state.displayEnd + 1
+        displayEnd: this.state.displayEnd + 1,
       });
     } else {
       console.log("end of line");
@@ -95,7 +99,7 @@ class RoomListNav extends React.Component {
     if (this.state.displayStart > 0) {
       this.setState({
         displayStart: this.state.displayStart - 1,
-        displayEnd: this.state.displayEnd - 1
+        displayEnd: this.state.displayEnd - 1,
       });
     } else {
       console.log("cant go back any further");
@@ -107,9 +111,10 @@ class RoomListNav extends React.Component {
       // <div className="room-list-nav-container">
 
       <React.Fragment>
-        <RoomNavButton onClick={this.prev}>
+        {/* <RoomNavButton onClick={this.prev}>
           <ChevronLeftIcon />
-        </RoomNavButton>
+        </RoomNavButton> */}
+        <CircleButton onClick={this.prev} icon={<ChevronLeftIcon />} />
         {this.props.subscribedRooms
           .slice(this.state.displayStart, this.state.displayEnd)
           .map((room, i) => (
@@ -141,9 +146,10 @@ class RoomListNav extends React.Component {
               </HoverPopOver>
             </Link>
           ))}
-        <RoomNavButton onClick={this.next}>
+        {/* <RoomNavButton onClick={this.next}>
           <ChevronRightIcon />
-        </RoomNavButton>
+        </RoomNavButton> */}
+        <CircleButton onClick={this.next} icon={<ChevronRightIcon />} />
       </React.Fragment>
       // </div>
     );
@@ -154,12 +160,12 @@ const mapStateToProps = ({ user, room }) => ({
   userAuth: user.userAuth,
   friendslist: user.friendslist,
   subscribedRooms: room.subscribedRooms,
-  selectedRoom: room.selectedRoom
+  selectedRoom: room.selectedRoom,
 });
 
-const mapDispatchToProps = dispatch => ({
-  updateSubscribedRooms: uid => dispatch(updateSubscribedRooms(uid)),
-  setSelectedRoom: roomID => dispatch(setSelectedRoom(roomID))
+const mapDispatchToProps = (dispatch) => ({
+  updateSubscribedRooms: (uid) => dispatch(updateSubscribedRooms(uid)),
+  setSelectedRoom: (roomID) => dispatch(setSelectedRoom(roomID)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RoomListNav);

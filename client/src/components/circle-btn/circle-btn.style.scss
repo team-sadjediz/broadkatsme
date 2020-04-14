@@ -2,12 +2,8 @@
 @import "../../assets/dimensions";
 
 @mixin circle-properties {
-  box-sizing: border-box;
+  // box-sizing: border-box;
   cursor: pointer;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
 
   // circle btn dimensions and color:
   background-color: $highlight1;
@@ -15,10 +11,13 @@
   height: $circle_btn_dimension;
   border-radius: 50%;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
   // icon dimensions and color:
   svg {
-    width: 0.7em;
-    height: auto;
+    // width: 1rem;
+    // height: auto;
     path {
       fill: $white;
     }
@@ -33,7 +32,7 @@
   }
 }
 
-.circle-btn {
+.circle-btn-container {
   @include circle-properties;
   @include hover-animation;
 
@@ -42,7 +41,7 @@
     height: 100%;
 
     font-weight: bold;
-    font-size: 1em;
+    font-size: 1rem;
     color: $white;
 
     display: flex;
