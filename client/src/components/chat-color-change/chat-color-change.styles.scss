@@ -1,2 +1,20 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
+
+.chat-color-change-container {
+  // width: 15rem;
+  // height: 40rem;
+  padding: 1rem;
+  background-color: $foreground2;
+  background-color: $foreground;
+
+  display: flex;
+  flex-direction: column;
+
+  border-radius: 0.2rem;
+
+  #chat-color-btn {
+    margin-top: 1rem;
+    border-radius: 6px;
+  }
+}

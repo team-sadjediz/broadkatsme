@@ -4,8 +4,7 @@
 .friends-list-container {
   // background-color: salmon;
   width: 100%;
-
-  height: fit-content;
+  // height: fit-content;
 
   display: flex;
   flex-direction: column;
@@ -64,4 +63,30 @@
       }
     }
   }
+
+  // .add-friend-container {
+  //   box-sizing: border-box;
+  //   padding: 0.5rem;
+  //   display: flex;
+  //   justify-content: space-between;
+  //   align-items: center;
+  //   // flex-direction: column;
+
+  //   #add-friend-btn {
+  //     background-color: transparent;
+  //     svg {
+  //       path {
+  //         fill: $highlight1;
+  //       }
+  //     }
+
+  //     &:hover {
+  //       svg {
+  //         path {
+  //           fill: $highlight2;
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 }

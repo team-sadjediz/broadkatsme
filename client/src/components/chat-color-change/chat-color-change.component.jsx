@@ -4,6 +4,8 @@ import axios from "axios";
 import { BASE_API_URL } from "../../utils";
 import { BlockPicker } from "react-color";
 
+import CustomButton from "../custom-button/custom-button.component";
+
 // mui components:
 import Button from "@material-ui/core/Button";
 
@@ -62,9 +64,13 @@ const ChatColorChange = ({
         ]}
         onChangeComplete={handleChangeComplete}
       />
-      <Button variant="contained" color="primary" onClick={handleSubmit}>
+      {/* <Button variant="contained" color="primary" onClick={handleSubmit}>
         Change Chat Color
-      </Button>
+      </Button> */}
+
+      <CustomButton id="chat-color-btn" onClick={handleSubmit}>
+        Change
+      </CustomButton>
     </div>
   );
 };

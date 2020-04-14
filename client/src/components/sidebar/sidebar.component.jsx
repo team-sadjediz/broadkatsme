@@ -18,6 +18,8 @@ import HeaderInfo from "../header-info/header-info.component";
 import Chat from "../chat/chat.component";
 import FriendsList from "../friendslist/friendslist.component";
 
+import ChatSidebarHeader from "../sidebar-content-header/sidebar-content-header.component";
+
 // icons:
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import ChatIcon from "@material-ui/icons/Chat";
@@ -34,13 +36,21 @@ import { BASE_API_URL } from "../../utils";
 const tabNavComponents = [
   {
     component: <FriendsList />,
-    title: "Friendslist",
+    componentHeader: null,
+    title: "Friends List",
     icon: <SupervisedUserCircleIcon />,
     index: 0,
   },
-  { component: <Chat />, title: "Chat", icon: <ChatIcon />, index: 1 },
+  {
+    component: <Chat />,
+    componentHeader: <ChatSidebarHeader />,
+    title: "Chat",
+    icon: <ChatIcon />,
+    index: 1,
+  },
   {
     component: <HeaderInfo />,
+    componentHeader: null,
     title: "Debug",
     icon: <BugReportIcon />,
     index: 2,
@@ -102,7 +112,10 @@ const Sidebar = ({
         }`}
       >
         <div className="sidebar-header">
-          {tabNavComponents[itemSelected].title}
+          {tabNavComponents[itemSelected].componentHeader
+            ? tabNavComponents[itemSelected].componentHeader
+            : tabNavComponents[itemSelected].title}
+          {/* {} */}
         </div>
         <div className="sidebar-component">
           {tabNavComponents[itemSelected].component}

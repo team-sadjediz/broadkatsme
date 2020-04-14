@@ -92,3 +92,8 @@ $foreground2: $gray_material_ui;
   font-weight: normal;
   color: $highlight1; // must be selected from MAIN REFERENCE
 }
+
+$header_size: 3.25rem;
+$sidebar_nav_width: 3.75rem;
+$sidebar_timing: 150ms;
+$sidebar_gutter_width: 0.5rem;

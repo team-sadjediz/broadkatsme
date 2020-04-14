@@ -10,6 +10,7 @@ import TextField from "@material-ui/core/TextField";
 
 // components:
 import Message from "../message/message.component";
+// import SidebarContentHeader from "../sidebar-content-header/sidebar-content-header.component";
 
 // custom style sheet:
 import "./chat.styles.scss";
