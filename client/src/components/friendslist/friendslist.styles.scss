@@ -18,7 +18,8 @@
   color: $highlight1;
 
   .friend-item {
-    margin: 3px;
+    box-sizing: border-box;
+    margin-bottom: 0.5rem;
     padding: 3px 3px;
 
     height: fit-content;

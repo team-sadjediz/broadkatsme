@@ -11,10 +11,12 @@ const CircleButton = ({
   icon,
   text,
   bgImageUrl,
+  onMouseEnter,
   ...otherProps
 }) => (
   <button
-    onMouseEnter={otherProps.onMouseEnter}
+    {...otherProps}
+    onMouseEnter={onMouseEnter}
     onClick={onClick}
     className={`circle-btn-container ${className ? className : ""}`}
   >

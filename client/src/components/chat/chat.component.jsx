@@ -126,9 +126,9 @@ const Chat = ({
     <div className="chat-container">
       {selectedRoom.roomID ? (
         <React.Fragment>
-          <div className="chat-header-container">
+          {/* <div className="chat-header-container">
             {drawerOpen ? selectedRoom.roomID : ""}
-          </div>
+          </div> */}
           <ScrollToBottom className="message-list-container">
             {messages.map((message, i) => {
               return (

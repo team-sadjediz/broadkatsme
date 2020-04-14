@@ -32,39 +32,24 @@ import "./navbar.styles.scss";
 import { BASE_API_URL } from "../../utils";
 
 const Navbar = ({ updateSubscribedRooms, subscribedRooms, userAuth }) => {
-  // async componentDidMount() {
-  //   this.props.updateSubscribedRooms(this.props.userAuth.uid);
-  //   console.log("navbar sub rooms:", this.props.subscribedRooms);
-  // }
-
   useEffect(() => {
     updateSubscribedRooms(userAuth.uid);
     console.log("navbar sub rooms:", subscribedRooms);
   }, []);
 
   return (
-    <div className="nav-bar-container">
+    <div className="navbar-container">
       <div className="logo-section">
         <p className="logo-text">broadkats.me</p>
         {/* <CircleButton className="me-btn" text="me"></CircleButton> */}
         {/* <LogoCircle>me</LogoCircle> */}
       </div>
 
-      {/* [DEBUG]: TO SEE CURRENT USER INFO: */}
-      {/* <div>{`${this.props.currentUser.uid} ${this.props.currentUser.email}`}</div> */}
-
       <div className="room-nav">
         <Link to="/lobby">
-          {/* <RoomNavButton>
-            <DashboardIcon></DashboardIcon>
-          </RoomNavButton> */}
-
           <CircleButton className="nav-bar-btn" icon={<DashboardIcon />} />
         </Link>
         <Link to="/search">
-          {/* <RoomNavButton>
-            <SearchIcon></SearchIcon>
-          </RoomNavButton> */}
           <CircleButton className="nav-bar-btn" icon={<SearchIcon />} />
         </Link>
 
@@ -75,16 +60,11 @@ const Navbar = ({ updateSubscribedRooms, subscribedRooms, userAuth }) => {
           contentAnchorPoint="top middle"
           childrenAnchorPoint="bottom middle"
         >
-          {/* <RoomNavButton>
-            <AddIcon></AddIcon>
-          </RoomNavButton> */}
-
           <CircleButton className="nav-bar-btn" icon={<AddIcon />} />
         </Poppity>
 
         <RoomListNav />
       </div>
-      {/* <CircleButton icon={<MenuIcon />} /> */}
 
       <Poppity
         content={<PageDropdown />}

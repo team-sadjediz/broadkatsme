@@ -19,7 +19,8 @@ import {
 import { resetRoomRedux } from "./redux/room/room.actions";
 
 // custom components:
-import CustomDrawer from "./components/custom-drawer/custom-drawer.component";
+// import CustomDrawer from "./components/custom-drawer/custom-drawer.component";
+import Sidebar from "./components/sidebar/sidebar.component";
 // import ButtonAppBar from "./components/navbar-mui/navbar-mui.component";
 import Navbar from "./components/navbar/navbar.component";
 // import Drawer from "@material-ui/core/Drawer";
@@ -117,7 +118,8 @@ class App extends Component {
             <BrowserRouter>
               {/* <ButtonAppBar /> */}
               <Navbar />
-              <CustomDrawer>
+              {/* <CustomDrawer> */}
+              <Sidebar>
                 <Switch>
                   <Route
                     exact
@@ -139,7 +141,8 @@ class App extends Component {
                   <Route path="/codeofconduct" component={CodeOfConductPage} />
                   <Route path="/userprofile" component={UserProfilePage} />
                 </Switch>
-              </CustomDrawer>
+              </Sidebar>
+              {/* </CustomDrawer> */}
             </BrowserRouter>
           ) : (
             <BrowserRouter>

@@ -1,7 +1,8 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
 
-.nav-bar-container {
+.navbar-container {
+  box-sizing: border-box;
   background-color: $highlight1;
   width: 100%;
   padding: 0.5rem 1rem;
