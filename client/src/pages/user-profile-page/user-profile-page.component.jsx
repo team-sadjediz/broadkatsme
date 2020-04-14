@@ -122,7 +122,6 @@ class UserProfilePage extends React.Component {
         console.log('private', this.state.isPrivate);
         console.log('is user', this.state.isUser);
     }
-    
     handleSubmit(e) {
         // this.setState({username: e.target.value});
         const details = {
