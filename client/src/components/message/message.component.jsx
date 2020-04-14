@@ -1,62 +1,129 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import Timestamp from "react-timestamp";
+// import axios from "axios";
+// import { BASE_API_URL } from "../../utils";
 
 // mui components:
 
 // custom style sheet:
 import "./message.styles.scss";
 
-const Message = ({ message, sender, date, currentUser }) => {
-  let isSentByCurrentUser = false;
+const Message = ({
+  message,
+  senderID,
+  senderName,
+  chatColor,
+  date,
+  userAuth,
+  currentUser,
+}) => {
+  const [flexDirection, setFlexDirection] = useState("");
+  const [border, setBorder] = useState({});
+  const [bgColor, setBgColor] = useState("");
+  const [orientation, setOrientation] = useState("");
+  const [textAlign, setTextAlign] = useState("");
+  const [fontStyle, setFontStyle] = useState({});
 
-  if (currentUser.uid === sender) {
-    isSentByCurrentUser = true;
-  }
+  // const getChatColor = async userID => {
+  //   let chatColor = "white";
+  //   await axios
+  //     .get(`${BASE_API_URL}/userprofile/details/${userID}`)
+  //     .then(async res => {
+  //       console.log("chatcolor", res.data.chatColor);
 
-  let username = sender;
+  //       chatColor = await res.data.chatColor;
+  //     })
+  //     .catch(err => {
+  //       console.error(err);
+  //     });
 
-  if (sender.length > 10) {
-    username =
-      sender.slice(0, 3) + sender.slice(sender.length - 3, sender.length);
-  }
+  //   return chatColor;
+  // };
 
-  let flexDirection;
-  let border;
-  let bgColor;
-  let orientation;
-  let textAlign;
-  if (isSentByCurrentUser) {
-    flexDirection = "flex-row-reverse";
-    border = "border-right";
-    bgColor = "bgc-sent";
-    orientation = "align-right";
-    textAlign = "text-left";
-  } else {
-    flexDirection = "flex-row";
-    border = "border-left";
-    bgColor = "bgc-rec";
-    orientation = "align-left";
-    textAlign = "text-right";
-  }
+  useEffect(() => {
+    let isSentByCurrentUser = false;
 
-  // let date = new Date();
+    if (userAuth.uid === senderID) {
+      isSentByCurrentUser = true;
+    }
 
-  // console.log(date);
+    if (isSentByCurrentUser) {
+      setFlexDirection("flex-row-reverse");
+      setBorder({ borderRight: `5px solid ${currentUser.chatColor}` });
+      setBgColor("bgc-sent");
+      setOrientation("align-right");
+      setTextAlign("text-left");
+      setFontStyle({ color: `${currentUser.chatColor}` });
+    } else {
+      setFlexDirection("flex-row");
+
+      // let chatColor = "black"; // for admins
+      // if (senderName !== "admin") {
+      //   // getChatColor(senderID).then(res => {
+      //   //   chatColor = res;
+      //   // });
+      //   chatColor = chatColor;
+      // }
+
+      // console.log("chatCOLOR", chatColor);
+
+      setBorder({ borderLeft: `5px solid ${chatColor || "#3a4660"}` });
+      setBgColor("bgc-rec");
+      setOrientation("align-left");
+      setTextAlign("text-right");
+      setFontStyle({ color: `${chatColor || "#3a4660"}` });
+    }
+  }, []);
+
+  // let isSentByCurrentUser = false;
+
+  // if (userAuth.uid === senderID) {
+  //   isSentByCurrentUser = true;
+  // }
+
+  // let flexDirection;
+  // let border;
+  // let bgColor;
+  // let orientation;
+  // let textAlign;
+  // if (isSentByCurrentUser) {
+  //   flexDirection = "flex-row-reverse";
+  //   border = { borderRight: `5px solid ${currentUser.chatColor}` };
+  //   bgColor = "bgc-sent";
+  //   orientation = "align-right";
+  //   textAlign = "text-left";
+  // } else {
+  //   flexDirection = "flex-row";
+  //   // border = "border-left";
+  //   let chatColor = getChatColor(senderID);
+  //   console.log("chatCOLOR", chatColor);
+  //   border = { borderLeft: `5px solid ${chatColor}` };
+  //   bgColor = "bgc-rec";
+  //   orientation = "align-left";
+  //   textAlign = "text-right";
+  // }
 
   return (
     <div className={`message-container ${orientation}`}>
       <div className={`msg-info-container ${flexDirection} ${orientation}`}>
-        <div className={`msg-sender ${border} ${bgColor}`}>{username}</div>
+        <div
+          className={`msg-sender ${bgColor}`}
+          // style={{ borderRight: "10px solid black" }}
+          style={border}
+        >
+          <span style={fontStyle}>{senderName}</span>
+        </div>
         {/* <div className={`msg-timestamp ${textAlign}`}>{date}</div> */}
         <Timestamp
           className={`msg-timestamp ${textAlign}`}
           // relative
           date={date}
           // autoUpdate
+          options={{ format: "time" }}
         ></Timestamp>
       </div>
-      <div className={`msg-text ${border} ${bgColor} ${orientation}`}>
+      <div className={`msg-text ${bgColor} ${orientation}`} style={border}>
         {message}
       </div>
     </div>
@@ -82,7 +149,8 @@ const Message = ({ message, sender, date, currentUser }) => {
   // );
 };
 
-const mapStateToProps = state => ({
-  currentUser: state.user.currentUser
+const mapStateToProps = (state) => ({
+  userAuth: state.user.userAuth,
+  currentUser: state.user.currentUser,
 });
 export default connect(mapStateToProps)(Message);

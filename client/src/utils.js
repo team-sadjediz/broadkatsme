@@ -1,9 +1,9 @@
 const URL_DEVELOPMENT = "http://localhost:5000";
-const URL_PRODUCTION = "http://broadkatsme.herokuapp.com";
+const URL_PRODUCTION = "https://broadkatsme.herokuapp.com";
 
 // will be changed later:
 const URL_CHAT_DEVELOPMENT = "http://localhost:5000";
-const URL_CHAT_PRODUCTION = "http://broadkatsme.herokuapp.com";
+const URL_CHAT_PRODUCTION = "https://broadkatsme.herokuapp.com";
 
 let BASE_API_URL;
 let CHAT_SERVER;

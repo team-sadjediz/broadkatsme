@@ -1,0 +1,23 @@
+@import "../../assets/colors";
+@import "../../assets/dimensions";
+
+.room-title-container {
+  background-color: transparent;
+  display: grid;
+  max-inline-size: 100%;
+  align-content: center;
+}
+
+.room-title {
+  background-color: transparent;
+  text-transform: uppercase;
+  text-overflow: ellipsis;
+  width: 100%;
+  outline: none;
+  // max-width: 8.6em;
+  border: none;
+  font-size: 1.5em;
+  font-weight: bold;
+  // color: white;
+  color: $foreground;
+}

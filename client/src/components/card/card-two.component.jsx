@@ -10,6 +10,8 @@ import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
+import Fab from '@material-ui/core/Fab';
 
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Tag from "../../components/tag/tag.component";
@@ -40,6 +42,18 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 // - implement Skeleton component for card
 // - fix linking click on card
 
+function tagCheck(roomTags) {
+  if (roomTags.length != 0){
+    const allTags = roomTags.map((value, index) => {
+      return <Tag type="label" text={value} />;
+    })
+    return allTags;
+  }
+  else {
+    return <Tag type="label" text="No tags" />;
+  }
+};
+
 const useStyles = makeStyles(theme => ({
   root: {
     position: "relative",
@@ -66,7 +80,7 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid, ...otherProps}) => {
   const [openLink, setOpen] = React.useState(false);
 
   const [hover, setHover] = React.useState(false);
-  const [active, setActive] = React.useState(true);
+  const [active, setActive] = React.useState(false);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -82,6 +96,7 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid, ...otherProps}) => {
   const handleMouseEnter = event => {
     setHover(true);
     // console.log(hover);
+    // console.log(tags.length);
   };
   const handleMouseLeave = event => {
     setHover(false);
@@ -90,6 +105,8 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid, ...otherProps}) => {
 
   const roomTags = tags;
   // console.log(name);
+
+  
   return (
     <div>
     <Card className={classes.root} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
@@ -97,38 +114,49 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid, ...otherProps}) => {
       {hover && 
           <div className="buttons-container">
             {otherProps.unsubscribe &&
-            <CircleBtn
-            className="room-card-buttons"
-            icon={<ClearIcon />}
-            // onClick={this.handleUnsubscribe}
-            />
+            <Tooltip title='Unsubscribe' placement='left'>
+            <Fab className="room-card-buttons" color="primary" aria-label="unsubscribe">
+                <ClearIcon />
+            </Fab>
+            </Tooltip>
             }
             {otherProps.subscribe &&
-            <CircleBtn
-            className="room-card-buttons"
-            icon={<AddIcon />} 
-            />
+            // <Tooltip title="Subscribe" placement="left">
+            //   <CircleBtn
+            //   className="room-card-buttons"
+            //   icon={<AddIcon />} 
+            //   />
+            // </Tooltip>
+            <Tooltip title='Subscribe' placement='left'>
+            <Fab className="room-card-buttons" color="primary" aria-label="subscribe">
+                <AddIcon />
+            </Fab>
+            </Tooltip>
             }
             {otherProps.invite &&
-            <CircleBtn
-            className="room-card-buttons"
-            icon={<PersonAddIcon />} // or use ShareIcon
-            />
+            <Tooltip title='Invite' placement='left'>
+            <Fab className="room-card-buttons" color="primary" aria-label="invite">
+                <PersonAddIcon />
+            </Fab>
+            </Tooltip>
             }
             {otherProps.chat &&
-            <CircleBtn
-            className="room-card-buttons"
-            icon={<ChatIcon />} 
-            />
+            <Tooltip title='Subscribe' placement='left'>
+            <Fab className="room-card-buttons" color="primary" aria-label="chat">
+                <ChatIcon />
+            </Fab>
+            </Tooltip>
             }
-            <IconButton
-              className="show-more-button"
-              onClick={handleExpandClick}
-              aria-expanded={expanded}
-              aria-label="show more"
-            >
-              <ExpandMoreIcon />
-            </IconButton>
+            <Tooltip title="Show More" placement="left">
+              <IconButton
+                className="show-more-button"
+                onClick={handleExpandClick}
+                aria-expanded={expanded}
+                aria-label="show more"
+              >
+                <ExpandMoreIcon />
+              </IconButton>
+            </Tooltip>
           </div>}
 
       <Link to={`/room/id=${roomID}`}>
@@ -142,9 +170,7 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid, ...otherProps}) => {
           <ListItemAvatar>
             <Avatar src={thumbnailUrl} />
           </ListItemAvatar>
-          <ListItemText primary={<Typography noWrap>{name}</Typography>} secondary={roomTags && roomTags.map((value, index) => {
-              return <Tag type="label" text={value} />;
-            })} />
+          <ListItemText primary={<Typography noWrap>{name}</Typography>} secondary={roomTags && tagCheck(roomTags)} />
         </ListItem>
           {/* <Typography noWrap>{name}</Typography>
           <Typography variant="body2" color="textSecondary" component="p" noWrap>

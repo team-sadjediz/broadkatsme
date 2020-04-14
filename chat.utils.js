@@ -1,33 +1,63 @@
-const users = [{ id: "idadmin", name: "admin", room: "masteroom" }];
+const users = [
+  {
+    socketID: "socketIDadmin",
+    id: "adminID",
+    name: "admin",
+    chatColor: "#000000",
+    room: "masteroom",
+  },
+];
 
-const addUser = ({ id, name, room }) => {
-  // name = name.trim().toLowerCase();
+const addUser = ({ socketID, id, name, chatColor, room }) => {
+  // id = id.trim().toLowerCase();
   // room = room.trim().toLowerCase();
 
   const existingUser = users.find(
-    user => user.room === room && user.name === name
+    (user) => user.room === room && user.id === id
   );
 
-  if (!name || !room) return { error: "Username and room are required." };
+  if (!id || !room) return { error: "Username and room are required." };
   if (existingUser) return { error: "Username is taken." };
 
-  const user = { id, name, room };
+  const user = { socketID, id, name, chatColor, room };
 
   users.push(user);
 
   return { user };
 };
 
-const removeUser = id => {
-  const index = users.findIndex(user => user.id === id);
+const removeUser = (socketID) => {
+  const index = users.findIndex((user) => user.socketID === socketID);
 
   if (index !== -1) return users.splice(index, 1)[0];
 };
 
-const getUser = id => users.find(user => user.id === id);
+const updateUser = ({ socketID, id, name, chatColor, room }) => {
+  // id = id.trim().toLowerCase();
+  // room = room.trim().toLowerCase();
 
-const getUsersInRoom = room => users.filter(user => user.room === room);
+  // const existingUser = users.find(user => user.room === room && user.id === id);
+
+  const index = users.findIndex((user) => user.socketID === socketID);
+  const user = { socketID, id, name, chatColor, room };
+  if (index !== -1) {
+    users[index] = user;
+  }
+
+  // return { user };
+};
+
+const getUser = (socketID) => users.find((user) => user.socketID === socketID);
+
+const getUsersInRoom = (room) => users.filter((user) => user.room === room);
 
 const getAllUsers = () => users;
 
-module.exports = { addUser, removeUser, getUser, getUsersInRoom, getAllUsers };
+module.exports = {
+  addUser,
+  removeUser,
+  getUser,
+  getUsersInRoom,
+  getAllUsers,
+  updateUser,
+};

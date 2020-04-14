@@ -1,14 +1,18 @@
 const messageList = [
-  { roomId: "masterroom", sender: "admin", msg: "you have been kicked" },
-  { roomId: "masterroom", sender: "apedude", msg: "you have been liked" },
-  { roomId: "notyours", sender: "admin", msg: "you have been botherd" },
-  { roomId: "masterroom", sender: "admin", msg: "you have been kicked" }
+  {
+    roomId: "masterroom",
+    senderID: "senderID",
+    senderName: "senderName",
+    msg: "you have been kicked"
+  }
 ];
 
 const addMessageToRoom = (roomId, message) => {
   const formattedMsg = {
     roomId: roomId,
-    sender: message.user,
+    senderID: message.userID,
+    senderName: message.user,
+    senderChatColor: message.chatColor,
     msg: message.text,
     date: message.date
   };

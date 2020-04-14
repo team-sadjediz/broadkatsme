@@ -9,7 +9,7 @@ import { setAuthorization } from "./firebase/firebase.sdk";
 
 // redux stuff:
 import { connect } from "react-redux";
-import { setUserAuth } from "./redux/user/user.actions";
+import { setUserAuth, updateCurrentUser } from "./redux/user/user.actions";
 
 // components:
 import CustomDrawer from "./components/custom-drawer/custom-drawer.component";
@@ -70,7 +70,13 @@ class App extends Component {
   componentDidMount() {
     console.log("App.js mounted");
     this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-      // this.props.setCurrentUser(user);
+      if (!user) {
+        // THIS IS WHERE WE CLEAN UP ALL REDUX VARIABLES AFTER A USER LOGS OUT
+        // THIS IS WHERE WE CLEAN UP ALL REDUX VARIABLES AFTER A USER LOGS OUT
+        // THIS IS WHERE WE CLEAN UP ALL REDUX VARIABLES AFTER A USER LOGS OUT
+      } else {
+        this.props.updateCurrentUser(user.uid);
+      }
       this.props.setUserAuth(user);
     });
   }
@@ -117,7 +123,7 @@ class App extends Component {
                   <Route path="/about" component={AboutPage} />
                   <Route path="/contact" component={ContactPage} />
                   <Route path="/codeofconduct" component={CodeOfConductPage} />
-                  <Route path="/userprofile" component={UserProfilePage} />
+                  <Route path={`/userprofile/id=:id`} component={UserProfilePage} />
                 </Switch>
               </CustomDrawer>
             </BrowserRouter>
@@ -142,7 +148,8 @@ const mapStateToProps = ({ user }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setUserAuth: user => dispatch(setUserAuth(user))
+  setUserAuth: user => dispatch(setUserAuth(user)),
+  updateCurrentUser: userID => dispatch(updateCurrentUser(userID))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -16,7 +16,7 @@ const HeaderInfo = ({ userAuth, selectedRoom, subscribedRooms }) => {
   return (
     <div className="info-header-container">
       <div>User: {userAuth.uid}</div>
-      <div>Room: {selectedRoom}</div>
+      <div>Room: {selectedRoom["roomID"]}</div>
       <div>BASE_API_URL: {BASE_API_URL}</div>
       <div>CHAT_SERVER: {CHAT_SERVER}</div>
     </div>
