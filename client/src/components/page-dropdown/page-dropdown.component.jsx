@@ -19,7 +19,8 @@ const PageDropdown = ({ className, ...otherProps }) => (
     <Link to="/codeofconduct">
       <div className="text gap">Code of Conduct</div>
     </Link>
-    <Link to="/userprofile">
+    {/* <Link to="/userprofile"> */}
+    <Link to={`/userprofile/id=${otherProps.uid}`}>
       <div className="text gap">User Profile</div>
     </Link>
 

@@ -121,7 +121,7 @@ class App extends Component {
                   <Route path="/about" component={AboutPage} />
                   <Route path="/contact" component={ContactPage} />
                   <Route path="/codeofconduct" component={CodeOfConductPage} />
-                  <Route path="/userprofile" component={UserProfilePage} />
+                  <Route path={`/userprofile/id=:id`} component={UserProfilePage} />
                 </Switch>
               </CustomDrawer>
             </BrowserRouter>

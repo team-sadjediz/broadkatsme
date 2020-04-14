@@ -185,7 +185,9 @@ class ButtonAppBar extends React.Component {
                 vertical: "top",
                 horizontal: "right"
               }}
-              content={<PageDropdown />}
+              // content={<PageDropdown/>}
+              // profile routing
+              content={<PageDropdown uid={this.props.userAuth.uid}/>}
             >
               <MenuButton>
                 <MenuIcon></MenuIcon>

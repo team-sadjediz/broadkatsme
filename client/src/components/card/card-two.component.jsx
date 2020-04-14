@@ -42,6 +42,18 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 // - implement Skeleton component for card
 // - fix linking click on card
 
+function tagCheck(roomTags) {
+  if (roomTags.length != 0){
+    const allTags = roomTags.map((value, index) => {
+      return <Tag type="label" text={value} />;
+    })
+    return allTags;
+  }
+  else {
+    return <Tag type="label" text="No tags" />;
+  }
+};
+
 const useStyles = makeStyles(theme => ({
   root: {
     position: "relative",
@@ -83,15 +95,17 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid, ...otherProps}) => {
 
   const handleMouseEnter = event => {
     setHover(true);
-    console.log(hover);
+    // console.log(tags.length);
   };
   const handleMouseLeave = event => {
     setHover(false);
-    console.log(hover);
+    // console.log(hover);
   };
 
   const roomTags = tags;
-  console.log(name);
+  // console.log(name);
+
+  
   return (
     <div>
     <Card className={classes.root} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
@@ -155,9 +169,7 @@ const CardTwo = ({ roomID, name, thumbnailUrl, tags, uid, ...otherProps}) => {
           <ListItemAvatar>
             <Avatar src={thumbnailUrl} />
           </ListItemAvatar>
-          <ListItemText primary={<Typography noWrap>{name}</Typography>} secondary={roomTags && roomTags.map((value, index) => {
-              return <Tag type="label" text={value} />;
-            })} />
+          <ListItemText primary={<Typography noWrap>{name}</Typography>} secondary={roomTags && tagCheck(roomTags)} />
         </ListItem>
           {/* <Typography noWrap>{name}</Typography>
           <Typography variant="body2" color="textSecondary" component="p" noWrap>
