@@ -149,7 +149,11 @@ class RoomListNav extends React.Component {
         {/* <RoomNavButton onClick={this.next}>
           <ChevronRightIcon />
         </RoomNavButton> */}
-        <CircleButton onClick={this.next} icon={<ChevronRightIcon />} />
+        <CircleButton
+          className=".nav-bar-btn"
+          onClick={this.next}
+          icon={<ChevronRightIcon />}
+        />
       </React.Fragment>
       // </div>
     );

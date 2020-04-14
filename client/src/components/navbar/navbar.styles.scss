@@ -82,3 +82,15 @@
     }
   }
 }
+
+.nav-bar-btn {
+  &:hover {
+    background-color: white;
+
+    svg {
+      path {
+        fill: $highlight1;
+      }
+    }
+  }
+}

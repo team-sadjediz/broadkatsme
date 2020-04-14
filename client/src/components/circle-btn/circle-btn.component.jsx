@@ -13,7 +13,7 @@ const CircleButton = ({
   bgImageUrl,
   ...otherProps
 }) => (
-  <div
+  <button
     onMouseEnter={otherProps.onMouseEnter}
     onClick={onClick}
     className={`circle-btn-container ${className ? className : ""}`}
@@ -23,16 +23,9 @@ const CircleButton = ({
         return icon;
       } else if (text) {
         return <div className="text">{text}</div>;
-      } else if (bgImageUrl) {
-        return (
-          <div className="image-container">
-            <img className="image-fill" src={bgImageUrl} alt="" />
-            <div className="hover-overlay">{<PlayIcon />}</div>
-          </div>
-        );
       }
     })()}
-  </div>
+  </button>
 );
 
 export default CircleButton;

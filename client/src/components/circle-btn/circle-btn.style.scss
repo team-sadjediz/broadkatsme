@@ -19,7 +19,7 @@
     // width: 1rem;
     // height: auto;
     path {
-      fill: $white;
+      fill: white;
     }
   }
 }
@@ -42,53 +42,11 @@
 
     font-weight: bold;
     font-size: 1rem;
-    color: $white;
+    color: white;
 
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-
-  .image-container {
-    position: relative;
-    height: 100%;
-    width: 100%;
-
-    .image-fill {
-      border-radius: 50%;
-      height: 100%;
-      width: 100%;
-      object-fit: cover;
-    }
-
-    .hover-overlay {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      position: absolute;
-      top: 0;
-      right: 0;
-
-      height: 100%;
-      width: 100%;
-      opacity: 0;
-      transition-duration: 200ms;
-      transition-property: transform opacity;
-
-      svg {
-        padding-left: 2px; // this is to offset the play icon since the shape is left heavy
-
-        path {
-          fill: $white;
-        }
-      }
-    }
-
-    &:hover .hover-overlay {
-      opacity: 100%;
-      transform: rotate(360deg);
-    }
   }
 }
 

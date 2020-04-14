@@ -17,12 +17,6 @@ import NewRoom from "../new-room/new-room.component";
 import RoomListNav from "../room-list-nav/room-list-nav.component";
 import Poppity from "../poppity/poppity-v2.component";
 
-// mui components:
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-// import AppBar from "@material-ui/core/AppBar";
-// import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-
 // icons:
 import AddIcon from "@material-ui/icons/Add";
 import SearchIcon from "@material-ui/icons/Search";
@@ -36,68 +30,6 @@ import "./navbar.styles.scss";
 
 // utils:
 import { BASE_API_URL } from "../../utils";
-
-// const useStyles = makeStyles(theme => ({
-//   root: {
-//     flexGrow: 1,
-//     boxShadow: "none"
-//   },
-//   menuButton: {
-//     marginRight: theme.spacing(2)
-//   },
-//   title: {
-//     flexGrow: 1
-//   }
-// }));
-
-// const MyAppBar = withStyles((theme) => ({
-//   root: {
-//     boxShadow: "none",
-//   },
-// }))(AppBar);
-
-// const LogoCircle = withStyles((theme) => ({
-//   root: {
-//     backgroundColor: theme.palette.secondary.main,
-//     fontFamily: `"Karla"`,
-//     textTransform: "uppercase",
-//     fontWeight: "bold",
-//     fontSize: "1em",
-//     color: "white",
-//     padding: 0,
-//   },
-// }))(IconButton);
-
-// const MenuButton = withStyles((theme) => ({
-//   root: {
-//     backgroundColor: "white",
-//     fontFamily: `"Karla"`,
-//     textTransform: "uppercase",
-//     fontWeight: "bold",
-//     fontSize: "1em",
-//     color: theme.palette.primary.main,
-//     "&:hover": {
-//       backgroundColor: theme.palette.secondary.main,
-//       color: "white",
-//     },
-//   },
-// }))(IconButton);
-
-const RoomNavButton = withStyles((theme) => ({
-  root: {
-    backgroundColor: theme.palette.primary.main,
-    fontFamily: `"Karla"`,
-    textTransform: "uppercase",
-    fontWeight: "bold",
-    fontSize: "1em",
-    // margin: "0 3px",
-    color: "white",
-    "&:hover": {
-      backgroundColor: theme.palette.secondary.main,
-      color: "white",
-    },
-  },
-}))(IconButton);
 
 const Navbar = ({ updateSubscribedRooms, subscribedRooms, userAuth }) => {
   // async componentDidMount() {
@@ -127,13 +59,13 @@ const Navbar = ({ updateSubscribedRooms, subscribedRooms, userAuth }) => {
             <DashboardIcon></DashboardIcon>
           </RoomNavButton> */}
 
-          <CircleButton icon={<DashboardIcon />} />
+          <CircleButton className="nav-bar-btn" icon={<DashboardIcon />} />
         </Link>
         <Link to="/search">
           {/* <RoomNavButton>
             <SearchIcon></SearchIcon>
           </RoomNavButton> */}
-          <CircleButton icon={<SearchIcon />} />
+          <CircleButton className="nav-bar-btn" icon={<SearchIcon />} />
         </Link>
 
         <Poppity
@@ -147,7 +79,7 @@ const Navbar = ({ updateSubscribedRooms, subscribedRooms, userAuth }) => {
             <AddIcon></AddIcon>
           </RoomNavButton> */}
 
-          <CircleButton icon={<AddIcon />} />
+          <CircleButton className="nav-bar-btn" icon={<AddIcon />} />
         </Poppity>
 
         <RoomListNav />
@@ -160,7 +92,7 @@ const Navbar = ({ updateSubscribedRooms, subscribedRooms, userAuth }) => {
         contentAnchorPoint="top right"
         childrenAnchorPoint="bottom right"
       >
-        <CircleButton icon={<MenuIcon />} />
+        <CircleButton className="nav-bar-btn" icon={<MenuIcon />} />
       </Poppity>
     </div>
   );
