@@ -3,6 +3,7 @@
 
 $header_size: 3.25rem;
 $sidebar_nav_width: 3.75rem;
+$sidebar_timing: 150ms;
 
 .main-sidebar-container {
   position: relative;
@@ -27,6 +28,8 @@ $sidebar_nav_width: 3.75rem;
     align-items: center;
 
     .sidebar-item {
+      z-index: 1;
+
       width: 100%;
       height: $header_size;
       // background-color: black;
@@ -40,6 +43,23 @@ $sidebar_nav_width: 3.75rem;
         // top: 0;
         // right: 0;
         // background-color: purple;
+        width: 2.5rem;
+        height: 2.5rem;
+        svg {
+          transition: transform $sidebar_timing ease-out;
+        }
+      }
+
+      .btn-left {
+        svg {
+          transform: rotate(-180deg);
+        }
+      }
+
+      .btn-right {
+        svg {
+          transform: rotate(0deg);
+        }
       }
 
       .tab-nav-item-circle-btn {
@@ -69,6 +89,15 @@ $sidebar_nav_width: 3.75rem;
         }
       }
     }
+
+    .toggle-container {
+      z-index: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+    }
   }
 
   .sidebar-content {
@@ -88,7 +117,10 @@ $sidebar_nav_width: 3.75rem;
 
     // transform: translateX(0);
 
-    transition: all 200ms ease-out;
+    transition-property: max-width, min-width, opacity;
+    transition-duration: $sidebar_timing;
+    transition-timing-function: ease-out;
+    // transition: min-width $sidebar_timing ease-out;
 
     display: flex;
     flex-direction: column;
@@ -121,13 +153,14 @@ $sidebar_nav_width: 3.75rem;
 
   .sidebar-open {
     // transform: translateX(0);
-
+    opacity: 1;
     min-width: 20rem;
     max-width: 20rem;
   }
 
   .sidebar-closed {
     // transform: translateX(-100%);
+    opacity: 0;
 
     min-width: 0;
     max-width: 0;

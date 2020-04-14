@@ -23,6 +23,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import ChatIcon from "@material-ui/icons/Chat";
 import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
 import BugReportIcon from "@material-ui/icons/BugReport";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 
 // custom style sheet:
 import "./sidebar.styles.scss";
@@ -55,19 +56,26 @@ const Sidebar = ({
   const [drawerOpen, setDrawerOpen] = useState(true);
   const [itemSelected, setItemSelected] = useState(0);
 
-  // useEffect(() => {
-
-  // }, []);
+  useEffect(() => {}, [drawerOpen, itemSelected]);
 
   const toggleSidebar = () => {
     setDrawerOpen(!drawerOpen);
+  };
+
+  const enableSidebar = () => {
+    setDrawerOpen(true);
   };
 
   return (
     <div className="main-sidebar-container">
       <div className="sidebar-nav">
         <div className="sidebar-item">
-          <CircleButton id="toggle-sidebar-btn" onClick={toggleSidebar} />
+          <CircleButton
+            id="toggle-sidebar-btn"
+            className={`${drawerOpen ? "btn-left" : "btn-right"}`}
+            icon={<ChevronRightIcon />}
+            onClick={toggleSidebar}
+          />
         </div>
 
         {tabNavComponents.map((item, i) => (
@@ -77,12 +85,15 @@ const Sidebar = ({
                 item.index === itemSelected ? "tab-nav-item-selected" : ""
               }`}
               onClick={() => {
+                enableSidebar();
                 setItemSelected(item.index);
               }}
               icon={item.icon}
             />
           </div>
         ))}
+
+        <div onClick={toggleSidebar} className="toggle-container"></div>
       </div>
 
       <div
