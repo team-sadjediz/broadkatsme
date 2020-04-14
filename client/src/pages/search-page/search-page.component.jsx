@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 //components
 import Card from "../../components/card/card.component";
 import CardTwo from "../../components/card/card-two.component";
+import UserCard from "../../components/card/user-card.component";
 import FormInput from "../../components/form-input/form-input.component";
 import Carousel from "../../components/carousel/carousel.component";
 import Grid from '@material-ui/core/Grid';
@@ -15,6 +16,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 
 
 //svg and styling
@@ -76,7 +78,9 @@ class SearchPage extends React.Component {
       search: "",
       filterBy: "",
       selectedRoom: "",
-      tabValue: 1
+      tabValue: 1,
+      isSearchingUsers: false,
+      users: [],
     };
   }
 
@@ -86,6 +90,12 @@ class SearchPage extends React.Component {
 
   handleSelect(e) {
     this.setState({filterBy: e.target.value});
+    if (e.target.value == 'users') {
+      this.state.isSearchingUsers = true;
+      }
+    else {
+      this.state.isSearchingUsers = false;
+    }
   }
 
   handleSelectRoom = e => {
@@ -111,7 +121,26 @@ class SearchPage extends React.Component {
     this.setState({tabValue: newValue});
   }
 
+  findUsers = e => {
+      if (this.state.isSearchingUsers) {
+        axios
+        .get(`${BASE_API_URL}/search/user/${this.state.search}`)
+        .then(user => {
+          // console.log("user rooms: " + rooms);
+          this.setState({ users: user.data });
+          // console.log(rooms.data);
+        })
+        .catch(error => {
+          console.error(error);
+          // console.log("oof");
+        });
+      }
+      return this.state.users;
+  }
+
   render() {
+
+    let filteredUsers = this.findUsers();
 
     let filteredUserRooms = this.state.userRooms.filter(
       (room) => {
@@ -142,6 +171,7 @@ class SearchPage extends React.Component {
         return -1;
       }
     );
+
     return (
       <div className="container">
         <div className="lobby-tabs">
@@ -159,11 +189,12 @@ class SearchPage extends React.Component {
                       >
                         <MenuItem value={"roomName"}>room name</MenuItem>
                         <MenuItem value={"tags"}>tags</MenuItem>
+                        <MenuItem value={"users"}>users</MenuItem>
                       </Select>
                     </FormControl>
                   <div>
                     <Grid container spacing={1}>
-                  {
+                  {!this.state.isSearchingUsers &&
                       filteredUserRooms.map(property=> 
                       // <div className="card-grid-container" key={ property.roomID }>
                       <Grid item xs={4} zeroMinWidth>
@@ -183,6 +214,23 @@ class SearchPage extends React.Component {
                       )
                   }
                   </Grid>
+                  {
+                    this.state.isSearchingUsers &&
+                    <div className='search-users'>
+                      {
+                      filteredUsers.map(property=> 
+                        <div>
+                         <UserCard
+                         username={property.username}
+                         avatar={property.photoURL}
+                         bio={property.biography}
+                         />
+                         <Divider variant="middle" />
+                        </div>
+                          )
+                        }
+                    </div>
+                  }
                   </div>
                 </div>
         </div>

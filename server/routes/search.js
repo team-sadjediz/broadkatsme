@@ -2,6 +2,8 @@ var express = require("express");
 var router = express.Router();
 
 const Room = require("../models/room.model");
+const UserProfile = require("../models/userprofile.model");
+const User = require("../models/user.model");
 
 // ---------------------------------------------------------- SEARCH W/NAME & TAGS ----------------------------------------------------------
 
@@ -96,5 +98,16 @@ router.get('/rooms', async function(req, res) {
     });
 
     res.send(roomUrls);  
+  });
+});
+
+// ---------------------------------------------------------- SEARCH USERNAMES ----------------------------------------------------------
+router.get("/user/:username", async function(req, res) {
+  let username = req.params.username;
+  await UserProfile.find({ username: username })
+  .then(user => {
+    res.json(user);
+  }).catch(error => {
+    res.status(404).send(error);
   });
 });
