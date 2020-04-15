@@ -376,7 +376,7 @@ class RoomSettings extends Component {
                     name={this.state.roomName}
                     onChangeTitle={this.onChangeTitle}
                     onBlurTitle={this.onBlurTitle}
-                    owner={this.props.currentUser.username}
+                    owner={this.props.selectedRoom.ownerID}
                     ownerID={this.props.userAuth.uid}
                     tags={tags}
                     roomID={this.props.roomID}

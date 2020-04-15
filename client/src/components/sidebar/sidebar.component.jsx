@@ -28,7 +28,7 @@ import ChatIcon from "@material-ui/icons/Chat";
 import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
 import BugReportIcon from "@material-ui/icons/BugReport";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-
+import AddCircleIcon from "@material-ui/icons/AddCircle";
 // custom style sheet:
 import "./sidebar.styles.scss";
 
@@ -118,6 +118,15 @@ const Sidebar = ({
           }}
           className="room-list-nav-z"
         />
+
+        <div className="sidebar-item">
+          <CircleButton
+            // id="toggle-sidebar-btn"
+            className={`tab-nav-item-circle-btn`}
+            icon={<AddCircleIcon />}
+            onClick={toggleSidebar}
+          />
+        </div>
 
         <div onClick={toggleSidebar} className="toggle-container"></div>
       </div>
