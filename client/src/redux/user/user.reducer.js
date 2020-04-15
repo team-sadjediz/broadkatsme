@@ -1,48 +1,34 @@
-import { UserActionTypes } from "./user.types";
-
-const INITIAL_STATE = {
-  userAuth: null,
-  currentUser: {
-    userID: "",
-    username: "",
-    chatColor: "",
-    photoURL: "",
-    biography: "",
-    tags: [],
-    favorites: { movies: "", music: "", websites: "" },
-    privacy: true
-  },
-  friendslist: [],
-  notifications: [],
-  socket: { id: null }
-};
+import { UserActionTypes, INITIAL_STATE } from "./user.types";
 
 const userReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case UserActionTypes.RESET_USER_REDUX:
+      return action.payload;
+
     case UserActionTypes.SET_USER_AUTH:
       return {
         ...state,
-        userAuth: action.payload
+        userAuth: action.payload,
       };
     case UserActionTypes.SET_CURRENT_USER:
       return {
         ...state,
-        currentUser: action.payload
+        currentUser: action.payload,
       };
     case UserActionTypes.SET_FRIENDSLIST:
       return {
         ...state,
-        friendslist: action.payload
+        friendslist: action.payload,
       };
     case UserActionTypes.SET_NOTIFICATION:
       return {
         ...state,
-        notifications: action.payload
+        notifications: action.payload,
       };
     case UserActionTypes.SET_SOCKET:
       return {
         ...state,
-        socket: action.payload
+        socket: action.payload,
       };
     // case UserActionTypes.UPDATE_CURRENT_USER:
     //   return state;

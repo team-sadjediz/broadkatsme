@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import {
   setSubscribedRooms,
   setSelectedRoom,
-  updateSubscribedRooms
+  updateSubscribedRooms,
 } from "../../redux/room/room.actions";
 import axios from "axios";
 
@@ -12,9 +12,10 @@ import axios from "axios";
 import CircleBtn from "../circle-btn/circle-btn.component";
 import ImageButton from "../img-btn/img-btn.component";
 import PageDropdown from "../page-dropdown/page-dropdown.component";
-import MouseOverPopover from "../custom-popover/custom-popover.component";
+// import MouseOverPopover from "../custom-popover/custom-popover.component";
 import NewRoom from "../new-room/new-room.component";
 import RoomListNav from "../room-list-nav/room-list-nav.component";
+import Poppity from "../poppity/poppity-v2.component";
 
 // mui components:
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -49,13 +50,13 @@ import { BASE_API_URL } from "../../utils";
 //   }
 // }));
 
-const MyAppBar = withStyles(theme => ({
+const MyAppBar = withStyles((theme) => ({
   root: {
-    boxShadow: "none"
-  }
+    boxShadow: "none",
+  },
 }))(AppBar);
 
-const LogoCircle = withStyles(theme => ({
+const LogoCircle = withStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.secondary.main,
     fontFamily: `"Karla"`,
@@ -63,11 +64,11 @@ const LogoCircle = withStyles(theme => ({
     fontWeight: "bold",
     fontSize: "1em",
     color: "white",
-    padding: 0
-  }
+    padding: 0,
+  },
 }))(IconButton);
 
-const MenuButton = withStyles(theme => ({
+const MenuButton = withStyles((theme) => ({
   root: {
     backgroundColor: "white",
     fontFamily: `"Karla"`,
@@ -75,11 +76,14 @@ const MenuButton = withStyles(theme => ({
     fontWeight: "bold",
     fontSize: "1em",
     color: theme.palette.primary.main,
-    "&:hover": { backgroundColor: theme.palette.secondary.main, color: "white" }
-  }
+    "&:hover": {
+      backgroundColor: theme.palette.secondary.main,
+      color: "white",
+    },
+  },
 }))(IconButton);
 
-const RoomNavButton = withStyles(theme => ({
+const RoomNavButton = withStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.primary.main,
     fontFamily: `"Karla"`,
@@ -88,8 +92,11 @@ const RoomNavButton = withStyles(theme => ({
     fontSize: "1em",
     // margin: "0 3px",
     color: "white",
-    "&:hover": { backgroundColor: theme.palette.secondary.main, color: "white" }
-  }
+    "&:hover": {
+      backgroundColor: theme.palette.secondary.main,
+      color: "white",
+    },
+  },
 }))(IconButton);
 
 class ButtonAppBar extends React.Component {
@@ -131,72 +138,32 @@ class ButtonAppBar extends React.Component {
                   <SearchIcon></SearchIcon>
                 </RoomNavButton>
               </Link>
-              <MouseOverPopover
-                // popoverMode="hover"
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "center"
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "center"
-                }}
+
+              <Poppity
                 content={<NewRoom />}
+                buttonEventTrigger="hover"
+                spacing="10px"
+                contentAnchorPoint="top middle"
+                childrenAnchorPoint="bottom middle"
               >
                 <RoomNavButton>
                   <AddIcon></AddIcon>
                 </RoomNavButton>
-              </MouseOverPopover>
+              </Poppity>
 
               <RoomListNav />
-
-              {/* {console.log("yellow", this.props.userProps)} */}
-              {/* {this.props.subscribedRooms.map((room, i) => (
-                <Link
-                  style={{ position: "relative" }}
-                  to={`/room/id=${room.roomID}`}
-                  key={i}
-                >
-                  {this.props.selectedRoom === room.roomID ? (
-                    <div className="room-selected">
-                      <div className="indicator"></div>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                  <ImageButton
-                    onClick={() => {
-                      this.props.setSelectedRoom(room.roomID);
-                    }}
-                    iconHover={<PlayCircleFilledIcon />}
-                    // bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=default1.png`}
-                    bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${room.thumbnailUrl}`}
-                  ></ImageButton>
-                </Link>
-              ))} */}
             </div>
 
-            <MouseOverPopover
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right"
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right"
-              }}
-              // content={<PageDropdown/>}
-              // profile routing
-              content={<PageDropdown uid={this.props.userAuth.uid}/>}
+            <Poppity
+              content={<PageDropdown />}
+              buttonEventTrigger="hover"
+              contentAnchorPoint="top right"
+              childrenAnchorPoint="bottom right"
             >
               <MenuButton>
                 <MenuIcon></MenuIcon>
               </MenuButton>
-            </MouseOverPopover>
-            {/* 
-            <MenuButton>
-              <MenuIcon></MenuIcon>
-            </MenuButton> */}
+            </Poppity>
           </Toolbar>
         </MyAppBar>
       </div>
@@ -204,15 +171,15 @@ class ButtonAppBar extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   userAuth: state.user.userAuth,
   subscribedRooms: state.room.subscribedRooms,
-  selectedRoom: state.room.selectedRoom
+  selectedRoom: state.room.selectedRoom,
 });
 
-const mapDispatchToProps = dispatch => ({
-  updateSubscribedRooms: uid => dispatch(updateSubscribedRooms(uid)),
-  setSelectedRoom: roomID => dispatch(setSelectedRoom(roomID))
+const mapDispatchToProps = (dispatch) => ({
+  updateSubscribedRooms: (uid) => dispatch(updateSubscribedRooms(uid)),
+  setSelectedRoom: (roomID) => dispatch(setSelectedRoom(roomID)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ButtonAppBar);

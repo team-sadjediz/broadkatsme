@@ -1,2 +1,34 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
+
+.add-friend-container {
+  box-sizing: border-box;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  // flex-direction: column;
+
+  // background-color: red;
+
+  background-color: $foreground2;
+  margin-bottom: $sidebar_gutter_width;
+
+  #add-friend-btn {
+    background-color: transparent;
+    svg {
+      path {
+        fill: $highlight1;
+      }
+    }
+
+    &:hover {
+      svg {
+        path {
+          fill: $highlight2;
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { auth } from "../../firebase/firebase.utils";
+import { connect } from "react-redux";
 
 // icons:
 // import { ReactComponent as PeopleIcon } from "../../assets/icons/user-circle-solid.svg";
@@ -8,8 +9,11 @@ import { auth } from "../../firebase/firebase.utils";
 
 import "./page-dropdown.styles.scss";
 
-const PageDropdown = ({ className, ...otherProps }) => (
-  <div {...otherProps} className={`page-dropdown-container ${className ? className : ""}`}>
+const PageDropdown = ({ className, userAuth, ...otherProps }) => (
+  <div
+    {...otherProps}
+    className={`page-dropdown-container ${className ? className : ""}`}
+  >
     <Link to="/about">
       <div className="text gap">About</div>
     </Link>
@@ -20,7 +24,7 @@ const PageDropdown = ({ className, ...otherProps }) => (
       <div className="text gap">Code of Conduct</div>
     </Link>
     {/* <Link to="/userprofile"> */}
-    <Link to={`/userprofile/id=${otherProps.uid}`}>
+    <Link to={`/userprofile/id=${userAuth.uid}`}>
       <div className="text gap">User Profile</div>
     </Link>
 
@@ -30,4 +34,10 @@ const PageDropdown = ({ className, ...otherProps }) => (
   </div>
 );
 
-export default PageDropdown;
+// export default PageDropdown;
+
+const mapStateToProps = ({ user, room }) => ({
+  userAuth: user.userAuth,
+});
+
+export default connect(mapStateToProps)(PageDropdown);

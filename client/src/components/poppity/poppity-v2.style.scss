@@ -1,0 +1,219 @@
+@import "../../assets/dimensions";
+@import "../../assets/colors";
+
+@mixin top_left {
+  top: 0;
+  left: 0;
+}
+
+@mixin top_middle {
+  top: 0;
+  left: 50%;
+}
+
+@mixin top_right {
+  top: 0;
+  right: 0;
+}
+
+@mixin middle_left {
+  top: 50%;
+  left: 0;
+}
+
+@mixin middle_middle {
+  top: 50%;
+  left: 50%;
+}
+
+@mixin middle_right {
+  top: 50%;
+  right: 0;
+}
+
+@mixin bottom_left {
+  bottom: 0;
+  left: 0;
+}
+
+@mixin bottom_middle {
+  bottom: 0;
+  left: 50%;
+}
+
+@mixin bottom_right {
+  bottom: 0;
+  right: 0;
+}
+
+.poppity-container {
+  // background-color: blue;
+  position: relative;
+  z-index: 5000;
+
+  .custom-backdrop {
+    // position: fixed;
+    position: fixed;
+    z-index: 0;
+    // top: 0;
+    // left: 0;
+    width: 800px;
+    height: 2000px;
+    background-color: rgba(black, 0.5);
+  }
+
+  .ch-anchor-point {
+    position: absolute;
+    // width: 3px;
+    // height: 3px;
+    // background-color: red;
+
+    .pop-up-container {
+      // background-color: red;
+
+      position: relative;
+
+      // width: 2px;
+      // height: 2px;
+      // background-color: green;
+      // background-color: $foreground;
+
+      // .triangle {
+      //   margin-top: 0.5em;
+      //   width: $circle_btn_dimension;
+
+      //   z-index: 50;
+
+      //   display: flex;
+      //   justify-content: center;
+      //   align-items: center;
+
+      //   svg {
+      //     width: 1.5em;
+      //     path {
+      //       fill: $highlight1;
+      //     }
+      //   }
+      // }
+
+      .dropdown-container {
+        position: absolute;
+        z-index: 10;
+
+        width: auto;
+        height: auto;
+
+        // to get spacing between the children and content use margin:
+        // margin-top: 0.5em;
+
+        background-color: $foreground;
+
+        box-shadow: 0px 0px 9px 6px rgba(black, 0.15);
+        // border-top: 0.5rem solid $highlight1;
+        border-radius: 0.2rem;
+
+        box-sizing: border-box;
+
+        // width: 10px;
+        // height: 10px;
+        // background-color: green;
+
+        // display: flex;
+        // flex-direction: row;
+        // .backdrop {
+        //   position: fixed;
+        //   z-index: 3;
+        //   top: 0;
+        //   left: 0;
+        //   width: 100vw;
+        //   height: 100%;
+        //   background-color: rgba(black, 0.5);
+        // }
+      }
+
+      // .alignment {
+      //   transform: translate(-100%, 0%);
+      // }
+
+      // cap = content anchor point
+      .cap-top-left {
+        transform: translate(0%, 0%);
+      }
+
+      .cap-top-middle {
+        transform: translate(-50%, 0%);
+      }
+
+      .cap-top-right {
+        transform: translate(-100%, 0%);
+      }
+
+      .cap-middle-left {
+        transform: translate(0%, -50%);
+      }
+
+      .cap-middle-middle {
+        transform: translate(-50%, -50%);
+      }
+
+      .cap-middle-right {
+        transform: translate(-100%, -50%);
+      }
+
+      .cap-bottom-left {
+        transform: translate(0%, -100%);
+      }
+
+      .cap-bottom-middle {
+        transform: translate(-50%, -100%);
+      }
+
+      .cap-bottom-right {
+        transform: translate(-100%, -100%);
+      }
+    }
+  }
+
+  .chap-top-left {
+    @include top_left();
+  }
+
+  .chap-top-middle {
+    @include top_middle();
+  }
+
+  .chap-top-right {
+    @include top_right();
+  }
+
+  .chap-middle-left {
+    @include middle_left();
+  }
+
+  .chap-middle-middle {
+    @include middle_middle();
+  }
+
+  .chap-middle-right {
+    @include middle_right();
+  }
+
+  .chap-bottom-left {
+    @include bottom_left();
+  }
+
+  .chap-bottom-middle {
+    @include bottom_middle();
+  }
+
+  .chap-bottom-right {
+    @include bottom_right();
+  }
+
+  .disabled {
+    display: none;
+    svg {
+      display: none;
+    }
+  }
+}

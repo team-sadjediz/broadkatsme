@@ -1,92 +1,96 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-// import { auth } from "../../firebase/firebase.utils";
+import {
+  setSubscribedRooms,
+  setSelectedRoom,
+  updateSubscribedRooms,
+} from "../../redux/room/room.actions";
+// import axios from "axios";
 
 // components:
-import CircleBtn from "../circle-btn/circle-btn.component";
-import Poppity from "../poppity/poppity.component";
-import NewRoom from "../new-room/new-room.component";
+import CircleButton from "../circle-btn/circle-btn.component";
+import ImageButton from "../img-btn/img-btn.component";
 import PageDropdown from "../page-dropdown/page-dropdown.component";
+// import MouseOverPopover from "../custom-popover/custom-popover.component";
+import NewRoom from "../new-room/new-room.component";
+// import RoomListNav from "../room-list-nav/room-list-nav.component";
+import Poppity from "../poppity/poppity-v2.component";
 
 // icons:
-import { ReactComponent as NineDotIcon } from "../../assets/icons/nine-dots-solid.svg";
-import { ReactComponent as SearchIcon } from "../../assets/icons/search-solid.svg";
-import { ReactComponent as PlusIcon } from "../../assets/icons/plus-solid.svg";
-import { ReactComponent as BarsIcon } from "../../assets/icons/bars-solid.svg";
+import AddIcon from "@material-ui/icons/Add";
+import SearchIcon from "@material-ui/icons/Search";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
+import MenuIcon from "@material-ui/icons/Menu";
+import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 
-import "./navbar.style.scss";
+// custom style sheet:
+import "./navbar.styles.scss";
 
-let rooms = [
-  {
-    id: 86,
-    pic: "https://i.picsum.photos/id/1049/3900/3120.jpg"
-  },
-  {
-    id: 16,
-    pic: "https://i.picsum.photos/id/1049/3900/3120.jpg"
-  },
-  {
-    id: 38,
-    pic: "https://i.picsum.photos/id/1049/3900/3120.jpg"
-  },
-  {
-    id: 19,
-    pic: "https://i.picsum.photos/id/1049/3900/3120.jpg"
-  }
-];
+// utils:
+import { BASE_API_URL } from "../../utils";
 
-const NavBar = ({ currentUser }) => (
-  <div className="navbar-container">
-    {/* LOGO: */}
-    <div className="logo-section">
-      {/* <div>{`${currentUser.uid} ${currentUser.email}`}</div> */}
-      {/* <Link to="/login">
-        <LogoHorizontal />
-      </Link> */}
+const Navbar = ({ updateSubscribedRooms, subscribedRooms, userAuth }) => {
+  useEffect(() => {
+    updateSubscribedRooms(userAuth.uid);
+    console.log("navbar sub rooms:", subscribedRooms);
+  }, []);
 
-      <p>broadkats</p>
-      <CircleBtn text="me"></CircleBtn>
-    </div>
-
-    {/* ROOM NAV */}
-    <div className="room-nav">
-      <Link to="/lobby">
-        <CircleBtn className="room-nav-btn home-btn" icon={<NineDotIcon />} />
-      </Link>
-      <Link to="/search">
-        <CircleBtn className="room-nav-btn search-btn" icon={<SearchIcon />} />
-      </Link>
-      <Poppity alignArrow="center" content={<NewRoom />}>
-        <CircleBtn
-          className="room-nav-btn create-room-btn"
-          icon={<PlusIcon />}
-        ></CircleBtn>
-      </Poppity>
-
-      <div className="room-list-container">
-        {rooms.map(room => (
-          <Link to={`/room/id/${room.id}`}>
-            <CircleBtn
-              className="room-item-btn room-btn"
-              bgImageUrl={room.pic}
-            />
-          </Link>
-        ))}
+  return (
+    <div className="navbar-container">
+      <div className="logo-section">
+        <p className="logo-text">broadkats.me</p>
+        {/* <CircleButton className="me-btn" text="me"></CircleButton> */}
+        {/* <LogoCircle>me</LogoCircle> */}
       </div>
-    </div>
 
-    {/* SITE NAV */}
-    <div className="site-nav">
-      <Poppity btnAction="hover" alignArrow="right" content={<PageDropdown />}>
-        <CircleBtn className="" icon={<BarsIcon />} />
+      <div className="room-nav">
+        <Link to="/lobby">
+          <CircleButton className="nav-bar-btn" icon={<DashboardIcon />} />
+        </Link>
+        <Link to="/search">
+          <CircleButton className="nav-bar-btn" icon={<SearchIcon />} />
+        </Link>
+
+        <Poppity
+          // className="nav-item-spacing"
+          // spacingClass="nav-item-spacing"
+          style={{ marginTop: "1rem" }}
+          content={<NewRoom />}
+          // buttonEventTrigger="hover"
+          spacing="10px"
+          contentAnchorPoint="top middle"
+          childrenAnchorPoint="bottom middle"
+        >
+          <CircleButton className="nav-bar-btn" icon={<AddIcon />} />
+        </Poppity>
+
+        {/* <RoomListNav /> */}
+      </div>
+
+      <Poppity
+        style={{ marginTop: "1rem" }}
+        content={<PageDropdown />}
+        buttonEventTrigger="hover"
+        contentAnchorPoint="top right"
+        childrenAnchorPoint="bottom right"
+      >
+        <CircleButton className="nav-bar-btn" icon={<MenuIcon />} />
       </Poppity>
     </div>
-  </div>
-);
+  );
+};
 
-const mapStateToProps = state => ({
-  currentUser: state.user.currentUser
+const mapStateToProps = (state) => ({
+  userAuth: state.user.userAuth,
+  subscribedRooms: state.room.subscribedRooms,
+  selectedRoom: state.room.selectedRoom,
 });
 
-export default connect(mapStateToProps)(NavBar);
+const mapDispatchToProps = (dispatch) => ({
+  updateSubscribedRooms: (uid) => dispatch(updateSubscribedRooms(uid)),
+  setSelectedRoom: (roomID) => dispatch(setSelectedRoom(roomID)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

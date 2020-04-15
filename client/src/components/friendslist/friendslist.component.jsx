@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+
 import { connect } from "react-redux";
-import axios from "axios";
+
+import { updateFriendslist } from "../../redux/user/user.actions";
+
+import CircleButton from "../circle-btn/circle-btn.component";
+import AddFriend from "../add-friend/add-friend.component";
+
 import ImageButton from "../img-btn/img-btn.component";
 import AirplayIcon from "@material-ui/icons/Airplay";
 
@@ -9,13 +14,12 @@ import AirplayIcon from "@material-ui/icons/Airplay";
 //   setSubscribedRooms,
 //   setSelectedRoom
 // } from "../../redux/room/room.actions";
-import { updateFriendslist } from "../../redux/user/user.actions";
-
-// custom style sheet:
-import "./friendslist.styles.scss";
 
 // utils:
 import { BASE_API_URL, CHAT_SERVER } from "../../utils";
+
+// custom style sheet:
+import "./friendslist.styles.scss";
 
 class FriendsList extends React.Component {
   constructor(props) {
@@ -40,7 +44,7 @@ class FriendsList extends React.Component {
       //   ))}
       // </div>
       <div className="friends-list-container">
-        {/* {console.log("FL", friendslist)} */}
+        <AddFriend />
         {this.props.friendslist.map((friend, i) => (
           <div key={i} className="friend-item">
             <ImageButton

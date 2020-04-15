@@ -18,7 +18,7 @@ import Tag from "../../components/tag/tag.component";
 import axios from "axios";
 import { BASE_API_URL } from "../../utils";
 import Popper from "@material-ui/core/Popper";
-import Poppity from "../poppity/poppity.component";
+// import Poppity from "../poppity/poppity-1.component";
 import { Link } from "react-router-dom";
 import { emphasize } from "@material-ui/core/styles/colorManipulator";
 import Content from "./card-content.component";
@@ -49,18 +49,17 @@ import {
 // - fix linking click on card
 
 function tagCheck(roomTags) {
-  if (roomTags.length != 0){
+  if (roomTags.length != 0) {
     const allTags = roomTags.map((value, index) => {
       return <Tag type="label" text={value} />;
-    })
+    });
     return allTags;
-  }
-  else {
+  } else {
     return <Tag type="label" text="No tags" />;
   }
-};
+}
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     position: "relative",
     "&:hover": {
@@ -131,6 +130,9 @@ const CardTwo = ({
           null,
           { params: { action: "unsubscribe" } }
         )
+        .then((res) => {
+          updateSubscribedRooms(userAuth.uid);
+        })
         .catch((err) => {
           console.log("card unsubbbb", err);
         });
@@ -139,7 +141,36 @@ const CardTwo = ({
       //   `${BASE_API_URL}/userprops/rooms/${userAuth.uid}`
       // );
 
-      updateSubscribedRooms(userAuth.uid);
+      // setSelectedRoom(roomId);
+    }
+  };
+
+  const handleSubscribe = async (event) => {
+    if (roomID) {
+      console.log(roomID, userAuth.uid);
+      // await axios.put(`${BASE_API_URL}/userprops/subscribed-rooms/subscribe`, {
+      //   roomID: roomId,
+      //   uid: currentUser.uid
+      // });
+      console.log("card sub", roomID);
+      console.log("card userAuth", userAuth.uid);
+      await axios
+        .put(
+          `${BASE_API_URL}/userprops/subscribe/${roomID}/${userAuth.uid}`,
+          null,
+          { params: { action: "subscribe" } }
+        )
+        .then((res) => {
+          updateSubscribedRooms(userAuth.uid);
+        })
+        .catch((err) => {
+          console.log("card subbbb", err);
+        });
+
+      // let results = await axios.get(
+      //   `${BASE_API_URL}/userprops/rooms/${userAuth.uid}`
+      // );
+
       // setSelectedRoom(roomId);
     }
   };
@@ -147,7 +178,6 @@ const CardTwo = ({
   const roomTags = tags;
   // console.log(name);
 
-  
   return (
     <div>
       <Card
@@ -158,40 +188,58 @@ const CardTwo = ({
         {active && <Live className="live-box" />}
         {hover && (
           <div className="buttons-container">
-            {otherProps.unsubscribe &&
-            <Tooltip title='Unsubscribe' placement='left'>
-            <Fab className="room-card-buttons" color="primary" aria-label="unsubscribe" onClick={handleUnsubscribe}>
-                <ClearIcon />
-            </Fab>
-            </Tooltip>
-            }
-            {otherProps.subscribe &&
-            // <Tooltip title="Subscribe" placement="left">
-            //   <CircleBtn
-            //   className="room-card-buttons"
-            //   icon={<AddIcon />} 
-            //   />
-            // </Tooltip>
-            <Tooltip title='Subscribe' placement='left'>
-            <Fab className="room-card-buttons" color="primary" aria-label="subscribe">
-                <AddIcon />
-            </Fab>
-            </Tooltip>
-            }
-            {otherProps.invite &&
-            <Tooltip title='Invite' placement='left'>
-            <Fab className="room-card-buttons" color="primary" aria-label="invite">
-                <PersonAddIcon />
-            </Fab>
-            </Tooltip>
-            }
-            {otherProps.chat &&
-            <Tooltip title='Subscribe' placement='left'>
-            <Fab className="room-card-buttons" color="primary" aria-label="chat">
-                <ChatIcon />
-            </Fab>
-            </Tooltip>
-            }
+            {otherProps.unsubscribe && (
+              <Tooltip title="Unsubscribe" placement="left">
+                <Fab
+                  className="room-card-buttons"
+                  color="primary"
+                  aria-label="unsubscribe"
+                  onClick={handleUnsubscribe}
+                >
+                  <ClearIcon />
+                </Fab>
+              </Tooltip>
+            )}
+            {otherProps.subscribe && (
+              // <Tooltip title="Subscribe" placement="left">
+              //   <CircleBtn
+              //   className="room-card-buttons"
+              //   icon={<AddIcon />}
+              //   />
+              // </Tooltip>
+              <Tooltip title="Subscribe" placement="left">
+                <Fab
+                  className="room-card-buttons"
+                  color="primary"
+                  aria-label="subscribe"
+                  onClick={handleSubscribe}
+                >
+                  <AddIcon />
+                </Fab>
+              </Tooltip>
+            )}
+            {otherProps.invite && (
+              <Tooltip title="Invite" placement="left">
+                <Fab
+                  className="room-card-buttons"
+                  color="primary"
+                  aria-label="invite"
+                >
+                  <PersonAddIcon />
+                </Fab>
+              </Tooltip>
+            )}
+            {otherProps.chat && (
+              <Tooltip title="Subscribe" placement="left">
+                <Fab
+                  className="room-card-buttons"
+                  color="primary"
+                  aria-label="chat"
+                >
+                  <ChatIcon />
+                </Fab>
+              </Tooltip>
+            )}
             <Tooltip title="Show More" placement="left">
               <IconButton
                 className="show-more-button"
@@ -209,12 +257,15 @@ const CardTwo = ({
           <CardMedia className={classes.media} image={thumbnailUrl} />
         </Link>
         <CardContent>
-        <ListItem style={{'padding' : '0', 'zIndex': '5'}}>
-          <ListItemAvatar>
-            <Avatar src={thumbnailUrl} />
-          </ListItemAvatar>
-          <ListItemText primary={<Typography noWrap>{name}</Typography>} secondary={roomTags && tagCheck(roomTags)} />
-        </ListItem>
+          <ListItem style={{ "padding": "0", "zIndex": "5" }}>
+            <ListItemAvatar>
+              <Avatar src={thumbnailUrl} />
+            </ListItemAvatar>
+            <ListItemText
+              primary={<Typography noWrap>{name}</Typography>}
+              secondary={roomTags && tagCheck(roomTags)}
+            />
+          </ListItem>
           {/* <Typography noWrap>{name}</Typography>
           <Typography variant="body2" color="textSecondary" component="p" noWrap>
             {roomTags && roomTags.map((value, index) => {
@@ -253,8 +304,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  updateSubscribedRooms: (subRoomList) =>
-    dispatch(updateSubscribedRooms(subRoomList)),
+  updateSubscribedRooms: (userID) => dispatch(updateSubscribedRooms(userID)),
   setSelectedRoom: (roomID) => dispatch(setSelectedRoom(roomID)),
 });
 

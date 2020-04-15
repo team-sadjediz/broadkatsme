@@ -35,14 +35,14 @@ const RoomInfoPreview = ({ roomInfo }) => {
     };
   });
 
-  const shortenID = id => {
+  const shortenID = (id) => {
     return id.slice(0, 4) + id.slice(id.length - 4, id.length);
   };
 
   return (
     <div className="room-info-preview-container">
       <div className="room-info-item room-name">{roomInfo.name}</div>
-      <div className="room-info-item room-owner">
+      {/* <div className="room-info-item room-owner">
         Owner: <span>{shortenID(roomInfo.ownerID)}</span>
       </div>
       <div className="room-info-item room-size">
@@ -56,9 +56,7 @@ const RoomInfoPreview = ({ roomInfo }) => {
         ) : (
           "Not broadcasting at the moment.."
         )}
-
-        {/* Active: {`${roomInfo.active}`} */}
-      </div>
+      </div> */}
     </div>
   );
 };

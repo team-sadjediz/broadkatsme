@@ -25,7 +25,11 @@ router.put("/update/:uid/:friendID", async function (req, res) {
     }
   } else if (action == "add") {
     try {
-      let newProps = await addFriend(userID, friendID);
+      // i need to refractor this part later
+      let friendIDConverted = await UserProfile.findOne({ username: friendID });
+      // end of refractor
+
+      let newProps = await addFriend(userID, friendIDConverted.userID);
       res.send(newProps);
     } catch (error) {
       console.log(error);
@@ -105,6 +109,7 @@ async function deleteFriend(userID, friendID) {
 async function addFriend(userID, friendID) {
   const session = await mongoose.startSession();
   session.startTransaction();
+
   try {
     const opts = { session, new: true, runValidators: true };
 

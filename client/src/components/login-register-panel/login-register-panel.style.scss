@@ -21,6 +21,7 @@
   box-shadow: $default_box_shadow;
 
   width: auto;
+  // height: 23em;
 
   display: grid;
   grid-template-columns: auto;
@@ -54,7 +55,7 @@
       @include tab-properties;
       border-radius: 0 5px 0 0;
     }
-    
+
     .tabselected {
       background-color: $foreground;
       color: $highlight1;

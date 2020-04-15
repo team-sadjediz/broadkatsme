@@ -41,7 +41,7 @@ class NewRoom extends React.Component {
       privacy: this.state.privacy,
     };
 
-    console.log(room);
+    // console.log(room);
 
     axios
       // .post(`${BASE_API_URL}/room/create-room`, room)
@@ -81,7 +81,7 @@ class NewRoom extends React.Component {
         <div className="header">Create Room</div>
         <form className="form-container" onSubmit={this.handleSubmit}>
           <FormInput
-            className="room-title"
+            className="new-room-title field-spacing-bottom"
             name="roomName"
             handleChange={this.handleChange}
             value={this.state.roomName}
@@ -90,7 +90,7 @@ class NewRoom extends React.Component {
           />
 
           <FormInput
-            className="room-size"
+            className="new-room-size field-spacing-bottom"
             name="roomSize"
             handleChange={this.handleChange}
             value={this.state.roomSize}
@@ -101,7 +101,7 @@ class NewRoom extends React.Component {
             required
           />
 
-          <div className="privacy">
+          <div className="privacy field-spacing-bottom">
             <label for="privacy">Privacy</label>
             <select
               value={this.state.privacy}
