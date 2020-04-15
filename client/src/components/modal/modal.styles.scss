@@ -48,6 +48,8 @@
 @import "../../assets/colors";
 
 .modal-container {
+  // transform: translateY(-999px);
+
   position: fixed;
   z-index: 1000;
   left: 50vw;
@@ -69,7 +71,7 @@
     position: fixed;
     width: 100%;
     height: 100%;
-    background-color: rgba(black, 0.5);
+    background-color: rgba(black, 0.2);
   }
 
   .modal-content {
@@ -78,4 +80,8 @@
     z-index: 10;
     border-radius: 5px;
   }
+}
+
+.hide-modal {
+  display: none;
 }

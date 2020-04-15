@@ -123,43 +123,25 @@ class RoomListNav extends React.Component {
         {this.props.subscribedRooms.map((room, i) => (
           <div key={i} className="room-item">
             <Poppity
-              buttonEventTrigger="hover"
-              // spacingLeft="0.5rem"
+              triggerType="tooltip"
+              triggerComponent={
+                <Link to={`/room/id=${room.roomID}`}>
+                  <ImageButton
+                    onClick={() => {
+                      this.props.setSelectedRoom(room.roomID);
+                      this.props.clickThis();
+                      this.setItemSelected(i);
+                    }}
+                    iconHover={<PlayCircleFilledIcon />}
+                    bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${room.thumbnailUrl}`}
+                  ></ImageButton>
+                </Link>
+              }
               contentAnchorPoint="middle left"
               childrenAnchorPoint="middle right"
-              content={<RoomInfoPreview roomInfo={room} />}
+              // spacingLeft="0.5rem"
             >
-              {/* <Tooltip title={room.name} placement="right" arrow> */}
-              <Link
-                // style={{ position: "relative" }}
-                to={`/room/id=${room.roomID}`}
-              >
-                {/* {this.props.selectedRoom.roomID === room.roomID ? (
-                  <div className="room-selected">
-                    <div className="indicator"></div>
-                  </div>
-                ) : (
-                  ""
-                )} */}
-                {/* {console.log("from room list", room)} */}
-                {/* <HoverPopOver content={<RoomInfoPreview roomInfo={room} />}> */}
-                {/* RANDOM DIV NEEDED TO MAKE THINGS WORK LOL */}
-
-                {/* <div> */}
-                <ImageButton
-                  onClick={() => {
-                    this.props.setSelectedRoom(room.roomID);
-                    this.props.clickThis();
-                    this.setItemSelected(i);
-                  }}
-                  iconHover={<PlayCircleFilledIcon />}
-                  // bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=default1.png`}
-                  bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${room.thumbnailUrl}`}
-                ></ImageButton>
-                {/* </div> */}
-                {/* </HoverPopOver> */}
-              </Link>
-              {/* </Tooltip> */}
+              <RoomInfoPreview roomInfo={room} />
             </Poppity>
           </div>
         ))}

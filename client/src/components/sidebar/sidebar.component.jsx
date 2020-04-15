@@ -8,14 +8,13 @@ import {
 } from "../../redux/room/room.actions";
 
 // components:
+import Modal from "../modal/modal.component";
+import Poppity from "../poppity/poppity-v2.component";
 import CircleButton from "../circle-btn/circle-btn.component";
 import NewRoom from "../new-room/new-room.component";
-import ChatColorChange from "../chat-color-change/chat-color-change.component";
-import AddFriend from "../add-friend/add-friend.component";
-import RoomSubscribe from "../room-subscribe/room-subscribe.component";
+
 import HeaderInfo from "../header-info/header-info.component";
 
-import Poppity from "../poppity/poppity-v2.component";
 import Chat from "../chat/chat.component";
 import FriendsList from "../friendslist/friendslist.component";
 
@@ -127,6 +126,10 @@ const Sidebar = ({
             onClick={toggleSidebar}
           />
         </div>
+
+        {/* <Modal backdrop>
+          <NewRoom />
+        </Modal> */}
 
         <div onClick={toggleSidebar} className="toggle-container"></div>
       </div>

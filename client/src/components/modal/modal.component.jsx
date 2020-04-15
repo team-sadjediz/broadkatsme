@@ -39,7 +39,7 @@ import Portal from "../portal/portal.component";
 import "./modal.styles.scss";
 
 const Modal = ({ children, backdrop = false, backdropStyle }) => {
-  // const [varA, setVarA] = useState("");
+  const [show, setShow] = useState(false);
   // const [varB, setVarB] = useState([]);
 
   useEffect(() => {

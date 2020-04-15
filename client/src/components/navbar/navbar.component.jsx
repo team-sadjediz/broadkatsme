@@ -54,16 +54,15 @@ const Navbar = ({ updateSubscribedRooms, subscribedRooms, userAuth }) => {
         </Link>
 
         <Poppity
-          // className="nav-item-spacing"
-          // spacingClass="nav-item-spacing"
+          triggerType="click"
+          triggerComponent={
+            <CircleButton className="nav-bar-btn" icon={<AddIcon />} />
+          }
           spacingTop="1rem"
-          content={<NewRoom />}
-          // buttonEventTrigger="hover"
-          spacing="10px"
           contentAnchorPoint="top middle"
           childrenAnchorPoint="bottom middle"
         >
-          <CircleButton className="nav-bar-btn" icon={<AddIcon />} />
+          <NewRoom />
         </Poppity>
 
         {/* <RoomListNav /> */}
@@ -71,12 +70,16 @@ const Navbar = ({ updateSubscribedRooms, subscribedRooms, userAuth }) => {
 
       <Poppity
         spacingTop="1rem"
-        content={<PageDropdown />}
-        buttonEventTrigger="hover"
+        // content={}
+        // buttonEventTrigger="hover"
+        triggerType="hover"
+        triggerComponent={
+          <CircleButton className="nav-bar-btn" icon={<MenuIcon />} />
+        }
         contentAnchorPoint="top right"
         childrenAnchorPoint="bottom right"
       >
-        <CircleButton className="nav-bar-btn" icon={<MenuIcon />} />
+        <PageDropdown />
       </Poppity>
     </div>
   );

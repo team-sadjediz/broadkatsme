@@ -17,9 +17,9 @@ const ANCHOR_POINTS = {
 
 const Poppity = ({
   className,
-  content,
+  triggerComponent,
   children,
-  buttonEventTrigger = "click",
+  triggerType = "click",
   childrenAnchorPoint,
   contentAnchorPoint,
   spacingRight = "0",
@@ -103,37 +103,77 @@ const Poppity = ({
     return false;
   };
 
-  let newChild;
-  let newContent;
+  let NewTriggerComponent = "";
+  let NewChildrenComponent = "";
+
+  if (React.isValidElement(triggerComponent)) {
+    switch (triggerType) {
+      case "hover":
+        NewTriggerComponent = React.cloneElement(triggerComponent, {
+          onMouseEnter: onMouseEnter,
+          onClick: togglePoppity,
+        });
+        break;
+      case "tooltip":
+        NewTriggerComponent = React.cloneElement(triggerComponent, {
+          onMouseEnter: onMouseEnter,
+          onMouseLeave: onMouseLeave,
+          onClick: togglePoppity,
+        });
+        break;
+      default:
+        NewTriggerComponent = React.cloneElement(triggerComponent, {
+          onClick: togglePoppity,
+        });
+    }
+  }
+
+  if (React.isValidElement(children)) {
+    switch (triggerType) {
+      case "hover":
+        NewChildrenComponent = React.cloneElement(children, {
+          onMouseLeave: onMouseLeave,
+        });
+        break;
+      case "tooltip":
+        NewChildrenComponent = children;
+        break;
+      default:
+        NewChildrenComponent = children;
+    }
+  }
+
+  // let newChild;
+  // let newContent;
   // let btnAction = btnAction;
 
-  if (buttonEventTrigger === "hover") {
-    newChild = React.cloneElement(children, {
-      onMouseEnter: onMouseEnter,
-      onMouseLeave: onMouseLeave,
-      onClick: togglePoppity,
-    });
+  // if (buttonEventTrigger === "hover") {
+  //   newChild = React.cloneElement(children, {
+  //     onMouseEnter: onMouseEnter,
+  //     onMouseLeave: onMouseLeave,
+  //     onClick: togglePoppity,
+  //   });
 
-    newContent = React.cloneElement(content, {
-      onMouseLeave: onMouseLeave,
-    });
-  } else {
-    // also handles btnAction="click"
-    newChild = React.cloneElement(children, {
-      onClick: togglePoppity,
-    });
+  //   newContent = React.cloneElement(content, {
+  //     onMouseLeave: onMouseLeave,
+  //   });
+  // } else {
+  //   // also handles btnAction="click"
+  //   newChild = React.cloneElement(children, {
+  //     onClick: togglePoppity,
+  //   });
 
-    newContent = React.cloneElement(content, {
-      onClick: togglePoppity,
-      onMouseLeave: onMouseLeave,
-    });
-  }
+  //   newContent = React.cloneElement(content, {
+  //     onClick: togglePoppity,
+  //     onMouseLeave: onMouseLeave,
+  //   });
+  // }
 
   return (
     // <React.Fragment>
     <div className={`poppity-container`}>
       {/* <div className={`${enabled ? "custom-backdrop" : ""}`}></div> */}
-      {newChild}
+      {NewTriggerComponent}
       <div className={`children-anchor-point ${setChildrenAnchorPoint()}`}>
         <div className={`content-anchor-point`}>
           <div
@@ -142,7 +182,7 @@ const Poppity = ({
               enabled ? "" : "disabled"
             }`}
           >
-            {newContent}
+            {NewChildrenComponent}
             {/* <div className="backdrop"></div> */}
           </div>
         </div>

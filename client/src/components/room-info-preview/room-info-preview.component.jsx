@@ -41,7 +41,7 @@ const RoomInfoPreview = ({ roomInfo }) => {
 
   return (
     <div className="room-info-preview-container">
-      <div className="room-info-item room-name">{roomInfo.name}</div>
+      <div className="room-info-item">{roomInfo.name}</div>
       {/* <div className="room-info-item room-owner">
         Owner: <span>{shortenID(roomInfo.ownerID)}</span>
       </div>
