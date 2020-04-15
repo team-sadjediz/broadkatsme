@@ -118,6 +118,9 @@ const CardTwo = ({
           null,
           { params: { action: "unsubscribe" } }
         )
+        .then((res) => {
+          updateSubscribedRooms(userAuth.uid);
+        })
         .catch((err) => {
           console.log("card unsubbbb", err);
         });
@@ -126,7 +129,36 @@ const CardTwo = ({
       //   `${BASE_API_URL}/userprops/rooms/${userAuth.uid}`
       // );
 
-      updateSubscribedRooms(userAuth.uid);
+      // setSelectedRoom(roomId);
+    }
+  };
+
+  const handleSubscribe = async (event) => {
+    if (roomID) {
+      console.log(roomID, userAuth.uid);
+      // await axios.put(`${BASE_API_URL}/userprops/subscribed-rooms/subscribe`, {
+      //   roomID: roomId,
+      //   uid: currentUser.uid
+      // });
+      console.log("card sub", roomID);
+      console.log("card userAuth", userAuth.uid);
+      await axios
+        .put(
+          `${BASE_API_URL}/userprops/subscribe/${roomID}/${userAuth.uid}`,
+          null,
+          { params: { action: "subscribe" } }
+        )
+        .then((res) => {
+          updateSubscribedRooms(userAuth.uid);
+        })
+        .catch((err) => {
+          console.log("card subbbb", err);
+        });
+
+      // let results = await axios.get(
+      //   `${BASE_API_URL}/userprops/rooms/${userAuth.uid}`
+      // );
+
       // setSelectedRoom(roomId);
     }
   };
@@ -167,6 +199,7 @@ const CardTwo = ({
                   className="room-card-buttons"
                   color="primary"
                   aria-label="subscribe"
+                  onClick={handleSubscribe}
                 >
                   <AddIcon />
                 </Fab>
@@ -263,8 +296,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  updateSubscribedRooms: (subRoomList) =>
-    dispatch(updateSubscribedRooms(subRoomList)),
+  updateSubscribedRooms: (userID) => dispatch(updateSubscribedRooms(userID)),
   setSelectedRoom: (roomID) => dispatch(setSelectedRoom(roomID)),
 });
 
