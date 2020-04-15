@@ -26,6 +26,34 @@
   background-color: white;
 }
 
+.profile-hide {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: minmax(5em, 1fr) auto minmax(5em, 1fr);
+  grid-template-areas:
+    ". . ."
+    ". private ."
+    ". . .";
+  margin-top: 100px;
+  width: 1200px;
+  height: 600px;
+  // justify-content: center;
+  justify-items: center;
+  // align-items: center;
+  .private-icon {
+
+    width: 200px;
+    height: 200px;
+  }
+  .private-text {
+    text-align: center;
+  }
+}
+
+.private-user {
+  grid-area: private;
+
+}
 .profile-picture {
     // grid-area: profpic;
     position: absolute;

@@ -17,13 +17,15 @@ import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import CloseIcon from '@material-ui/icons/Close';
 import Fab from '@material-ui/core/Fab';
 import IconButton from "@material-ui/core/IconButton";
+import LockIcon from '@material-ui/icons/Lock';
 
 //components
 import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
 import Tag from "../../components/tag/tag.component";
 import FormInput from "../../components/form-input/form-input.component";
-import Profile from "../../components/profile/profile.component";
+import Favorites from "../../components/profile/favorites/favorites.component";
+import EditProfile from "../../components/profile/edit-profile/edit-profile.component";
 import Carousel from "../../components/carousel/carousel.component";
 import MessagePop from "../../components/message-pop/message-pop.component";
 
@@ -32,11 +34,11 @@ class UserProfilePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            uid: this.props.userAuth.uid,
+            uid: this.props.match.params.id,
             username: "",
             biography: "",
-            privacy: "",
-            tags: "",
+            isPrivate: true,
+            tags: [],
             movies: "",
             websites: "",
             music: "",
@@ -44,7 +46,7 @@ class UserProfilePage extends React.Component {
             subscribedRooms: "",
             ownedRooms: "",
             isEditing: false,
-            isUser: true,
+            isUser: false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleChangePhoto = this.handleChangePhoto.bind(this);
@@ -55,38 +57,59 @@ class UserProfilePage extends React.Component {
     }
 
     componentDidMount() {
-        axios
+        // console.log('propstata', this.props.match.params.id);
+        this.validateView(this.props.match.params.id);
+        // console.log('private', this.state.isPrivate);
+        // console.log('is user', this.state.isUser);
+
+    }
+
+    //component is not remouonting so this is just receiving new props
+    componentWillReceiveProps(nextProps) {
+        this.validateView(nextProps.match.params.id);
+      }
+
+    validateView = async (data) => {
+        // this.setState({uid: data});
+        await axios
         .get(`${BASE_API_URL}/userprofile/details/${this.state.uid}`)
         .then(result =>
         {
-            console.log("success: ");
-            console.log(result);
-            // this.setState({profile: result.data});
+            // console.log(data);
+            // console.log(this.props.userAuth.uid);
+            this.setState({uid: data});
+            if (this.state.uid === this.props.userAuth.uid) {
+                this.setState({isUser: true});
+            }
+
+            this.setState({isPrivate: result.data.privacy});
             this.setState({username: result.data.username});
             this.setState({photoURL: result.data.photoURL});
             this.setState({biography: result.data.biography});
-            this.setState({tags: result.data.tags});
-            this.setState({movies: result.data.favorites.movies});
-            this.setState({websites: result.data.favorites.websites});
-            this.setState({music: result.data.favorites.music});
-            this.setState({privacy: result.data.privacy});
-            // console.log(this.state.profile.favorites.movies);
-            // console.log(this.props.userAuth.uid);
+
+            if (!this.state.isPrivate || this.state.isUser) {
+                this.setState({tags: result.data.tags});
+                this.setState({movies: result.data.favorites.movies});
+                this.setState({websites: result.data.favorites.websites});
+                this.setState({music: result.data.favorites.music});
+            }
         })
         .catch(error => {
             console.log("error: " + error);
         });
 
-        axios
-        .get(`${BASE_API_URL}/userprops/rooms/${this.state.uid}`)
-        .then(rooms => {
-          this.setState({ subscribedRooms: rooms.data });
-        })
-        .catch(error => {
-          console.error(error);
-        });
+        if (!this.state.isPrivate || this.state.isUser) {
+            await axios
+            .get(`${BASE_API_URL}/userprops/rooms/${this.state.uid}`)
+            .then(rooms => {
+            this.setState({ subscribedRooms: rooms.data });
+            console.log(rooms.data);
+            })
+            .catch(error => {
+            console.error(error);
+            });
 
-        axios
+            await axios
             .get(`${BASE_API_URL}/home/rooms/?size=8`)
             .then(rooms => {
             this.setState({ ownedRooms: rooms.data });
@@ -94,8 +117,10 @@ class UserProfilePage extends React.Component {
             .catch(error => {
             console.error(error);
             });
+        }
+        // console.log('private', this.state.isPrivate);
+        // console.log('is user', this.state.isUser);
     }
-    
     handleSubmit(e) {
         // this.setState({username: e.target.value});
         const details = {
@@ -176,10 +201,35 @@ class UserProfilePage extends React.Component {
         this.setState({isEditing : true});
     }
 
-
+    onChangeTag = (tags) => {
+        this.setState({ tags: tags });
+      };
+    
     render(){
+        let tags = this.state.tags.map((tag) => {
+            return (
+                <Tag
+                key={tag}
+                type="remove-profile"
+                text={tag}
+                onChangeTag={this.onChangeTag}
+                // roomID={this.props.match.params.id}
+                uid={this.props.userAuth.uid}
+                ></Tag>
+            );
+            });
+            let addTag = (
+            <Tag
+                type="add-profile"
+                // roomID={this.props.match.params.id}
+                onChangeTag={this.onChangeTag}
+                uid={this.props.userAuth.uid}
+            ></Tag>
+            );
         return(
+            
             <div className="profile">
+
             <MessagePop pop={this.state.feedback} message={this.state.feedbackMessage}/>
             <div className="profile-picture">
                 <img
@@ -225,112 +275,125 @@ class UserProfilePage extends React.Component {
                 </div>
                 }
             </div>
-            {!this.state.isEditing &&
-                    <div className="profile-show">
-                            <div className="profile-favorites">
-                                <Profile
-                                movies={this.state.movies}
-                                music={this.state.music}
-                                website={this.state.websites}
-                                />
+            {!this.state.isEditing && (this.state.isUser || !this.state.isPrivate) &&
+                <div className="profile-show">
+                        <div className="profile-favorites">
+                            <Favorites
+                            movies={this.state.movies}
+                            music={this.state.music}
+                            website={this.state.websites}
+                            />
+                        </div>
+                        <div className="profile-biography">
+                            <div className="profile-tags">
+                            {this.state.tags.length !== 0 && this.state.tags.map((value, index) => {
+                                return <Tag type="label" text={value} />;
+                            })}
                             </div>
-                            <div className="profile-biography">
-                                <div className="profile-tags">
-                                {this.state.tags.length !== 0 && this.state.tags.map((value, index) => {
-                                    return <Tag type="label" text={value} />;
-                                })}
-                                </div>
-                                
-                            </div>
-                            <div className="subscribed-rooms">
-                                <div className="subscribed-title">Subscribed Rooms</div>
-                                <Carousel
-                                    properties={this.state.subscribedRooms}
-                                />
-                            </div>
-                            <div className="owned-rooms">
-                            <div className="owned-title">Owned Rooms</div>
-                                <Carousel
-                                    properties={this.state.ownedRooms}
-                                />
-                            </div>
-                        {/* </div> */}
-                    </div>
-                    }
-
-                    {this.state.isEditing &&
-                        <form class="profile-details-form">
-                            <FormInput
-                            label="Username"
-                            name="username"
-                            value={this.state.username}
-                            handleChange={this.handleChange}
+                            
+                        </div>
+                        <div className="subscribed-rooms">
+                            <div className="subscribed-title">Subscribed Rooms</div>
+                            <Carousel
+                                properties={this.state.subscribedRooms}
                             />
-
-                            <FormInput
-                            label="Biography"
-                            name="biography"
-                            value={this.state.biography}
-                            handleChange={this.handleChange}
+                        </div>
+                        <div className="owned-rooms">
+                        <div className="owned-title">Owned Rooms</div>
+                            <Carousel
+                                properties={this.state.ownedRooms}
                             />
-
-                            <FormInput
-                            label="Tags *NOT UPDATING YET"
-                            name="tags"
-                            value={this.state.tags}
-                            // handleChange={this.handleChange}
-                            />
-
-                            <FormInput
-                            label="Movies"
-                            name="movies"
-                            value={this.state.movies}
-                            handleChange={this.handleChange}
-                            />
-
-                            <FormInput
-                            label="Music"
-                            name="music"
-                            value={this.state.music}
-                            handleChange={this.handleChange}
-                            />
-
-                            <FormInput
-                            label="Websites"
-                            name="websites"
-                            value={this.state.websites}
-                            handleChange={this.handleChange}
-                            />
-
-                            {/* <FormInput
-                            label="Privacy"
-                            name="privacy"
-                            value={this.state.privacy}
-                            handleChange={this.handleChange}
-                            /> */}
-
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                // className={classes.button}
-                                startIcon={<CheckIcon />}
-                                onClick={this.handleSubmit}
-                            >
-                            Update
-                            </Button>
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                // className={classes.button}
-                                startIcon={<CloseIcon />}
-                                onClick={this.handleCancel}
-                            >
-                            Cancel
-                            </Button>
-                        </form>
-
-                    }
+                        </div>
+                    {/* </div> */}
                 </div>
+            }
+            {!this.state.isEditing && !(this.state.isUser || !this.state.isPrivate) &&
+                <div className="profile-hide">
+                    <div className="private-user">
+                    <LockIcon className="private-icon"/>
+                    <div className="private-text">This User is Private.</div>
+                    </div>
+                </div>
+            }
+            {this.state.isEditing &&
+                // <EditProfile
+                //     className="profile-details-form"
+                //     props={this.state}
+                //     tags={this.state.tags}
+                //     handleChange={this.handleChange}
+                //     handleSubmit={this.handleSubmit}
+                //     handleCancel={this.handleCancel}
+                // />
+                <form class="profile-details-form">
+                <FormInput
+                label="Username"
+                name="username"
+                value={this.state.username}
+                handleChange={this.handleChange}
+                />
+        
+                <FormInput
+                label="Biography"
+                name="biography"
+                value={this.state.biography}
+                handleChange={this.handleChange}
+                />
+        
+                {addTag}
+                {tags}
+        
+                <FormInput
+                label="Movies"
+                name="movies"
+                value={this.state.movies}
+                handleChange={this.handleChange}
+                />
+        
+                <FormInput
+                label="Music"
+                name="music"
+                value={this.state.music}
+                handleChange={this.handleChange}
+                />
+        
+                <FormInput
+                label="Websites"
+                name="websites"
+                value={this.state.websites}
+                handleChange={this.handleChange}
+                />
+        
+                {/* <FormInput
+                label="Privacy"
+                name="isPrivate"
+                value={state.isPrivate}
+                handleChange={handleChange}
+                /> */}
+        
+                <Button
+                    variant="contained"
+                    color="primary"
+                    // className={classes.button}
+                    startIcon={<CheckIcon />}
+                    onClick={this.handleSubmit}
+                >
+                Update
+                </Button>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    // className={classes.button}
+                    startIcon={<CloseIcon />}
+                    onClick={this.handleCancel}
+                >
+                Cancel
+                </Button>
+                </form>
+
+            }
+                
+        </div>
+            
         )
     }
 }

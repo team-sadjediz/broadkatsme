@@ -9,6 +9,13 @@ import {
   updateSubscribedRooms,
 } from "../../redux/room/room.actions";
 
+import {
+  setUserAuth,
+  setCurrentUser,
+  updateCurrentUser,
+} from "../../redux/user/user.actions";
+
+
 import Chip from "@material-ui/core/Chip";
 import { withStyles } from "@material-ui/core/styles";
 
@@ -154,6 +161,53 @@ class Tag extends Component {
       .catch((error) => console.error(error));
   };
 
+  //for user profile tags start
+  addProfileTag = (e) => {
+    e.preventDefault();
+    let tag = this.state.input;
+    axios
+      .put(
+        `${BASE_API_URL}/userprofile/tags/${this.props.uid}`,
+        null,
+        {
+          params: { tags: tag, action: "add" },
+        },
+        {
+          cancelToken: this.source.token,
+        }
+      )
+      .then((res) => {
+        this.props.updateCurrentUser(this.props.uid);
+        this.props.setCurrentUser(this.props.uid);
+        this.props.onChangeTag(res.data);
+        this.setState({ input: "" });
+      })
+      .catch((error) => console.error(error));
+  };
+
+  removeProfileTag = (e) => {
+    e.preventDefault();
+    let tag = this.props.text;
+    axios
+      .put(
+        `${BASE_API_URL}/userprofile/tags/${this.props.uid}`,
+        null,
+        {
+          params: { tags: tag, action: "delete" },
+        },
+        {
+          cancelToken: this.source.token,
+        }
+      )
+      .then((res) => {
+        this.props.updateCurrentUser(this.props.uid);
+        this.props.setCurrentUser(this.props.uid);
+        this.props.onChangeTag(res.data);
+      })
+      .catch((error) => console.error(error));
+  };
+  //for user profile tags end
+
   handleChange = (e) => {
     this.setState({ input: e.target.value });
   };
@@ -193,6 +247,35 @@ class Tag extends Component {
       );
     } else if (this.state.type === "label") {
       return <Chip className={classes.label} label={this.props.text} />;
+    } else if (this.state.type === "add-profile") {
+      return (
+        <Chip
+          className={classes.add}
+          label={
+            <input
+              className={classes.input}
+              id="add-tag"
+              type="text"
+              value={this.state.input}
+              onChange={this.handleChange}
+              placeholder="Add tag"
+            />
+          }
+          icon={
+            <AddCircleIcon onClick={this.addProfileTag} className={classes.svg} />
+          }
+          variant="outlined"
+        />
+      );
+    } else if (this.state.type === "remove-profile") {
+      return (
+        <Chip
+          className={classes.root}
+          onDelete={this.removeProfileTag}
+          label={this.props.text}
+          variant="outlined"
+        />
+      );
     }
   }
 }
@@ -207,6 +290,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   updateSubscribedRooms: (uid) => dispatch(updateSubscribedRooms(uid)),
   setSelectedRoom: (roomID) => dispatch(setSelectedRoom(roomID)),
+  updateCurrentUser: (uid) => dispatch(updateCurrentUser(uid)),
+  setCurrentUser: (uid) => dispatch(setCurrentUser(uid)),
 });
 
 export default connect(

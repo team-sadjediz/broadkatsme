@@ -48,7 +48,19 @@ import {
 // - implement Skeleton component for card
 // - fix linking click on card
 
-const useStyles = makeStyles((theme) => ({
+function tagCheck(roomTags) {
+  if (roomTags.length != 0){
+    const allTags = roomTags.map((value, index) => {
+      return <Tag type="label" text={value} />;
+    })
+    return allTags;
+  }
+  else {
+    return <Tag type="label" text="No tags" />;
+  }
+};
+
+const useStyles = makeStyles(theme => ({
   root: {
     position: "relative",
     "&:hover": {
@@ -96,7 +108,7 @@ const CardTwo = ({
 
   const handleMouseEnter = (event) => {
     setHover(true);
-    // console.log(hover);
+    // console.log(tags.length);
   };
   const handleMouseLeave = (event) => {
     setHover(false);
@@ -133,6 +145,8 @@ const CardTwo = ({
 
   const roomTags = tags;
   // console.log(name);
+
+  
   return (
     <div>
       <Card
@@ -143,7 +157,6 @@ const CardTwo = ({
         {active && <Live className="live-box" />}
         {hover && (
           <div className="buttons-container">
-<<<<<<< HEAD
             {otherProps.unsubscribe &&
             <Tooltip title='Unsubscribe' placement='left'>
             <Fab className="room-card-buttons" color="primary" aria-label="unsubscribe" onClick={handleUnsubscribe}>
@@ -178,59 +191,6 @@ const CardTwo = ({
             </Fab>
             </Tooltip>
             }
-=======
-            {otherProps.unsubscribe && (
-              <Tooltip title="Unsubscribe" placement="left">
-                <Fab
-                  className="room-card-buttons"
-                  color="primary"
-                  aria-label="unsubscribe"
-                  onClick={handleUnsubscribe}
-                >
-                  <ClearIcon />
-                </Fab>
-              </Tooltip>
-            )}
-            {otherProps.subscribe && (
-              // <Tooltip title="Subscribe" placement="left">
-              //   <CircleBtn
-              //   className="room-card-buttons"
-              //   icon={<AddIcon />}
-              //   />
-              // </Tooltip>
-              <Tooltip title="Subscribe" placement="left">
-                <Fab
-                  className="room-card-buttons"
-                  color="primary"
-                  aria-label="subscribe"
-                >
-                  <AddIcon />
-                </Fab>
-              </Tooltip>
-            )}
-            {otherProps.invite && (
-              <Tooltip title="Invite" placement="left">
-                <Fab
-                  className="room-card-buttons"
-                  color="primary"
-                  aria-label="invite"
-                >
-                  <PersonAddIcon />
-                </Fab>
-              </Tooltip>
-            )}
-            {otherProps.chat && (
-              <Tooltip title="Subscribe" placement="left">
-                <Fab
-                  className="room-card-buttons"
-                  color="primary"
-                  aria-label="chat"
-                >
-                  <ChatIcon />
-                </Fab>
-              </Tooltip>
-            )}
->>>>>>> 4ca7ecde75dda38c8b7d24fe2c85e216db0f49d8
             <Tooltip title="Show More" placement="left">
               <IconButton
                 className="show-more-button"
@@ -248,20 +208,12 @@ const CardTwo = ({
           <CardMedia className={classes.media} image={thumbnailUrl} />
         </Link>
         <CardContent>
-          <ListItem style={{ "padding": "0", "zIndex": "5" }}>
-            <ListItemAvatar>
-              <Avatar src={thumbnailUrl} />
-            </ListItemAvatar>
-            <ListItemText
-              primary={<Typography noWrap>{name}</Typography>}
-              secondary={
-                roomTags &&
-                roomTags.map((value, index) => {
-                  return <Tag type="label" text={value} />;
-                })
-              }
-            />
-          </ListItem>
+        <ListItem style={{'padding' : '0', 'zIndex': '5'}}>
+          <ListItemAvatar>
+            <Avatar src={thumbnailUrl} />
+          </ListItemAvatar>
+          <ListItemText primary={<Typography noWrap>{name}</Typography>} secondary={roomTags && tagCheck(roomTags)} />
+        </ListItem>
           {/* <Typography noWrap>{name}</Typography>
           <Typography variant="body2" color="textSecondary" component="p" noWrap>
             {roomTags && roomTags.map((value, index) => {

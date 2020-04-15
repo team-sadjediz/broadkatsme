@@ -244,3 +244,30 @@ router.put("/setChatColor/:uid/", async function(req, res) {
     })
     .catch(error => res.status(404).send(error));
 });
+
+router.put("/tags/:uid", async function (req, res) {
+  let uid = req.params.uid;
+  let tags = req.query.tags;
+  let action = req.query.action;
+  if (action == "delete") {
+    await UserProfile.findOneAndUpdate(
+      { userID: uid },
+      { $pull: { tags: tags } },
+      { runValidators: true, new: true }
+    )
+      .then((document) => {
+        res.send(document.tags);
+      })
+      .catch((error) => res.status(400).send(error));
+  } else if (action == "add") {
+    await UserProfile.findOneAndUpdate(
+      { userID: uid },
+      { $addToSet: { tags: tags } },
+      { runValidators: true, new: true }
+    )
+      .then((document) => res.send(document.tags))
+      .catch((error) => res.status(400).send(error));
+  } else {
+    res.status(400).send("Bad request.");
+  }
+});
