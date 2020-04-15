@@ -25,15 +25,18 @@ const ChatSidebarHeader = ({ children }) => {
       <div className="chat-title">Chat</div>
 
       <Poppity
-        content={<ChatColorChange />}
+        triggerType="click"
+        triggerComponent={
+          <CircleButton
+            id="change-color-btn"
+            className="chat-header-content"
+            icon={<ColorLensIcon />}
+          />
+        }
         contentAnchorPoint="top right"
         childrenAnchorPoint="bottom right"
       >
-        <CircleButton
-          id="change-color-btn"
-          className="chat-header-content"
-          icon={<ColorLensIcon />}
-        />
+        <ChatColorChange />
       </Poppity>
     </div>
   );
