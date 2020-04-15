@@ -16,15 +16,16 @@ const ANCHOR_POINTS = {
 };
 
 const Poppity = ({
-  style,
   className,
   content,
   children,
   buttonEventTrigger = "click",
   childrenAnchorPoint,
   contentAnchorPoint,
-  spacing = "0px",
-  spacingClass = "",
+  spacingRight = "0",
+  spacingLeft = "0",
+  spacingTop = "0",
+  spacingBottom = "0",
   backdrop = false,
 }) => {
   const [enabled, setEnabled] = useState(false);
@@ -91,8 +92,10 @@ const Poppity = ({
     }
   };
 
-  const determineSpacingProperty = () => {
-    return true;
+  const getSpacingStyle = () => {
+    return {
+      margin: `${spacingTop} ${spacingRight} ${spacingBottom} ${spacingLeft}`,
+    };
   };
 
   const isValidAnchorPoint = () => {
@@ -107,7 +110,7 @@ const Poppity = ({
   if (buttonEventTrigger === "hover") {
     newChild = React.cloneElement(children, {
       onMouseEnter: onMouseEnter,
-      // onMouseLeave: onMouseLeave,
+      onMouseLeave: onMouseLeave,
       onClick: togglePoppity,
     });
 
@@ -134,8 +137,7 @@ const Poppity = ({
       <div className={`children-anchor-point ${setChildrenAnchorPoint()}`}>
         <div className={`content-anchor-point`}>
           <div
-            style={style}
-            // style={{ padding: `${spacing}` }}
+            style={getSpacingStyle()}
             className={`dropdown-container ${setContentAnchorPoint()} ${
               enabled ? "" : "disabled"
             }`}

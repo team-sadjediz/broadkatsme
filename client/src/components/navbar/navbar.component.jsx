@@ -56,7 +56,7 @@ const Navbar = ({ updateSubscribedRooms, subscribedRooms, userAuth }) => {
         <Poppity
           // className="nav-item-spacing"
           // spacingClass="nav-item-spacing"
-          style={{ marginTop: "1rem" }}
+          spacingTop="1rem"
           content={<NewRoom />}
           // buttonEventTrigger="hover"
           spacing="10px"
@@ -70,7 +70,7 @@ const Navbar = ({ updateSubscribedRooms, subscribedRooms, userAuth }) => {
       </div>
 
       <Poppity
-        style={{ marginTop: "1rem" }}
+        spacingTop="1rem"
         content={<PageDropdown />}
         buttonEventTrigger="hover"
         contentAnchorPoint="top right"

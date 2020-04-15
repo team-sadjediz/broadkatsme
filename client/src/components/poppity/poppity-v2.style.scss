@@ -64,17 +64,16 @@
 
   .children-anchor-point {
     position: absolute;
-    width: 4px;
-    height: 4px;
-    background-color: pink;
+    // width: 4px;
+    // height: 4px;
+    // background-color: pink;
 
     .content-anchor-point {
       position: relative;
 
-      width: 2px;
-      height: 2px;
-      background-color: red;
-      // background-color: $foreground;
+      // width: 2px;
+      // height: 2px;
+      // background-color: red;
 
       .dropdown-container {
         position: absolute;

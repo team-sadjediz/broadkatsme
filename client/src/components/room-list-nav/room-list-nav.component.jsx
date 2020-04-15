@@ -9,17 +9,12 @@ import {
   updateSubscribedRooms,
 } from "../../redux/room/room.actions";
 
-// import HoverPopOver from "../hover-popover/hover-popover.component";
-import LoginRegisterPanel from "../login-register-panel/login-register-panel.component";
 import Poppity from "../poppity/poppity-v2.component";
 import ImageButton from "../img-btn/img-btn.component";
 import RoomInfoPreview from "../room-info-preview/room-info-preview.component";
 import CircleButton from "../circle-btn/circle-btn.component";
 // import Portal from "../portal/portal.component";
 import Modal from "../modal/modal.component";
-import NewRoom from "../new-room/new-room.component";
-
-import Tooltip from "@material-ui/core/Tooltip";
 
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import IconButton from "@material-ui/core/IconButton";
@@ -128,8 +123,8 @@ class RoomListNav extends React.Component {
         {this.props.subscribedRooms.map((room, i) => (
           <div key={i} className="room-item">
             <Poppity
-              // buttonEventTrigger="hover"
-              style={{ marginRight: "4rem" }}
+              buttonEventTrigger="hover"
+              // spacingLeft="0.5rem"
               contentAnchorPoint="middle left"
               childrenAnchorPoint="middle right"
               content={<RoomInfoPreview roomInfo={room} />}

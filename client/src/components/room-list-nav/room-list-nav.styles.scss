@@ -9,6 +9,7 @@
   // background-color: yellow;
 
   .room-item {
+    z-index: 1;
     margin-bottom: 1rem;
     // background-color: pink;
 
@@ -16,17 +17,18 @@
   }
 
   .indicator {
+    z-index: 50;
     position: absolute;
     left: 0;
     // opacity: 0.5;
 
-    clip-path: polygon(0 0, 0% 100%, 20% 50%);
+    // clip-path: polygon(0 0, 0% 100%, 20% 50%);
     // clip-path: polygon(4px 0, 10px 50%, 4px 100%, 0 100%, 0 0);
 
     clip-path: polygon(8% 0, 8% 40%, 15% 50%, 8% 60%, 8% 100%, 0 100%, 0 0);
 
     height: 40px;
-    width: 10px;
+    // width: 10px;
     width: 100%;
     background-color: $highlight2;
 
