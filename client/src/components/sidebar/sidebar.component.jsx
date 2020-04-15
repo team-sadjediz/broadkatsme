@@ -15,10 +15,12 @@ import AddFriend from "../add-friend/add-friend.component";
 import RoomSubscribe from "../room-subscribe/room-subscribe.component";
 import HeaderInfo from "../header-info/header-info.component";
 
+import Poppity from "../poppity/poppity-v2.component";
 import Chat from "../chat/chat.component";
 import FriendsList from "../friendslist/friendslist.component";
 
 import ChatSidebarHeader from "../sidebar-content-header/sidebar-content-header.component";
+import RoomListNav from "../room-list-nav/room-list-nav.component";
 
 // icons:
 import NotificationsIcon from "@material-ui/icons/Notifications";
@@ -35,24 +37,24 @@ import { BASE_API_URL } from "../../utils";
 
 const tabNavComponents = [
   {
+    component: <HeaderInfo />,
+    componentHeader: null,
+    title: "Debug",
+    icon: <BugReportIcon />,
+    index: 0,
+  },
+  {
     component: <FriendsList />,
     componentHeader: null,
     title: "Friends List",
     icon: <SupervisedUserCircleIcon />,
-    index: 0,
+    index: 1,
   },
   {
     component: <Chat />,
     componentHeader: <ChatSidebarHeader />,
     title: "Chat",
     icon: <ChatIcon />,
-    index: 1,
-  },
-  {
-    component: <HeaderInfo />,
-    componentHeader: null,
-    title: "Debug",
-    icon: <BugReportIcon />,
     index: 2,
   },
 ];
@@ -80,12 +82,18 @@ const Sidebar = ({
     <div className="main-sidebar-container">
       <div className="sidebar-nav">
         <div className="sidebar-item">
+          {/* <Poppity
+            contentAnchorPoint="middle left"
+            childrenAnchorPoint="middle left"
+            content={<HeaderInfo />}
+          > */}
           <CircleButton
             id="toggle-sidebar-btn"
             className={`${drawerOpen ? "btn-left" : "btn-right"}`}
             icon={<ChevronRightIcon />}
             onClick={toggleSidebar}
           />
+          {/* </Poppity> */}
         </div>
 
         {tabNavComponents.map((item, i) => (
@@ -102,6 +110,14 @@ const Sidebar = ({
             />
           </div>
         ))}
+
+        <RoomListNav
+          clickThis={() => {
+            enableSidebar();
+            setItemSelected(2);
+          }}
+          className="room-list-nav-z"
+        />
 
         <div onClick={toggleSidebar} className="toggle-container"></div>
       </div>

@@ -9,10 +9,13 @@ import {
   updateSubscribedRooms,
 } from "../../redux/room/room.actions";
 
-import HoverPopOver from "../hover-popover/hover-popover.component";
+// import HoverPopOver from "../hover-popover/hover-popover.component";
+import Poppity from "../poppity/poppity-v2.component";
 import ImageButton from "../img-btn/img-btn.component";
 import RoomInfoPreview from "../room-info-preview/room-info-preview.component";
 import CircleButton from "../circle-btn/circle-btn.component";
+
+import Tooltip from "@material-ui/core/Tooltip";
 
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import IconButton from "@material-ui/core/IconButton";
@@ -49,10 +52,13 @@ class RoomListNav extends React.Component {
     super(props);
 
     this.state = {
-      displayStart: 0,
-      displayEnd: DISPLAY_MAX,
+      itemSelected: null,
     };
   }
+
+  setItemSelected = (item) => {
+    this.setState({ itemSelected: item });
+  };
 
   componentDidMount() {
     // console.log("RoomListNav Mounted");
@@ -110,51 +116,67 @@ class RoomListNav extends React.Component {
     return (
       // <div className="room-list-nav-container">
 
-      <React.Fragment>
-        {/* <RoomNavButton onClick={this.prev}>
-          <ChevronLeftIcon />
-        </RoomNavButton> */}
-        <CircleButton onClick={this.prev} icon={<ChevronLeftIcon />} />
-        {this.props.subscribedRooms
-          .slice(this.state.displayStart, this.state.displayEnd)
-          .map((room, i) => (
-            <Link
-              style={{ position: "relative" }}
-              to={`/room/id=${room.roomID}`}
-              key={i}
-            >
-              {this.props.selectedRoom.roomID === room.roomID ? (
-                <div className="room-selected">
-                  <div className="indicator"></div>
-                </div>
-              ) : (
-                ""
-              )}
-              {console.log("from room list", room)}
-              <HoverPopOver content={<RoomInfoPreview roomInfo={room} />}>
+      // <div.Fragment>
+      <div className={`room-list-nav-container ${this.props.className}`}>
+        {this.props.subscribedRooms.map((room, i) => (
+          <div key={i} className="room-item">
+            {/* <Poppity
+              // buttonEventTrigger="hover"
+              style={{ marginRight: "4rem" }}
+              contentAnchorPoint="middle left"
+              childrenAnchorPoint="middle right"
+              content={<RoomInfoPreview roomInfo={room} />}
+            > */}
+            <Tooltip title={room.name} placement="right" arrow>
+              <Link
+                // style={{ position: "relative" }}
+                to={`/room/id=${room.roomID}`}
+              >
+                {/* {this.props.selectedRoom.roomID === room.roomID ? (
+                  <div className="room-selected">
+                    <div className="indicator"></div>
+                  </div>
+                ) : (
+                  ""
+                )} */}
+                {/* {console.log("from room list", room)} */}
+                {/* <HoverPopOver content={<RoomInfoPreview roomInfo={room} />}> */}
                 {/* RANDOM DIV NEEDED TO MAKE THINGS WORK LOL */}
-                <div>
-                  <ImageButton
-                    onClick={() => {
-                      this.props.setSelectedRoom(room.roomID);
-                    }}
-                    iconHover={<PlayCircleFilledIcon />}
-                    // bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=default1.png`}
-                    bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${room.thumbnailUrl}`}
-                  ></ImageButton>
-                </div>
-              </HoverPopOver>
-            </Link>
-          ))}
-        {/* <RoomNavButton onClick={this.next}>
-          <ChevronRightIcon />
-        </RoomNavButton> */}
-        <CircleButton
-          className=".nav-bar-btn"
-          onClick={this.next}
-          icon={<ChevronRightIcon />}
-        />
-      </React.Fragment>
+
+                {/* <div> */}
+                <ImageButton
+                  onClick={() => {
+                    this.props.setSelectedRoom(room.roomID);
+                    this.props.clickThis();
+                    this.setItemSelected(i);
+                  }}
+                  iconHover={<PlayCircleFilledIcon />}
+                  // bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=default1.png`}
+                  bgImageUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${room.thumbnailUrl}`}
+                ></ImageButton>
+                {/* </div> */}
+                {/* </HoverPopOver> */}
+              </Link>
+            </Tooltip>
+            {/* </Poppity> */}
+          </div>
+        ))}
+
+        {/* <div className="indicator"></div> */}
+
+        {this.state.itemSelected !== null ? (
+          <div
+            style={{
+              // transform: `translateY(${this.state.itemSelected * (40 + 10)}px)`,
+              transform: `translateY(calc(${this.state.itemSelected} * (40px + 1rem)))`,
+            }}
+            className="indicator"
+          ></div>
+        ) : (
+          ""
+        )}
+      </div>
+      // </React.Fragment>
       // </div>
     );
   }

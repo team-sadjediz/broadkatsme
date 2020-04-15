@@ -16,12 +16,15 @@ const ANCHOR_POINTS = {
 };
 
 const Poppity = ({
+  style,
+  className,
   content,
   children,
   buttonEventTrigger = "click",
   childrenAnchorPoint,
   contentAnchorPoint,
   spacing = "0px",
+  spacingClass = "",
   backdrop = false,
 }) => {
   const [enabled, setEnabled] = useState(false);
@@ -125,7 +128,7 @@ const Poppity = ({
 
   return (
     // <React.Fragment>
-    <div className="poppity-container">
+    <div className={`poppity-container`}>
       {/* <div className={`${enabled ? "custom-backdrop" : ""}`}></div> */}
       {newChild}
       <div className={`ch-anchor-point ${setChildrenAnchorPoint()}`}>
@@ -135,6 +138,7 @@ const Poppity = ({
         </div> */}
 
           <div
+            style={style}
             // style={{ padding: `${spacing}` }}
             className={`dropdown-container ${setContentAnchorPoint()} ${
               enabled ? "" : "disabled"

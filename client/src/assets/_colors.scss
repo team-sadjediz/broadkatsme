@@ -58,12 +58,19 @@ $lg_blue: linear-gradient(
 $lg_lightblue: linear-gradient(45deg, #c7ddfd 20%, #d7f9e7 80%);
 $lg_red: linear-gradient(60deg, #d44f4f 20%, #ec5353 80%);
 
+$lg_pink_purple: linear-gradient(
+  45deg,
+  rgba(28, 73, 219, 0.2) 0%,
+  rgba(191, 96, 255, 0.2) 100%
+);
+
 ///////////////////////////////////////////////////////////////
 // DROP SHADOWS HERE:
 ///////////////////////////////////////////////////////////////
 $light_box_shadow: 0 0 5px #c5c5c5;
 $default_box_shadow: 0 0 5px #6b6b6b;
 $strong_box_shadow: 0 0 5px #414141;
+$big_radius_box_shadow: 0px 0px 9px 6px rgba(black, 0.15);
 
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////

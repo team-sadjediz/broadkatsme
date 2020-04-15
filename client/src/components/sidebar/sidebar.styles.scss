@@ -6,15 +6,22 @@
   overflow: hidden;
 
   display: flex;
+  // z-index: 800;
 
   .sidebar-nav {
-    z-index: 2;
-
+    z-index: 3;
+    overflow-x: auto;
     overflow-y: auto;
     position: relative;
+
     min-width: $sidebar_nav_width;
     max-width: $sidebar_nav_width;
     width: $sidebar_nav_width;
+
+    // min-width: 20rem;
+    // max-width: $sidebar_nav_width;
+    // width: $sidebar_nav_width;
+
     height: 100%;
     background-color: $foreground;
     // border-right: 1px solid rgba($highlight1, 0.15);
@@ -95,10 +102,19 @@
       left: 0;
       height: 100%;
       width: 100%;
+      // background-color: salmon;
+    }
+
+    .room-list-nav-z {
+      z-index: 500;
     }
   }
 
   .sidebar-content {
+    border-right: 1px solid $gray_material_ui;
+
+    // box-shadow: $big_radius_box_shadow;
+    // box-shadow: 7px 0px 5px -4px rgba(black, 0.2);
     z-index: 1;
 
     overflow-x: hidden;
@@ -177,10 +193,6 @@
     // overflow-y: scroll;
     overflow: auto;
 
-    background: linear-gradient(
-      45deg,
-      rgba(28, 73, 219, 0.2) 0%,
-      rgba(191, 96, 255, 0.2) 100%
-    );
+    background: $lg_pink_purple;
   }
 }

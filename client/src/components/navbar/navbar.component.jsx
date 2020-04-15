@@ -14,7 +14,7 @@ import ImageButton from "../img-btn/img-btn.component";
 import PageDropdown from "../page-dropdown/page-dropdown.component";
 // import MouseOverPopover from "../custom-popover/custom-popover.component";
 import NewRoom from "../new-room/new-room.component";
-import RoomListNav from "../room-list-nav/room-list-nav.component";
+// import RoomListNav from "../room-list-nav/room-list-nav.component";
 import Poppity from "../poppity/poppity-v2.component";
 
 // icons:
@@ -54,6 +54,9 @@ const Navbar = ({ updateSubscribedRooms, subscribedRooms, userAuth }) => {
         </Link>
 
         <Poppity
+          // className="nav-item-spacing"
+          // spacingClass="nav-item-spacing"
+          style={{ marginTop: "1rem" }}
           content={<NewRoom />}
           // buttonEventTrigger="hover"
           spacing="10px"
@@ -63,10 +66,11 @@ const Navbar = ({ updateSubscribedRooms, subscribedRooms, userAuth }) => {
           <CircleButton className="nav-bar-btn" icon={<AddIcon />} />
         </Poppity>
 
-        <RoomListNav />
+        {/* <RoomListNav /> */}
       </div>
 
       <Poppity
+        style={{ marginTop: "1rem" }}
         content={<PageDropdown />}
         buttonEventTrigger="hover"
         contentAnchorPoint="top right"
