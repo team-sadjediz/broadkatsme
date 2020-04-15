@@ -108,6 +108,7 @@ const CardTwo = ({
 
   const handleMouseEnter = (event) => {
     setHover(true);
+    // console.log(hover);
     // console.log(tags.length);
   };
   const handleMouseLeave = (event) => {
