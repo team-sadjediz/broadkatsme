@@ -24,7 +24,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
 import Tag from "../../components/tag/tag.component";
 import FormInput from "../../components/form-input/form-input.component";
-import Profile from "../../components/profile/profile.component";
+import Favorites from "../../components/profile/favorites/favorites.component";
+import EditProfile from "../../components/profile/edit-profile/edit-profile.component";
 import Carousel from "../../components/carousel/carousel.component";
 import MessagePop from "../../components/message-pop/message-pop.component";
 
@@ -37,7 +38,7 @@ class UserProfilePage extends React.Component {
             username: "",
             biography: "",
             isPrivate: true,
-            tags: "",
+            tags: [],
             movies: "",
             websites: "",
             music: "",
@@ -119,8 +120,8 @@ class UserProfilePage extends React.Component {
             console.error(error);
             });
         }
-        console.log('private', this.state.isPrivate);
-        console.log('is user', this.state.isUser);
+        // console.log('private', this.state.isPrivate);
+        // console.log('is user', this.state.isUser);
     }
     handleSubmit(e) {
         // this.setState({username: e.target.value});
@@ -202,8 +203,31 @@ class UserProfilePage extends React.Component {
         this.setState({isEditing : true});
     }
 
-
+    onChangeTag = (tags) => {
+        this.setState({ tags: tags });
+      };
+    
     render(){
+        let tags = this.state.tags.map((tag) => {
+            return (
+                <Tag
+                key={tag}
+                type="remove-profile"
+                text={tag}
+                onChangeTag={this.onChangeTag}
+                // roomID={this.props.match.params.id}
+                uid={this.props.userAuth.uid}
+                ></Tag>
+            );
+            });
+            let addTag = (
+            <Tag
+                type="add-profile"
+                // roomID={this.props.match.params.id}
+                onChangeTag={this.onChangeTag}
+                uid={this.props.userAuth.uid}
+            ></Tag>
+            );
         return(
             
             <div className="profile">
@@ -256,7 +280,7 @@ class UserProfilePage extends React.Component {
             {!this.state.isEditing && (this.state.isUser || !this.state.isPrivate) &&
                 <div className="profile-show">
                         <div className="profile-favorites">
-                            <Profile
+                            <Favorites
                             movies={this.state.movies}
                             music={this.state.music}
                             website={this.state.websites}
@@ -294,74 +318,78 @@ class UserProfilePage extends React.Component {
                 </div>
             }
             {this.state.isEditing &&
+                // <EditProfile
+                //     className="profile-details-form"
+                //     props={this.state}
+                //     tags={this.state.tags}
+                //     handleChange={this.handleChange}
+                //     handleSubmit={this.handleSubmit}
+                //     handleCancel={this.handleCancel}
+                // />
                 <form class="profile-details-form">
-                    <FormInput
-                    label="Username"
-                    name="username"
-                    value={this.state.username}
-                    handleChange={this.handleChange}
-                    />
-
-                    <FormInput
-                    label="Biography"
-                    name="biography"
-                    value={this.state.biography}
-                    handleChange={this.handleChange}
-                    />
-
-                    <FormInput
-                    label="Tags *NOT UPDATING YET"
-                    name="tags"
-                    value={this.state.tags}
-                    // handleChange={this.handleChange}
-                    />
-
-                    <FormInput
-                    label="Movies"
-                    name="movies"
-                    value={this.state.movies}
-                    handleChange={this.handleChange}
-                    />
-
-                    <FormInput
-                    label="Music"
-                    name="music"
-                    value={this.state.music}
-                    handleChange={this.handleChange}
-                    />
-
-                    <FormInput
-                    label="Websites"
-                    name="websites"
-                    value={this.state.websites}
-                    handleChange={this.handleChange}
-                    />
-
-                    {/* <FormInput
-                    label="Privacy"
-                    name="isPrivate"
-                    value={this.state.isPrivate}
-                    handleChange={this.handleChange}
-                    /> */}
-
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        // className={classes.button}
-                        startIcon={<CheckIcon />}
-                        onClick={this.handleSubmit}
-                    >
-                    Update
-                    </Button>
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        // className={classes.button}
-                        startIcon={<CloseIcon />}
-                        onClick={this.handleCancel}
-                    >
-                    Cancel
-                    </Button>
+                <FormInput
+                label="Username"
+                name="username"
+                value={this.state.username}
+                handleChange={this.handleChange}
+                />
+        
+                <FormInput
+                label="Biography"
+                name="biography"
+                value={this.state.biography}
+                handleChange={this.handleChange}
+                />
+        
+                {addTag}
+                {tags}
+        
+                <FormInput
+                label="Movies"
+                name="movies"
+                value={this.state.movies}
+                handleChange={this.handleChange}
+                />
+        
+                <FormInput
+                label="Music"
+                name="music"
+                value={this.state.music}
+                handleChange={this.handleChange}
+                />
+        
+                <FormInput
+                label="Websites"
+                name="websites"
+                value={this.state.websites}
+                handleChange={this.handleChange}
+                />
+        
+                {/* <FormInput
+                label="Privacy"
+                name="isPrivate"
+                value={state.isPrivate}
+                handleChange={handleChange}
+                /> */}
+        
+                <Button
+                    variant="contained"
+                    color="primary"
+                    // className={classes.button}
+                    startIcon={<CheckIcon />}
+                    onClick={this.handleSubmit}
+                >
+                Update
+                </Button>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    // className={classes.button}
+                    startIcon={<CloseIcon />}
+                    onClick={this.handleCancel}
+                >
+                Cancel
+                </Button>
                 </form>
 
             }
