@@ -15,7 +15,7 @@
 .newroom-container {
   box-sizing: border-box;
   // background-color: $navbar_color;
-  background-color: $foreground;
+  // background-color: $foreground;
 
   // border: 5px solid red;
   // box-shadow: $default_box_shadow;
@@ -25,7 +25,7 @@
 
   .header {
     margin-bottom: 0.5em;
-    background-color: transparent;
+    // background-color: transparent;
     height: 2em;
 
     display: flex;
@@ -43,27 +43,24 @@
   .form-container {
     // width: 100%;
 
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-gap: 0.8em;
+    display: flex;
+    flex-direction: column;
 
-    grid-template-areas:
-      "room-title"
-      "room-size"
-      "privacy"
-      "new-room-submit-btn";
-
-    .room-title {
-      grid-area: room-title;
+    .field-spacing-bottom {
+      margin-bottom: 0.5em;
     }
 
-    .room-size {
-      grid-area: room-size;
+    .field-spacing-top {
+      margin-top: 1em;
+    }
+
+    .new-room-title {
+    }
+
+    .new-room-size {
     }
 
     .privacy {
-      grid-area: privacy;
-
       display: flex;
       flex-direction: column;
 
@@ -111,33 +108,4 @@
       margin-top: 1.5em;
     }
   }
-
-  // .toggle-container {
-  //   display: flex;
-  //   flex-direction: row;
-  //   justify-content: center;
-  //   align-items: center;
-  //   margin-bottom: 1em;
-  //   svg:nth-child(1) {
-  //     width: 10px;
-  //     path {
-  //       fill: $white;
-  //     }
-  //   }
-
-  //   .values {
-  //     padding: 0 1em;
-  //     @include font;
-  //     font-size: 15px;
-  //     text-transform: lowercase;
-  //     font-weight: 100;
-  //   }
-
-  //   svg:nth-child(3) {
-  //     width: 10px;
-  //     path {
-  //       fill: $white;
-  //     }
-  //   }
-  // }
 }

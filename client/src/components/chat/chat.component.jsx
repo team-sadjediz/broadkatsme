@@ -10,6 +10,7 @@ import TextField from "@material-ui/core/TextField";
 
 // components:
 import Message from "../message/message.component";
+// import SidebarContentHeader from "../sidebar-content-header/sidebar-content-header.component";
 
 // custom style sheet:
 import "./chat.styles.scss";
@@ -52,8 +53,8 @@ const Chat = ({
   const endpoint = CHAT_SERVER;
 
   useEffect(() => {
-    console.log("---------------------------------------------------------");
-    console.log("MOUNT", messages);
+    // console.log("---------------------------------------------------------");
+    // console.log("MOUNT", messages);
     socket = io(endpoint);
 
     setSocket(socket);
@@ -77,7 +78,7 @@ const Chat = ({
 
     socket.on("message", (message) => {
       // console.log("on rec", messages);
-      console.log("Array of messsages from this room:", message);
+      // console.log("Array of messsages from this room:", message);
       // setMessages([...message]);
       setMessages(message);
       // console.log("from useEffect", message.text);
@@ -88,8 +89,8 @@ const Chat = ({
       // setMessages([]);
       setSocket(null);
       socket.disconnect();
-      console.log("DISMOUNT", messages);
-      console.log("**************************************************");
+      // console.log("DISMOUNT", messages);
+      // console.log("**************************************************");
     };
     // }, [ENDPOINT, currentUser.uid, selectedRoom]);
   }, [CHAT_SERVER, selectedRoom]);
@@ -126,9 +127,9 @@ const Chat = ({
     <div className="chat-container">
       {selectedRoom.roomID ? (
         <React.Fragment>
-          <div className="chat-header-container">
+          {/* <div className="chat-header-container">
             {drawerOpen ? selectedRoom.roomID : ""}
-          </div>
+          </div> */}
           <ScrollToBottom className="message-list-container">
             {messages.map((message, i) => {
               return (

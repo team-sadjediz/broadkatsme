@@ -166,7 +166,7 @@ export default function DrawerTabs({ drawerOpen }) {
         <TabPanel value={value} index={1}>
           {/* <div>TO BE IMPLEMENTED</div> */}
           <HoverPopOver content={<div>yelllllow</div>}>
-            <div>clickhere</div>
+            <NewRoom />
           </HoverPopOver>
         </TabPanel>
         <TabPanel value={value} index={2}>

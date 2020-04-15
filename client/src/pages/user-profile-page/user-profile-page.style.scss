@@ -19,7 +19,7 @@
   // width: 1200px;
   // height: 800px;
 }
- 
+
 .profile-show {
   grid-column: 1 / end;
   grid-row: 2 / end;
@@ -41,7 +41,6 @@
   justify-items: center;
   // align-items: center;
   .private-icon {
-
     width: 200px;
     height: 200px;
   }
@@ -52,42 +51,39 @@
 
 .private-user {
   grid-area: private;
-
 }
 .profile-picture {
-    // grid-area: profpic;
-    position: absolute;
+  // grid-area: profpic;
+  position: absolute;
+  height: 200px;
+  width: 100%;
+  margin-left: 25px;
+  img {
+    width: 200px;
     height: 200px;
-    width: 100%;
-    margin-left: 25px;
-    img {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
+    border-radius: 50%;
+    object-fit: cover;
+  }
 
-    // background-color: white;
+  // background-color: white;
+}
+.profile-buttons {
+  position: absolute;
+  z-index: 3;
+  margin-left: 175px;
+  display: inline-block;
+  input[type="file"] {
+    display: none;
   }
-  .profile-buttons {
-    position: absolute;
-    z-index: 3;
-    margin-left: 175px;
-    display: inline-block;
-    input[type="file"] {
-      display: none;
-    }
-  }
+}
 
 .profile-biography {
   grid-area: bio;
   margin-top: 10px;
   font-size: 25px;
   .profile-tags {
-
   }
 }
-
 
 .username-title {
   position: absolute;
@@ -105,7 +101,6 @@
 
 .subscribed-rooms {
   grid-area: subs;
-
 }
 .subscribed-title {
   font-size: 25px;
@@ -117,7 +112,6 @@
 }
 .owned-rooms {
   grid-area: owned;
-
 }
 .profile-biography {
   grid-area: bio;
@@ -134,4 +128,3 @@
 .profile-details-form {
   margin-top: 250px;
 }
-

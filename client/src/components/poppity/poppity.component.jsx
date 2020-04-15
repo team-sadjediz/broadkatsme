@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./poppity.style.scss";
+// import "./poppity.style.scss";
 import { ReactComponent as CaretUp } from "../../assets/icons/caret-up-solid-flush.svg";
 
 class Poppity extends React.Component {
@@ -8,20 +8,20 @@ class Poppity extends React.Component {
     super(props);
 
     this.state = {
-      enabled: false
+      enabled: false,
     };
   }
 
-  togglePoppity = event => {
+  togglePoppity = (event) => {
     // const { value, name } = event.target;
     this.setState({ enabled: !this.state.enabled });
   };
 
-  onMouseEnter = event => {
+  onMouseEnter = (event) => {
     this.setState({ enabled: true });
   };
 
-  onMouseLeave = event => {
+  onMouseLeave = (event) => {
     this.setState({ enabled: false });
   };
 
@@ -44,23 +44,23 @@ class Poppity extends React.Component {
       newChildWithOnClick = React.cloneElement(this.props.children, {
         onMouseEnter: this.onMouseEnter,
         onMouseLeave: this.onMouseLeave,
-        onClick: this.togglePoppity
+        onClick: this.togglePoppity,
       });
 
       newContent = React.cloneElement(this.props.content, {
-        onMouseLeave: this.onMouseLeave
+        onMouseLeave: this.onMouseLeave,
       });
     } else {
       // also handles btnAction="click"
       newChildWithOnClick = React.cloneElement(this.props.children, {
-        onClick: this.togglePoppity
+        onClick: this.togglePoppity,
       });
 
       newContent = React.cloneElement(this.props.content, {
-        onClick: this.togglePoppity
+        onClick: this.togglePoppity,
       });
     }
-    
+
     return (
       <div className="poppity-container">
         {newChildWithOnClick}

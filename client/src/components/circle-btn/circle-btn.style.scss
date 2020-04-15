@@ -2,12 +2,8 @@
 @import "../../assets/dimensions";
 
 @mixin circle-properties {
-  box-sizing: border-box;
+  // box-sizing: border-box;
   cursor: pointer;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
 
   // circle btn dimensions and color:
   background-color: $highlight1;
@@ -15,12 +11,15 @@
   height: $circle_btn_dimension;
   border-radius: 50%;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
   // icon dimensions and color:
   svg {
-    width: 0.7em;
-    height: auto;
+    // width: 1rem;
+    // height: auto;
     path {
-      fill: $white;
+      fill: white;
     }
   }
 }
@@ -33,7 +32,7 @@
   }
 }
 
-.circle-btn {
+.circle-btn-container {
   @include circle-properties;
   @include hover-animation;
 
@@ -42,54 +41,12 @@
     height: 100%;
 
     font-weight: bold;
-    font-size: 1em;
-    color: $white;
+    font-size: 1rem;
+    color: white;
 
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-
-  .image-container {
-    position: relative;
-    height: 100%;
-    width: 100%;
-
-    .image-fill {
-      border-radius: 50%;
-      height: 100%;
-      width: 100%;
-      object-fit: cover;
-    }
-
-    .hover-overlay {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      position: absolute;
-      top: 0;
-      right: 0;
-
-      height: 100%;
-      width: 100%;
-      opacity: 0;
-      transition-duration: 200ms;
-      transition-property: transform opacity;
-
-      svg {
-        padding-left: 2px; // this is to offset the play icon since the shape is left heavy
-
-        path {
-          fill: $white;
-        }
-      }
-    }
-
-    &:hover .hover-overlay {
-      opacity: 100%;
-      transform: rotate(360deg);
-    }
   }
 }
 

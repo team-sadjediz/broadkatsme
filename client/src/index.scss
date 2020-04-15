@@ -1,0 +1,49 @@
+@import "./assets/colors";
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  /* ensures that the default font is Karla with no bold*/
+}
+
+html,
+body,
+#root {
+  @include base_font_stack;
+}
+
+button {
+  border: none;
+  &:focus {
+    outline: none;
+  }
+}
+
+ul,
+ol {
+  list-style-type: none;
+}
+
+a,
+a:link,
+a:visited,
+a:hover,
+a:active {
+  cursor: pointer;
+  text-decoration: none;
+  // color: $secondary_dark;
+}

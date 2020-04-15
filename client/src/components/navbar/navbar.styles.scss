@@ -1,10 +1,17 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
 
-.nav-bar-container {
-  display: flex;
-
+.navbar-container {
+  z-index: 20;
+  box-sizing: border-box;
+  background-color: $highlight1;
   width: 100%;
+  padding: 0.5rem 1rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   .logo-section {
     // temp logo:
     display: flex;
@@ -13,17 +20,17 @@
 
     cursor: pointer;
 
-    p {
-      font-family: "Alatsi";
+    .logo-text {
+      // font-family: "Alatsi";
       margin: 0 5px 0 0;
-      // font-weight: bold;
+      font-weight: bold;
       font-size: 1.2em;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: $foreground;
     }
 
-    .circle-btn {
+    .me-btn {
       background-color: $soft_red;
       text-transform: uppercase;
       color: $foreground;
@@ -40,11 +47,11 @@
   .room-nav {
     flex-grow: 1;
     // background-color: red;
-    height: 2em;
+    // height: 2em;
 
     display: flex;
     justify-content: center;
-    align-items: center;
+    // align-items: center;
   }
 
   .room-selected {
@@ -74,6 +81,18 @@
       height: 5px;
       width: 48px;
       background-color: $highlight2;
+    }
+  }
+}
+
+.nav-bar-btn {
+  &:hover {
+    background-color: white;
+
+    svg {
+      path {
+        fill: $highlight1;
+      }
     }
   }
 }
