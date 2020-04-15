@@ -10,10 +10,14 @@ import {
 } from "../../redux/room/room.actions";
 
 // import HoverPopOver from "../hover-popover/hover-popover.component";
+import LoginRegisterPanel from "../login-register-panel/login-register-panel.component";
 import Poppity from "../poppity/poppity-v2.component";
 import ImageButton from "../img-btn/img-btn.component";
 import RoomInfoPreview from "../room-info-preview/room-info-preview.component";
 import CircleButton from "../circle-btn/circle-btn.component";
+// import Portal from "../portal/portal.component";
+import Modal from "../modal/modal.component";
+import NewRoom from "../new-room/new-room.component";
 
 import Tooltip from "@material-ui/core/Tooltip";
 
@@ -118,16 +122,19 @@ class RoomListNav extends React.Component {
 
       // <div.Fragment>
       <div className={`room-list-nav-container ${this.props.className}`}>
+        {/* <Modal>
+          <NewRoom />
+        </Modal> */}
         {this.props.subscribedRooms.map((room, i) => (
           <div key={i} className="room-item">
-            {/* <Poppity
+            <Poppity
               // buttonEventTrigger="hover"
               style={{ marginRight: "4rem" }}
               contentAnchorPoint="middle left"
               childrenAnchorPoint="middle right"
               content={<RoomInfoPreview roomInfo={room} />}
-            > */}
-            <Tooltip title={room.name} placement="right" arrow>
+            >
+              {/* <Tooltip title={room.name} placement="right" arrow> */}
               <Link
                 // style={{ position: "relative" }}
                 to={`/room/id=${room.roomID}`}
@@ -157,8 +164,8 @@ class RoomListNav extends React.Component {
                 {/* </div> */}
                 {/* </HoverPopOver> */}
               </Link>
-            </Tooltip>
-            {/* </Poppity> */}
+              {/* </Tooltip> */}
+            </Poppity>
           </div>
         ))}
 

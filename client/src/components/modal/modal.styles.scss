@@ -1,11 +1,63 @@
+// @import "../../assets/colors";
+
+// .modal-container {
+//   position: fixed;
+//   width: 100%;
+//   height: 100%;
+//   // background-color: rgba(red, 0.5);
+//   // background-color: red;
+//   border-radius: 10px;
+
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+
+//   .modal-backdrop {
+//     z-index: 5;
+
+//     position: fixed;
+//     width: 100%;
+//     height: 100%;
+//     // background-color: rgba(black, 0.5);
+
+//     background: $lg_pink_purple;
+
+//     &:hover {
+//       // background-color: red;
+//     }
+//   }
+
+//   .modal-content {
+//     background-color: $foreground;
+//     z-index: 10;
+
+//     // width: 35em;
+//     // padding: 3em;
+//     border-radius: 5px;
+
+//     display: flex;
+//     flex-direction: row;
+//     justify-content: space-between;
+//     align-items: center;
+//     &:hover {
+//       // background-color: red;
+//     }
+//   }
+// }
+
 @import "../../assets/colors";
 
 .modal-container {
   position: fixed;
-  width: 100%;
-  height: 100%;
+  z-index: 1000;
+  left: 50vw;
+  top: 50vh;
+  // transform: translate(50vw, 50vh);
+  width: 0px;
+  height: 0px;
+  // position: fixed;
   // background-color: rgba(red, 0.5);
-  // background-color: red;
+  background-color: red;
   border-radius: 10px;
 
   display: flex;
@@ -18,9 +70,9 @@
     position: fixed;
     width: 100%;
     height: 100%;
-    // background-color: rgba(black, 0.5);
+    background-color: rgba(black, 0.5);
 
-    background: $lg_pink_purple;
+    // background: $lg_pink_purple;
 
     &:hover {
       // background-color: red;
@@ -28,19 +80,17 @@
   }
 
   .modal-content {
+    position: absolute;
+    // top: 0;
+    // left: 0;
+
+    // transform: translate(-50%, 50%);
+
     background-color: $foreground;
     z-index: 10;
 
     // width: 35em;
     // padding: 3em;
     border-radius: 5px;
-
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    &:hover {
-      // background-color: red;
-    }
   }
 }

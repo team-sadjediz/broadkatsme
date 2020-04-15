@@ -24,6 +24,8 @@ html,
 body,
 #root {
   @include base_font_stack;
+  width: 100%;
+  height: 100%;
 }
 
 button {

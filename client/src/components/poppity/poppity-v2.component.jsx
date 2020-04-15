@@ -131,12 +131,8 @@ const Poppity = ({
     <div className={`poppity-container`}>
       {/* <div className={`${enabled ? "custom-backdrop" : ""}`}></div> */}
       {newChild}
-      <div className={`ch-anchor-point ${setChildrenAnchorPoint()}`}>
-        <div className={`pop-up-container`}>
-          {/* <div className={`triangle ${enabled ? "" : "disabled"}`}>
-          <CaretUp />
-        </div> */}
-
+      <div className={`children-anchor-point ${setChildrenAnchorPoint()}`}>
+        <div className={`content-anchor-point`}>
           <div
             style={style}
             // style={{ padding: `${spacing}` }}
