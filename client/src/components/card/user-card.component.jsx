@@ -44,7 +44,7 @@ const UserCard = ({...otherProps}) => {
     const classes = useStyles();
     return (
         <Card className={classes.card}>
-        {/* <Link to="/userprofile"> */}
+        <Link to={`/userprofile/id=${otherProps.uid}`}>
         <CardHeader
         className={classes.media}
           avatar={
@@ -70,9 +70,10 @@ const UserCard = ({...otherProps}) => {
               <Skeleton animation="wave" height={10} width="80%" style={{ marginBottom: 6 }} />
             ) : (<div className={classes.username}>{otherProps.username}</div>)
           }
-          subheader={loading ? <Skeleton animation="wave" height={10} width="40%" /> : (<div className={classes.bio}>{otherProps.bio}</div>)}
+          subheader={loading ? <Skeleton animation="wave" height={10} width="40%" /> : (<div className={classes.username}>{otherProps.username}</div>)}
+          // subheader={loading ? <Skeleton animation="wave" height={10} width="40%" /> : (<div className={classes.bio}>{otherProps.bio}</div>)}
         />
-        {/* </Link> */}
+        </Link>
        </Card>
       );
 }

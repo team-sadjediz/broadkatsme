@@ -224,6 +224,7 @@ class SearchPage extends React.Component {
                          username={property.username}
                          avatar={property.photoURL}
                          bio={property.biography}
+                         uid={property.userID}
                          />
                          <Divider variant="middle" />
                         </div>
