@@ -10,14 +10,11 @@ import {
 
 // components:
 import CircleButton from "../circle-btn/circle-btn.component";
-import ImageButton from "../img-btn/img-btn.component";
 import PageDropdown from "../page-dropdown/page-dropdown.component";
-// import MouseOverPopover from "../custom-popover/custom-popover.component";
-import NewRoom from "../new-room/new-room.component";
-// import RoomListNav from "../room-list-nav/room-list-nav.component";
 import Poppity from "../poppity/poppity-v2.component";
 import UserAvatar from "../user-avatar/user-avatar.component";
 import ProfileDropdown from "../profile-dropdown/profile-dropdown.component";
+import HomeSearchBar from "../home-search-bar/home-search-bar.component";
 
 // icons:
 import AddIcon from "@material-ui/icons/Add";
@@ -71,14 +68,7 @@ const Navbar = ({
       {/* </div> */}
 
       <div className="room-nav">
-        <Link to="/lobby">
-          <CircleButton className="nav-bar-btn" icon={<DashboardIcon />} />
-        </Link>
-        <Link to="/search">
-          <CircleButton className="nav-bar-btn" icon={<SearchIcon />} />
-        </Link>
-
-        {/* <RoomListNav /> */}
+        <HomeSearchBar />
       </div>
 
       <Poppity

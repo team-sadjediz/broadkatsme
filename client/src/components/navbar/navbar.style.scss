@@ -4,6 +4,9 @@
 .nav-bar-container {
   display: flex;
 
+  justify-content: center;
+  align-items: center;
+
   width: 100%;
   .logo-section {
     // temp logo:
@@ -40,7 +43,7 @@
   .room-nav {
     flex-grow: 1;
     // background-color: red;
-    height: 2em;
+    // height: 2em;
 
     display: flex;
     justify-content: center;
