@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { setSearchbarValue } from "../../redux/ui/ui.actions";
+import { useHistory } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 // mui icons:
 import SearchIcon from "@material-ui/icons/Search";
 import DashboardIcon from "@material-ui/icons/Dashboard";
@@ -10,14 +12,38 @@ import AppsIcon from "@material-ui/icons/Apps";
 
 import "./home-search-bar.styles.scss";
 
-const HomeSearchBar = ({ setSearchbarValue }) => {
+const HomeSearchBar = ({ setSearchbarValue, location }) => {
+  const [searchbarPlaceholder, setSearchbarPlaceholder] = useState("search...");
+  const browserHistory = useHistory();
+  const browserLocation = useLocation();
+
   const handleChange = (e) => {
     setSearchbarValue(e.target.value);
   };
 
+  const changePlaceHolderText = (e) => {
+    setSearchbarPlaceholder("to the dashboard!");
+  };
+
+  const resetPlaceHolderText = (e) => {
+    setSearchbarPlaceholder("search...");
+  };
+
+  const submitSearch = (e) => {
+    if (e.key === "Enter") {
+      if (browserLocation.pathname !== "/search")
+        browserHistory.push("/search");
+    }
+  };
+
   return (
-    <div className="home-search-bar-container">
-      <Link to="/lobby">
+    <div className="home-search-bar-container" onKeyDown={submitSearch}>
+      <Link
+        id="home-btn"
+        to="/lobby"
+        onMouseEnter={changePlaceHolderText}
+        onMouseLeave={resetPlaceHolderText}
+      >
         <AppsIcon />
       </Link>
 
@@ -26,11 +52,16 @@ const HomeSearchBar = ({ setSearchbarValue }) => {
         <input
           className="search-input"
           type="text"
-          placeholder="search..."
+          placeholder={searchbarPlaceholder}
           onChange={handleChange}
         />
       </div>
-      <Link to="/search">
+      <Link
+        to="/search"
+        onKeyPress={() => {
+          console.log("---------------");
+        }}
+      >
         <SearchIcon />
       </Link>
     </div>
