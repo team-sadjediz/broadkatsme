@@ -6,11 +6,16 @@
   box-sizing: border-box;
   background-color: $highlight1;
   width: 100%;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.5rem;
+  position: relative;
 
   display: flex;
   justify-content: center;
   align-items: center;
+
+  .avatar-properties {
+    // margin: 0 0.5rem;
+  }
 
   .logo-section {
     // temp logo:

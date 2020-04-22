@@ -1,0 +1,63 @@
+@import "../../assets/colors";
+
+.profile-dropdown-container {
+  // width: 10rem;
+  // height: 1rem;
+
+  background-color: $foreground;
+  border-radius: 1px;
+
+  padding: 0.5em;
+  // box-shadow: $big_radius_box_shadow;
+  clip-path: polygon(1rem 0, 100% 0, 100% 100%, 1rem 100%, 0 50%);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .pd-vertical-properties {
+    padding: 1em;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  li {
+    // background-color: $foreground2;
+    cursor: pointer;
+
+    a {
+      margin: 0 0.25rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      svg {
+        margin: 0 0.2rem;
+        path {
+          fill: $highlight1;
+        }
+      }
+
+      p {
+        font-size: 0.9rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: $highlight1;
+      }
+    }
+
+    &:hover {
+      a {
+        p {
+          color: $highlight2;
+        }
+        svg {
+          path {
+            fill: $highlight2;
+          }
+        }
+      }
+    }
+  }
+}

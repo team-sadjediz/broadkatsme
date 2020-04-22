@@ -138,7 +138,7 @@ class RoomListNav extends React.Component {
                 </Link>
               }
               contentAnchorPoint="middle left"
-              childrenAnchorPoint="middle right"
+              triggerAnchorPoint="middle right"
               // spacingLeft="0.5rem"
             >
               <RoomInfoPreview roomInfo={room} />

@@ -20,13 +20,14 @@ const Poppity = ({
   triggerComponent,
   children,
   triggerType = "click",
-  childrenAnchorPoint,
   contentAnchorPoint,
+  triggerAnchorPoint,
   spacingRight = "0",
   spacingLeft = "0",
   spacingTop = "0",
   spacingBottom = "0",
   backdrop = false,
+  dropdownStyles = "",
 }) => {
   const [enabled, setEnabled] = useState(false);
 
@@ -42,8 +43,8 @@ const Poppity = ({
     setEnabled(false);
   };
 
-  const setChildrenAnchorPoint = () => {
-    switch (childrenAnchorPoint) {
+  const setTriggerAnchorPoint = () => {
+    switch (triggerAnchorPoint) {
       case ANCHOR_POINTS.TOP_LEFT.engVersion:
         return "chap-top-left";
       case ANCHOR_POINTS.TOP_MIDDLE.engVersion:
@@ -143,44 +144,18 @@ const Poppity = ({
     }
   }
 
-  // let newChild;
-  // let newContent;
-  // let btnAction = btnAction;
-
-  // if (buttonEventTrigger === "hover") {
-  //   newChild = React.cloneElement(children, {
-  //     onMouseEnter: onMouseEnter,
-  //     onMouseLeave: onMouseLeave,
-  //     onClick: togglePoppity,
-  //   });
-
-  //   newContent = React.cloneElement(content, {
-  //     onMouseLeave: onMouseLeave,
-  //   });
-  // } else {
-  //   // also handles btnAction="click"
-  //   newChild = React.cloneElement(children, {
-  //     onClick: togglePoppity,
-  //   });
-
-  //   newContent = React.cloneElement(content, {
-  //     onClick: togglePoppity,
-  //     onMouseLeave: onMouseLeave,
-  //   });
-  // }
-
   return (
     // <React.Fragment>
     <div className={`poppity-container`}>
       {/* <div className={`${enabled ? "custom-backdrop" : ""}`}></div> */}
       {NewTriggerComponent}
-      <div className={`children-anchor-point ${setChildrenAnchorPoint()}`}>
+      <div className={`children-anchor-point ${setTriggerAnchorPoint()}`}>
         <div className={`content-anchor-point`}>
           <div
             style={getSpacingStyle()}
             className={`dropdown-container ${setContentAnchorPoint()} ${
               enabled ? "" : "disabled"
-            }`}
+            } ${dropdownStyles}`}
           >
             {NewChildrenComponent}
             {/* <div className="backdrop"></div> */}
