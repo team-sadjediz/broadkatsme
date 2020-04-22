@@ -10,8 +10,9 @@ import "./login-register-page.styles.scss";
 
 const LoginRegisterPage = () => (
   <div className="login-register-page">
-    {/* <LoginRegisterPanel /> */}
+    <LoginRegisterPanel />
     <Modal
+      defaultShow={true}
       backdrop
       backdropStyle={{
         background:

@@ -78,18 +78,6 @@ const Navbar = ({
           <CircleButton className="nav-bar-btn" icon={<SearchIcon />} />
         </Link>
 
-        <Poppity
-          triggerType="click"
-          triggerComponent={
-            <CircleButton className="nav-bar-btn" icon={<AddIcon />} />
-          }
-          spacingTop="1rem"
-          contentAnchorPoint="top middle"
-          childrenAnchorPoint="bottom middle"
-        >
-          <NewRoom />
-        </Poppity>
-
         {/* <RoomListNav /> */}
       </div>
 

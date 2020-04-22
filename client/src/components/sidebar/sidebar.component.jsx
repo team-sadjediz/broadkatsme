@@ -118,18 +118,20 @@ const Sidebar = ({
           className="room-list-nav-z"
         />
 
-        <div className="sidebar-item">
-          <CircleButton
-            // id="toggle-sidebar-btn"
-            className={`tab-nav-item-circle-btn`}
-            icon={<AddCircleIcon />}
-            onClick={toggleSidebar}
-          />
-        </div>
-
-        {/* <Modal backdrop>
+        <Modal
+          backdrop
+          triggerComponent={
+            <div className="sidebar-item">
+              <CircleButton
+                // id="toggle-sidebar-btn"
+                className={`tab-nav-item-circle-btn`}
+                icon={<AddCircleIcon />}
+              />
+            </div>
+          }
+        >
           <NewRoom />
-        </Modal> */}
+        </Modal>
 
         <div onClick={toggleSidebar} className="toggle-container"></div>
       </div>

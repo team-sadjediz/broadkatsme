@@ -38,23 +38,61 @@ import Portal from "../portal/portal.component";
 
 import "./modal.styles.scss";
 
-const Modal = ({ children, backdrop = false, backdropStyle }) => {
-  const [show, setShow] = useState(false);
+const Modal = ({
+  defaultShow = false,
+  children,
+  backdrop = false,
+  backdropStyle,
+  triggerComponent,
+  triggerType = "click",
+}) => {
+  const [show, setShow] = useState(defaultShow);
   // const [varB, setVarB] = useState([]);
 
   useEffect(() => {
     // same as componentDidMount() (not really but sorta; read up on this)
   }, []);
 
+  const toggleModal = () => {
+    setShow(!show);
+  };
+
+  let NewTriggerComponent = null;
+  if (React.isValidElement(triggerComponent)) {
+    switch (triggerType) {
+      case "hover":
+        NewTriggerComponent = React.cloneElement(triggerComponent, {
+          onMouseEnter: toggleModal,
+          onClick: toggleModal,
+        });
+        break;
+      default:
+        NewTriggerComponent = React.cloneElement(triggerComponent, {
+          onClick: toggleModal,
+        });
+    }
+  }
+
   return (
-    <Portal>
-      <div className="modal-container">
-        {backdrop ? (
-          <div style={backdropStyle} className={`modal-backdrop`}></div>
-        ) : null}
-        }<div className="modal-content">{children}</div>
-      </div>
-    </Portal>
+    <React.Fragment>
+      {NewTriggerComponent}
+      <Portal>
+        {show ? (
+          <div className="modal-container">
+            {backdrop ? (
+              <div
+                onClick={toggleModal}
+                style={backdropStyle}
+                className={`modal-backdrop`}
+              ></div>
+            ) : null}
+            }<div className="modal-content">{children}</div>
+          </div>
+        ) : (
+          ""
+        )}
+      </Portal>
+    </React.Fragment>
   );
 };
 
