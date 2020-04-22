@@ -152,7 +152,7 @@ class RoomListNav extends React.Component {
           <div
             style={{
               // transform: `translateY(${this.state.itemSelected * (40 + 10)}px)`,
-              transform: `translateY(calc(${this.state.itemSelected} * (40px + 1rem)))`,
+              transform: `translateY(calc(${this.state.itemSelected} * (40px + 1rem) + 0.5rem))`,
             }}
             className="indicator"
           ></div>
