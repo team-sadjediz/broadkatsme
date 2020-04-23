@@ -93,7 +93,7 @@ const Chat = ({
       // console.log("**************************************************");
     };
     // }, [ENDPOINT, currentUser.uid, selectedRoom]);
-  }, [CHAT_SERVER, selectedRoom]);
+  }, [CHAT_SERVER, selectedRoom.roomID]);
 
   // second use effect not working as intended:
   // useEffect(() => {

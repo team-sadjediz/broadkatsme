@@ -5,9 +5,11 @@ import { connect } from "react-redux";
 import { updateFriendslist } from "../../redux/user/user.actions";
 
 import CircleButton from "../circle-btn/circle-btn.component";
-import AddFriend from "../add-friend/add-friend.component";
+// import AddFriend from "../add-friend/add-friend.component";
 
 import ImageButton from "../img-btn/img-btn.component";
+import UserAvatar from "../user-avatar/user-avatar.component";
+
 import AirplayIcon from "@material-ui/icons/Airplay";
 
 // import {
@@ -44,21 +46,22 @@ class FriendsList extends React.Component {
       //   ))}
       // </div>
       <div className="friends-list-container">
-        <AddFriend />
+        {/* <AddFriend /> */}
         {this.props.friendslist.map((friend, i) => (
           <div key={i} className="friend-item">
-            <ImageButton
-              // src={`${BASE_API_URL}/userprofile/get-photo?photoUrl=${this.state.photoURL}`}
+            <UserAvatar
+              imgUrl={`${BASE_API_URL}/userprofile/get-photo?photoUrl=${friend.photoURL}`}
+              onlineStatus={i % 2 == 0 ? true : false}
+            />
+
+            {/* <ImageButton
               bgImageUrl={`${BASE_API_URL}/userprofile/get-photo?photoUrl=${friend.photoURL}`}
-            ></ImageButton>
+            ></ImageButton> */}
+
             <span>{friend.username}</span>
 
             <div className="send-invitation">
               <AirplayIcon />
-            </div>
-
-            <div className="status">
-              <div className={`circle ${i % 2 == 0 ? "green" : "red"}`}></div>
             </div>
           </div>
         ))}

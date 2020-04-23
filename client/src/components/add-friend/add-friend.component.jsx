@@ -6,6 +6,8 @@ import axios from "axios";
 import TextField from "@material-ui/core/TextField";
 import CircleButton from "../circle-btn/circle-btn.component";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import AddIcon from "@material-ui/icons/Add";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
 import { updateFriendslist } from "../../redux/user/user.actions";
 
@@ -55,7 +57,12 @@ const CustomTextField = withStyles((theme) => ({
   },
 }))(TextField);
 
-const AddFriend = ({ userAuth, updateFriendslist, className }) => {
+const AddFriend = ({
+  userAuth,
+  updateFriendslist,
+  className,
+  toggleComponent = () => "",
+}) => {
   const [friendID, setFriendID] = useState("");
 
   const handleChange = (event) => {
@@ -70,8 +77,10 @@ const AddFriend = ({ userAuth, updateFriendslist, className }) => {
       .then((res) => {
         updateFriendslist(userAuth.uid);
         setFriendID("");
+        toggleComponent();
       })
       .catch((err) => {
+        toggleComponent();
         console.log(err);
       });
   };
@@ -103,7 +112,7 @@ const AddFriend = ({ userAuth, updateFriendslist, className }) => {
       />
       <CircleButton
         id="add-friend-btn"
-        icon={<PersonAddIcon />}
+        icon={<AddCircleOutlineIcon />}
         onClick={handleSubmit}
       />
     </div>

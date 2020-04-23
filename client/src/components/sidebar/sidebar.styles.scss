@@ -130,6 +130,8 @@
 
     overflow-x: hidden;
     overflow-y: auto;
+    overflow-y: hidden;
+
     background-color: $foreground;
     position: relative;
 
@@ -153,7 +155,7 @@
 
     .sidebar-header {
       width: 100%;
-      min-height: 3rem;
+      min-height: $header_size;
       max-height: $header_size;
       height: $header_size;
       // background-color: purple;
@@ -175,6 +177,7 @@
       // background-color: salmon;
       padding: 0.5rem;
       box-sizing: border-box;
+      overflow-y: auto;
     }
   }
 

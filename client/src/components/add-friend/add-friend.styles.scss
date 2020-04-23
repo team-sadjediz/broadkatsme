@@ -2,18 +2,20 @@
 @import "../../assets/dimensions";
 
 .add-friend-container {
-  box-sizing: border-box;
-  padding: 0.5rem;
+  // padding: 0.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 100%;
   width: 100%;
+  // width: 18rem;
   // flex-direction: column;
 
   // background-color: red;
 
-  background-color: $foreground2;
-  margin-bottom: $sidebar_gutter_width;
+  background-color: $foreground;
+  // margin-bottom: $sidebar_gutter_width;
+  // box-shadow: $big_radius_box_shadow;
 
   #add-friend-btn {
     background-color: transparent;

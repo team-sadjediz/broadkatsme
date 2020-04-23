@@ -36,6 +36,10 @@ const HomeSearchBar = ({ setSearchbarValue, location }) => {
     }
   };
 
+  const goHome = (e) => {
+    browserHistory.push("/lobby");
+  };
+
   return (
     <div className="home-search-bar-container" onKeyDown={submitSearch}>
       <Link
@@ -43,6 +47,7 @@ const HomeSearchBar = ({ setSearchbarValue, location }) => {
         to="/lobby"
         onMouseEnter={changePlaceHolderText}
         onMouseLeave={resetPlaceHolderText}
+        onMouseDown={goHome}
       >
         <AppsIcon />
       </Link>

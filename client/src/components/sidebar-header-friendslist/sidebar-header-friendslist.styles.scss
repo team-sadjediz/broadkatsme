@@ -1,8 +1,9 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
 
-.chat-header {
-  box-sizing: border-box;
+.friendslist-header {
+  position: relative;
+
   width: 100%;
   height: 100%;
 
@@ -23,14 +24,22 @@
 
   // background-color: red;
 
-  .chat-title {
+  .friendslist-title {
     flex-grow: 1;
 
     display: flex;
     justify-content: center;
   }
 
-  #change-color-btn {
+  .add-friend-override {
+    flex-grow: 1;
+    height: 100%;
+
+    clip-path: polygon(0 0, 0 49%, 0 100%, 100% 100%, 100% 0);
+    background-color: $foreground2;
+  }
+
+  #header-add-friend-btn {
     background-color: transparent;
 
     svg {
@@ -46,5 +55,9 @@
         }
       }
     }
+  }
+
+  .hidden {
+    display: none;
   }
 }

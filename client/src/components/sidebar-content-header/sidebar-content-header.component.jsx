@@ -34,7 +34,7 @@ const ChatSidebarHeader = ({ children }) => {
           />
         }
         contentAnchorPoint="top right"
-        childrenAnchorPoint="bottom right"
+        triggerAnchorPoint="bottom right"
       >
         <ChatColorChange />
       </Poppity>

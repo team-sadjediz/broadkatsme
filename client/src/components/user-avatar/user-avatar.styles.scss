@@ -12,6 +12,7 @@ $avatar_size: 40px;
   min-height: $avatar_size;
   // border-radius: 50%;
   position: relative;
+  // background-color: $highlight2;
 
   img {
     // border-radius: 50%;
@@ -24,8 +25,8 @@ $avatar_size: 40px;
     position: absolute;
     left: 0;
     bottom: 0;
-    width: 0.8rem;
-    height: 0.8rem;
+    width: 0.7rem;
+    height: 0.7rem;
     border-radius: 50%;
   }
 
