@@ -16,6 +16,7 @@ const HomeSearchBar = ({ setSearchbarValue, location }) => {
   const [searchbarPlaceholder, setSearchbarPlaceholder] = useState("search...");
   const browserHistory = useHistory();
   const browserLocation = useLocation();
+  const inputRef = React.createRef();
 
   const handleChange = (e) => {
     setSearchbarValue(e.target.value);
@@ -59,12 +60,15 @@ const HomeSearchBar = ({ setSearchbarValue, location }) => {
           type="text"
           placeholder={searchbarPlaceholder}
           onChange={handleChange}
+          ref={inputRef}
         />
       </div>
       <Link
         to="/search"
-        onKeyPress={() => {
-          console.log("---------------");
+        onMouseDown={() => {
+          setTimeout(() => {
+            if (inputRef.current) inputRef.current.focus();
+          }, 100);
         }}
       >
         <SearchIcon />

@@ -122,21 +122,22 @@
   }
 
   .sidebar-content {
+    box-sizing: content-box;
     border-right: 1px solid $gray_material_ui;
-
     // box-shadow: $big_radius_box_shadow;
     // box-shadow: 7px 0px 5px -4px rgba(black, 0.2);
     z-index: 1;
 
     overflow-x: hidden;
-    overflow-y: auto;
+    // overflow-y: auto;
     overflow-y: hidden;
 
     background-color: $foreground;
     position: relative;
 
-    min-width: 20rem;
-    max-width: 20rem;
+    min-width: 100%;
+    width: 100%;
+    max-width: 100%;
 
     height: 100%;
     // background-color: red;
@@ -174,10 +175,15 @@
     .sidebar-component {
       width: 100%;
       flex-grow: 1;
-      // background-color: salmon;
       padding: 0.5rem;
-      box-sizing: border-box;
-      overflow-y: auto;
+      overflow-y: auto; // necessary for correct scrollbar placement
+
+      display: flex;
+      flex-direction: column;
+
+      & > * {
+        overflow-y: auto; // necessary for correct scrollbar placement
+      }
     }
   }
 
