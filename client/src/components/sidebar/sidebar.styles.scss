@@ -177,11 +177,13 @@
       flex-grow: 1;
       padding: 0.5rem;
       overflow-y: auto; // necessary for correct scrollbar placement
+      overflow-x: hidden;
 
       display: flex;
       flex-direction: column;
 
       & > * {
+        overflow-x: hidden;
         overflow-y: auto; // necessary for correct scrollbar placement
       }
     }

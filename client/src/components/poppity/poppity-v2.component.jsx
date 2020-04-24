@@ -104,9 +104,11 @@ const Poppity = ({
     return false;
   };
 
-  let NewTriggerComponent = "";
-  let NewChildrenComponent = "";
+  const closeComponent = () => {
+    setEnabled(false);
+  };
 
+  let NewTriggerComponent = null;
   if (React.isValidElement(triggerComponent)) {
     switch (triggerType) {
       case "hover":
@@ -129,18 +131,22 @@ const Poppity = ({
     }
   }
 
+  let NewChildrenComponent = null;
   if (React.isValidElement(children)) {
     switch (triggerType) {
       case "hover":
         NewChildrenComponent = React.cloneElement(children, {
           onMouseLeave: onMouseLeave,
+          closeComponent: closeComponent,
         });
         break;
       case "tooltip":
         NewChildrenComponent = children;
         break;
       default:
-        NewChildrenComponent = children;
+        NewChildrenComponent = React.cloneElement(children, {
+          closeComponent: closeComponent,
+        });
     }
   }
 

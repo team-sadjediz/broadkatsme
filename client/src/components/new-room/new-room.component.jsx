@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 // import { auth } from "../../firebase/firebase.utils";
 
@@ -18,42 +18,41 @@ import "./new-room.style.scss";
 // utils:
 import { BASE_API_URL } from "../../utils";
 
-class NewRoom extends React.Component {
-  constructor(props) {
-    super(props);
+const NewRoom = ({
+  onClick,
+  userAuth,
+  updateSubscribedRooms,
 
-    this.state = {
-      roomName: "",
-      tags: "",
-      roomSize: "",
-      privacy: "true",
-    };
-  }
+  // Poppity and Modal has 'closeComponent' defined
+  // call this appropriately in your component
+  // such as after you click on a button
+  closeComponent = () => {
+    return;
+  },
+  ...otherProps
+}) => {
+  const [roomName, setRoomName] = useState("");
+  const [tags, setTags] = useState("");
+  const [roomSize, setRoomSize] = useState(1);
+  const [privacy, setPrivacy] = useState(true);
 
-  handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
     const room = {
-      uid: this.props.userAuth.uid,
-      roomName: this.state.roomName,
-      tags: this.state.tags,
-      roomSize: this.state.roomSize,
-      privacy: this.state.privacy,
+      uid: userAuth.uid,
+      roomName: roomName,
+      tags: tags,
+      roomSize: roomSize,
+      privacy: privacy,
     };
 
-    // console.log(room);
-
-    axios
-      // .post(`${BASE_API_URL}/room/create-room`, room)
+    await axios
       .post(`${BASE_API_URL}/room/create`, room)
       .then(async (res) => {
-        console.log("Room posted for user:", this.props.userAuth.uid);
-        // let results = await axios.get(`${BASE_API_URL}/userprops/users-rooms`, {
-        //   params: { uid: this.props.currentUser.uid }
-        // });
-        // this.props.setSubscribedRooms(results.data);
-
-        this.props.updateSubscribedRooms(this.props.userAuth.uid);
+        console.log("Room posted for user:", userAuth.uid);
+        updateSubscribedRooms(userAuth.uid);
+        closeComponent();
       })
       .catch((error) => {
         console.error(error);
@@ -61,67 +60,59 @@ class NewRoom extends React.Component {
           console.log(error.response);
         }
       });
-
-    this.setState({
-      roomName: "",
-      tags: "",
-      roomSize: "",
-      privacy: "",
-    });
   };
 
-  handleChange = (event) => {
-    const { value, name } = event.target;
-    this.setState({ [name]: value });
-  };
+  return (
+    <div className="newroom-container">
+      <div className="header">Create Room</div>
+      <form className="form-container">
+        <FormInput
+          className="new-room-title field-spacing-bottom"
+          name="roomName"
+          handleChange={(e) => {
+            setRoomName(e.target.value);
+          }}
+          value={roomName}
+          label="room title"
+          required
+        />
 
-  render() {
-    return (
-      <div className="newroom-container">
-        <div className="header">Create Room</div>
-        <form className="form-container" onSubmit={this.handleSubmit}>
-          <FormInput
-            className="new-room-title field-spacing-bottom"
-            name="roomName"
-            handleChange={this.handleChange}
-            value={this.state.roomName}
-            label="room title"
-            required
-          />
+        <FormInput
+          className="new-room-size field-spacing-bottom"
+          name="roomSize"
+          handleChange={(e) => {
+            setRoomSize(e.target.value);
+          }}
+          value={roomSize}
+          label="room size"
+          type="number"
+          min="1"
+          max="5"
+          required
+        />
 
-          <FormInput
-            className="new-room-size field-spacing-bottom"
-            name="roomSize"
-            handleChange={this.handleChange}
-            value={this.state.roomSize}
-            label="room size"
-            type="number"
-            min="1"
-            max="5"
-            required
-          />
+        <div className="privacy field-spacing-bottom">
+          <label htmlFor="privacy">Privacy</label>
+          <select
+            value={privacy}
+            onChange={(e) => {
+              setPrivacy(e.target.value);
+            }}
+            name="privacy"
+            id="privacy"
+          >
+            <option value="true">Invite Only</option>
+            <option value="false">Open Room</option>
+          </select>
+        </div>
 
-          <div className="privacy field-spacing-bottom">
-            <label for="privacy">Privacy</label>
-            <select
-              value={this.state.privacy}
-              onChange={this.handleChange}
-              name="privacy"
-              id="privacy"
-            >
-              <option value="true">Invite Only</option>
-              <option value="false">Open Room</option>
-            </select>
-          </div>
-
-          <CustomButton className="new-room-btn" type="submit">
-            Create Room
-          </CustomButton>
-        </form>
-      </div>
-    );
-  }
-}
+        <CustomButton className="new-room-btn" onClick={handleSubmit}>
+          Create Room
+        </CustomButton>
+      </form>
+    </div>
+  );
+};
 
 const mapStateToProps = (state) => ({
   userAuth: state.user.userAuth,
