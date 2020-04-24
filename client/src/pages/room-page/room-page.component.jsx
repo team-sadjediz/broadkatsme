@@ -155,12 +155,12 @@ class RoomPage extends Component {
       this.props.match.params.id !== prevProps.match.params.id ||
       this.props.selectedRoom._id !== prevProps.selectedRoom._id
     ) {
-      console.log(this.props.selectedRoom);
-      console.log(
-        `COMPONENT HAS CHANGED DATA FROM ${this.props.match.params.id} TO ${prevProps.match.params.id}`
-      );
+      // console.log(this.props.selectedRoom);
+      // console.log(
+      //   `COMPONENT HAS CHANGED DATA FROM ${this.props.match.params.id} TO ${prevProps.match.params.id}`
+      // );
       this.fetchData();
-      console.log(this.state);
+      // console.log(this.state);
     }
   }
 
