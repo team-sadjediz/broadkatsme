@@ -24,7 +24,7 @@ import CircleBtn from "../circle-btn/circle-btn.component";
 const useStyles = makeStyles((theme) => ({
   root: {
     transform: "translateZ(0px)",
-    height: 36,
+    // height: 36,
     // flexGrow: 1
   },
   fab: {
