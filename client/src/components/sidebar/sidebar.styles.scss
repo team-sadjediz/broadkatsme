@@ -10,6 +10,8 @@
   display: flex;
   // z-index: 800;
 
+  // background-color: lightpink;
+
   .sidebar-nav {
     box-sizing: border-box;
     z-index: 3;
@@ -35,16 +37,20 @@
     // justify-content: center;
     align-items: center;
 
+    // background-color: lightgreen;
     .sidebar-item {
       z-index: 1;
 
       width: 100%;
       height: $header_size;
+      min-height: $header_size;
       // background-color: black;
 
       display: flex;
       justify-content: center;
       align-items: center;
+
+      // background-color: lightseagreen;
 
       #toggle-sidebar-btn {
         // position: absolute;
@@ -72,6 +78,8 @@
 
       .tab-nav-item-circle-btn {
         background-color: transparent;
+        // background-color: lightpink;
+
         svg {
           path {
             fill: $highlight1;
