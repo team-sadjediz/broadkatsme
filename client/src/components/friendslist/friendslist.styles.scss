@@ -35,11 +35,28 @@
       margin-left: 1em;
     }
 
-    .send-invitation {
-      cursor: pointer;
-      margin-right: 1em;
-      display: flex;
-      justify-content: flex-end;
+    .friend-btn {
+      // cursor: pointer;
+      // margin-right: 1em;
+      // display: flex;
+      // justify-content: flex-end;
+      background-color: transparent;
+
+      svg {
+        path,
+        circle {
+          fill: $highlight1;
+        }
+      }
+
+      &:hover {
+        svg {
+          path,
+          circle {
+            fill: $highlight2;
+          }
+        }
+      }
     }
 
     .status {

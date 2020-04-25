@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
+// redux:
 import { connect } from "react-redux";
-
 import { updateFriendslist } from "../../redux/user/user.actions";
 
+// custom components:
 import CircleButton from "../circle-btn/circle-btn.component";
-// import AddFriend from "../add-friend/add-friend.component";
+import Poppity from "../poppity/poppity-v2.component";
+import Modal from "../modal/modal.component";
+import RoomInvite from "../room-invite/room-invite.component";
 
-import ImageButton from "../img-btn/img-btn.component";
+// mui icons:
 import UserAvatar from "../user-avatar/user-avatar.component";
-
+import FaceIcon from "@material-ui/icons/Face";
 import AirplayIcon from "@material-ui/icons/Airplay";
+import FiberSmartRecordIcon from "@material-ui/icons/FiberSmartRecord";
 
-// import {
-//   setSubscribedRooms,
-//   setSelectedRoom
-// } from "../../redux/room/room.actions";
-
-// utils:
 import { BASE_API_URL, CHAT_SERVER } from "../../utils";
 
 // custom style sheet:
@@ -40,29 +39,32 @@ class FriendsList extends React.Component {
 
   render() {
     return (
-      // <div className="friendslist-container">
-      //   {this.props.friendslist.map((friend, i) => (
-      //     <div key={i}>{friend.username}</div>
-      //   ))}
-      // </div>
       <div className="friends-list-container">
-        {/* <AddFriend /> */}
         {this.props.friendslist.map((friend, i) => (
           <div key={i} className="friend-item">
             <UserAvatar
               imgUrl={`${BASE_API_URL}/userprofile/get-photo?photoUrl=${friend.photoURL}`}
               onlineStatus={i % 2 == 0 ? true : false}
             />
-
-            {/* <ImageButton
-              bgImageUrl={`${BASE_API_URL}/userprofile/get-photo?photoUrl=${friend.photoURL}`}
-            ></ImageButton> */}
-
             <span>{friend.username}</span>
 
-            <div className="send-invitation">
-              <AirplayIcon />
-            </div>
+            <Link to={`/userprofile/id=${friend.userID}`}>
+              <CircleButton className="friend-btn" icon={<FaceIcon />} />
+            </Link>
+
+            <Modal
+              backdrop
+              triggerComponent={
+                <CircleButton
+                  className="friend-btn"
+                  icon={<FiberSmartRecordIcon />}
+                />
+              }
+              triggerAnchorPoint="bottom right"
+              contentAnchorPoint="top right"
+            >
+              <RoomInvite userToInvite={friend.username} />
+            </Modal>
           </div>
         ))}
       </div>

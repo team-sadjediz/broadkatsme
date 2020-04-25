@@ -75,7 +75,6 @@ const Navbar = ({
         spacingTop="1rem"
         // content={}
         // buttonEventTrigger="hover"
-        triggerType="hover"
         triggerComponent={
           <CircleButton className="nav-bar-btn" icon={<MenuIcon />} />
         }
