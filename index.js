@@ -37,10 +37,6 @@ const port = process.env.PORT || 5000;
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "client/build")));
 
-// Catchall preventing CANNOT GET / CANNOT POST errors
-// app.use("/", express.static(path.join(__dirname, "client/build")));
-app.use("*", express.static(path.join(__dirname, "client/build")));
-
 // mongoose.plugin(require("./server/utils/mongoose-error-plugin"));
 // --------------------------------- V E R I F Y () ---------------------------------
 
@@ -123,9 +119,9 @@ app.use("/api/friends", friends);
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname + "/client/build/index.html"));
-// });
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/client/build/index.html"));
+});
 
 const server = http.createServer(app);
 const io = socketio(server);
