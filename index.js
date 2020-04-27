@@ -38,7 +38,7 @@ const port = process.env.PORT || 5000;
 app.use(express.static(path.join(__dirname, "client/build")));
 
 // Catchall preventing CANNOT GET / CANNOT POST errors
-app.use("/", express.static(path.join(__dirname, "client/build")));
+// app.use("/", express.static(path.join(__dirname, "client/build")));
 app.use("*", express.static(path.join(__dirname, "client/build")));
 
 // mongoose.plugin(require("./server/utils/mongoose-error-plugin"));
