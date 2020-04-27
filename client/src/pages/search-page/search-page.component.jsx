@@ -10,15 +10,12 @@ import CardTwo from "../../components/card/card-two.component";
 import UserCard from "../../components/card/user-card.component";
 import SearchCard from "../../components/card/search-card/search-card.component";
 import FormInput from "../../components/form-input/form-input.component";
-import Carousel from "../../components/carousel/carousel.component";
-import Grid from '@material-ui/core/Grid';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-
+import CircleBtn from "../../components/circle-btn/circle-btn.component";
+// import Poppity from "../../components/poppity/poppity-v2.component";
+// import NewRoom from "../../components/new-room/new-room.component";
+import Popper from '@material-ui/core/Popper';
+import PopupState, { bindToggle, bindPopper } from 'material-ui-popup-state';
 
 //svg and styling
 import "./search-page.style.scss";
@@ -36,28 +33,6 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 // - styling issues with the app bar not staying the same size... not dynamic to window size either
 // need media query container
 // - fix the grid... (idk not a priority either)
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      // id={`full-width-tabpanel-${index}`}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box p={1}>{children}</Box>}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired
-};
-
 
 class SearchPage extends React.Component {
   constructor(props) {
@@ -169,10 +144,63 @@ class SearchPage extends React.Component {
     return (
       <div className="container">
         <div className="display-view">
+        {/* <Poppity
+          // triggerType="click"
+          triggerComponent={
+            <CircleBtn
+            className="filter-button"
+            icon={<FilterListIcon />}
+            />
+          }
+          spacingTop="1rem"
+          contentAnchorPoint="top middle"
+          childrenAnchorPoint="bottom middle"
+        > */}
+
+        <PopupState variant="popper" popupId="demo-popup-popper">
+          {(popupState) => (
+            <div>
+              {/* <Button variant="contained" color="primary" {...bindToggle(popupState)}>
+                Toggle Popper
+              </Button> */}
+              <CircleBtn
+              className="filter-button"
+              icon={<FilterListIcon />}
+              {...bindToggle(popupState)}
+              />
+              <Popper {...bindPopper(popupState)} transition>
+                {({ TransitionProps }) => (
+                          <div className="filter-popup">
+                  <FormControl variant="outlined" >
+                    <InputLabel id="demo-simple-select-outlined-label">
+                      Filter
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-outlined-label"
+                      id="demo-simple-select-outlined"
+                      value={this.state.filterBy}
+                      onChange={this.handleSelect.bind(this)}
+                    >
+                      <MenuItem value={"roomName"}>room name</MenuItem>
+                      <MenuItem value={"tags"}>tags</MenuItem>
+                      <MenuItem value={"users"}>users</MenuItem>
+                    </Select>
+                  </FormControl>
+                            </div>
+                )}
+              </Popper>
+            </div>
+          )}
+        </PopupState>
+
+
+
+        {/* </Poppity> */}
                   <FormInput className="search-input" label="search" value={this.state.search} handleChange={this.handleFilter.bind(this)}></FormInput>
-                    <FormControl variant="outlined" >
+
+                    {/* <FormControl variant="outlined" >
                       <InputLabel id="demo-simple-select-outlined-label">
-                        <FilterListIcon /> FILTER
+                        Filter
                       </InputLabel>
                       <Select
                         labelId="demo-simple-select-outlined-label"
@@ -184,13 +212,14 @@ class SearchPage extends React.Component {
                         <MenuItem value={"tags"}>tags</MenuItem>
                         <MenuItem value={"users"}>users</MenuItem>
                       </Select>
-                    </FormControl>
+                    </FormControl> */}
+
                 <div className="search-page">
                 <div>
-
+                <div className="search-results">
                   {!this.state.isSearchingUsers &&
                       filteredUserRooms.map(property=> 
-                        <div className="search-results">
+                        
                           <SearchCard
                             uid={ this.state.uid }
                             roomID={ property.roomID }
@@ -202,7 +231,7 @@ class SearchPage extends React.Component {
                             onMouseEnter={this.handleSelectRoom.bind(property.roomID)}
                             subscribe
                           />
-                        </div>
+                        
                       )
                   }
                   {
@@ -223,7 +252,7 @@ class SearchPage extends React.Component {
                         }
                     </div>
                   }
-
+                  </div>
                   </div>
                 </div>
         </div>
