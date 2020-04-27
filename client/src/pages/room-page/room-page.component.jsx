@@ -378,7 +378,7 @@ class RoomPage extends Component {
                     src="http://3.22.254.199:5800/"
                     // frameborder="0"
                     // allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                    // allowfullscreen
+                    allowfullscreen
                   ></iframe>
                   {this.state.isMouseMoving ? (
                     <BrowserOverlay

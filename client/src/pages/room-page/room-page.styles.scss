@@ -72,18 +72,19 @@
   grid-template-columns: auto;
   grid-template-rows: auto;
   grid-template-areas: " browser ";
-  // height: 720px;
-  // width: 1280px;
-  height: 632px;
-  width: 1054px;
-  background-color: $foreground;
+  height: 720px;
+  width: 1280px;
+  // height: 632px;
+  // width: 1054px;
+  // background-color: $foreground;
+  background-color: magenta;
   // background-color: rgba(101, 149, 158, 0.3);
   iframe {
     grid-area: browser;
-    // height: 720px;
-    // width: 1280px;
-    height: 632px;
-    width: 1054px;
+    height: 720px;
+    width: 1280px;
+    // height: 632px;
+    // width: 1054px;
 
     border: none;
     outline: none;
@@ -92,7 +93,7 @@
 
 .room-screen-init {
   grid-area: room-screen;
-  z-index: 1101;
+  z-index: 3;
 }
 
 .room-tags-area {
@@ -127,14 +128,14 @@
   .room-screen-area {
     // height: 680px;
     // width: 1054px;
-    height: 465px;
-    width: 775px;
+    height: 632px;
+    width: 1054px;
 
     iframe {
       // height: 680px;
       // width: 1054px;
-      height: 465px;
-      width: 775px;
+      height: 632px;
+      width: 1054px;
     }
   }
   .room-screen-init svg {
@@ -148,13 +149,13 @@
   .room-screen-area {
     // height: 480px;
     // width: 854px;
-    height: 345px;
-    width: 575px;
+    height: 446px;
+    width: 743px;
     iframe {
       // height: 480px;
       // width: 854px;
-      height: 345px;
-      width: 575px;
+      height: 446px;
+      width: 743px;
     }
   }
   // .room-screen-init-play svg {
@@ -167,13 +168,13 @@
   .room-screen-area {
     // height: 360px;
     // width: 640px;
-    height: 225px;
-    width: 375px;
+    height: 383px;
+    width: 638px;
     iframe {
       // height: 360px;
       // width: 640px;
-      height: 225px;
-      width: 375px;
+      height: 383px;
+      width: 638px;
     }
   }
   // .room-screen-init-play svg {
@@ -184,19 +185,34 @@
 
 @media (max-width: 1050px) {
   .room-screen-area {
-    // height: 240px;
-    // width: 426px;
-    height: 196px;
-    width: 327px;
+    height: 300px;
+    width: 500px;
+    // height: 196px;
+    // width: 327px;
     iframe {
-      // height: 240px;
-      // width: 426px;
-      height: 196px;
-      width: 327px;
+      height: 300px;
+      width: 500px;
+      // height: 196px;
+      // width: 327px;
     }
   }
   // .room-screen-init-play svg {
   //   height: 2em;
   //   width: 2em;
   // }
+}
+
+@media (max-width: 860px) {
+  .room-screen-area {
+    height: 275px;
+    width: 458px;
+    // height: 196px;
+    // width: 327px;
+    iframe {
+      height: 275px;
+      width: 458px;
+      // height: 196px;
+      // width: 327px;
+    }
+  }
 }

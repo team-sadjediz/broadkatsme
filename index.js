@@ -37,6 +37,10 @@ const port = process.env.PORT || 5000;
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "client/build")));
 
+// Catchall preventing CANNOT GET / CANNOT POST errors
+app.use("/", express.static(path.join(__dirname, "client/build")));
+app.use("*", express.static(path.join(__dirname, "client/build")));
+
 // mongoose.plugin(require("./server/utils/mongoose-error-plugin"));
 // --------------------------------- V E R I F Y () ---------------------------------
 
@@ -251,7 +255,7 @@ const databaseURI = uri || process.env.MONGODB_URI;
 
 mongoose.connect(databaseURI, {
   useNewUrlParser: true,
-  useFindAndModify: false
+  useFindAndModify: false,
 });
 
 const connection = mongoose.connection;
