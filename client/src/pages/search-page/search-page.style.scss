@@ -1,0 +1,34 @@
+
+@import "../../assets/colors";
+
+.container {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 100%;
+}
+
+.display-view {
+    display: flex;
+    justify-content: center;
+    grid-column: 1;
+    grid-row: 1;
+    max-height: 100%;
+}
+.search-page {
+    display: grid;
+    grid-template-columns: min-content;
+    grid-template-rows: max-content ;
+    grid-template-areas:
+      "    search     ";
+}
+
+.search-input {
+    width: 100px;
+}
+
+.search-results {
+    grid-area: search;
+}
+

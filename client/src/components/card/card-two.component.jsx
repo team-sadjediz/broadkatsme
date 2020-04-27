@@ -39,6 +39,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 
 import { connect } from "react-redux";
+
 import {
   updateSubscribedRooms,
   setSelectedRoom,

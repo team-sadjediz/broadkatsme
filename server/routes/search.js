@@ -68,7 +68,8 @@ router.get('/rooms', async function(req, res) {
         "roomID": room._id,
         "name": room.name,
         "thumbnailUrl": room.thumbnailUrl,
-        "tags": room.tags
+        "tags": room.tags,
+        "ownerID": room.ownerID,
       });
     });
 

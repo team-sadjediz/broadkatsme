@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 import Card from "../../components/card/card.component";
 import CardTwo from "../../components/card/card-two.component";
 import UserCard from "../../components/card/user-card.component";
+import SearchCard from "../../components/card/search-card/search-card.component";
 import FormInput from "../../components/form-input/form-input.component";
 import Carousel from "../../components/carousel/carousel.component";
 import Grid from '@material-ui/core/Grid';
@@ -20,7 +21,7 @@ import Divider from '@material-ui/core/Divider';
 
 
 //svg and styling
-
+import "./search-page.style.scss";
 
 // for filter
 import { makeStyles } from '@material-ui/core/styles';
@@ -29,6 +30,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import FilterListIcon from '@material-ui/icons/FilterList';
 
 //////////TO DO//////////
 // - styling issues with the app bar not staying the same size... not dynamic to window size either
@@ -56,14 +58,6 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired
 };
 
-const style = {
-  // background : '#FFFFFF'
-  background: 'transparent',
-  // position: 'static',
-  width: '100%',
-  boxShadow: 'none',
-  // borderBottom: "1px solid red"
-};
 
 class SearchPage extends React.Component {
   constructor(props) {
@@ -174,12 +168,11 @@ class SearchPage extends React.Component {
 
     return (
       <div className="container">
-        <div className="lobby-tabs">
-                <div className="active-container">
-                    <FormInput className="search-input" label="search" value={this.state.search} handleChange={this.handleFilter.bind(this)}></FormInput>
+        <div className="display-view">
+                  <FormInput className="search-input" label="search" value={this.state.search} handleChange={this.handleFilter.bind(this)}></FormInput>
                     <FormControl variant="outlined" >
                       <InputLabel id="demo-simple-select-outlined-label">
-                        filter by
+                        <FilterListIcon /> FILTER
                       </InputLabel>
                       <Select
                         labelId="demo-simple-select-outlined-label"
@@ -192,28 +185,26 @@ class SearchPage extends React.Component {
                         <MenuItem value={"users"}>users</MenuItem>
                       </Select>
                     </FormControl>
-                  <div>
-                    <Grid container spacing={1}>
+                <div className="search-page">
+                <div>
+
                   {!this.state.isSearchingUsers &&
                       filteredUserRooms.map(property=> 
-                      // <div className="card-grid-container" key={ property.roomID }>
-                      <Grid item xs={4} zeroMinWidth>
-                          <CardTwo
-                          style={{"margin" : "10px"}}
-                          uid={ this.state.uid }
-                          roomID={ property.roomID } 
-                          name={ property.name }  
-                          tags={ property.tags } 
-                          thumbnailUrl={ `${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}` }
-                          onMouseEnter={this.handleSelectRoom.bind(property.roomID)}
-                          subscribe
-                          // unsubscribe={this.handleUnsubscribe}
-                          ></CardTwo>
-                          </Grid>
-                      // </div>
+                        <div className="search-results">
+                          <SearchCard
+                            uid={ this.state.uid }
+                            roomID={ property.roomID }
+                            ownerID={ property.ownerID }
+                            roomName={ property.name }  
+                            tags={ property.tags } 
+                            occupancy={ property.settings }
+                            thumbnail={ `${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}` }
+                            onMouseEnter={this.handleSelectRoom.bind(property.roomID)}
+                            subscribe
+                          />
+                        </div>
                       )
                   }
-                  </Grid>
                   {
                     this.state.isSearchingUsers &&
                     <div className='search-users'>
@@ -232,6 +223,7 @@ class SearchPage extends React.Component {
                         }
                     </div>
                   }
+
                   </div>
                 </div>
         </div>
