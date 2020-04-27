@@ -18,18 +18,35 @@
 }
 .search-page {
     display: grid;
-    grid-template-columns: min-content;
-    grid-template-rows: max-content ;
+    grid-template-columns: min-content min-content;
+    grid-template-rows: max-content max-content;
     grid-template-areas:
-      "    search     ";
+    "    input submit     "
+    "    search search    ";
 }
 
+.search-bar {
+    grid-area: bar;
+}
 .search-input {
+    grid-area: input;
+    // width: 150px;
+    margin: 1rem;
+}
+
+.search-submit {
+    grid-area: submit;
     width: 100px;
+    margin: 1rem;
+    height: 2rem;
 }
 
 .search-results {
     grid-area: search;
+}
+
+.filter-button {
+    margin: 0.5rem;
 }
 
 .filter-popup {
