@@ -28,25 +28,16 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
-//////////TO DO//////////
-// - styling issues with the app bar not staying the same size... not dynamic to window size either
-// need media query container
-// - fix the grid... (idk not a priority either)
-
 class SearchPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       uid: this.props.userAuth.uid,
-      // uid: "h2pO0PwXsycrNuOHKenZSAaKRl42",
-      featureRooms: [],
-      featureSize: 8,
-      userRooms: [],
-      activeRooms: [],
+      roomResults: [],
+      userResults: [],
       search: "",
-      filterBy: "",
+      filterBy: "none",
       selectedRoom: "",
-      tabValue: 1,
       isSearchingUsers: false,
       users: [],
     };
@@ -70,30 +61,31 @@ class SearchPage extends React.Component {
     // this.setState({selectedRoom: e.target.value});
     // console.log(e.target.value);
   }
+
   componentDidMount() {
-    // Get User Rooms
-    axios
-      .get(`${BASE_API_URL}/search/rooms`)
-      .then(rooms => {
-        // console.log("user rooms: " + rooms);
-        this.setState({ userRooms: rooms.data });
-        // console.log(rooms.data);
-      })
-      .catch(error => {
-        console.error(error);
-        // console.log("oof");
-      });
-      axios
-      .get(`${BASE_API_URL}/search/rooms`)
-      .then(rooms => {
-        // console.log("user rooms: " + rooms);
-        this.setState({ userRooms: rooms.data });
-        // console.log(rooms.data);
-      })
-      .catch(error => {
-        console.error(error);
-        // console.log("oof");
-      });
+    // // Get User Rooms
+    // axios
+    //   .get(`${BASE_API_URL}/search/rooms`)
+    //   .then(rooms => {
+    //     // console.log("user rooms: " + rooms);
+    //     this.setState({ roomResults: rooms.data });
+    //     // console.log(rooms.data);
+    //   })
+    //   .catch(error => {
+    //     console.error(error);
+    //     // console.log("oof");
+    //   });
+    //   axios
+    //   .get(`${BASE_API_URL}/search/rooms`)
+    //   .then(rooms => {
+    //     // console.log("user rooms: " + rooms);
+    //     this.setState({ roomResults: rooms.data });
+    //     // console.log(rooms.data);
+    //   })
+    //   .catch(error => {
+    //     console.error(error);
+    //     // console.log("oof");
+    //   });
   }
 
   handleChange = (event, newValue) => {
@@ -117,28 +109,37 @@ class SearchPage extends React.Component {
       return this.state.users;
   }
 
-  search = async e => {
-    if (this.state.isSearchingUsers) {
-      axios
-      .get(`${BASE_API_URL}/search/queries`)
-      .then(user => {
-        // console.log("user rooms: " + rooms);
-        this.setState({ users: user.data });
-        // console.log(rooms.data);
-      })
-      .catch(error => {
-        console.error(error);
-        // console.log("oof");
-      });
-    }
+  submitSearch = async (e) => {
+    // const data = {
+    //   query: {
+    //     "name" : this.state.search,
+    //     "tags" : this.state.search,
+    //   },
+    // }
+
+    axios
+    .get(`${BASE_API_URL}/search/queries?search=${this.state.search}&filter=${this.state.filterBy}`)
+    .then(response => {
+      console.log("users: ", response.data.users);
+      // console.log("rooms: ",response.data.rooms);
+      // console.log("tags: ",response.data.tags);
+      this.setState({userResults: response.data.users});
+      this.setState({roomResults: Object.assign(response.data.rooms, response.data.tags)})
+
+    })
+    .catch(error => {
+      console.error(error);
+      // console.log("oof");
+    });
+
     return this.state.users;
   }
 
   render() {
 
-    let filteredUsers = this.findUsers();
-
-    let filteredUserRooms = this.state.userRooms.filter(
+    let results = this.state.roomResults;
+    let resultsUser = this.state.userResults;
+    let filteredRoomResults = this.state.roomResults.filter(
       (room) => {
         if (this.state.filterBy === "tags") {
           let found = false;
@@ -152,7 +153,7 @@ class SearchPage extends React.Component {
         if (this.state.filterBy === "roomName") {
           return room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1;
         }
-        if (this.state.filterBy === "") {
+        if (this.state.filterBy === "none") {
           let found = false;
           for (let tag = 0; tag < room.tags.length; tag++){
             if (room.tags[tag].toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1){
@@ -207,14 +208,14 @@ class SearchPage extends React.Component {
           <div className="search-page">
             {/* <div className="search-bar"> */}
               <FormInput className="search-input" label="search" value={this.state.search} handleChange={this.handleFilter.bind(this)}></FormInput>
-              <CustomButton className="search-submit" label="search-button">
+              <CustomButton className="search-submit" label="search-button" onClick={this.submitSearch}>
                 Enter
               </CustomButton>
             {/* </div> */}
           <div>
           <div className="search-results">
-            {!this.state.isSearchingUsers &&
-                filteredUserRooms.map(property=> 
+            {/* {!this.state.isSearchingUsers &&
+                filteredRoomResults.map(property=> 
                   
                     <SearchCard
                       uid={ this.state.uid }
@@ -229,12 +230,11 @@ class SearchPage extends React.Component {
                     />
                   
                 )
-            }
+            } */}
             {
-              this.state.isSearchingUsers &&
               <div className='search-users'>
-                {
-                filteredUsers.map(property=> 
+                {(this.state.filterBy == "none" || this.state.filterBy == "user") &&
+                results.map(property=> 
                   <div>
                     <UserCard
                     username={property.username}
@@ -247,6 +247,21 @@ class SearchPage extends React.Component {
                     )
                   }
               </div>
+            }
+            {(this.state.filterBy == "none" || this.state.filterBy == "room" || this.state.filterBy == "tags" ) &&
+                results.map(property=> 
+                    <SearchCard
+                      uid={ this.state.uid }
+                      roomID={ property.roomID }
+                      ownerID={ property.ownerID }
+                      roomName={ property.name }  
+                      tags={ property.tags } 
+                      occupancy={ property.settings }
+                      thumbnail={ `${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}` }
+                      onMouseEnter={this.handleSelectRoom.bind(property.roomID)}
+                      subscribe
+                    />
+                )
             }
             </div>
           </div>

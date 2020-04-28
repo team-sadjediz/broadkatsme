@@ -121,7 +121,7 @@ const SearchCard = ({userAuth, ...props}) => {
   let avatar = BASE_API_URL + "/userprofile/get-photo?photoUrl=" + owner.photoURL;
   let thumbnail = props.thumbnail;
   let username = owner.username;
-  console.log(owner);
+  // console.log(owner);
   
   return (
 
