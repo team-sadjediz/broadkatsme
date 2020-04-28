@@ -14,22 +14,6 @@ const FilterSearch = (query, filter) => {
 
   return (
     <div className="filter-popup">
-        {/* <FormControl variant="outlined" >
-            <InputLabel id="demo-simple-select-outlined-label">
-            Filter
-            </InputLabel>
-            <Select
-            labelId="demo-simple-select-outlined-label"
-            id="demo-simple-select-outlined"
-            value={this.state.filterBy}
-            onChange={this.handleSelect.bind(this)}
-            >
-            <MenuItem value={"none"}>None</MenuItem>
-            <MenuItem value={"roomName"}>Room</MenuItem>
-            <MenuItem value={"tags"}>Tags</MenuItem>
-            <MenuItem value={"users"}>Users</MenuItem>
-            </Select>
-        </FormControl> */}
         <div className="filter-title">
         FILTER
         </div>

@@ -134,6 +134,15 @@ router.get("/queries", async function(req, res) {
             // ]
             //doesnt work because $or is short circuit
         }
+      },
+      {
+        $lookup:
+        {
+          from: "userprofiles",
+          localField: "ownerID",
+          foreignField: "userID",
+          as: "user_profile"
+        }
       }
     ])
       .then(response => {

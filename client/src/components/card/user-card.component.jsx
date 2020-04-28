@@ -15,9 +15,12 @@ const useStyles = makeStyles((theme) => ({
     card: {
     //   maxWidth: 345,
       margin: theme.spacing(2),
+      // height: "180px",
+      // width: "800px",
+      padding: "0 auto",
     },
     media: {
-      height: 200,
+      height: "180px",
     //   width: 700,
       justifyItems: 'center',
     },
@@ -42,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 const UserCard = ({...otherProps}) => {
     const { loading = false } = otherProps;
     const classes = useStyles();
-    console.log(otherProps);
+    // console.log(otherProps);
     return (
         <Card className={classes.card}>
         {/* <Link to={`/userprofile/id=${otherProps.uid}`}> */}
@@ -71,8 +74,8 @@ const UserCard = ({...otherProps}) => {
               <Skeleton animation="wave" height={10} width="80%" style={{ marginBottom: 6 }} />
             ) : (<div className={classes.username}>{otherProps.username}</div>)
           }
-          subheader={loading ? <Skeleton animation="wave" height={10} width="40%" /> : (<div className={classes.username}>{otherProps.username}</div>)}
-          // subheader={loading ? <Skeleton animation="wave" height={10} width="40%" /> : (<div className={classes.bio}>{otherProps.bio}</div>)}
+          // subheader={loading ? <Skeleton animation="wave" height={10} width="40%" /> : (<div className={classes.username}>{otherProps.username}</div>)}
+          subheader={loading ? <Skeleton animation="wave" height={10} width="40%" /> : (<div className={classes.bio}>{otherProps.bio}</div>)}
         />
         {/* </Link> */}
        </Card>

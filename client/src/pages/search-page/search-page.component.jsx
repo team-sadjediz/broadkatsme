@@ -19,6 +19,7 @@ import FilterSearch from "../../components/filter-search/filter-search.component
 
 //svg and styling
 import "./search-page.style.scss";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 // for filter
 import InputLabel from '@material-ui/core/InputLabel';
@@ -32,6 +33,7 @@ class SearchPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: false,
       uid: this.props.userAuth.uid,
       roomResults: [],
       userResults: [],
@@ -116,19 +118,23 @@ class SearchPage extends React.Component {
     //     "tags" : this.state.search,
     //   },
     // }
+    this.setState({roomResults: []});
+    this.setState({userResults: []});
+    this.setState({isLoading: true});
 
-    axios
+    await axios
     .get(`${BASE_API_URL}/search/queries?search=${this.state.search}&filter=${this.state.filterBy}`)
     .then(response => {
-      console.log("users: ", response.data.users);
+      // console.log("users: ", response.data.users);
       // console.log("rooms: ",response.data.rooms);
       // console.log("tags: ",response.data.tags);
       this.setState({userResults: response.data.users});
       this.setState({roomResults: Object.assign(response.data.rooms, response.data.tags)})
-
+      this.setState({isLoading: false});
     })
     .catch(error => {
       console.error(error);
+      this.setState({isLoading: false});
       // console.log("oof");
     });
 
@@ -139,36 +145,41 @@ class SearchPage extends React.Component {
 
     let results = this.state.roomResults;
     let resultsUser = this.state.userResults;
-    let filteredRoomResults = this.state.roomResults.filter(
-      (room) => {
-        if (this.state.filterBy === "tags") {
-          let found = false;
-          for (let tag = 0; tag < room.tags.length; tag++){
-            if (room.tags[tag].toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1){
-              found = true;
-            }
-          }
-          return found;
-        }
-        if (this.state.filterBy === "roomName") {
-          return room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1;
-        }
-        if (this.state.filterBy === "none") {
-          let found = false;
-          for (let tag = 0; tag < room.tags.length; tag++){
-            if (room.tags[tag].toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1){
-              found = true;
-            }
-          }
-          if (room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1){
-            found = true;
-          }
-          return found;
-        }
-        return -1;
-      }
-    );
+    // let 
+    // if (results != ""){
 
+    // }
+    console.log("room", results);
+    console.log("user", resultsUser);
+    // let filteredRoomResults = this.state.roomResults.filter(
+    //   (room) => {
+    //     if (this.state.filterBy === "tags") {
+    //       let found = false;
+    //       for (let tag = 0; tag < room.tags.length; tag++){
+    //         if (room.tags[tag].toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1){
+    //           found = true;
+    //         }
+    //       }
+    //       return found;
+    //     }
+    //     if (this.state.filterBy === "roomName") {
+    //       return room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1;
+    //     }
+    //     if (this.state.filterBy === "none") {
+    //       let found = false;
+    //       for (let tag = 0; tag < room.tags.length; tag++){
+    //         if (room.tags[tag].toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1){
+    //           found = true;
+    //         }
+    //       }
+    //       if (room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1){
+    //         found = true;
+    //       }
+    //       return found;
+    //     }
+    //     return -1;
+    //   }
+    // );
     return (
       <div className="container">
         <div className="display-view">
@@ -183,27 +194,41 @@ class SearchPage extends React.Component {
                 />
                 <Popper {...bindPopper(popupState)} transition>
                   {({ TransitionProps }) => (
-                    <FilterSearch />
+                    <div className="filter-popup">
+                      <div className="filter-title">
+                      FILTER
+                      </div>
+                        <CustomButton 
+                            className="none-filter-button"
+                            type="button"
+                        >
+                        None
+                        </CustomButton>
+                        <CustomButton 
+                            className="room-filter-button"
+                            type="button"
+                        >
+                        Room
+                        </CustomButton>
+                        <CustomButton 
+                            className="user-filter-button"
+                            type="button"
+                        >
+                        User
+                        </CustomButton>
+                        <CustomButton 
+                            className="tags-filter-button"
+                            type="button"
+                        >
+                        Tags
+                        </CustomButton>
+                    </div>
                   )}
                 </Popper>
               </div>
             )}
           </PopupState>
-          {/* <FormControl variant="outlined" >
-            <InputLabel id="demo-simple-select-outlined-label">
-              Filter
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
-              value={this.state.filterBy}
-              onChange={this.handleSelect.bind(this)}
-            >
-              <MenuItem value={"roomName"}>room name</MenuItem>
-              <MenuItem value={"tags"}>tags</MenuItem>
-              <MenuItem value={"users"}>users</MenuItem>
-            </Select>
-          </FormControl> */}
+
 
           <div className="search-page">
             {/* <div className="search-bar"> */}
@@ -214,27 +239,12 @@ class SearchPage extends React.Component {
             {/* </div> */}
           <div>
           <div className="search-results">
-            {/* {!this.state.isSearchingUsers &&
-                filteredRoomResults.map(property=> 
-                  
-                    <SearchCard
-                      uid={ this.state.uid }
-                      roomID={ property.roomID }
-                      ownerID={ property.ownerID }
-                      roomName={ property.name }  
-                      tags={ property.tags } 
-                      occupancy={ property.settings }
-                      thumbnail={ `${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}` }
-                      onMouseEnter={this.handleSelectRoom.bind(property.roomID)}
-                      subscribe
-                    />
-                  
-                )
-            } */}
+            {this.state.isLoading &&
+               <div>LOADING <CircularProgress className="loader"/></div>}
             {
               <div className='search-users'>
                 {(this.state.filterBy == "none" || this.state.filterBy == "user") &&
-                results.map(property=> 
+                resultsUser.map(property=> 
                   <div>
                     <UserCard
                     username={property.username}
@@ -242,18 +252,21 @@ class SearchPage extends React.Component {
                     bio={property.biography}
                     uid={property.userID}
                     />
-                    <Divider variant="middle" />
                   </div>
                     )
                   }
               </div>
             }
+            { (resultsUser != "") && <Divider variant="middle" /> }
             {(this.state.filterBy == "none" || this.state.filterBy == "room" || this.state.filterBy == "tags" ) &&
-                results.map(property=> 
+                results.map((property, i) => 
                     <SearchCard
+                      key={i}
                       uid={ this.state.uid }
-                      roomID={ property.roomID }
+                      roomID={ property._id }
                       ownerID={ property.ownerID }
+                      username={ property.user_profile[0].username}
+                      avatar={ property.user_profile[0].photoURL}
                       roomName={ property.name }  
                       tags={ property.tags } 
                       occupancy={ property.settings }

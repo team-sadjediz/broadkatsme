@@ -16,6 +16,7 @@
     grid-row: 1;
     max-height: 100%;
 }
+
 .search-page {
     display: grid;
     grid-template-columns: min-content min-content;
@@ -28,6 +29,7 @@
 .search-bar {
     grid-area: bar;
 }
+
 .search-input {
     grid-area: input;
     width: 800px;
@@ -64,5 +66,10 @@
       margin-top: 1rem;
       border-radius: 6px;
     }
+}
+
+.loader {
+    width: 500px;
+    height: 500px;
 }
 

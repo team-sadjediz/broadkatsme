@@ -38,7 +38,7 @@ const SearchCard = ({userAuth, ...props}) => {
     const [hover, setHover] = React.useState(false);
     const [active, setActive] = React.useState(false);
     const [owner, setOwner] = React.useState([]);
-
+  console.log(props);
   const handleMouseEnter = (event) => {
     // console.log(props);
     setHover(true);
@@ -118,7 +118,7 @@ const SearchCard = ({userAuth, ...props}) => {
       // return [];
   }
 
-  let avatar = BASE_API_URL + "/userprofile/get-photo?photoUrl=" + owner.photoURL;
+  let avatar = BASE_API_URL + "/userprofile/get-photo?photoUrl=" + props.avatar;
   let thumbnail = props.thumbnail;
   let username = owner.username;
   // console.log(owner);
@@ -175,18 +175,18 @@ const SearchCard = ({userAuth, ...props}) => {
           </div>
           <div className="owner">
             <div className="user-thumbnail">
-              {/* <img
+              <img
                 src={avatar}
-              /> */}
-              <AccountCircleIcon />
+              />
+              {/* <AccountCircleIcon /> */}
             </div>
             <div className="username">
-              username {username}
+              {props.username}
             </div>
           </div>
           <div className="people">
-              {/* {props.occupancy.roomSize} */}
-              { 5 } subscribers
+              {props.occupancy.roomSize} subscriber occupancy
+              {/* { 5 } subscribers */}
           </div>
           <div className="tags">
               {tagCheck(props.tags)}
