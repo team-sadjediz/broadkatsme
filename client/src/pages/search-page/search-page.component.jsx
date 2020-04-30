@@ -11,8 +11,6 @@ import FormInput from "../../components/form-input/form-input.component";
 import Divider from '@material-ui/core/Divider';
 import CircleBtn from "../../components/circle-btn/circle-btn.component";
 import CustomButton from "../../components/custom-button/custom-button.component";
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 // import Poppity from "../../components/poppity/poppity-v2.component";
 // import NewRoom from "../../components/new-room/new-room.component";
 import Popper from '@material-ui/core/Popper';
@@ -51,9 +49,10 @@ class SearchPage extends React.Component {
     this.setState({search: e.target.value});
   }
 
-  handleFilter = e => {
-    console.log("clicked?");
-    // this.setState({search: e.target.value});
+  handleFilter(e) {
+    // console.log("target ", e.target.value);
+
+    this.setState({filterBy: e.target.value});
   }
 
   handleSelect(e) {
@@ -152,41 +151,40 @@ class SearchPage extends React.Component {
 
     let results = this.state.roomResults;
     let resultsUser = this.state.userResults;
-    // let 
-    // if (results != ""){
 
-    // }
-    console.log("room", results);
-    console.log("user", resultsUser);
-    // let filteredRoomResults = this.state.roomResults.filter(
-    //   (room) => {
-    //     if (this.state.filterBy === "tags") {
-    //       let found = false;
-    //       for (let tag = 0; tag < room.tags.length; tag++){
-    //         if (room.tags[tag].toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1){
-    //           found = true;
-    //         }
-    //       }
-    //       return found;
-    //     }
-    //     if (this.state.filterBy === "roomName") {
-    //       return room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1;
-    //     }
-    //     if (this.state.filterBy === "none") {
-    //       let found = false;
-    //       for (let tag = 0; tag < room.tags.length; tag++){
-    //         if (room.tags[tag].toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1){
-    //           found = true;
-    //         }
-    //       }
-    //       if (room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1){
-    //         found = true;
-    //       }
-    //       return found;
-    //     }
-    //     return -1;
-    //   }
-    // );
+    // console.log("room", results);
+    // console.log("user", resultsUser);
+
+    let resultsUsersFilter = results.filter(
+      (room) => {
+        if (this.state.filterBy === "tags") {
+          let found = false;
+          for (let tag = 0; tag < room.tags.length; tag++){
+            if (room.tags[tag].toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1){
+              found = true;
+            }
+          }
+          return found;
+        }
+        if (this.state.filterBy === "room") {
+          return room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1;
+        }
+        // if (this.state.filterBy === "none") {
+        //   let found = false;
+        //   for (let tag = 0; tag < room.tags.length; tag++){
+        //     if (room.tags[tag].toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1){
+        //       found = true;
+        //     }
+        //   }
+        //   if (room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1){
+        //     found = true;
+        //   }
+        //   return found;
+        // }
+        return -1;
+      }
+    );
+
     return (
       <div className="container">
         <div className="display-view">
@@ -201,46 +199,51 @@ class SearchPage extends React.Component {
           <PopupState variant="popper" popupId="demo-popup-popper">
             {(popupState) => (
               <div>
-                <IconButton
+                <CircleBtn
                 className="filter-button"
                 {...bindToggle(popupState)}
+                icon={<FilterListIcon />}
                 >
-                                {/* icon={<FilterListIcon />} */}
                   <FilterListIcon />
-                </IconButton>
+                </CircleBtn>
                 <Popper {...bindPopper(popupState)} transition>
                   {({ TransitionProps }) => (
                     <div className="filter-popup">
-                      <div className="filter-title">
+                      <div className="filter-title" >
                       FILTER
                       </div>
                       <div>
-                        <Button 
+                        <CustomButton 
                             className="none-filter-button"
-                            type="button"
-                            name="none"
-                            label="search"
+                            // type="button"
+                            // name="none"
+                            // label="none"
                             value="none"
-                            onClick={this.handleFilter()}
+                            onClick={this.handleFilter.bind(this)}
                         >
                         None
-                        </Button>
+                        </CustomButton>
                         <CustomButton 
                             className="room-filter-button"
                             type="button"
-
+                            value="room"
+                            onClick={this.handleFilter.bind(this)}
                         >
                         Room
                         </CustomButton>
                         <CustomButton 
                             className="user-filter-button"
                             type="button"
+                            value="user"
+                            onClick={this.handleFilter.bind(this)}
                         >
                         User
                         </CustomButton>
                         <CustomButton 
                             className="tags-filter-button"
                             type="button"
+                            value="tags"
+                            onClick={this.handleFilter.bind(this)}
                         >
                         Tags
                         </CustomButton>
@@ -282,7 +285,7 @@ class SearchPage extends React.Component {
             }
             { (resultsUser != "") && <Divider variant="middle" /> }
             {(this.state.filterBy == "none" || this.state.filterBy == "room" || this.state.filterBy == "tags" ) &&
-                results.map((property, i) => 
+                resultsUsersFilter.map((property, i) => 
                     <SearchCard
                       key={i}
                       uid={ this.state.uid }
