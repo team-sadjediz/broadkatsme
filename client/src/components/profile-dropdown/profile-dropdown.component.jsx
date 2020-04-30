@@ -11,23 +11,35 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 import "./profile-dropdown.styles.scss";
 
-const ProfileDropdown = ({ className, userAuth, ...otherProps }) => {
+const ProfileDropdown = ({
+  className,
+  userAuth,
+  closeComponent = () => {
+    return;
+  },
+  ...otherProps
+}) => {
   return (
     <ul {...otherProps} className={`profile-dropdown-container ${className}`}>
       <li>
-        <Link to={`/userprofile/id=${userAuth.uid}`}>
+        <Link to={`/userprofile/id=${userAuth.uid}`} onClick={closeComponent}>
           <AccountCircleIcon />
           <p>Profile</p>
         </Link>
       </li>
       <li>
-        <Link to="/settings">
+        <Link to="/settings" onClick={closeComponent}>
           <SettingsIcon />
           <p>Settings</p>
         </Link>
       </li>
       <li>
-        <a onClick={() => auth.signOut()}>
+        <a
+          onClick={() => {
+            auth.signOut();
+            closeComponent();
+          }}
+        >
           <ExitToAppIcon />
           <p>Logout</p>
         </a>

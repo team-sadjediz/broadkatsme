@@ -20,7 +20,7 @@ import CloseIcon from "@material-ui/icons/Close";
 // custom style sheet:
 import "./sidebar-header-friendslist.styles.scss";
 
-const ChatSidebarHeader = ({ children }) => {
+const FriendsListHeader = ({ children }) => {
   const [showAddFriend, setShowAddFriend] = useState(false);
 
   const toggleAddFriend = () => {
@@ -47,4 +47,4 @@ const ChatSidebarHeader = ({ children }) => {
   );
 };
 
-export default ChatSidebarHeader;
+export default FriendsListHeader;

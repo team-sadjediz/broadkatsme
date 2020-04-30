@@ -16,6 +16,8 @@ import UserAvatar from "../user-avatar/user-avatar.component";
 import FaceIcon from "@material-ui/icons/Face";
 import AirplayIcon from "@material-ui/icons/Airplay";
 import FiberSmartRecordIcon from "@material-ui/icons/FiberSmartRecord";
+import AddToQueueIcon from "@material-ui/icons/AddToQueue";
+import AccountBoxIcon from "@material-ui/icons/AccountBox";
 
 import { BASE_API_URL, CHAT_SERVER } from "../../utils";
 
@@ -57,7 +59,7 @@ class FriendsList extends React.Component {
               triggerComponent={
                 <CircleButton
                   className="friend-btn"
-                  icon={<FiberSmartRecordIcon />}
+                  icon={<AddToQueueIcon />}
                 />
               }
               triggerAnchorPoint="bottom right"

@@ -1,15 +1,20 @@
 @import "../../assets/colors";
 .room-invite-container {
+  position: relative;
   background-color: $foreground;
   box-shadow: $big_radius_box_shadow;
   border-radius: 0.3rem;
-  padding: 0.5rem 0.5rem 1rem 1rem;
+  // padding: 0.5rem 0.5rem 1rem 1rem;
+  padding: 1rem;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
 
   .close-invite-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
     width: fit-content;
     height: fit-content;
 
@@ -32,7 +37,7 @@
   }
 
   .invite-header {
-    margin-bottom: 1rem;
+    margin: 1rem 0;
     .invitee-name {
       font-weight: bold;
 
@@ -46,7 +51,8 @@
     flex-direction: column;
 
     width: 15rem;
-    height: 15rem;
+    height: fit-content;
+    max-height: 15rem;
 
     overflow-y: auto;
 
@@ -59,16 +65,16 @@
       width: 100%;
       // height: 2rem;
       cursor: pointer;
-      padding: 0.1rem 0.3rem;
+      padding: 0.2rem 0.5rem;
       // width: 80%;
       margin: 0.3rem 0;
       background-color: $foreground2;
-      transition: border-left 200ms ease-out;
+      transition: border-left 100ms ease-out;
 
       display: flex;
 
       &:hover {
-        border-left: 1.4rem solid $highlight2;
+        border-left: 1.5rem solid $highlight2;
       }
     }
   }
