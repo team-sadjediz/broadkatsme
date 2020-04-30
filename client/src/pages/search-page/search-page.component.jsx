@@ -5,87 +5,54 @@ import { BASE_API_URL } from "../../utils";
 import PropTypes from "prop-types";
 
 //components
-import Card from "../../components/card/card.component";
-import CardTwo from "../../components/card/card-two.component";
 import UserCard from "../../components/card/user-card.component";
+import SearchCard from "../../components/card/search-card/search-card.component";
 import FormInput from "../../components/form-input/form-input.component";
-import Carousel from "../../components/carousel/carousel.component";
-import Grid from '@material-ui/core/Grid';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-
+import CircleBtn from "../../components/circle-btn/circle-btn.component";
+import CustomButton from "../../components/custom-button/custom-button.component";
+// import Poppity from "../../components/poppity/poppity-v2.component";
+// import NewRoom from "../../components/new-room/new-room.component";
+import Popper from '@material-ui/core/Popper';
+import PopupState, { bindToggle, bindPopper } from 'material-ui-popup-state';
+import FilterSearch from "../../components/filter-search/filter-search.component";
 
 //svg and styling
-
+import "./search-page.style.scss";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 // for filter
-import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-
-//////////TO DO//////////
-// - styling issues with the app bar not staying the same size... not dynamic to window size either
-// need media query container
-// - fix the grid... (idk not a priority either)
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      // id={`full-width-tabpanel-${index}`}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box p={1}>{children}</Box>}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired
-};
-
-const style = {
-  // background : '#FFFFFF'
-  background: 'transparent',
-  // position: 'static',
-  width: '100%',
-  boxShadow: 'none',
-  // borderBottom: "1px solid red"
-};
+import FilterListIcon from '@material-ui/icons/FilterList';
 
 class SearchPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: false,
       uid: this.props.userAuth.uid,
-      // uid: "h2pO0PwXsycrNuOHKenZSAaKRl42",
-      featureRooms: [],
-      featureSize: 8,
-      userRooms: [],
-      activeRooms: [],
+      roomResults: [],
+      userResults: [],
       search: "",
-      filterBy: "",
+      filterBy: "none",
       selectedRoom: "",
-      tabValue: 1,
       isSearchingUsers: false,
       users: [],
     };
   }
 
-  handleFilter(e) {
+  handleSearch(e) {
     this.setState({search: e.target.value});
+  }
+
+  handleFilter(e) {
+    // console.log("target ", e.target.value);
+
+    this.setState({filterBy: e.target.value});
   }
 
   handleSelect(e) {
@@ -102,19 +69,31 @@ class SearchPage extends React.Component {
     // this.setState({selectedRoom: e.target.value});
     // console.log(e.target.value);
   }
+
   componentDidMount() {
-    // Get User Rooms
-    axios
-      .get(`${BASE_API_URL}/search/rooms`)
-      .then(rooms => {
-        // console.log("user rooms: " + rooms);
-        this.setState({ userRooms: rooms.data });
-        // console.log(rooms.data);
-      })
-      .catch(error => {
-        console.error(error);
-        // console.log("oof");
-      });
+    // // Get User Rooms
+    // axios
+    //   .get(`${BASE_API_URL}/search/rooms`)
+    //   .then(rooms => {
+    //     // console.log("user rooms: " + rooms);
+    //     this.setState({ roomResults: rooms.data });
+    //     // console.log(rooms.data);
+    //   })
+    //   .catch(error => {
+    //     console.error(error);
+    //     // console.log("oof");
+    //   });
+    //   axios
+    //   .get(`${BASE_API_URL}/search/rooms`)
+    //   .then(rooms => {
+    //     // console.log("user rooms: " + rooms);
+    //     this.setState({ roomResults: rooms.data });
+    //     // console.log(rooms.data);
+    //   })
+    //   .catch(error => {
+    //     console.error(error);
+    //     // console.log("oof");
+    //   });
   }
 
   handleChange = (event, newValue) => {
@@ -138,11 +117,45 @@ class SearchPage extends React.Component {
       return this.state.users;
   }
 
+  submitSearch = async (e) => {
+    // const data = {
+    //   query: {
+    //     "name" : this.state.search,
+    //     "tags" : this.state.search,
+    //   },
+    // }
+    this.setState({roomResults: []});
+    this.setState({userResults: []});
+    this.setState({isLoading: true});
+
+    await axios
+    .get(`${BASE_API_URL}/search/queries?search=${this.state.search}&filter=${this.state.filterBy}`)
+    .then(response => {
+      // console.log("users: ", response.data.users);
+      // console.log("rooms: ",response.data.rooms);
+      // console.log("tags: ",response.data.tags);
+      this.setState({userResults: response.data.users});
+      this.setState({roomResults: Object.assign(response.data.rooms, response.data.tags)})
+      this.setState({isLoading: false});
+    })
+    .catch(error => {
+      console.error(error);
+      this.setState({isLoading: false});
+      // console.log("oof");
+    });
+
+    return this.state.users;
+  }
+
   render() {
 
-    let filteredUsers = this.findUsers();
+    let results = this.state.roomResults;
+    let resultsUser = this.state.userResults;
 
-    let filteredUserRooms = this.state.userRooms.filter(
+    // console.log("room", results);
+    // console.log("user", resultsUser);
+
+    let resultsUsersFilter = results.filter(
       (room) => {
         if (this.state.filterBy === "tags") {
           let found = false;
@@ -153,91 +166,146 @@ class SearchPage extends React.Component {
           }
           return found;
         }
-        if (this.state.filterBy === "roomName") {
+        if (this.state.filterBy === "room") {
           return room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1;
         }
-        if (this.state.filterBy === "") {
-          let found = false;
-          for (let tag = 0; tag < room.tags.length; tag++){
-            if (room.tags[tag].toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1){
-              found = true;
-            }
-          }
-          if (room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1){
-            found = true;
-          }
-          return found;
-        }
+        // if (this.state.filterBy === "none") {
+        //   let found = false;
+        //   for (let tag = 0; tag < room.tags.length; tag++){
+        //     if (room.tags[tag].toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1){
+        //       found = true;
+        //     }
+        //   }
+        //   if (room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1){
+        //     found = true;
+        //   }
+        //   return found;
+        // }
         return -1;
       }
     );
 
     return (
       <div className="container">
-        <div className="lobby-tabs">
-                <div className="active-container">
-                    <FormInput className="search-input" label="search" value={this.state.search} handleChange={this.handleFilter.bind(this)}></FormInput>
-                    <FormControl variant="outlined" >
-                      <InputLabel id="demo-simple-select-outlined-label">
-                        filter by
-                      </InputLabel>
-                      <Select
-                        labelId="demo-simple-select-outlined-label"
-                        id="demo-simple-select-outlined"
-                        value={this.state.filterBy}
-                        onChange={this.handleSelect.bind(this)}
-                      >
-                        <MenuItem value={"roomName"}>room name</MenuItem>
-                        <MenuItem value={"tags"}>tags</MenuItem>
-                        <MenuItem value={"users"}>users</MenuItem>
-                      </Select>
-                    </FormControl>
-                  <div>
-                    <Grid container spacing={1}>
-                  {!this.state.isSearchingUsers &&
-                      filteredUserRooms.map(property=> 
-                      // <div className="card-grid-container" key={ property.roomID }>
-                      <Grid item xs={4} zeroMinWidth>
-                          <CardTwo
-                          style={{"margin" : "10px"}}
-                          uid={ this.state.uid }
-                          roomID={ property.roomID } 
-                          name={ property.name }  
-                          tags={ property.tags } 
-                          thumbnailUrl={ `${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}` }
-                          onMouseEnter={this.handleSelectRoom.bind(property.roomID)}
-                          subscribe
-                          // unsubscribe={this.handleUnsubscribe}
-                          ></CardTwo>
-                          </Grid>
-                      // </div>
-                      )
-                  }
-                  </Grid>
-                  {
-                    this.state.isSearchingUsers &&
-                    <div className='search-users'>
-                      {
-                      filteredUsers.map(property=> 
-                        <div>
-                         <UserCard
-                         username={property.username}
-                         avatar={property.photoURL}
-                         bio={property.biography}
-                         uid={property.userID}
-                         />
-                         <Divider variant="middle" />
-                        </div>
-                          )
-                        }
+        <div className="display-view">
+        {/* <CustomButton 
+                            className="none-filter-button"
+                            type="button"
+                            name="none"
+                            onClick={this.handleFilter()}
+                        >
+                        None
+                        </CustomButton> */}
+          <PopupState variant="popper" popupId="demo-popup-popper">
+            {(popupState) => (
+              <div>
+                <CircleBtn
+                className="filter-button"
+                {...bindToggle(popupState)}
+                icon={<FilterListIcon />}
+                >
+                  <FilterListIcon />
+                </CircleBtn>
+                <Popper {...bindPopper(popupState)} transition>
+                  {({ TransitionProps }) => (
+                    <div className="filter-popup">
+                      <div className="filter-title" >
+                      FILTER
+                      </div>
+                      <div>
+                        <CustomButton 
+                            className="none-filter-button"
+                            // type="button"
+                            // name="none"
+                            // label="none"
+                            value="none"
+                            onClick={this.handleFilter.bind(this)}
+                        >
+                        None
+                        </CustomButton>
+                        <CustomButton 
+                            className="room-filter-button"
+                            type="button"
+                            value="room"
+                            onClick={this.handleFilter.bind(this)}
+                        >
+                        Room
+                        </CustomButton>
+                        <CustomButton 
+                            className="user-filter-button"
+                            type="button"
+                            value="user"
+                            onClick={this.handleFilter.bind(this)}
+                        >
+                        User
+                        </CustomButton>
+                        <CustomButton 
+                            className="tags-filter-button"
+                            type="button"
+                            value="tags"
+                            onClick={this.handleFilter.bind(this)}
+                        >
+                        Tags
+                        </CustomButton>
+                      </div>
                     </div>
-                  }
-                  </div>
-                </div>
-        </div>
+                  )}
+                </Popper>
+              </div>
+            )}
+          </PopupState>
 
-        {/* <BackBtn className="back-btn" onClick={() => this.prevProperty()} />
-        <NextBtn className="next-btn" onClick={() => this.nextProperty()} /> */}
+
+          <div className="search-page">
+            {/* <div className="search-bar"> */}
+              <FormInput className="search-input" label="search" value={this.state.search} handleChange={this.handleSearch.bind(this)}></FormInput>
+              <CustomButton className="search-submit" label="search-button" onClick={this.submitSearch}>
+                Enter
+              </CustomButton>
+            {/* </div> */}
+          <div>
+          <div className="search-results">
+            {this.state.isLoading &&
+               <div>LOADING <CircularProgress className="loader"/></div>}
+            {
+              <div className='search-users'>
+                {(this.state.filterBy == "none" || this.state.filterBy == "user") &&
+                resultsUser.map(property=> 
+                  <div>
+                    <UserCard
+                    username={property.username}
+                    avatar={property.photoURL}
+                    bio={property.biography}
+                    uid={property.userID}
+                    />
+                  </div>
+                    )
+                  }
+              </div>
+            }
+            { (resultsUser != "") && <Divider variant="middle" /> }
+            {(this.state.filterBy == "none" || this.state.filterBy == "room" || this.state.filterBy == "tags" ) &&
+                resultsUsersFilter.map((property, i) => 
+                    <SearchCard
+                      key={i}
+                      uid={ this.state.uid }
+                      roomID={ property._id }
+                      ownerID={ property.ownerID }
+                      username={ property.user_profile[0].username}
+                      avatar={ property.user_profile[0].photoURL}
+                      roomName={ property.name }  
+                      tags={ property.tags } 
+                      occupancy={ property.settings }
+                      thumbnail={ `${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}` }
+                      onMouseEnter={this.handleSelectRoom.bind(property.roomID)}
+                      subscribe
+                    />
+                )
+            }
+            </div>
+          </div>
+        </div>
+      </div>
 
       </div>
     );

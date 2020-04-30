@@ -1,0 +1,76 @@
+@import "../../assets/dimensions";
+@import "../../assets/colors";
+
+.filter-popup {
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-areas:
+    " title "
+    " nada "
+    " room "
+    " user "
+    " tags ";
+
+    width: 10rem;
+}
+
+.filter-title {
+    grid-area: title;
+    margin-bottom: 0.5em;
+    height: 2em;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-weight: bold;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: $highlight1;
+    padding: 0;
+}
+
+.none-filter-button {
+    grid-area: nada;
+    width: 100%;
+    background-color: white;
+    color: $highlight1;
+    &:hover {
+        background-color: $highlight1;
+        color: white;
+      }
+}
+
+.room-filter-button {
+    grid-area: room;
+    width: 100%;
+    background-color: white;
+    color: $highlight1;
+    &:hover {
+        background-color: $highlight1;
+        color: white;
+      }
+}
+
+.user-filter-button {
+    grid-area: user;
+    width: 100%;
+    background-color: white;
+    color: $highlight1;
+    &:hover {
+        background-color: $highlight1;
+        color: white;
+      }
+}
+
+.tags-filter-button {
+    grid-area: tags;
+    width: 100%;
+    background-color: white;
+    color: $highlight1;
+    &:hover {
+        background-color: $highlight1;
+        color: white;
+      }
+}
