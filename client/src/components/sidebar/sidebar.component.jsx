@@ -17,9 +17,10 @@ import HeaderInfo from "../header-info/header-info.component";
 
 import Chat from "../chat/chat.component";
 import FriendsList from "../friendslist/friendslist.component";
+import RoomListNav from "../room-list-nav/room-list-nav.component";
 
 import ChatSidebarHeader from "../sidebar-content-header/sidebar-content-header.component";
-import RoomListNav from "../room-list-nav/room-list-nav.component";
+import FriendslistSidebarHeader from "../sidebar-header-friendslist/sidebar-header-friendslist.component";
 
 // icons:
 import NotificationsIcon from "@material-ui/icons/Notifications";
@@ -28,6 +29,7 @@ import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
 import BugReportIcon from "@material-ui/icons/BugReport";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
+
 // custom style sheet:
 import "./sidebar.styles.scss";
 
@@ -44,7 +46,7 @@ const tabNavComponents = [
   },
   {
     component: <FriendsList />,
-    componentHeader: null,
+    componentHeader: <FriendslistSidebarHeader />,
     title: "Friends List",
     icon: <SupervisedUserCircleIcon />,
     index: 1,
@@ -118,18 +120,20 @@ const Sidebar = ({
           className="room-list-nav-z"
         />
 
-        <div className="sidebar-item">
-          <CircleButton
-            // id="toggle-sidebar-btn"
-            className={`tab-nav-item-circle-btn`}
-            icon={<AddCircleIcon />}
-            onClick={toggleSidebar}
-          />
-        </div>
-
-        {/* <Modal backdrop>
+        <Modal
+          backdrop
+          triggerComponent={
+            <div className="sidebar-item">
+              <CircleButton
+                // id="toggle-sidebar-btn"
+                className={`tab-nav-item-circle-btn`}
+                icon={<AddCircleIcon />}
+              />
+            </div>
+          }
+        >
           <NewRoom />
-        </Modal> */}
+        </Modal>
 
         <div onClick={toggleSidebar} className="toggle-container"></div>
       </div>

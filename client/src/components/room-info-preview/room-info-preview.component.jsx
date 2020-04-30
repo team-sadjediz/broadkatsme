@@ -33,7 +33,7 @@ const RoomInfoPreview = ({ roomInfo }) => {
         roomInfo.roomID
       );
     };
-  });
+  }, [roomInfo.roomID]);
 
   const shortenID = (id) => {
     return id.slice(0, 4) + id.slice(id.length - 4, id.length);

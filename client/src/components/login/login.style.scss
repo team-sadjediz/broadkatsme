@@ -4,6 +4,15 @@
 .login-container {
   display: flex;
   flex-direction: column;
+  width: 20rem;
+
+  background-color: $foreground;
+
+  .playful-cat {
+    align-self: center;
+    width: 8rem;
+    height: 8rem;
+  }
 
   .login-title {
     text-transform: uppercase;
@@ -13,9 +22,8 @@
   }
 
   .form-container {
-    background-color: $foreground;
-    height: auto;
-    width: 15em;
+    // height: auto;
+    // width: 15em;
 
     display: flex;
     flex-direction: column;
@@ -43,10 +51,10 @@
     .forgot-pw {
       text-decoration: upper-case;
       color: $highlight1;
-      font-size: 0.8em;
+      font-size: 1rem;
       font-weight: bold;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.1rem;
       text-align: center;
 
       &:hover {
@@ -55,7 +63,7 @@
     }
 
     .field-spacing-bottom {
-      margin-bottom: 0.5em;
+      margin-bottom: 1em;
     }
 
     .field-spacing-top {

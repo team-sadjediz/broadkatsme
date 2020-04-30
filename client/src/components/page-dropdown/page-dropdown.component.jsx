@@ -9,26 +9,39 @@ import { connect } from "react-redux";
 
 import "./page-dropdown.styles.scss";
 
-const PageDropdown = ({ className, userAuth, ...otherProps }) => (
+const PageDropdown = ({
+  className,
+  userAuth,
+  closeComponent = () => {
+    return;
+  },
+  ...otherProps
+}) => (
   <div
     {...otherProps}
     className={`page-dropdown-container ${className ? className : ""}`}
   >
-    <Link to="/about">
+    <Link to="/about" onClick={closeComponent}>
       <div className="text gap">About</div>
     </Link>
-    <Link to="/contact">
+    <Link to="/contact" onClick={closeComponent}>
       <div className="text gap">Contact</div>
     </Link>
-    <Link to="/codeofconduct">
+    <Link to="/codeofconduct" onClick={closeComponent}>
       <div className="text gap">Code of Conduct</div>
     </Link>
     {/* <Link to="/userprofile"> */}
-    <Link to={`/userprofile/id=${userAuth.uid}`}>
+    <Link to={`/userprofile/id=${userAuth.uid}`} onClick={closeComponent}>
       <div className="text gap">User Profile</div>
     </Link>
 
-    <div onClick={() => auth.signOut()} className="text">
+    <div
+      onClick={() => {
+        auth.signOut();
+        closeComponent();
+      }}
+      className="text"
+    >
       Logout
     </div>
   </div>

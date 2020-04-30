@@ -1,6 +1,11 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
 
+@mixin vertical_indicator_bar_with_arrow {
+  clip-path: polygon(8% 0, 8% 40%, 15% 50%, 8% 60%, 8% 100%, 0 100%, 0 0);
+  width: 100%;
+}
+
 .room-list-nav-container {
   position: relative;
   display: flex;
@@ -18,16 +23,11 @@
     z-index: 50;
     position: absolute;
     left: 0;
-    // opacity: 0.5;
-
-    // clip-path: polygon(0 0, 0% 100%, 20% 50%);
-    // clip-path: polygon(4px 0, 10px 50%, 4px 100%, 0 100%, 0 0);
-
-    clip-path: polygon(8% 0, 8% 40%, 15% 50%, 8% 60%, 8% 100%, 0 100%, 0 0);
-
     height: 40px;
-    // width: 10px;
-    width: 100%;
+
+    width: 4px;
+    // @include vertical_indicator_bar_with_arrow();
+
     background-color: $highlight2;
 
     transition: transform 200ms ease-in-out;

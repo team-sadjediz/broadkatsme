@@ -7,10 +7,12 @@
   padding: 0.25rem 0.5rem;
   background-color: rgba(black, 0.5);
   background-color: $highlight2;
+  width: fit-content;
 
-  border-radius: 3px;
+  // border-radius: 3px;
 
-  box-shadow: $light_dark_box_shadow;
+  // box-shadow: $light_dark_box_shadow;
+  clip-path: polygon(0.5rem 0, 100% 0, 100% 100%, 0.5rem 100%, 0 50%);
 
   display: flex;
   flex-direction: column;
@@ -18,10 +20,16 @@
   align-items: center;
 
   .room-info-item {
+    margin-left: 0.3rem;
     font-family: "Karla", sans-serif;
     font-size: 1rem;
-    font-weight: bold;
+    // font-weight: bold;
     color: $foreground;
+    white-space: nowrap;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     // width: 100%;
     // background-color: salmon;

@@ -52,6 +52,7 @@ a:active {
 
   width: 8px;
   border-left: 8px transparent solid;
+  border-top: 8px transparent solid;
   background-clip: padding-box;
 }
 
@@ -60,6 +61,7 @@ a:active {
   background: $highlight1;
   // width: 8px;
   border-left: 8px transparent solid;
+  border-top: 8px transparent solid;
   background-clip: padding-box;
 }
 
@@ -67,5 +69,6 @@ a:active {
 ::-webkit-scrollbar-thumb:hover {
   background: $highlight2;
   border-left: 8px transparent solid;
+  border-top: 8px transparent solid;
   background-clip: padding-box;
 }

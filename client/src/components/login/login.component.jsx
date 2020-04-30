@@ -7,6 +7,8 @@ import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
 // import CircleBtn from "../circle-btn/circle-btn.component";
 
+import { ReactComponent as PlayfulCat } from "../../assets/graphics/undraw_Playful_cat_rchv.svg";
+
 import "./login.style.scss";
 
 // icons:
@@ -43,6 +45,8 @@ const LogIn = ({ className, ...otherProps }) => {
   return (
     <div className={`login-container ${className ? className : ""}`}>
       {/* <p className="login-title">account login</p> */}
+      <PlayfulCat className="playful-cat" />
+
       <form className="form-container">
         <FormInput
           className="email-field field-spacing-bottom"

@@ -2,11 +2,11 @@
 @import "../../assets/_dimensions.scss";
 
 @mixin shrinkLabel {
-  top: -1.1rem;
+  top: -1.15rem;
 
   left: 0.1rem;
 
-  font-size: 0.75rem;
+  font-size: 0.9rem;
 
   font-weight: bold;
   color: $highlight1;
@@ -24,7 +24,7 @@
   .form-input {
     background-color: $light_gray;
     // height: 2em;
-    height: 2rem;
+    height: 2.5rem;
 
     width: 100%;
     box-sizing: border-box;
@@ -81,15 +81,15 @@
     text-transform: uppercase;
     color: $highlight1;
 
-    font-size: 0.95rem;
+    font-size: 1.1rem;
 
     font-weight: normal;
     letter-spacing: 0.05rem;
 
     position: absolute;
     pointer-events: none;
-    left: 0.5rem;
-    top: 0.4rem;
+    left: 0.6rem;
+    top: 0.55rem;
 
     transition-property: top, left, font-size, font-weight, color,
       letter-spacing;
@@ -104,8 +104,9 @@
   .visibility-container {
     cursor: pointer;
 
-    height: 1.8em;
-    width: 1.8em;
+    height: 100%;
+
+    margin-right: 0.5rem;
 
     position: absolute;
     bottom: 0;
@@ -119,6 +120,14 @@
       background-color: $gray_form_input;
       path {
         fill: $highlight1;
+      }
+    }
+
+    &:hover {
+      svg {
+        path {
+          fill: $highlight2;
+        }
       }
     }
   }
