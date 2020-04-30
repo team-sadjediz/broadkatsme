@@ -11,6 +11,8 @@ import FormInput from "../../components/form-input/form-input.component";
 import Divider from '@material-ui/core/Divider';
 import CircleBtn from "../../components/circle-btn/circle-btn.component";
 import CustomButton from "../../components/custom-button/custom-button.component";
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 // import Poppity from "../../components/poppity/poppity-v2.component";
 // import NewRoom from "../../components/new-room/new-room.component";
 import Popper from '@material-ui/core/Popper';
@@ -45,8 +47,13 @@ class SearchPage extends React.Component {
     };
   }
 
-  handleFilter(e) {
+  handleSearch(e) {
     this.setState({search: e.target.value});
+  }
+
+  handleFilter = e => {
+    console.log("clicked?");
+    // this.setState({search: e.target.value});
   }
 
   handleSelect(e) {
@@ -183,30 +190,45 @@ class SearchPage extends React.Component {
     return (
       <div className="container">
         <div className="display-view">
-
+        {/* <CustomButton 
+                            className="none-filter-button"
+                            type="button"
+                            name="none"
+                            onClick={this.handleFilter()}
+                        >
+                        None
+                        </CustomButton> */}
           <PopupState variant="popper" popupId="demo-popup-popper">
             {(popupState) => (
               <div>
-                <CircleBtn
+                <IconButton
                 className="filter-button"
-                icon={<FilterListIcon />}
                 {...bindToggle(popupState)}
-                />
+                >
+                                {/* icon={<FilterListIcon />} */}
+                  <FilterListIcon />
+                </IconButton>
                 <Popper {...bindPopper(popupState)} transition>
                   {({ TransitionProps }) => (
                     <div className="filter-popup">
                       <div className="filter-title">
                       FILTER
                       </div>
-                        <CustomButton 
+                      <div>
+                        <Button 
                             className="none-filter-button"
                             type="button"
+                            name="none"
+                            label="search"
+                            value="none"
+                            onClick={this.handleFilter()}
                         >
                         None
-                        </CustomButton>
+                        </Button>
                         <CustomButton 
                             className="room-filter-button"
                             type="button"
+
                         >
                         Room
                         </CustomButton>
@@ -222,6 +244,7 @@ class SearchPage extends React.Component {
                         >
                         Tags
                         </CustomButton>
+                      </div>
                     </div>
                   )}
                 </Popper>
@@ -232,7 +255,7 @@ class SearchPage extends React.Component {
 
           <div className="search-page">
             {/* <div className="search-bar"> */}
-              <FormInput className="search-input" label="search" value={this.state.search} handleChange={this.handleFilter.bind(this)}></FormInput>
+              <FormInput className="search-input" label="search" value={this.state.search} handleChange={this.handleSearch.bind(this)}></FormInput>
               <CustomButton className="search-submit" label="search-button" onClick={this.submitSearch}>
                 Enter
               </CustomButton>
