@@ -97,13 +97,13 @@ class RoomPage extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log(
-      `!!!!!!!!!!!!!!!!!       ${this.props.match.params.id}             ${nextProps.match.params.id}       `
-    );
-    console.log("THIS CURRENT PROPS SELECTED ROOM");
-    console.log(this.props.selectedRoom);
-    console.log("NEXT PROPS SELECTED ROOM");
-    console.log(nextProps.selectedRoom);
+    // console.log(
+    //   `!!!!!!!!!!!!!!!!!       ${this.props.match.params.id}             ${nextProps.match.params.id}       `
+    // );
+    // console.log("THIS CURRENT PROPS SELECTED ROOM");
+    // console.log(this.props.selectedRoom);
+    // console.log("NEXT PROPS SELECTED ROOM");
+    // console.log(nextProps.selectedRoom);
     let isFetching = this.state.isFetching !== nextState.isFetching;
     let exists = this.state.exists !== nextState.exists;
     let roomID = this.props.match.params.id !== nextProps.match.params.id;
@@ -116,23 +116,23 @@ class RoomPage extends Component {
     let showSettings = this.state.showSettings !== nextState.showSettings;
     let subscribers = this.state.subscribers !== nextState.subscribers;
     let tags = this.state.tags !== nextState.tags;
-    console.log(
-      `isFetching ${isFetching} - exists ${exists} - roomID ${roomID} - isMouseMoving ${isMouseMoving} - roomName ${roomName} - showInitial ${showInitial} - show Settings ${showSettings} - subscribers ${subscribers} - tags ${tags} - selectedRoomId ${selectedRoomId}`
-    );
-    console.log(
-      isFetching ||
-        exists ||
-        roomID ||
-        isMouseMoving ||
-        // isFavorited ||
-        selectedRoomId ||
-        roomName ||
-        showInitial ||
-        showSettings ||
-        subscribers ||
-        subscribers ||
-        tags
-    );
+    // console.log(
+    //   `isFetching ${isFetching} - exists ${exists} - roomID ${roomID} - isMouseMoving ${isMouseMoving} - roomName ${roomName} - showInitial ${showInitial} - show Settings ${showSettings} - subscribers ${subscribers} - tags ${tags} - selectedRoomId ${selectedRoomId}`
+    // );
+    // console.log(
+    //   isFetching ||
+    //     exists ||
+    //     roomID ||
+    //     isMouseMoving ||
+    //     // isFavorited ||
+    //     selectedRoomId ||
+    //     roomName ||
+    //     showInitial ||
+    //     showSettings ||
+    //     subscribers ||
+    //     subscribers ||
+    //     tags
+    // );
     return (
       isFetching ||
       exists ||
@@ -273,9 +273,23 @@ class RoomPage extends Component {
     this.setState({ tags: tags });
   };
 
-  onChangeTitle = (newName) => {
-    this.setState({ roomName: newName });
+  onChangeTitle = (e) => {
+    this.setState({ roomName: e.target.value });
     //axios call to save title changes here & return true -> flashes when saved/true is returned?
+  };
+
+  onSubmitTitle = async (e) => {
+    e.preventDefault();
+
+    await axios
+      .put(
+        `${BASE_API_URL}/roomsettings/change-name/${this.props.match.params.id}/${this.props.userAuth.uid}`,
+        null,
+        { params: { name: this.state.roomName } },
+        { cancelToken: this.source.token }
+      )
+      .then((res) => console.log("Changed name to " + res.data))
+      .catch((error) => console.error(error));
   };
 
   handleMouseMove = (e) => {
@@ -343,6 +357,7 @@ class RoomPage extends Component {
                   <RoomTitle
                     roomName={this.state.roomName}
                     onChangeTitle={this.onChangeTitle}
+                    onSubmit={this.onSubmitTitle}
                   />
                 </div>
                 {this.state.showInitial ? (
@@ -357,6 +372,14 @@ class RoomPage extends Component {
                   className="room-screen-area"
                   onMouseMove={(e) => this.handleMouseMove(e)}
                 >
+                  <iframe
+                    // width="500"
+                    // height="500"
+                    src="http://3.22.254.199:5800/"
+                    // frameborder="0"
+                    // allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                  ></iframe>
                   {this.state.isMouseMoving ? (
                     <BrowserOverlay
                       className="browser-overlay"
@@ -374,10 +397,11 @@ class RoomPage extends Component {
                     isFavorited={this.state.isFavorited}
                     unsubscribe={this.unsubscribe}
                   />
+                  {addTag}
                 </div>
                 <div className="room-tags-area">
                   <Divider className="room-tag-divider" variant="fullWidth" />
-                  {addTag}
+                  {/* {addTag} */}
                   {tags}
                 </div>
               </div>
