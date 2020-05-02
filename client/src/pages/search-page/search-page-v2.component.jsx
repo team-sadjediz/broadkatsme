@@ -1,27 +1,21 @@
 import React, { useState, useEffect } from "react";
+
+// misc:
 import axios from "axios";
 import { BASE_API_URL } from "../../utils";
-
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { useHistory } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 
+// custom components:
 import UserCard from "../../components/card/user-card.component";
 import SearchCard from "../../components/card/search-card/search-card.component";
 
 // mui components:
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-// mui icons:
-import SearchIcon from "@material-ui/icons/Search";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import HomeIcon from "@material-ui/icons/Home";
-import AppsIcon from "@material-ui/icons/Apps";
-
+// custom stylesheet:
 import "./search-page-v2.styles.scss";
 
-const SearchPage = ({ setSearchbarValue, searchbarValue, userAuth }) => {
+const SearchPage = ({ searchbarValue, userAuth }) => {
   const [results, setResults] = useState({ rooms: [], tags: [], users: [] });
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("none");
@@ -32,7 +26,7 @@ const SearchPage = ({ setSearchbarValue, searchbarValue, userAuth }) => {
       setLoading(true);
 
       try {
-        // request to get ALL data for the search terms and THEN filter on the client
+        // request to get ALL data for the search terms and THEN filter on client side
         // hence the filter = none
         const res = await axios.get(
           `${BASE_API_URL}/search/queries?search=${searchbarValue}&filter=none`,
@@ -57,7 +51,11 @@ const SearchPage = ({ setSearchbarValue, searchbarValue, userAuth }) => {
       setLoading(false);
       source.cancel();
     };
-  }, [searchbarValue, filter]);
+  }, [searchbarValue]);
+
+  // when filter is changed, re-render.
+  // this 2nd useEffect is to avoid an extra api call when the user changes the filter
+  useEffect(() => {}, [filter]);
 
   return (
     <div
@@ -114,7 +112,7 @@ const SearchPage = ({ setSearchbarValue, searchbarValue, userAuth }) => {
         ? results.rooms.map((room, i) => (
             <SearchCard
               key={i}
-              uid={room.uid}
+              uid={userAuth.uid}
               roomID={room._id}
               ownerID={room.ownerID}
               username={
