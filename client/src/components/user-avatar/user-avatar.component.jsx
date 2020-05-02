@@ -9,10 +9,11 @@ const UserAvatar = ({
   imgUrl = defaultImageUrl,
   onlineStatus = null,
   square = false,
-  ...otherProps
+  text,
+  ...props
 }) => {
   return (
-    <div {...otherProps} className={`user-avatar-container ${className}`}>
+    <div {...props} className={`user-avatar-container ${className}`}>
       <img className={square ? "" : "circle"} src={imgUrl} alt=""></img>
 
       <div
@@ -20,6 +21,8 @@ const UserAvatar = ({
           onlineStatus === null ? "" : onlineStatus ? "online" : "offline"
         }`}
       ></div>
+
+      {text && <p>{text}</p>}
     </div>
   );
 };

@@ -31,19 +31,24 @@ const PageDropdown = ({
       <div className="text gap">Code of Conduct</div>
     </Link>
     {/* <Link to="/userprofile"> */}
-    <Link to={`/userprofile/id=${userAuth.uid}`} onClick={closeComponent}>
-      <div className="text gap">User Profile</div>
-    </Link>
 
-    <div
-      onClick={() => {
-        auth.signOut();
-        closeComponent();
-      }}
-      className="text"
-    >
-      Logout
-    </div>
+    {userAuth && (
+      <Link to={`/userprofile/id=${userAuth.uid}`} onClick={closeComponent}>
+        <div className="text gap">User Profile</div>
+      </Link>
+    )}
+
+    {userAuth && (
+      <div
+        onClick={() => {
+          auth.signOut();
+          closeComponent();
+        }}
+        className="text"
+      >
+        Logout
+      </div>
+    )}
   </div>
 );
 

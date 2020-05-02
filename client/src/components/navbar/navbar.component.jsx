@@ -15,6 +15,8 @@ import Poppity from "../poppity/poppity-v2.component";
 import UserAvatar from "../user-avatar/user-avatar.component";
 import ProfileDropdown from "../profile-dropdown/profile-dropdown.component";
 import HomeSearchBar from "../home-search-bar/home-search-bar.component";
+import LoginRegisterPanel from "../login-register-panel/login-register-panel.component";
+import Modal from "../modal/modal.component";
 
 // icons:
 import AddIcon from "@material-ui/icons/Add";
@@ -37,29 +39,39 @@ const Navbar = ({
   currentUser,
 }) => {
   useEffect(() => {
-    updateSubscribedRooms(userAuth.uid);
-    console.log("navbar sub rooms:", subscribedRooms);
-  }, []);
+    if (userAuth) updateSubscribedRooms(userAuth.uid);
+    // console.log("navbar sub rooms:", subscribedRooms);
+  }, [userAuth]);
 
   return (
     <div className="navbar-container">
-      <Poppity
-        triggerType="click"
-        triggerComponent={
-          <UserAvatar
+      {userAuth ? (
+        <Poppity
+          triggerType="click"
+          triggerComponent={
+            <UserAvatar
             // square
-            className="avatar-properties"
+            // className="avatar-properties"
             // onlineStatus
             // imgUrl={`${BASE_API_URL}/userprofile/get-photo?photoUrl=${currentUser.photoURL}`}
-          />
-        }
-        // spacingTop="1rem"
-        spacingLeft="1rem"
-        contentAnchorPoint="middle left"
-        triggerAnchorPoint="middle right"
-      >
-        <ProfileDropdown />
-      </Poppity>
+            />
+          }
+          // spacingTop="1rem"
+          spacingLeft="1rem"
+          contentAnchorPoint="middle left"
+          triggerAnchorPoint="middle right"
+        >
+          <ProfileDropdown />
+        </Poppity>
+      ) : (
+        <Modal
+          defaultShow
+          backdrop
+          triggerComponent={<UserAvatar text="login" />}
+        >
+          <LoginRegisterPanel />
+        </Modal>
+      )}
 
       {/* <div className="logo-section"> */}
       {/* <p className="logo-text">broadkats.me</p> */}
@@ -70,6 +82,10 @@ const Navbar = ({
       <div className="room-nav">
         <HomeSearchBar />
       </div>
+
+      {/* {!userAuth && (
+       
+      )} */}
 
       <Poppity
         spacingTop="1rem"

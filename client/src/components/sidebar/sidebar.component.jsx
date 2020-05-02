@@ -81,78 +81,82 @@ const Sidebar = ({
 
   return (
     <div className="main-sidebar-container">
-      <div className="sidebar-nav">
-        <div className="sidebar-item">
-          {/* <Poppity
+      {userAuth && (
+        <React.Fragment>
+          <div className="sidebar-nav">
+            <div className="sidebar-item">
+              {/* <Poppity
             contentAnchorPoint="middle left"
             childrenAnchorPoint="middle left"
             content={<HeaderInfo />}
           > */}
-          <CircleButton
-            id="toggle-sidebar-btn"
-            className={`${drawerOpen ? "btn-left" : "btn-right"}`}
-            icon={<ChevronRightIcon />}
-            onClick={toggleSidebar}
-          />
-          {/* </Poppity> */}
-        </div>
-
-        {tabNavComponents.map((item, i) => (
-          <div key={i} className="sidebar-item">
-            <CircleButton
-              className={`tab-nav-item-circle-btn ${
-                item.index === itemSelected ? "tab-nav-item-selected" : ""
-              }`}
-              onClick={() => {
-                enableSidebar();
-                setItemSelected(item.index);
-              }}
-              icon={item.icon}
-            />
-          </div>
-        ))}
-
-        <RoomListNav
-          clickThis={() => {
-            enableSidebar();
-            setItemSelected(2);
-          }}
-          className="room-list-nav-z"
-        />
-
-        <Modal
-          backdrop
-          triggerComponent={
-            <div className="sidebar-item">
               <CircleButton
-                // id="toggle-sidebar-btn"
-                className={`tab-nav-item-circle-btn`}
-                icon={<AddCircleIcon />}
+                id="toggle-sidebar-btn"
+                className={`${drawerOpen ? "btn-left" : "btn-right"}`}
+                icon={<ChevronRightIcon />}
+                onClick={toggleSidebar}
               />
+              {/* </Poppity> */}
             </div>
-          }
-        >
-          <NewRoom />
-        </Modal>
 
-        <div onClick={toggleSidebar} className="toggle-container"></div>
-      </div>
+            {tabNavComponents.map((item, i) => (
+              <div key={i} className="sidebar-item">
+                <CircleButton
+                  className={`tab-nav-item-circle-btn ${
+                    item.index === itemSelected ? "tab-nav-item-selected" : ""
+                  }`}
+                  onClick={() => {
+                    enableSidebar();
+                    setItemSelected(item.index);
+                  }}
+                  icon={item.icon}
+                />
+              </div>
+            ))}
 
-      <div
-        className={`sidebar-content ${
-          drawerOpen ? "sidebar-open" : "sidebar-closed"
-        }`}
-      >
-        <div className="sidebar-header">
-          {tabNavComponents[itemSelected].componentHeader
-            ? tabNavComponents[itemSelected].componentHeader
-            : tabNavComponents[itemSelected].title}
-          {/* {} */}
-        </div>
-        <div className="sidebar-component">
-          {tabNavComponents[itemSelected].component}
-        </div>
-      </div>
+            <RoomListNav
+              clickThis={() => {
+                enableSidebar();
+                setItemSelected(2);
+              }}
+              className="room-list-nav-z"
+            />
+
+            <Modal
+              backdrop
+              triggerComponent={
+                <div className="sidebar-item">
+                  <CircleButton
+                    // id="toggle-sidebar-btn"
+                    className={`tab-nav-item-circle-btn`}
+                    icon={<AddCircleIcon />}
+                  />
+                </div>
+              }
+            >
+              <NewRoom />
+            </Modal>
+
+            <div onClick={toggleSidebar} className="toggle-container"></div>
+          </div>
+
+          <div
+            className={`sidebar-content ${
+              drawerOpen ? "sidebar-open" : "sidebar-closed"
+            }`}
+          >
+            <div className="sidebar-header">
+              {tabNavComponents[itemSelected].componentHeader
+                ? tabNavComponents[itemSelected].componentHeader
+                : tabNavComponents[itemSelected].title}
+              {/* {} */}
+            </div>
+            <div className="sidebar-component">
+              {tabNavComponents[itemSelected].component}
+            </div>
+          </div>
+        </React.Fragment>
+      )}
 
       <div className="main-content">{children}</div>
     </div>

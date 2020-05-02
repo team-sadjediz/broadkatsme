@@ -14,11 +14,23 @@ $avatar_size: 40px;
   position: relative;
   // background-color: $highlight2;
 
+  display: flex;
+  // justify-content: center;
+  align-items: center;
+
   img {
     // border-radius: 50%;
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  p {
+    margin-left: 1rem;
+    color: $foreground;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    font-size: 1.15rem;
   }
 
   .online-status {
@@ -40,5 +52,12 @@ $avatar_size: 40px;
 
   .circle {
     border-radius: 50%;
+  }
+
+  &:hover {
+    p {
+      // color: $highlight2;
+      font-weight: bold;
+    }
   }
 }
