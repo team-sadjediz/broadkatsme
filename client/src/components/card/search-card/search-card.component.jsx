@@ -6,24 +6,24 @@ import axios from "axios";
 import { BASE_API_URL } from "../../../utils";
 
 //svgs, icons, button
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import ClearIcon from '@material-ui/icons/Clear';
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import ClearIcon from "@material-ui/icons/Clear";
 import CircleBtn from "../../circle-btn/circle-btn.component";
-import ChatIcon from '@material-ui/icons/Chat';
-import AddIcon from '@material-ui/icons/Add';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ChatIcon from "@material-ui/icons/Chat";
+import AddIcon from "@material-ui/icons/Add";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import Tooltip from "@material-ui/core/Tooltip";
 import Fab from "@material-ui/core/Fab";
 import Tag from "../../../components/tag/tag.component";
 import "./search-card.style.scss";
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from "@material-ui/core/styles";
 
 import {
-    updateSubscribedRooms,
-    setSelectedRoom,
-  } from "../../../redux/room/room.actions";
+  updateSubscribedRooms,
+  setSelectedRoom,
+} from "../../../redux/room/room.actions";
 
-  function tagCheck(roomTags) {
+function tagCheck(roomTags) {
   if (roomTags.length != 0) {
     const allTags = roomTags.map((value, index) => {
       return <Tag type="label" text={value} />;
@@ -34,11 +34,12 @@ import {
   }
 }
 
-const SearchCard = ({userAuth, ...props}) => {
-    const [hover, setHover] = React.useState(false);
-    const [active, setActive] = React.useState(false);
-    const [owner, setOwner] = React.useState([]);
-  console.log(props);
+const SearchCard = ({ userAuth, ...props }) => {
+  const [hover, setHover] = React.useState(false);
+  const [active, setActive] = React.useState(false);
+  const [owner, setOwner] = React.useState([]);
+
+  // console.log(props);
   const handleMouseEnter = (event) => {
     // console.log(props);
     setHover(true);
@@ -46,7 +47,6 @@ const SearchCard = ({userAuth, ...props}) => {
 
   const handleMouseLeave = (event) => {
     setHover(false);
-
   };
 
   const handleUnsubscribe = async (event) => {
@@ -93,7 +93,6 @@ const SearchCard = ({userAuth, ...props}) => {
         .catch((err) => {
           console.log("card subbbb", err);
         });
-
     }
   };
 
@@ -102,9 +101,9 @@ const SearchCard = ({userAuth, ...props}) => {
   }, [owner]);
 
   const getUserInfo = async (event) => {
-      // console.log(props.roomID);
-      if (props.ownerID) {
-        await axios
+    // console.log(props.roomID);
+    if (props.ownerID) {
+      await axios
         .get(`${BASE_API_URL}/userprofile/details/${props.ownerID}`)
         .then((result) => {
           // console.log("owner: ", result.data);
@@ -114,98 +113,85 @@ const SearchCard = ({userAuth, ...props}) => {
         .catch((error) => {
           console.log("error: " + error);
         });
-      }
-      // return [];
-  }
+    }
+    // return [];
+  };
 
   let avatar = BASE_API_URL + "/userprofile/get-photo?photoUrl=" + props.avatar;
   let thumbnail = props.thumbnail;
   let username = owner.username;
   // console.log(owner);
-  
-  return (
 
-   <div
-    className="search-card"
-    onMouseEnter={handleMouseEnter}
-    onMouseLeave={handleMouseLeave}
-    href="www.google.com"
+  return (
+    <div
+      className="search-card"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      href="www.google.com"
     >
-        {hover && (
-          <div className="buttons-container">
-            {props.unsubscribe && (
-              <Tooltip title="Unsubscribe" placement="left">
-                <Fab
-                  className="room-card-buttons"
-                  color="primary"
-                  aria-label="unsubscribe"
-                  onClick={handleUnsubscribe}
-                >
-                  <ClearIcon />
-                </Fab>
-              </Tooltip>
-            )}
-            {props.subscribe && (
-              <Tooltip title="Subscribe" placement="left">
-                <Fab
-                  className="room-card-buttons"
-                  color="primary"
-                  aria-label="subscribe"
-                  onClick={handleSubscribe}
-                >
-                  <AddIcon />
-                </Fab>
-              </Tooltip>
-            )}
-           {/* add favorite? */}
-          </div>
-        )}
+      {hover && (
+        <div className="buttons-container">
+          {props.unsubscribe && (
+            <Tooltip title="Unsubscribe" placement="left">
+              <Fab
+                className="room-card-buttons"
+                color="primary"
+                aria-label="unsubscribe"
+                onClick={handleUnsubscribe}
+              >
+                <ClearIcon />
+              </Fab>
+            </Tooltip>
+          )}
+          {props.subscribe && (
+            <Tooltip title="Subscribe" placement="left">
+              <Fab
+                className="room-card-buttons"
+                color="primary"
+                aria-label="subscribe"
+                onClick={handleSubscribe}
+              >
+                <AddIcon />
+              </Fab>
+            </Tooltip>
+          )}
+          {/* add favorite? */}
+        </div>
+      )}
 
       <div className="room-thumbnail">
-      <Link to={`/room/id=${props.roomID}`}>
-          <img
-              src={thumbnail}
-          />
-      </Link>
+        <Link to={`/room/id=${props.roomID}`}>
+          <img src={thumbnail} />
+        </Link>
       </div>
 
       <div className="content">
-          <div className="room-name-title">
-              {props.roomName}
+        <div className="room-name-title">{props.roomName}</div>
+        <div className="owner">
+          <div className="user-thumbnail">
+            <img src={avatar} />
+            {/* <AccountCircleIcon /> */}
           </div>
-          <div className="owner">
-            <div className="user-thumbnail">
-              <img
-                src={avatar}
-              />
-              {/* <AccountCircleIcon /> */}
-            </div>
-            <div className="username">
-              {props.username}
-            </div>
-          </div>
-          <div className="people">
-              {props.occupancy.roomSize} subscriber occupancy
-              {/* { 5 } subscribers */}
-          </div>
-          <div className="tags">
-              {tagCheck(props.tags)}
-          </div>
+          <div className="username">{props.username}</div>
+        </div>
+        <div className="people">
+          {props.occupancy.roomSize} subscriber occupancy
+          {/* { 5 } subscribers */}
+        </div>
+        <div className="tags">{tagCheck(props.tags)}</div>
       </div>
-
-   </div>
+    </div>
   );
 };
 
-
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   currentUser: state.user.currentUser,
-  userAuth: state.user.userAuth
+  userAuth: state.user.userAuth,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    updateSubscribedRooms: (userID) => dispatch(updateSubscribedRooms(userID)),
-    setSelectedRoom: (roomID) => dispatch(setSelectedRoom(roomID)),
-  });
+  updateSubscribedRooms: (userID) => dispatch(updateSubscribedRooms(userID)),
+  setSelectedRoom: (roomID) => dispatch(setSelectedRoom(roomID)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchCard);

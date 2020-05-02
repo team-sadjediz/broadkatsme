@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { setSearchbarValue } from "../../redux/ui/ui.actions";
 import { useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+
 // mui icons:
 import SearchIcon from "@material-ui/icons/Search";
 import DashboardIcon from "@material-ui/icons/Dashboard";
@@ -14,7 +15,7 @@ import AppsIcon from "@material-ui/icons/Apps";
 
 import "./home-search-bar.styles.scss";
 
-const HomeSearchBar = ({ setSearchbarValue, location }) => {
+const HomeSearchBar = ({ setSearchbarValue, searchbarValue }) => {
   const [searchbarPlaceholder, setSearchbarPlaceholder] = useState("search...");
   const browserHistory = useHistory();
   const browserLocation = useLocation();
@@ -44,40 +45,6 @@ const HomeSearchBar = ({ setSearchbarValue, location }) => {
     browserHistory.push("/lobby");
   };
 
-  // const submitSearch = async (e) => {
-  //   // const data = {
-  //   //   query: {
-  //   //     "name" : this.state.search,
-  //   //     "tags" : this.state.search,
-  //   //   },
-  //   // }
-  //   this.setState({ roomResults: [] });
-  //   this.setState({ userResults: [] });
-  //   this.setState({ isLoading: true });
-
-  //   await axios
-  //     .get(
-  //       `${BASE_API_URL}/search/queries?search=${this.props.searchbarValue}&filter=${this.state.filterBy}`
-  //     )
-  //     .then((response) => {
-  //       // console.log("users: ", response.data.users);
-  //       // console.log("rooms: ",response.data.rooms);
-  //       // console.log("tags: ",response.data.tags);
-  //       this.setState({ userResults: response.data.users });
-  //       this.setState({
-  //         roomResults: Object.assign(response.data.rooms, response.data.tags),
-  //       });
-  //       this.setState({ isLoading: false });
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //       this.setState({ isLoading: false });
-  //       // console.log("oof");
-  //     });
-
-  //   return this.state.users;
-  // };
-
   return (
     <div className="home-search-bar-container" onKeyDown={submitSearch}>
       <Link
@@ -96,6 +63,7 @@ const HomeSearchBar = ({ setSearchbarValue, location }) => {
           className="search-input-1"
           type="text"
           placeholder={searchbarPlaceholder}
+          value={searchbarValue}
           onChange={handleChange}
           ref={inputRef}
         />
@@ -116,6 +84,7 @@ const HomeSearchBar = ({ setSearchbarValue, location }) => {
 
 const mapStateToProps = (state) => ({
   searchbarValue: state.ui.searchbarValue,
+  // submitSearch: state.ui.submitSearch,
 });
 
 const mapDispatchToProps = (dispatch) => ({

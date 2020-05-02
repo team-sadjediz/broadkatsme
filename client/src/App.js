@@ -30,7 +30,9 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 // pages:
 import LoginRegisterPage from "./pages/login-register-page/login-register-page.component";
 import LobbyPage from "./pages/lobby-page/lobby-page.component";
-import SearchPage from "./pages/search-page/search-page.component";
+// import SearchPage from "./pages/search-page/search-page.component";
+import SearchPage from "./pages/search-page/search-page-v2.component";
+
 import RoomPage from "./pages/room-page/room-page.component";
 import AboutPage from "./pages/about-page/about-page.component";
 import CodeOfConductPage from "./pages/code-of-conduct-page/code-of-conduct-page.component";

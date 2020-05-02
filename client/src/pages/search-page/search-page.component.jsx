@@ -125,6 +125,10 @@ class SearchPage extends React.Component {
     //     "tags" : this.state.search,
     //   },
     // }
+    console.log("SUBMITTING SEARCH---------------------");
+
+    if (this.props.searchbarValue === "") return;
+
     this.setState({ roomResults: [] });
     this.setState({ userResults: [] });
     this.setState({ isLoading: true });
@@ -292,9 +296,10 @@ class SearchPage extends React.Component {
                   <div className="search-users">
                     {(this.state.filterBy == "none" ||
                       this.state.filterBy == "user") &&
-                      resultsUser.map((property) => (
+                      resultsUser.map((property, i) => (
                         <div>
                           <UserCard
+                            key={i}
                             username={property.username}
                             avatar={property.photoURL}
                             bio={property.biography}
