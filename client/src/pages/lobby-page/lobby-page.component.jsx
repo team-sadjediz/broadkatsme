@@ -96,29 +96,29 @@ class LobbyPage extends React.Component {
   };
 
   componentDidMount() {
-    if (this.props.userAuth) {
-      // Get Random Rooms for Feature Rooms
-      axios
-        // .get(`${BASE_API_URL}/home/get-random-rooms?size=${this.state.featureSize}`)
-        .get(`${BASE_API_URL}/userprops/rooms/${this.state.uid}`)
-        .then((rooms) => {
-          this.setState({ featureRooms: rooms.data });
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-      // Get User Rooms
-      axios
-        .get(`${BASE_API_URL}/userprops/rooms/${this.state.uid}`)
-        .then((rooms) => {
-          // console.log("user rooms: " + rooms);
-          this.setState({ userRooms: rooms.data });
-        })
-        .catch((error) => {
-          console.error(error);
-          // console.log("oof");
-        });
-    }
+    // if (this.props.userAuth) {
+    //   // Get Random Rooms for Feature Rooms
+    //   axios
+    //     // .get(`${BASE_API_URL}/home/get-random-rooms?size=${this.state.featureSize}`)
+    //     .get(`${BASE_API_URL}/userprops/rooms/${this.state.uid}`)
+    //     .then((rooms) => {
+          this.setState({ featureRooms: this.props.subscribedRooms });
+    //     })
+    //     .catch((error) => {
+    //       console.error(error);
+    //     });
+    //   // Get User Rooms
+    //   axios
+    //     .get(`${BASE_API_URL}/userprops/rooms/${this.state.uid}`)
+    //     .then((rooms) => {
+    //       // console.log("user rooms: " + rooms);
+          this.setState({ userRooms: this.props.subscribedRooms });
+    //     })
+    //     .catch((error) => {
+    //       console.error(error);
+    //       // console.log("oof");
+    //     });
+    // }
   }
   // handleUnsubscribe(uid, roomID) {
   //   let request = {
@@ -141,7 +141,7 @@ class LobbyPage extends React.Component {
     this.setState({ tabValue: newValue });
   };
   render() {
-    console.log("user's room: ", JSON.stringify(this.subscribedRooms));
+    console.log("user's room: ", this.props.subscribedRooms);
     let filteredUserRooms = this.state.userRooms.filter((room) => {
       if (this.state.filterBy === "tags") {
         let found = false;

@@ -73,3 +73,14 @@
     height: 500px;
 }
 
+.filter-selector-container {
+    .filter-selector {
+        width: 100%;
+        background-color: white;
+        color: $highlight1;
+        &:hover {
+            background-color: $highlight1;
+            color: white;
+          }
+    }
+}

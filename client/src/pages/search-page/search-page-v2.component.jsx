@@ -4,13 +4,16 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { BASE_API_URL } from "../../utils";
 import { connect } from "react-redux";
+import NoResults from "../../assets/graphics/no_search_results.png";
 
 // custom components:
 import UserCard from "../../components/card/user-card.component";
 import SearchCard from "../../components/card/search-card/search-card.component";
+import CustomButton from "../../components/custom-button/custom-button.component";
 
 // mui components:
 import CircularProgress from "@material-ui/core/CircularProgress";
+import FilterListIcon from "@material-ui/icons/FilterList";
 
 // custom stylesheet:
 import "./search-page-v2.styles.scss";
@@ -58,6 +61,7 @@ const SearchPage = ({ searchbarValue, userAuth }) => {
   useEffect(() => {}, [filter]);
 
   return (
+
     <div
       className={`search-page-container`}
       onClick={() => {
@@ -67,48 +71,53 @@ const SearchPage = ({ searchbarValue, userAuth }) => {
     >
       {/* FILTER SELECTOR: PLEASE RESTYLE / REORGANIZE */}
       <div className="filter-selector-container">
-        <div
-          className="filter-selector"
+        <FilterListIcon 
+          className="filter-icon"
+        />
+        <CustomButton
+          className={filter === "none" ? "filter-selector" : "filter-selector-off"}
           onClick={() => {
             setFilter("none");
           }}
         >
           none
-        </div>
-        <div
-          className="filter-selector"
+        </CustomButton>
+        <CustomButton
+          className={filter === "room" ? "filter-selector" : "filter-selector-off"}
           onClick={() => {
             setFilter("room");
           }}
         >
           room
-        </div>
+        </CustomButton>
 
-        <div
-          className="filter-selector"
+        <CustomButton
+          className={filter === "user" ? "filter-selector" : "filter-selector-off"}
           onClick={() => {
             setFilter("user");
           }}
         >
           user
-        </div>
+        </CustomButton>
 
-        <div
-          className="filter-selector"
+        <CustomButton
+          className={filter === "tags" ? "filter-selector" : "filter-selector-off"}
           onClick={() => {
             setFilter("tags");
           }}
         >
           tags
-        </div>
-        {loading && (
-          <div className="filter-selector">
-            <CircularProgress className="loader" />
-          </div>
-        )}
+        </CustomButton>
       </div>
 
-      {filter === "room" || filter === "none"
+      {loading && (
+          <div className="filter-selector">
+            <CircularProgress className="loader" />
+            <div>LOADING...</div>
+          </div>
+        )}
+        
+      {(filter === "room" || filter === "none") && !loading
         ? results.rooms.map((room, i) => (
             <SearchCard
               key={i}
@@ -128,7 +137,7 @@ const SearchPage = ({ searchbarValue, userAuth }) => {
           ))
         : null}
 
-      {filter === "user" || filter === "none"
+      {(filter === "user" || filter === "none") && !loading
         ? results.users.map((user, i) => (
             <UserCard
               key={i}
@@ -140,7 +149,7 @@ const SearchPage = ({ searchbarValue, userAuth }) => {
           ))
         : null}
 
-      {filter === "tags" || filter === "none"
+      {(filter === "tags" || filter === "none") && !loading
         ? results.tags.map((room, i) => (
             <SearchCard
               key={i}
@@ -159,6 +168,14 @@ const SearchPage = ({ searchbarValue, userAuth }) => {
             />
           ))
         : null}
+
+        {results.tags.length === 0  && results.rooms.length === 0 && results.users.length === 0 && !loading ? 
+          <div className="no-results-container">
+            <img className="no-results-image" src={NoResults} />
+            <div className="no-results">We couldn't find what you're looking for :(</div>
+              {/* <div className="no-results">No Search Results</div> */}
+          </div>
+         : null}
     </div>
   );
 };

@@ -12,20 +12,59 @@
 
   .filter-selector-container {
     display: flex;
-
+    justify-content: center;
+    align-items: center;
+    .filter-icon {
+      display:flex;
+      justify-content: center;
+      align-items: center;
+      // margin-top: 1rem;
+      width: 3rem;
+      height: 3rem;
+    }
     .filter-selector {
       margin: 1rem;
-      width: 10rem;
-      height: 5rem;
-      background-color: salmon;
+      width: 5rem;
+      height: 2.5rem;
 
       display: flex;
       justify-content: center;
       align-items: center;
 
-      &:hover {
-        background-color: lightblue;
-      }
+      width: 100%;
+      // background-color: white;
+      // color: $highlight1;
+      // &:hover {
+      //     background-color: $white;
+      //     color: white;
+      //   }
+    }
+
+    .filter-selector-off {
+      background-color: transparent;
+    }
+  }
+  .no-results-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .no-results-image {
+      display: flex;
+
+      width: 20rem;
+      height: 20rem;
+    }
+    .no-results {
+      display: flex;
+
+      font-size: 1.1rem;
+      width: 100%;
+
+      background-color: #fff;
+      padding: 0.5rem;
+      font-weight: bold;
     }
   }
 }
