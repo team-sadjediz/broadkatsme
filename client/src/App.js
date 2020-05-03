@@ -30,13 +30,16 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 // pages:
 import LoginRegisterPage from "./pages/login-register-page/login-register-page.component";
 import LobbyPage from "./pages/lobby-page/lobby-page.component";
-import SearchPage from "./pages/search-page/search-page.component";
+// import SearchPage from "./pages/search-page/search-page.component";
+import SearchPage from "./pages/search-page/search-page-v2.component";
+
 import RoomPage from "./pages/room-page/room-page.component";
 import AboutPage from "./pages/about-page/about-page.component";
 import CodeOfConductPage from "./pages/code-of-conduct-page/code-of-conduct-page.component";
 import ContactPage from "./pages/contact-page/contact-page.component";
 import UserProfilePage from "./pages/user-profile-page/user-profile-page.component";
 import ResetPassPage from "./pages/reset-password-page/reset-password-page.component";
+import ErrorPage from "./pages/error-page/error-page.component";
 
 // import Test from "./components/test-component/test.component";
 // import Chat from "./components/chat/chat.component";
@@ -114,49 +117,39 @@ class App extends Component {
     return (
       <ThemeProvider theme={theme}>
         <div className="App">
-          {this.props.userAuth ? (
-            <BrowserRouter>
-              {/* <ButtonAppBar /> */}
-              <Navbar />
-              {/* <CustomDrawer> */}
-              <Sidebar>
-                <Switch>
-                  <Route
-                    exact
-                    path="/login"
-                    render={() =>
-                      this.props.userAuth ? (
-                        <Redirect to="/" />
-                      ) : (
-                        <LoginRegisterPage />
-                      )
-                    }
-                  />
-                  {/* <Route path="/lobby" component={Chat} /> */}
-                  <Route path="/lobby" component={LobbyPage} />
-                  <Route path="/search" component={SearchPage} />
-                  <Route path="/room/id=:id" component={RoomPage} />
-                  <Route path="/about" component={AboutPage} />
-                  <Route path="/contact" component={ContactPage} />
-                  <Route path="/codeofconduct" component={CodeOfConductPage} />
-                  <Route
-                    path={`/userprofile/id=:id`}
-                    component={UserProfilePage}
-                  />
-                </Switch>
-              </Sidebar>
-              {/* </CustomDrawer> */}
-            </BrowserRouter>
-          ) : (
-            <BrowserRouter>
+          <BrowserRouter>
+            <Navbar />
+            <Sidebar>
               <Switch>
-                <Route exact path="/" component={LoginRegisterPage} />
-                <Route exact path="/login" component={LoginRegisterPage} />
-                <Route path="/reset" component={ResetPassPage} />
-                <Route path="/" component={LoginRegisterPage} />
+                {/* ROUTES BOTH LOGGED IN AND LOGGED OUT USERS GET: */}
+                <Route exact path="/" component={LobbyPage} />
+                <Route exact path="/lobby" component={LobbyPage} />
+                <Route exact path="/about" component={AboutPage} />
+                <Route exact path="/contact" component={ContactPage} />
+                <Route exact path="/reset" component={ResetPassPage} />
+                <Route
+                  exact
+                  path="/codeofconduct"
+                  component={CodeOfConductPage}
+                />
+
+                {/* ROUTES ONLY LOGGED IN USERS GETS: */}
+                {this.props.userAuth && (
+                  <React.Fragment>
+                    <Route exact path="/search" component={SearchPage} />
+                    <Route path="/room/id=:id" component={RoomPage} />
+                    <Route
+                      path={`/userprofile/id=:id`}
+                      component={UserProfilePage}
+                    />
+                  </React.Fragment>
+                )}
+
+                {/* ALL OTHER ROUTES DEFAULT TO THE ERROR PAGE: */}
+                <Route to="*" component={ErrorPage} />
               </Switch>
-            </BrowserRouter>
-          )}
+            </Sidebar>
+          </BrowserRouter>
         </div>
       </ThemeProvider>
     );

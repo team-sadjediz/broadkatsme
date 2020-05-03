@@ -85,11 +85,11 @@
         // to get spacing between the children and content use margin:
         // margin-top: 0.5em;
 
-        background-color: $foreground;
+        // background-color: $foreground;
 
         // box-shadow: 0px 0px 9px 6px rgba(black, 0.15);
         // border-top: 0.5rem solid $highlight1;
-        border-radius: 0.2rem;
+        // border-radius: 0.2rem;
 
         box-sizing: border-box;
 
@@ -150,6 +150,14 @@
       .cap-bottom-right {
         transform: translate(-100%, -100%);
       }
+
+      .disabled {
+        transform: translateX(-9999px);
+        // display: none;
+        svg {
+          // display: none;
+        }
+      }
     }
   }
 
@@ -187,12 +195,5 @@
 
   .chap-bottom-right {
     @include bottom_right();
-  }
-
-  .disabled {
-    display: none;
-    svg {
-      display: none;
-    }
   }
 }

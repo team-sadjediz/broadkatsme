@@ -10,12 +10,13 @@ import {
 
 // components:
 import CircleButton from "../circle-btn/circle-btn.component";
-import ImageButton from "../img-btn/img-btn.component";
 import PageDropdown from "../page-dropdown/page-dropdown.component";
-// import MouseOverPopover from "../custom-popover/custom-popover.component";
-import NewRoom from "../new-room/new-room.component";
-// import RoomListNav from "../room-list-nav/room-list-nav.component";
 import Poppity from "../poppity/poppity-v2.component";
+import UserAvatar from "../user-avatar/user-avatar.component";
+import ProfileDropdown from "../profile-dropdown/profile-dropdown.component";
+import HomeSearchBar from "../home-search-bar/home-search-bar.component";
+import LoginRegisterPanel from "../login-register-panel/login-register-panel.component";
+import Modal from "../modal/modal.component";
 
 // icons:
 import AddIcon from "@material-ui/icons/Add";
@@ -31,53 +32,72 @@ import "./navbar.styles.scss";
 // utils:
 import { BASE_API_URL } from "../../utils";
 
-const Navbar = ({ updateSubscribedRooms, subscribedRooms, userAuth }) => {
+const Navbar = ({
+  updateSubscribedRooms,
+  subscribedRooms,
+  userAuth,
+  currentUser,
+}) => {
   useEffect(() => {
-    updateSubscribedRooms(userAuth.uid);
-    console.log("navbar sub rooms:", subscribedRooms);
-  }, []);
+    if (userAuth) updateSubscribedRooms(userAuth.uid);
+    // console.log("navbar sub rooms:", subscribedRooms);
+  }, [userAuth]);
 
   return (
     <div className="navbar-container">
-      <div className="logo-section">
-        <p className="logo-text">broadkats.me</p>
-        {/* <CircleButton className="me-btn" text="me"></CircleButton> */}
-        {/* <LogoCircle>me</LogoCircle> */}
-      </div>
-
-      <div className="room-nav">
-        <Link to="/lobby">
-          <CircleButton className="nav-bar-btn" icon={<DashboardIcon />} />
-        </Link>
-        <Link to="/search">
-          <CircleButton className="nav-bar-btn" icon={<SearchIcon />} />
-        </Link>
-
+      {userAuth ? (
         <Poppity
           triggerType="click"
           triggerComponent={
-            <CircleButton className="nav-bar-btn" icon={<AddIcon />} />
+            <UserAvatar
+            // square
+            // className="avatar-properties"
+            // onlineStatus
+            // imgUrl={`${BASE_API_URL}/userprofile/get-photo?photoUrl=${currentUser.photoURL}`}
+            />
           }
-          spacingTop="1rem"
-          contentAnchorPoint="top middle"
-          childrenAnchorPoint="bottom middle"
+          // spacingTop="1rem"
+          spacingLeft="1rem"
+          contentAnchorPoint="middle left"
+          triggerAnchorPoint="middle right"
         >
-          <NewRoom />
+          <ProfileDropdown />
         </Poppity>
+      ) : (
+        <Modal
+          defaultShow
+          backdrop
+          triggerComponent={<UserAvatar text="login" />}
+        >
+          <LoginRegisterPanel />
+        </Modal>
+      )}
 
-        {/* <RoomListNav /> */}
+      {/* <div className="logo-section"> */}
+      {/* <p className="logo-text">broadkats.me</p> */}
+      {/* <CircleButton className="me-btn" text="me"></CircleButton> */}
+      {/* <LogoCircle>me</LogoCircle> */}
+      {/* </div> */}
+
+      <div className="room-nav">
+        <HomeSearchBar />
       </div>
+
+      {/* {!userAuth && (
+       
+      )} */}
 
       <Poppity
         spacingTop="1rem"
         // content={}
         // buttonEventTrigger="hover"
-        triggerType="hover"
         triggerComponent={
           <CircleButton className="nav-bar-btn" icon={<MenuIcon />} />
         }
+        // contentAnchorPoint="top right"
+        // childrenAnchorPoint="bottom right"
         contentAnchorPoint="top right"
-        childrenAnchorPoint="bottom right"
+        triggerAnchorPoint="bottom right"
       >
         <PageDropdown />
       </Poppity>
@@ -89,6 +109,7 @@ const mapStateToProps = (state) => ({
   userAuth: state.user.userAuth,
   subscribedRooms: state.room.subscribedRooms,
   selectedRoom: state.room.selectedRoom,
+  currentUser: state.user.currentUser,
 });
 
 const mapDispatchToProps = (dispatch) => ({

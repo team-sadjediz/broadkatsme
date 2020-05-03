@@ -7,35 +7,35 @@
 
   // font-weight: bold;
   color: $highlight1;
-  font-size: 15px;
+  font-size: 2rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .newroom-container {
-  box-sizing: border-box;
+  // box-sizing: border-box;
   // background-color: $navbar_color;
   // background-color: $foreground;
 
   // border: 5px solid red;
   // box-shadow: $default_box_shadow;
 
-  width: 15em;
-  padding: 1em;
+  width: 23rem;
+  padding: 2rem;
+  background-color: $foreground;
+  border-radius: 6px;
 
   .header {
-    margin-bottom: 0.5em;
-    // background-color: transparent;
-    height: 2em;
+    margin: 2rem 0;
 
     display: flex;
     justify-content: center;
     align-items: center;
 
     font-weight: bold;
-    font-size: 18px;
+    font-size: 1.5rem;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    // letter-spacing: 0.05em;
     color: $highlight1;
     padding: 0;
   }
@@ -47,17 +47,11 @@
     flex-direction: column;
 
     .field-spacing-bottom {
-      margin-bottom: 0.5em;
+      margin-bottom: 1rem;
     }
 
     .field-spacing-top {
-      margin-top: 1em;
-    }
-
-    .new-room-title {
-    }
-
-    .new-room-size {
+      margin-top: 1rem;
     }
 
     .privacy {
@@ -65,10 +59,11 @@
       flex-direction: column;
 
       label {
-        margin-bottom: 4px;
+        margin-bottom: 1px;
         text-transform: uppercase;
 
-        font-size: 13px;
+        font-size: 0.9rem;
+
         font-weight: bold;
         color: $highlight1;
 
@@ -77,14 +72,15 @@
 
       select {
         background-color: $light_gray;
-        height: 2em;
+        height: 2.5rem;
 
         font-family: "Karla", sans-serif;
         font-weight: bold;
-        font-size: 0.9em;
+        font-size: 1rem;
+
         color: $highlight1;
 
-        padding: 0 0.5em;
+        padding: 0 0.5rem;
         border: none;
         border-radius: 2px;
 
@@ -96,16 +92,15 @@
 
         option {
           font-family: "Karla", sans-serif;
-          font-size: 1em;
+          font-size: 1rem;
           font-weight: bold;
         }
       }
     }
 
     .new-room-btn {
-      grid-area: new-room-submit-btn;
       width: 100%;
-      margin-top: 1.5em;
+      margin-top: 1.5rem;
     }
   }
 }

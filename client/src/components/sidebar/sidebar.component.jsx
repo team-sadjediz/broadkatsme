@@ -17,9 +17,10 @@ import HeaderInfo from "../header-info/header-info.component";
 
 import Chat from "../chat/chat.component";
 import FriendsList from "../friendslist/friendslist.component";
+import RoomListNav from "../room-list-nav/room-list-nav.component";
 
 import ChatSidebarHeader from "../sidebar-content-header/sidebar-content-header.component";
-import RoomListNav from "../room-list-nav/room-list-nav.component";
+import FriendslistSidebarHeader from "../sidebar-header-friendslist/sidebar-header-friendslist.component";
 
 // icons:
 import NotificationsIcon from "@material-ui/icons/Notifications";
@@ -28,6 +29,7 @@ import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
 import BugReportIcon from "@material-ui/icons/BugReport";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
+
 // custom style sheet:
 import "./sidebar.styles.scss";
 
@@ -44,7 +46,7 @@ const tabNavComponents = [
   },
   {
     component: <FriendsList />,
-    componentHeader: null,
+    componentHeader: <FriendslistSidebarHeader />,
     title: "Friends List",
     icon: <SupervisedUserCircleIcon />,
     index: 1,
@@ -79,76 +81,82 @@ const Sidebar = ({
 
   return (
     <div className="main-sidebar-container">
-      <div className="sidebar-nav">
-        <div className="sidebar-item">
-          {/* <Poppity
+      {userAuth && (
+        <React.Fragment>
+          <div className="sidebar-nav">
+            <div className="sidebar-item">
+              {/* <Poppity
             contentAnchorPoint="middle left"
             childrenAnchorPoint="middle left"
             content={<HeaderInfo />}
           > */}
-          <CircleButton
-            id="toggle-sidebar-btn"
-            className={`${drawerOpen ? "btn-left" : "btn-right"}`}
-            icon={<ChevronRightIcon />}
-            onClick={toggleSidebar}
-          />
-          {/* </Poppity> */}
-        </div>
+              <CircleButton
+                id="toggle-sidebar-btn"
+                className={`${drawerOpen ? "btn-left" : "btn-right"}`}
+                icon={<ChevronRightIcon />}
+                onClick={toggleSidebar}
+              />
+              {/* </Poppity> */}
+            </div>
 
-        {tabNavComponents.map((item, i) => (
-          <div key={i} className="sidebar-item">
-            <CircleButton
-              className={`tab-nav-item-circle-btn ${
-                item.index === itemSelected ? "tab-nav-item-selected" : ""
-              }`}
-              onClick={() => {
+            {tabNavComponents.map((item, i) => (
+              <div key={i} className="sidebar-item">
+                <CircleButton
+                  className={`tab-nav-item-circle-btn ${
+                    item.index === itemSelected ? "tab-nav-item-selected" : ""
+                  }`}
+                  onClick={() => {
+                    enableSidebar();
+                    setItemSelected(item.index);
+                  }}
+                  icon={item.icon}
+                />
+              </div>
+            ))}
+
+            <RoomListNav
+              clickThis={() => {
                 enableSidebar();
-                setItemSelected(item.index);
+                setItemSelected(2);
               }}
-              icon={item.icon}
+              className="room-list-nav-z"
             />
+
+            <Modal
+              backdrop
+              triggerComponent={
+                <div className="sidebar-item">
+                  <CircleButton
+                    // id="toggle-sidebar-btn"
+                    className={`tab-nav-item-circle-btn`}
+                    icon={<AddCircleIcon />}
+                  />
+                </div>
+              }
+            >
+              <NewRoom />
+            </Modal>
+
+            <div onClick={toggleSidebar} className="toggle-container"></div>
           </div>
-        ))}
 
-        <RoomListNav
-          clickThis={() => {
-            enableSidebar();
-            setItemSelected(2);
-          }}
-          className="room-list-nav-z"
-        />
-
-        <div className="sidebar-item">
-          <CircleButton
-            // id="toggle-sidebar-btn"
-            className={`tab-nav-item-circle-btn`}
-            icon={<AddCircleIcon />}
-            onClick={toggleSidebar}
-          />
-        </div>
-
-        {/* <Modal backdrop>
-          <NewRoom />
-        </Modal> */}
-
-        <div onClick={toggleSidebar} className="toggle-container"></div>
-      </div>
-
-      <div
-        className={`sidebar-content ${
-          drawerOpen ? "sidebar-open" : "sidebar-closed"
-        }`}
-      >
-        <div className="sidebar-header">
-          {tabNavComponents[itemSelected].componentHeader
-            ? tabNavComponents[itemSelected].componentHeader
-            : tabNavComponents[itemSelected].title}
-          {/* {} */}
-        </div>
-        <div className="sidebar-component">
-          {tabNavComponents[itemSelected].component}
-        </div>
-      </div>
+          <div
+            className={`sidebar-content ${
+              drawerOpen ? "sidebar-open" : "sidebar-closed"
+            }`}
+          >
+            <div className="sidebar-header">
+              {tabNavComponents[itemSelected].componentHeader
+                ? tabNavComponents[itemSelected].componentHeader
+                : tabNavComponents[itemSelected].title}
+              {/* {} */}
+            </div>
+            <div className="sidebar-component">
+              {tabNavComponents[itemSelected].component}
+            </div>
+          </div>
+        </React.Fragment>
+      )}
 
       <div className="main-content">{children}</div>
     </div>
