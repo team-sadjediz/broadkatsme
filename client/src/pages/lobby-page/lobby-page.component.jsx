@@ -57,8 +57,9 @@ TabPanel.propTypes = {
 };
 
 const style = {
-  // background : '#FFFFFF'
-  background: 'transparent',
+  // paddingTop: "10px",
+  background : '#FFFFFF',
+  // background: 'transparent',
   // position: 'static',
   width: '100%',
   boxShadow: 'none',
@@ -181,9 +182,10 @@ class LobbyPage extends React.Component {
           aria-label="tabs"
           centered
         >
-          <Tab label="Featured Rooms" id={`full-width-tab-${0}`} />
+          <Tab label="Home" id={`full-width-tab-${0}`} />
           <Tab label="Your Rooms" id={`full-width-tab-${1}`} />
-          <Tab label="Subscribed Rooms" id={`full-width-tab-${2}`} />
+          <Tab label="Subscriptions" id={`full-width-tab-${2}`} />
+          <Tab label="Favorites" id={`full-width-tab-${3}`} />
         </Tabs>
       </AppBar>
         <TabPanel value={this.state.tabValue} index={0}>
@@ -238,7 +240,10 @@ class LobbyPage extends React.Component {
                 </div>
         </TabPanel>
         <TabPanel value={this.state.tabValue} index={2}>
-          Subscribed Rooms
+          Subscriptions
+        </TabPanel>
+        <TabPanel value={this.state.tabValue} index={3}>
+          Favorites
         </TabPanel>
         </div>
 
