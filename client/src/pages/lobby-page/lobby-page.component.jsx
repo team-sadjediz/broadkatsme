@@ -141,6 +141,7 @@ class LobbyPage extends React.Component {
     this.setState({ tabValue: newValue });
   };
   render() {
+    console.log("user's room: ", JSON.stringify(this.subscribedRooms));
     let filteredUserRooms = this.state.userRooms.filter((room) => {
       if (this.state.filterBy === "tags") {
         let found = false;
@@ -275,6 +276,7 @@ class LobbyPage extends React.Component {
 const mapStateToProps = (state) => ({
   // currentUser: state.user.currentUser,
   userAuth: state.user.userAuth,
+  subscribedRooms: state.room.subscribedRooms,
 });
 
 export default connect(mapStateToProps)(LobbyPage);
