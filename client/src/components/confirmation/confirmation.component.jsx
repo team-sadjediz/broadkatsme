@@ -43,8 +43,6 @@ const handleConfirmation = async (e) => {
     <div className="confirmation-buttons">
     <Link to={`/room/id=${roomID}`} >
         <CustomButton
-        // onClick={handleYes}
-        // href={"www.google.com"}
         className="yes-button"
         onClick={handleConfirmation}
         >

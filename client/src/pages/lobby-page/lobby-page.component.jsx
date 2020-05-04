@@ -11,16 +11,23 @@ import FormInput from "../../components/form-input/form-input.component";
 import Carousel from "../../components/carousel/carousel.component";
 import Grid from "@material-ui/core/Grid";
 import AppBar from "@material-ui/core/AppBar";
+
+
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 
 //svg and styling
-import { ReactComponent as NextBtn } from "../../assets/icons/caret-right-solid.svg";
-import { ReactComponent as BackBtn } from "../../assets/icons/caret-left-solid.svg";
+// import { ReactComponent as NextBtn } from "../../assets/icons/caret-right-solid.svg";
+// import { ReactComponent as BackBtn } from "../../assets/icons/caret-left-solid.svg";
 import "./lobby-page.style.scss";
-
+import HomeIcon from '@material-ui/icons/Home';
+import AppsIcon from '@material-ui/icons/Apps';
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+import SubscriptionsIcon from '@material-ui/icons/Subscriptions';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import { ReactComponent as PetAdoption } from "../../assets/graphics/undraw_pet_adoption_2qkw.svg";
 // for filter
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -184,7 +191,7 @@ class LobbyPage extends React.Component {
       return -1;
     });
     return (
-      <div className="container">
+      <div className="lobby-page-container">
         <div className="lobby-tabs">
         <AppBar className="app-bar" position="static" style={style}>
         <Tabs
@@ -196,14 +203,15 @@ class LobbyPage extends React.Component {
           aria-label="tabs"
           centered
         >
-          <Tab label="Home" id={`full-width-tab-${0}`} />
-          <Tab label="Your Rooms" id={`full-width-tab-${1}`} />
-          <Tab label="Subscriptions" id={`full-width-tab-${2}`} />
-          <Tab label="Favorites" id={`full-width-tab-${3}`} />
+          <Tab icon={<HomeIcon />} aria-label="home" id={`full-width-tab-${0}`} />
+          <Tab icon={<PowerSettingsNewIcon />} aria-label="your Rooms" id={`full-width-tab-${1}`} />
+          <Tab icon={<SubscriptionsIcon />} aria-label="Subscriptions" id={`full-width-tab-${2}`} />
+          <Tab icon={<FavoriteIcon />} aria-label="Favorites" id={`full-width-tab-${3}`} />
         </Tabs>
       </AppBar>
         <TabPanel value={this.state.tabValue} index={0}>
             <div className="featured-container">
+              <PetAdoption className="pet-adoption"/>
               <Carousel properties={this.state.featureRooms} />
             </div>
           </TabPanel>
