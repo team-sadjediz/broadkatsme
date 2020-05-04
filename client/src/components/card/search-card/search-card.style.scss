@@ -1,38 +1,50 @@
 @import "../../../assets/colors";
 
+// .search-container {
+  .search-card {
+    // outline: 2px $greenmain solid;
+    transition: all 0.3s linear;
+    cursor: pointer;
+    background-color: $foreground;
+    width: 800px;
+    min-width: 800px;
+    height: 180px;
+    min-height: 180px;
 
-.search-card {
-  // outline: 2px $greenmain solid;
-  transition: all 0.3s linear;
-  cursor: pointer;
-  background-color: $foreground;
-  width: 800px;
-  min-width: 800px;
-  height: 180px;
-  min-height: 180px;
+    text-align: center;
+    margin: 10px;
+    overflow: hidden;
+    position: relative;
+    // border-radius: 5px;
 
-  text-align: center;
-  margin: 10px;
-  overflow: hidden;
-  position: relative;
-  // border-radius: 5px;
+    display: grid;
+    grid-template-columns: min-content;
+    grid-auto-rows: minmax(25px, auto);
+    grid-template-areas: "thumbnail content";
+    grid-gap: 20px;
 
-  display: grid;
-  grid-template-columns: min-content;
-  grid-auto-rows: minmax(25px, auto);
-  grid-template-areas: "thumbnail content";
-  grid-gap: 20px;
+    &:hover {
+      // background-color: $highlight2;
+      // transform: scale(1.005);
+      // webkit-filter: blur(1px); /* Chrome, Safari, Opera */
+      // filter: blur(1px);
+      opacity: 0.50;
+    }
 
-  &:hover {
-    // background-color: $highlight2;
-    // transform: scale(1.005);
-    webkit-filter: blur(1px); /* Chrome, Safari, Opera */
-    filter: blur(1px);
-    opacity: 0.50;
+
   }
-}
 
-
+  // .enter-button {
+  //   position: absolute;
+  //   width: 10rem;
+  //   margin-left: 22%;
+  //   margin-top: 5%;
+  //   color: green;
+  //   outline-color: green;
+  //   // margin: 10rem;
+  //   z-index: 10;
+  // }
+// }
 
 .room-thumbnail {
   grid-area: thumbnail;
@@ -64,6 +76,8 @@
     "owner"
     "occupancy"
     "tags";
+  height: 180px;
+  min-height: 180px;
 }
 
 .room-name-title {

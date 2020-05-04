@@ -169,7 +169,11 @@ const SearchPage = ({ searchbarValue, userAuth }) => {
           ))
         : null}
 
-        {results.tags.length === 0  && results.rooms.length === 0 && results.users.length === 0 && !loading ? 
+        {(results.tags.length === 0  && results.rooms.length === 0 && results.users.length === 0 && !loading)
+          || (filter === "room" && results.rooms.length === 0 && !loading) 
+          || (filter === "tags" && results.tags.length === 0 && !loading) 
+          || (filter === "user" && results.users.length === 0 && !loading)
+          ? 
           <div className="no-results-container">
             <img className="no-results-image" src={NoResults} />
             <div className="no-results">We couldn't find what you're looking for :(</div>

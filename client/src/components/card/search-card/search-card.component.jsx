@@ -156,7 +156,7 @@ const SearchCard = ({ userAuth, subscribedRooms, ...props }) => {
   let thumbnail = props.thumbnail;
   let username = owner.username;
   // console.log(owner);
-  if (isSubscribed){
+  if (!isSubscribed){
     return (
       <Modal
       backdrop
@@ -167,6 +167,12 @@ const SearchCard = ({ userAuth, subscribedRooms, ...props }) => {
           onMouseLeave={handleMouseLeave}
           // onClick={handleConfirmation}
         >
+
+        {/* <div className="enter-button">
+          <Button variant="outlined" color="secondary">
+            Secondary
+          </Button>
+        </div> */}
 
           <div className="room-thumbnail">
               <img src={thumbnail} />
@@ -201,21 +207,20 @@ const SearchCard = ({ userAuth, subscribedRooms, ...props }) => {
   }
   else {
     return (
-      <div
-      className="search-card"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      // onClick={handleConfirmation}
-    >
-        <div className="enter-button">
-        
-        </div>
+        // {/* <div className="enter-button"> */}
+        //   {/* <Button className="enter-button" variant="outlined" color="secondary">
+        //     Secondary
+        //   </Button> */}
+        // {/* </div> */}
+        <div
+        className="search-card"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        // onClick={handleConfirmation}
+      >
         <div className="buttons-container">
-          {/* <div className="room-card-buttons"> */}
             <BeenhereIcon className="room-card-buttons"/>
-          {/* </div> */}
         </div>
-
 
         <div className="room-thumbnail">
           <Link to={`room/id=${props.roomID}` }>
@@ -223,22 +228,23 @@ const SearchCard = ({ userAuth, subscribedRooms, ...props }) => {
           </Link>
         </div>
 
-      <div className="content">
-        <div className="room-name-title">{props.roomName}</div>
-        <div className="owner">
-          <div className="user-thumbnail">
-            <img src={avatar} />
-            {/* <AccountCircleIcon /> */}
+        <div className="content">
+          <div className="room-name-title">{props.roomName}</div>
+          <div className="owner">
+            <div className="user-thumbnail">
+              <img src={avatar} />
+              {/* <AccountCircleIcon /> */}
+            </div>
+            <div className="username">{props.username}</div>
           </div>
-          <div className="username">{props.username}</div>
+          <div className="people">
+            Max Limit {props.occupancy.roomSize}
+            {/* { 5 } subscribers */}
+          </div>
+          <div className="tags">{tagCheck(props.tags)}</div>
         </div>
-        <div className="people">
-          Max Limit {props.occupancy.roomSize}
-          {/* { 5 } subscribers */}
-        </div>
-        <div className="tags">{tagCheck(props.tags)}</div>
       </div>
-    </div>
+    // </div>
     );
   }
 };
