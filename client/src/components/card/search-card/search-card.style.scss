@@ -1,5 +1,6 @@
 @import "../../../assets/colors";
 
+
 .search-card {
   // outline: 2px $greenmain solid;
   transition: all 0.3s linear;
@@ -21,7 +22,17 @@
   grid-auto-rows: minmax(25px, auto);
   grid-template-areas: "thumbnail content";
   grid-gap: 20px;
+
+  &:hover {
+    // background-color: $highlight2;
+    // transform: scale(1.005);
+    webkit-filter: blur(1px); /* Chrome, Safari, Opera */
+    filter: blur(1px);
+    opacity: 0.50;
+  }
 }
+
+
 
 .room-thumbnail {
   grid-area: thumbnail;
@@ -104,12 +115,15 @@
   position: absolute;
   z-index: 2;
   // padding-left: 85%;
-  margin-left: 94%;
+  margin-left: 95%;
   opacity: 1;
   .room-card-buttons {
-    width: 36px;
-    height: 36px;
-    margin: 5px;
+    width: 2rem;
+    height: 2rem;
+    // color: green;
+    // color: #d0f4de;
+    color: #98c9a3;
+    // margin: 1rem;
   }
   .svg {
     width: 200px;

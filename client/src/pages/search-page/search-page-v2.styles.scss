@@ -14,6 +14,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
     .filter-icon {
       display:flex;
       justify-content: center;
@@ -22,8 +23,9 @@
       width: 3rem;
       height: 3rem;
     }
+
     .filter-selector {
-      margin: 1rem;
+      margin: 0.5rem;
       width: 5rem;
       height: 2.5rem;
 
@@ -41,8 +43,13 @@
     }
 
     .filter-selector-off {
+      margin: 0.5rem;
+      width: 5rem;
+      height: 2.5rem;
+
       background-color: transparent;
     }
+    
   }
   .no-results-container {
     display: flex;

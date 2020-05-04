@@ -116,7 +116,7 @@ const SearchPage = ({ searchbarValue, userAuth }) => {
             <div>LOADING...</div>
           </div>
         )}
-        
+
       {(filter === "room" || filter === "none") && !loading
         ? results.rooms.map((room, i) => (
             <SearchCard
@@ -183,6 +183,7 @@ const SearchPage = ({ searchbarValue, userAuth }) => {
 const mapStateToProps = (state) => ({
   searchbarValue: state.ui.searchbarValue,
   userAuth: state.user.userAuth,
+  // subscribedRooms: state.room.subscribedRooms
 });
 
 export default connect(mapStateToProps)(SearchPage);
