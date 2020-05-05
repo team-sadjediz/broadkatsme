@@ -1,0 +1,16 @@
+@import "../../../assets/colors";
+@import "../../../assets/dimensions";
+
+ .home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .splash-photo {
+        width: 37.4rem;
+        height: 37rem;
+    }
+
+    .carousel-random {
+
+    }
+ }

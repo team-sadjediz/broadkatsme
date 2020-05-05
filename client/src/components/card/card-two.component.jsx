@@ -257,14 +257,15 @@ const CardTwo = ({
         <Link to={`/room/id=${roomID}`}>
           <CardMedia className={classes.media} image={thumbnailUrl} />
         </Link>
-        <CardContent>
+        <CardContent style={{padding: "5px"}}>
           <ListItem style={{ "padding": "0", "zIndex": "5" }}>
             <ListItemAvatar>
               <Avatar src={thumbnailUrl} />
             </ListItemAvatar>
             <ListItemText
+              // className="tag-line"
               primary={<Typography noWrap>{name}</Typography>}
-              secondary={roomTags && tagCheck(roomTags)}
+              secondary={<Typography noWrap>{roomTags && tagCheck(roomTags)}</Typography>}
             />
           </ListItem>
           {/* <Typography noWrap>{name}</Typography>

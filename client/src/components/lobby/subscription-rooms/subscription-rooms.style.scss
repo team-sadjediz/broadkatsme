@@ -1,0 +1,44 @@
+@import "../../../assets/colors";
+@import "../../../assets/dimensions";
+
+.subscribed-rooms-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .search-input {
+        display: flex;
+        margin: 1rem;
+        width: 10rem;
+        align-self: right;
+    }
+    
+    .subscribed-rooms-container {
+        width: 80rem;
+    }
+
+
+    @media (min-width: 145rem) {
+        .subscribed-rooms-container {
+            width: 100rem;
+        }
+    }
+    
+    @media (max-width: 144rem) {
+        .subscribed-rooms-container {
+            width: 80rem;
+        }
+    }
+    
+    @media (max-width: 100rem) {
+        .subscribed-rooms-container {
+            width: 60rem;
+        }
+    }
+    
+    @media (max-width: 80rem) {
+        .subscribed-rooms-container {
+            width: 50rem;
+        }
+    }
+}

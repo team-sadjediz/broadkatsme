@@ -18,6 +18,11 @@ import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 
+// tabbed pages
+import HomePage from "../../components/lobby/home/home.component";
+import SubscribedRoomsPage from "../../components/lobby/subscription-rooms/subscription-rooms.component";
+import UserRoomsPage from "../../components/lobby/user-rooms/user-rooms.component";
+
 //svg and styling
 // import { ReactComponent as NextBtn } from "../../assets/icons/caret-right-solid.svg";
 // import { ReactComponent as BackBtn } from "../../assets/icons/caret-left-solid.svg";
@@ -51,7 +56,7 @@ function TabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box p={3}>{children}</Box>}
+      {value === index && <Box style={{padding: 0}} p={3}>{children}</Box>}
     </div>
   );
 }
@@ -67,7 +72,7 @@ const style = {
   background : '#FFFFFF',
   // background: 'transparent',
   // position: 'static',
-  width: "100%",
+  // width: "90%",
   boxShadow: "none",
   // borderBottom: "1px solid red"
 };
@@ -82,10 +87,7 @@ class LobbyPage extends React.Component {
       featureSize: 8,
       userRooms: [],
       activeRooms: [],
-      search: "",
-      filterBy: "",
-      selectedRoom: "",
-      tabValue: 1,
+      tabValue: 0,
     };
   }
 
@@ -97,10 +99,10 @@ class LobbyPage extends React.Component {
     this.setState({ filterBy: e.target.value });
   }
 
-  handleSelectRoom = (e) => {
-    // this.setState({selectedRoom: e.target.value});
-    console.log(e.target.value);
-  };
+  // handleSelectRoom = (e) => {
+  //   // this.setState({selectedRoom: e.target.value});
+  //   console.log(e.target.value);
+  // };
 
   componentDidMount() {
     // if (this.props.userAuth) {
@@ -109,7 +111,7 @@ class LobbyPage extends React.Component {
     //     // .get(`${BASE_API_URL}/home/get-random-rooms?size=${this.state.featureSize}`)
     //     .get(`${BASE_API_URL}/userprops/rooms/${this.state.uid}`)
     //     .then((rooms) => {
-          this.setState({ featureRooms: this.props.subscribedRooms });
+          // this.setState({ featureRooms: this.props.subscribedRooms });
     //     })
     //     .catch((error) => {
     //       console.error(error);
@@ -119,7 +121,7 @@ class LobbyPage extends React.Component {
     //     .get(`${BASE_API_URL}/userprops/rooms/${this.state.uid}`)
     //     .then((rooms) => {
     //       // console.log("user rooms: " + rooms);
-          this.setState({ userRooms: this.props.subscribedRooms });
+          // this.setState({ userRooms: this.props.subscribedRooms });
     //     })
     //     .catch((error) => {
     //       console.error(error);
@@ -148,136 +150,85 @@ class LobbyPage extends React.Component {
     this.setState({ tabValue: newValue });
   };
   render() {
-    console.log("user's room: ", this.props.subscribedRooms);
-    let filteredUserRooms = this.state.userRooms.filter((room) => {
-      if (this.state.filterBy === "tags") {
-        let found = false;
-        for (let tag = 0; tag < room.tags.length; tag++) {
-          if (
-            room.tags[tag]
-              .toLowerCase()
-              .indexOf(this.state.search.toLowerCase()) !== -1
-          ) {
-            found = true;
-          }
-        }
-        return found;
-      }
-      if (this.state.filterBy === "roomName") {
-        return (
-          room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !==
-          -1
-        );
-      }
-      if (this.state.filterBy === "") {
-        let found = false;
-        for (let tag = 0; tag < room.tags.length; tag++) {
-          if (
-            room.tags[tag]
-              .toLowerCase()
-              .indexOf(this.state.search.toLowerCase()) !== -1
-          ) {
-            found = true;
-          }
-        }
-        if (
-          room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !==
-          -1
-        ) {
-          found = true;
-        }
-        return found;
-      }
-      return -1;
-    });
-    return (
-      <div className="lobby-page-container">
-        <div className="lobby-tabs">
-        <AppBar className="app-bar" position="static" style={style}>
-        <Tabs
-          value={this.state.tabValue}
-          onChange={this.handleChange}
-          indicatorColor="primary"
-          textColor="primary"
-          variant="fullWidth"
-          aria-label="tabs"
-          centered
-        >
-          <Tab icon={<HomeIcon />} aria-label="home" id={`full-width-tab-${0}`} />
-          <Tab icon={<PowerSettingsNewIcon />} aria-label="your Rooms" id={`full-width-tab-${1}`} />
-          <Tab icon={<SubscriptionsIcon />} aria-label="Subscriptions" id={`full-width-tab-${2}`} />
-          <Tab icon={<FavoriteIcon />} aria-label="Favorites" id={`full-width-tab-${3}`} />
-        </Tabs>
-      </AppBar>
-        <TabPanel value={this.state.tabValue} index={0}>
-            <div className="featured-container">
-              <PetAdoption className="pet-adoption"/>
-              <Carousel properties={this.state.featureRooms} />
-            </div>
-          </TabPanel>
-          <TabPanel value={this.state.tabValue} index={1}>
-            <div className="active-container">
-              <FormInput
-                className="search-input"
-                label="search"
-                value={this.state.search}
-                handleChange={this.handleFilter.bind(this)}
-              ></FormInput>
-              {/* <FormControl variant="outlined" >
-                      <InputLabel id="demo-simple-select-outlined-label">
-                        filter by
-                      </InputLabel>
-                      <Select
-                        labelId="demo-simple-select-outlined-label"
-                        id="demo-simple-select-outlined"
-                        value={this.state.filterBy}
-                        onChange={this.handleSelect.bind(this)}
-                      >
-                        <MenuItem value={"roomName"}>room name</MenuItem>
-                        <MenuItem value={"tags"}>tags</MenuItem>
-                      </Select>
-                    </FormControl> */}
-              <div>
-                <Grid container spacing={1}>
-                  {filteredUserRooms.map(
-                    (property) => (
-                      // <div className="card-grid-container" key={ property.roomID }>
-                      <Grid item xs={4} zeroMinWidth>
-                        <CardTwo
-                          style={{ "margin": "10px" }}
-                          uid={this.state.uid}
-                          roomID={property.roomID}
-                          name={property.name}
-                          tags={property.tags}
-                          thumbnailUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}`}
-                          onMouseEnter={this.handleSelectRoom.bind(
-                            property.roomID
-                          )}
-                          unsubscribe
-                          invite
-                          chat
-                          // unsubscribe={this.handleUnsubscribe}
-                          ></CardTwo>
-                          </Grid>
-                      // </div>
-                      )
-                  )}
-                  </Grid>
-                  </div>
-                </div>
-        </TabPanel>
-        <TabPanel value={this.state.tabValue} index={2}>
-          Subscriptions
-        </TabPanel>
-        <TabPanel value={this.state.tabValue} index={3}>
-          Favorites
-        </TabPanel>
+    // console.log("user's room: ", this.props.subscribedRooms);
+    // let filteredUserRooms = this.state.userRooms.filter((room) => {
+    //   if (this.state.filterBy === "tags") {
+    //     let found = false;
+    //     for (let tag = 0; tag < room.tags.length; tag++) {
+    //       if (
+    //         room.tags[tag]
+    //           .toLowerCase()
+    //           .indexOf(this.state.search.toLowerCase()) !== -1
+    //       ) {
+    //         found = true;
+    //       }
+    //     }
+    //     return found;
+    //   }
+    //   if (this.state.filterBy === "roomName") {
+    //     return (
+    //       room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !==
+    //       -1
+    //     );
+    //   }
+    //   if (this.state.filterBy === "") {
+    //     let found = false;
+    //     for (let tag = 0; tag < room.tags.length; tag++) {
+    //       if (
+    //         room.tags[tag]
+    //           .toLowerCase()
+    //           .indexOf(this.state.search.toLowerCase()) !== -1
+    //       ) {
+    //         found = true;
+    //       }
+    //     }
+    //     if (
+    //       room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !==
+    //       -1
+    //     ) {
+    //       found = true;
+    //     }
+    //     return found;
+    //   }
+    //   return -1;
+    // });
+    if (this.props.userAuth) {
+      return (
+        <div className="lobby-page-container">
+          <div className="appbar-container">
+            <AppBar className="app-bar" position="static" style={style}>
+              <Tabs
+                value={this.state.tabValue}
+                onChange={this.handleChange}
+                indicatorColor="primary"
+                textColor="primary"
+                variant="fullWidth"
+                aria-label="tabs"
+                centered
+              >
+                <Tab icon={<HomeIcon />} aria-label="home" id={`full-width-tab-${0}`} />
+                <Tab icon={<PowerSettingsNewIcon />} aria-label="your Rooms" id={`full-width-tab-${1}`} />
+                <Tab icon={<SubscriptionsIcon />} aria-label="Subscriptions" id={`full-width-tab-${2}`} />
+              </Tabs>
+            </AppBar>
+          </div>
+          <div className="lobby-container">
+            <TabPanel className="tab-panel" value={this.state.tabValue} index={0}>
+              <HomePage />
+            </TabPanel>
+            <TabPanel className="tab-panel" value={this.state.tabValue} index={1}>
+              <UserRoomsPage />
+            </TabPanel>
+            <TabPanel className="tab-panel" value={this.state.tabValue} index={2}>
+              <SubscribedRoomsPage />
+            </TabPanel>
+          </div>
         </div>
-
-        {/* <BackBtn className="back-btn" onClick={() => this.prevProperty()} />
-        <NextBtn className="next-btn" onClick={() => this.nextProperty()} /> */}
-      </div>
-    );
+      );
+    }
+    else {
+      return <HomePage />
+    }
   }
 }
 
