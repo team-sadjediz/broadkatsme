@@ -17,7 +17,7 @@ import "./subscription-rooms.style.scss";
 const SubscribedRoomsPage = ({userAuth, subscribedRooms}) => {
   const [search, setSearch] = useState("");
   const [userRooms, setUserRooms] = useState(subscribedRooms.filter((room) => room.ownerID !== userAuth.uid));
-
+  const [filteredRooms, setFilteredRooms] = useState(userRooms);
   useEffect(() => {
     let filteredUserRooms = userRooms.filter((room) => {
           for (let tag = 0; tag < room.tags.length; tag++) {
@@ -28,12 +28,13 @@ const SubscribedRoomsPage = ({userAuth, subscribedRooms}) => {
             return true;
           return false;
       });
-    setUserRooms(filteredUserRooms);
+      setFilteredRooms(filteredUserRooms);
   }, [search]);
 
-  useEffect(() => {}, [subscribedRooms]);
+//   useEffect(() => {}, [subscribedRooms]);
 
   const handleSearch = (e) => {
+    console.log("hello", e.target.value);
     setSearch(e.target.value);
   }
 
@@ -46,7 +47,7 @@ const SubscribedRoomsPage = ({userAuth, subscribedRooms}) => {
         handleChange={handleSearch.bind(this)}
     />
     <Grid container spacing={1} className="subscribed-rooms-container">
-    {userRooms.map(
+    {filteredRooms.map(
         (property, index) => (
             <Grid item xs={4} zeroMinWidth>
                 <CardTwo

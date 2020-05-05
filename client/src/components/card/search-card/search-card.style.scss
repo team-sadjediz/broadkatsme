@@ -30,7 +30,26 @@
       // filter: blur(1px);
       opacity: 0.50;
     }
-
+    
+    .buttons-container {
+      position: absolute;
+      z-index: 2;
+      // padding-left: 85%;
+      margin-left: 95%;
+      opacity: 1;
+      .room-card-buttons {
+        width: 2rem;
+        height: 2rem;
+        // color: green;
+        // color: #d0f4de;
+        color: #98c9a3;
+        // margin: 1rem;
+      }
+      .svg {
+        width: 200px;
+        height: 200px;
+      }
+    }
 
   }
 
@@ -125,22 +144,4 @@
   text-align: left;
 }
 
-.buttons-container {
-  position: absolute;
-  z-index: 2;
-  // padding-left: 85%;
-  margin-left: 95%;
-  opacity: 1;
-  .room-card-buttons {
-    width: 2rem;
-    height: 2rem;
-    // color: green;
-    // color: #d0f4de;
-    color: #98c9a3;
-    // margin: 1rem;
-  }
-  .svg {
-    width: 200px;
-    height: 200px;
-  }
-}
+

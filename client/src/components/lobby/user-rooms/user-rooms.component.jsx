@@ -19,7 +19,7 @@ import "./user-rooms.style.scss";
 const UserRoomsPage = ({userAuth, subscribedRooms}) => {
   const [search, setSearch] = useState("");
   const [userRooms, setUserRooms] = useState(subscribedRooms.filter((room) => room.ownerID === userAuth.uid));
-
+  const [filteredRooms, setFilteredRooms] = useState(userRooms);
   useEffect(() => {
     let filteredUserRooms = userRooms.filter((room) => {
           for (let tag = 0; tag < room.tags.length; tag++) {
@@ -30,7 +30,7 @@ const UserRoomsPage = ({userAuth, subscribedRooms}) => {
             return true;
           return false;
       });
-    setUserRooms(filteredUserRooms);
+      setFilteredRooms(filteredUserRooms);
   }, [search]);
 
   useEffect(() => {}, [subscribedRooms]);
@@ -48,7 +48,7 @@ const UserRoomsPage = ({userAuth, subscribedRooms}) => {
         handleChange={handleSearch.bind(this)}
     />
     <Grid container spacing={1} className="user-rooms-container">
-    {userRooms.map(
+    {filteredRooms.map(
         (property, index) => (
             <Grid item xs={4} zeroMinWidth>
                 <CardTwo

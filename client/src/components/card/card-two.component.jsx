@@ -219,7 +219,7 @@ const CardTwo = ({
                 </Fab>
               </Tooltip>
             )}
-            {otherProps.invite && (
+            {/* {otherProps.invite && (
               <Tooltip title="Invite" placement="left">
                 <Fab
                   className="room-card-buttons"
@@ -229,19 +229,8 @@ const CardTwo = ({
                   <PersonAddIcon />
                 </Fab>
               </Tooltip>
-            )}
-            {otherProps.chat && (
-              <Tooltip title="Subscribe" placement="left">
-                <Fab
-                  className="room-card-buttons"
-                  color="primary"
-                  aria-label="chat"
-                >
-                  <ChatIcon />
-                </Fab>
-              </Tooltip>
-            )}
-            <Tooltip title="Show More" placement="left">
+            )} */}
+            {/* <Tooltip title="Show More" placement="left">
               <IconButton
                 className="show-more-button"
                 onClick={handleExpandClick}
@@ -250,7 +239,7 @@ const CardTwo = ({
               >
                 <ExpandMoreIcon />
               </IconButton>
-            </Tooltip>
+            </Tooltip> */}
           </div>
         )}
 
@@ -275,17 +264,6 @@ const CardTwo = ({
             })}
           </Typography> */}
         </CardContent>
-
-        {/* <CardActions disableSpacing>
-        <IconButton
-          className="show-more-button"
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </IconButton>
-      </CardActions> */}
       </Card>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <Content
