@@ -18,6 +18,9 @@ const ChatColorChange = ({
   currentUser,
   updateCurrentUser,
   socket,
+  closeComponent = () => {
+    return;
+  },
 }) => {
   const [chatColor, setChatColor] = useState("");
 
@@ -35,6 +38,8 @@ const ChatColorChange = ({
         socket.emit("update", chatColor, () => {
           // setMessage("");
         });
+
+        closeComponent();
       })
       .catch((err) => {
         console.log(err);

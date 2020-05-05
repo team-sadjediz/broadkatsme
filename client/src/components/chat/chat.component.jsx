@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import io from "socket.io-client";
 import ScrollToBottom from "react-scroll-to-bottom";
-import { setSocket } from "../../redux/user/user.actions";
+import { setSocket, resetUserRedux } from "../../redux/user/user.actions";
 
 // mui components:
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -87,7 +87,7 @@ const Chat = ({
 
     return () => {
       // setMessages([]);
-      setSocket(null);
+      setSocket({ id: null });
       socket.disconnect();
       // console.log("DISMOUNT", messages);
       // console.log("**************************************************");

@@ -33,7 +33,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: red;
+    background-color: rgba(red, 0.5);
   }
 }
 
@@ -82,6 +82,7 @@
 
 .room-title-area {
   grid-area: room-title;
+  width: 30rem;
 }
 
 .room-bar-area {
@@ -113,20 +114,74 @@
   // height: 632px;
   // width: 1054px;
   // background-color: $foreground;
-  background-color: magenta;
+  // background-color: magenta;
   // background-color: rgba(101, 149, 158, 0.3);
+  background-color: $foreground;
+
+  position: relative;
+
   iframe {
     grid-area: browser;
     height: 720px;
     width: 1280px;
     // height: 632px;
     // width: 1054px;
-
     border: none;
     outline: none;
   }
-}
 
+  .remote-control-blocked {
+    cursor: pointer;
+    position: absolute;
+    // z-index: 100;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(red, 0.5);
+  }
+
+  .control-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    // z-index: 120;
+    width: 100%;
+    height: 4rem;
+    padding: 0 0.5rem;
+    background-color: $highlight1;
+
+    display: flex;
+
+    justify-content: flex-end;
+    align-items: center;
+
+    .volume-slider-container {
+      height: 1rem;
+      width: 8rem;
+      background-color: $foreground;
+      margin: 0 0.5rem;
+
+      display: flex;
+      .volume-segment {
+        margin: 0 1px;
+        // width: 0.5rem;
+        flex: 1;
+        height: 100%;
+        background-color: $highlight2;
+      }
+    }
+  }
+}
+.room-screen-center {
+  position: absolute;
+  top: 40%;
+  // bottom: 0;
+  // left: 0;
+  // right: 0;
+
+  // transform: translateX(50%);
+}
 .room-screen-init {
   grid-area: room-screen;
   z-index: 3;
