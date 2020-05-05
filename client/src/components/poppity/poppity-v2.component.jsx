@@ -128,7 +128,7 @@ const Poppity = ({
         NewTriggerComponent = React.cloneElement(triggerComponent, {
           onClick: togglePoppity,
         });
-        console.log(NewTriggerComponent);
+      // console.log(NewTriggerComponent);
     }
   }
 

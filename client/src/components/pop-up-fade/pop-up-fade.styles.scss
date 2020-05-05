@@ -1,0 +1,32 @@
+@import "../../assets/colors";
+@import "../../assets/dimensions";
+
+@keyframes fade {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.pop-up-fade-container {
+  background-color: rgba($highlight1, 1);
+  padding: 1em 0;
+  // width: 10rem;
+  width: 100%;
+  height: 3rem;
+
+  border-radius: 2px;
+
+  font-family: "Karla", sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  color: $foreground;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  animation: fade 4s forwards linear;
+}

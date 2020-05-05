@@ -202,6 +202,27 @@ io.on("connection", (socket) => {
       room: user.room,
     });
     // console.log("user after update:", getUser(socket.id));
+    callback();
+  });
+
+  socket.on("updateBlockControl", (blockControl, callback) => {
+    // console.log("updating chat color for user", chatColor);
+    const user = getUser(socket.id);
+    console.log("attempting udpateBlockControl");
+
+    // console.log("user:", user);
+    // updateUser({
+    //   socketID: socket.id,
+    //   id: user.id,
+    //   name: user.name,
+    //   blockControl, // only thing updated
+    //   room: user.room,
+    // });
+    // console.log("user after update:", getUser(socket.id));
+
+    io.to(user.room).emit("pushBlockControl", "pushBlockControlSent");
+
+    socket.emit("pushBlockControl", "pushBlockControlSent");
 
     callback();
   });

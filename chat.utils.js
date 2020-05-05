@@ -4,6 +4,7 @@ const users = [
     id: "adminID",
     name: "admin",
     chatColor: "#000000",
+    // blockControl: true,
     room: "masteroom",
   },
 ];
@@ -28,7 +29,6 @@ const addUser = ({ socketID, id, name, chatColor, room }) => {
 
 const removeUser = (socketID) => {
   const index = users.findIndex((user) => user.socketID === socketID);
-
   if (index !== -1) return users.splice(index, 1)[0];
 };
 
