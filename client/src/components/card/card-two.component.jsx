@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -40,6 +40,8 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 
 import { connect } from "react-redux";
 
+import Modal from "../modal/modal.component";
+import Confirmation from "../confirmation/confirmation.component";
 import {
   updateSubscribedRooms,
   setSelectedRoom,
@@ -86,14 +88,16 @@ const CardTwo = ({
   thumbnailUrl,
   tags,
   uid,
+  subscribedRooms,
   ...otherProps
 }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const [openLink, setOpen] = React.useState(false);
 
-  const [hover, setHover] = React.useState(false);
+  const [hover, setHover] = React.useState(true);
   const [active, setActive] = React.useState(false);
+  const [isSubscribed, setIsSubscribed] = React.useState(false);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -178,10 +182,118 @@ const CardTwo = ({
 
   const roomTags = tags;
   // console.log(name);
+  useEffect (() => { 
+      subscribedRooms.map(function(room, i) {
+        console.log("roomID: ", room.roomID);
+        console.log("this actuall roomID: ", roomID);
+        if (room.roomID == roomID) {
+          setIsSubscribed(true);
+        }
+      });
+  });
 
-  return (
-    <div>
-      <Card
+  if (isSubscribed) {
+    return (
+      <div>
+        <Card
+          className={classes.root}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          {active && <Live className="live-box" />}
+          {hover && (
+            <div className="buttons-container">
+              {otherProps.unsubscribe && (
+                <Tooltip title="Unsubscribe" placement="left">
+                  <CircleBtn
+                    className="room-card-buttons"
+                    // color="primary"
+                    aria-label="unsubscribe"
+                    icon={<ClearIcon />}
+                    onClick={handleUnsubscribe}
+                  />
+                </Tooltip>
+              )}
+              {otherProps.subscribe && (
+                // <Tooltip title="Subscribe" placement="left">
+                //   <CircleBtn
+                //   className="room-card-buttons"
+                //   icon={<AddIcon />}
+                //   />
+                // </Tooltip>
+                <Tooltip title="Subscribe" placement="left">
+                  <CircleBtn
+                    className="room-card-buttons"
+                    // color="primary"
+                    aria-label="subscribe"
+                    icon={<AddIcon />}
+                    onClick={handleSubscribe}
+                  />
+                </Tooltip>
+              )}
+              {otherProps.invite && (
+                <Tooltip title="Invite" placement="left">
+                  <Fab
+                    className="room-card-buttons"
+                    color="primary"
+                    aria-label="invite"
+                  >
+                    <PersonAddIcon />
+                  </Fab>
+                </Tooltip>
+              )}
+              {/* <Tooltip title="Show More" placement="left">
+                <IconButton
+                  className="show-more-button"
+                  onClick={handleExpandClick}
+                  aria-expanded={expanded}
+                  aria-label="show more"
+                >
+                  <ExpandMoreIcon />
+                </IconButton>
+              </Tooltip> */}
+            </div>
+          )}
+
+          <Link to={`/room/id=${roomID}`}>
+            <CardMedia className={classes.media} image={thumbnailUrl} />
+          </Link>
+          <CardContent style={{padding: "5px"}}>
+            <ListItem style={{ "padding": "0", "zIndex": "5" }}>
+              <ListItemAvatar>
+                <Avatar src={thumbnailUrl} />
+              </ListItemAvatar>
+              <ListItemText
+                // className="tag-line"
+                primary={<Typography noWrap>{name}</Typography>}
+                secondary={<Typography noWrap>{roomTags && tagCheck(roomTags)}</Typography>}
+              />
+            </ListItem>
+            {/* <Typography noWrap>{name}</Typography>
+            <Typography variant="body2" color="textSecondary" component="p" noWrap>
+              {roomTags && roomTags.map((value, index) => {
+                return <Tag type="label" text={value} />;
+              })}
+            </Typography> */}
+          </CardContent>
+        </Card>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <Content
+            show={expanded}
+            name={name}
+            thumbnailUrl={thumbnailUrl}
+            tags={tags}
+          />
+        </Collapse>
+      </div>
+    ); 
+  }
+  else {
+    return(
+      <Modal
+      backdrop
+      triggerComponent={
+        <Card
         className={classes.root}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -191,35 +303,27 @@ const CardTwo = ({
           <div className="buttons-container">
             {otherProps.unsubscribe && (
               <Tooltip title="Unsubscribe" placement="left">
-                <Fab
+                <CircleBtn
                   className="room-card-buttons"
-                  color="primary"
+                  // color="primary"
                   aria-label="unsubscribe"
+                  icon={<ClearIcon />}
                   onClick={handleUnsubscribe}
-                >
-                  <ClearIcon />
-                </Fab>
+                />
               </Tooltip>
             )}
             {otherProps.subscribe && (
-              // <Tooltip title="Subscribe" placement="left">
-              //   <CircleBtn
-              //   className="room-card-buttons"
-              //   icon={<AddIcon />}
-              //   />
-              // </Tooltip>
               <Tooltip title="Subscribe" placement="left">
-                <Fab
+                <CircleBtn
                   className="room-card-buttons"
-                  color="primary"
+                  // color="primary"
                   aria-label="subscribe"
+                  icon={<AddIcon />}
                   onClick={handleSubscribe}
-                >
-                  <AddIcon />
-                </Fab>
+                />
               </Tooltip>
             )}
-            {/* {otherProps.invite && (
+            {otherProps.invite && (
               <Tooltip title="Invite" placement="left">
                 <Fab
                   className="room-card-buttons"
@@ -229,7 +333,7 @@ const CardTwo = ({
                   <PersonAddIcon />
                 </Fab>
               </Tooltip>
-            )} */}
+            )}
             {/* <Tooltip title="Show More" placement="left">
               <IconButton
                 className="show-more-button"
@@ -242,45 +346,36 @@ const CardTwo = ({
             </Tooltip> */}
           </div>
         )}
-
-        <Link to={`/room/id=${roomID}`}>
           <CardMedia className={classes.media} image={thumbnailUrl} />
-        </Link>
         <CardContent style={{padding: "5px"}}>
           <ListItem style={{ "padding": "0", "zIndex": "5" }}>
             <ListItemAvatar>
               <Avatar src={thumbnailUrl} />
             </ListItemAvatar>
             <ListItemText
-              // className="tag-line"
               primary={<Typography noWrap>{name}</Typography>}
               secondary={<Typography noWrap>{roomTags && tagCheck(roomTags)}</Typography>}
             />
           </ListItem>
-          {/* <Typography noWrap>{name}</Typography>
-          <Typography variant="body2" color="textSecondary" component="p" noWrap>
-            {roomTags && roomTags.map((value, index) => {
-              return <Tag type="label" text={value} />;
-            })}
-          </Typography> */}
         </CardContent>
       </Card>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <Content
-          show={expanded}
-          name={name}
-          thumbnailUrl={thumbnailUrl}
-          tags={tags}
+      }
+      >
+        <Confirmation 
+          roomName={name}
+          roomID={roomID}
+          handleYes={handleSubscribe}
+          subscribe
         />
-      </Collapse>
-    </div>
-  );
+      </Modal>
+    );
+  }
 };
 
 const mapStateToProps = (state) => ({
   userAuth: state.user.userAuth,
   // currentUser: state.user.currentUser,
-  // subscribedRooms: state.room.subscribedRooms,
+  subscribedRooms: state.room.subscribedRooms,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -76,7 +76,7 @@ class Carousel extends React.Component {
                 thumbnailUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}`}
                 ownerID={property.ownerID}
                 tags={property.tags}
-                subscribe
+                // subscribe
                 /> 
             ) : null }
 
@@ -88,7 +88,7 @@ class Carousel extends React.Component {
                 thumbnailUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}`}
                 ownerID={property.ownerID}
                 tags={property.tags}
-                subscribe
+                // subscribe
                 /> 
             ) : null }
         </ItemsCarousel>
