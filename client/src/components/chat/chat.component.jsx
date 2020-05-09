@@ -45,19 +45,20 @@ const Chat = ({
   userAuth,
   selectedRoom,
   drawerOpen,
+  socket,
   setSocket,
 }) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
-  const endpoint = CHAT_SERVER;
+  // const endpoint = CHAT_SERVER;
 
   useEffect(() => {
     // console.log("---------------------------------------------------------");
     // console.log("MOUNT", messages);
-    socket = io(endpoint);
+    // socket = io(endpoint);
 
-    setSocket(socket);
+    // setSocket(socket);
 
     socket.emit(
       "join",
@@ -167,6 +168,7 @@ const mapStateToProps = (state) => ({
   currentUser: state.user.currentUser,
   userAuth: state.user.userAuth,
   selectedRoom: state.room.selectedRoom,
+  socket: state.user.socket,
 });
 
 const mapDispatchToProps = (dispatch) => ({
