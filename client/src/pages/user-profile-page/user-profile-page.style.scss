@@ -3,17 +3,87 @@
 
 .profile {
   position: relative;
+  width: 100%;
+  height: 100%;
+  // background-color: red;
+
+  display: flex;
+  flex-direction: column;
+  // justify-content: center;
+  align-items: center;
+
+  .general-container {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+  }
+
+  .profile-picture {
+    grid-area: profpic;
+    // position: absolute;
+
+    justify-self: center;
+    height: 200px;
+    width: 100%;
+    margin-left: 75px;
+    img {
+      border: 2px solid $highlight1;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      justify-self: center;
+    }
+  
+    // background-color: white;
+  }
+
+  .username-title {
+    grid-area: username;
+    // position: absolute;
+    // margin-left: 250px;
+    // margin-top: 30px;
+    // justify-content: center;
+    justify-self: center;
+    font-weight: bold;
+    font-size: 50px;
+
+  }
+  .bio {
+    grid-area: bio;
+    font-size: 25px;
+    font-weight: normal;
+    // display: inline;
+    justify-self: center;
+    // margin-left: 20px;
+  }
+  .profile-buttons {
+    position: absolute;
+    z-index: 3;
+    margin-left: 175px;
+    margin-top: 10px;
+    display: inline-block;
+    input[type="file"] {
+      display: none;
+    }
+  }
 }
 
 .profile-show {
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  grid-template-rows: minmax(5em, 1fr) auto minmax(5em, 1fr);
+  grid-template-columns: 0.5fr 0.5fr 0.5fr;
+  // grid-template-rows: minmax(5em, 1fr) auto minmax(5em, 1fr);
+  grid-template-rows: minmax(0.25fr, 0.5fr) minmax(0.25fr, 0.5fr) minmax(0.25fr, 0.5fr) repeat(3, auto);
   grid-template-areas:
-    "fav bio ."
+    "profpic username fav"
+    "profpic bio fav"
+    "profpic tags fav"
+    ". . ."
     "subs subs subs"
     "owned owned owned";
-  margin-top: 100px;
+  // grid-gap: 1rem;
+  margin-top: 25px;
+  align-items: center;
   // justify-items: center;
 
   // width: 1200px;
@@ -38,8 +108,9 @@
   width: 1200px;
   height: 600px;
   // justify-content: center;
+  align-items: center;
   justify-items: center;
-  // align-items: center;
+
   .private-icon {
     width: 200px;
     height: 200px;
@@ -53,51 +124,14 @@
   grid-area: private;
 }
 
-.profile-picture {
-  // grid-area: profpic;
-  position: absolute;
-  height: 200px;
-  width: 100%;
-  margin-left: 25px;
-  img {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
 
-  // background-color: white;
-}
-.profile-buttons {
-  position: absolute;
-  z-index: 3;
-  margin-left: 175px;
-  display: inline-block;
-  input[type="file"] {
-    display: none;
-  }
-}
 
-.profile-biography {
-  grid-area: bio;
-  margin-top: 10px;
+
+.profile-tags {
+  grid-area: tags;
+  justify-self: center;
+  // margin-top: 10px;
   font-size: 25px;
-  .profile-tags {
-  }
-}
-
-.username-title {
-  position: absolute;
-  margin-left: 250px;
-  margin-top: 30px;
-  font-weight: bold;
-  font-size: 50px;
-  .bio {
-    font-size: 25px;
-    font-weight: normal;
-    display: inline;
-    margin-left: 20px;
-  }
 }
 
 .subscribed-rooms {
@@ -119,7 +153,7 @@
 }
 .profile-favorites {
   grid-area: fav;
-  margin-top: 100px;
+  // margin-top: 100px;
 }
 // .message-bubble {
 //   grid-area: bio;

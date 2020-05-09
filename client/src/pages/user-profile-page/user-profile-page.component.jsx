@@ -232,62 +232,67 @@ class UserProfilePage extends React.Component {
           pop={this.state.feedback}
           message={this.state.feedbackMessage}
         />
-        <div className="profile-picture">
-          <img
-            src={`${BASE_API_URL}/userprofile/get-photo?photoUrl=${this.state.photoURL}`}
-            //  src={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=default1.png`}
-          />
-        </div>
-        {!this.state.isEditing && (
-          <div className="username-title">
-            {this.state.username}
-            <div className="bio">{this.state.biography}</div>
-          </div>
-        )}
-        <div className="profile-buttons">
-          {!this.state.isEditing && !this.state.isUser && (
-            <Tooltip title="Send Friend Request" placement="right">
-              <Fab
-                className="friend-button"
-                color="primary"
-                aria-label="edit"
-                onClick={this.handleAddFriend}
-              >
-                <PersonAddIcon />
-              </Fab>
-            </Tooltip>
-          )}
-          {!this.state.isEditing && this.state.isUser && (
-            <Tooltip title="Edit Profile" placement="right">
-              <Fab
-                className="edit-button"
-                color="primary"
-                aria-label="edit"
-                onClick={this.handleEditClick}
-              >
-                <EditIcon />
-              </Fab>
-            </Tooltip>
-          )}
-          {this.state.isEditing && (
-            <div>
-              <label htmlFor="upload" for="upload">
-                <Fab className="upload-button" color="primary" component="span">
-                  <AddAPhotoIcon />
-                </Fab>
-              </label>
-              <input
-                type="file"
-                id="upload"
-                name="profile_picture"
-                accept="image/png, image/jpeg"
-                onChange={this.handleUpload}
-              />
-            </div>
-          )}
+        <div className="general-container">
+          {/* <div className="profile-container"> */}
+
+
         </div>
         {!this.state.isEditing && (this.state.isUser || !this.state.isPrivate) && (
           <div className="profile-show">
+            <div className="profile-picture">
+              <img
+                src={`${BASE_API_URL}/userprofile/get-photo?photoUrl=${this.state.photoURL}`}
+                //  src={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=default1.png`}
+              />
+            </div>
+            {!this.state.isEditing && (
+              <div className="username-title">
+                {this.state.username}
+              </div>
+            )}
+            <div className="bio">{this.state.biography}</div>
+            <div className="profile-buttons">
+              {!this.state.isEditing && !this.state.isUser && (
+                <Tooltip title="Send Friend Request" placement="right">
+                  <Fab
+                    className="friend-button"
+                    color="primary"
+                    aria-label="edit"
+                    onClick={this.handleAddFriend}
+                  >
+                    <PersonAddIcon />
+                  </Fab>
+                </Tooltip>
+              )}
+            {!this.state.isEditing && this.state.isUser && (
+              <Tooltip title="Edit Profile" placement="right">
+                <Fab
+                  className="edit-button"
+                  color="primary"
+                  aria-label="edit"
+                  onClick={this.handleEditClick}
+                >
+                  <EditIcon />
+                </Fab>
+              </Tooltip>
+            )}
+            {this.state.isEditing && (
+              <div>
+                <label htmlFor="upload" for="upload">
+                  <Fab className="upload-button" color="primary" component="span">
+                    <AddAPhotoIcon />
+                  </Fab>
+                </label>
+                <input
+                  type="file"
+                  id="upload"
+                  name="profile_picture"
+                  accept="image/png, image/jpeg"
+                  onChange={this.handleUpload}
+                />
+              </div>
+            )}
+            </div>
             <div className="profile-favorites">
               <Favorites
                 movies={this.state.movies}
@@ -295,13 +300,11 @@ class UserProfilePage extends React.Component {
                 website={this.state.websites}
               />
             </div>
-            <div className="profile-biography">
-              <div className="profile-tags">
-                {this.state.tags.length !== 0 &&
-                  this.state.tags.map((value, index) => {
-                    return <Tag type="label" text={value} />;
-                  })}
-              </div>
+            <div className="profile-tags">
+              {this.state.tags.length !== 0 &&
+                this.state.tags.map((value, index) => {
+                  return <Tag type="label" text={value} />;
+                })}
             </div>
             <div className="subscribed-rooms">
               <div className="subscribed-title">Subscribed Rooms</div>
@@ -398,6 +401,7 @@ class UserProfilePage extends React.Component {
             </Button>
           </form>
         )}
+        {/* </div> */}
       </div>
     );
   }

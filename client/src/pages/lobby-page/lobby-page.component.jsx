@@ -150,48 +150,48 @@ class LobbyPage extends React.Component {
     this.setState({ tabValue: newValue });
   };
   render() {
-    // console.log("user's room: ", this.props.subscribedRooms);
-    // let filteredUserRooms = this.state.userRooms.filter((room) => {
-    //   if (this.state.filterBy === "tags") {
-    //     let found = false;
-    //     for (let tag = 0; tag < room.tags.length; tag++) {
-    //       if (
-    //         room.tags[tag]
-    //           .toLowerCase()
-    //           .indexOf(this.state.search.toLowerCase()) !== -1
-    //       ) {
-    //         found = true;
-    //       }
-    //     }
-    //     return found;
-    //   }
-    //   if (this.state.filterBy === "roomName") {
-    //     return (
-    //       room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !==
-    //       -1
-    //     );
-    //   }
-    //   if (this.state.filterBy === "") {
-    //     let found = false;
-    //     for (let tag = 0; tag < room.tags.length; tag++) {
-    //       if (
-    //         room.tags[tag]
-    //           .toLowerCase()
-    //           .indexOf(this.state.search.toLowerCase()) !== -1
-    //       ) {
-    //         found = true;
-    //       }
-    //     }
-    //     if (
-    //       room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !==
-    //       -1
-    //     ) {
-    //       found = true;
-    //     }
-    //     return found;
-    //   }
-    //   return -1;
-    // });
+    console.log("user's room: ", this.props.subscribedRooms);
+    let filteredUserRooms = this.state.userRooms.filter((room) => {
+      if (this.state.filterBy === "tags") {
+        let found = false;
+        for (let tag = 0; tag < room.tags.length; tag++) {
+          if (
+            room.tags[tag]
+              .toLowerCase()
+              .indexOf(this.state.search.toLowerCase()) !== -1
+          ) {
+            found = true;
+          }
+        }
+        return found;
+      }
+      if (this.state.filterBy === "roomName") {
+        return (
+          room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !==
+          -1
+        );
+      }
+      if (this.state.filterBy === "") {
+        let found = false;
+        for (let tag = 0; tag < room.tags.length; tag++) {
+          if (
+            room.tags[tag]
+              .toLowerCase()
+              .indexOf(this.state.search.toLowerCase()) !== -1
+          ) {
+            found = true;
+          }
+        }
+        if (
+          room.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !==
+          -1
+        ) {
+          found = true;
+        }
+        return found;
+      }
+      return -1;
+    });
     if (this.props.userAuth) {
       return (
         <div className="lobby-page-container">
