@@ -204,15 +204,26 @@ const CardTwo = ({
           {hover && (
             <div className="buttons-container">
               {otherProps.unsubscribe && (
-                <Tooltip title="Unsubscribe" placement="left">
-                  <CircleBtn
-                    className="room-card-buttons"
-                    // color="primary"
-                    aria-label="unsubscribe"
-                    icon={<ClearIcon />}
-                    onClick={handleUnsubscribe}
-                  />
-                </Tooltip>
+                <Modal
+                backdrop
+                triggerComponent={
+                  <Tooltip title="Unsubscribe" placement="left">
+                    <CircleBtn
+                      className="room-card-buttons"
+                      // color="primary"
+                      aria-label="unsubscribe"
+                      icon={<ClearIcon />}
+                      // onClick={handleUnsubscribe}
+                    />
+                  </Tooltip>
+                }>
+                <Confirmation 
+                  roomName={name}
+                  roomID={roomID}
+                  handleYes={handleUnsubscribe}
+                  // unsubscribe
+                />
+                </Modal>
               )}
               {otherProps.subscribe && (
                 // <Tooltip title="Subscribe" placement="left">
@@ -308,7 +319,7 @@ const CardTwo = ({
                   // color="primary"
                   aria-label="unsubscribe"
                   icon={<ClearIcon />}
-                  onClick={handleUnsubscribe}
+                  // onClick={handleUnsubscribe}
                 />
               </Tooltip>
             )}
