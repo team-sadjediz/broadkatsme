@@ -95,7 +95,7 @@ const CardTwo = ({
   const [expanded, setExpanded] = React.useState(false);
   const [openLink, setOpen] = React.useState(false);
 
-  const [hover, setHover] = React.useState(true);
+  const [hover, setHover] = React.useState(false);
   const [active, setActive] = React.useState(false);
   const [isSubscribed, setIsSubscribed] = React.useState(false);
   const handleExpandClick = () => {

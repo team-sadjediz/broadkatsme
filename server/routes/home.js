@@ -15,10 +15,26 @@ const Room = require("../models/room.model");
 // NOT HOOKED UP TO ERROR VALIDATION
 // AUTOMATIC FUNCTION ERROR HANDLING INCLUDES NEGATIVE NUMBERS AND NON NUMBERS
 // WILL RETURN NOTHING
+// router.get("/rooms", async function(req, res) {
+//   let roomNum = req.query.size;
+//   // console.log(roomNum);
+//   Room.findRandom({}, {}, { limit: roomNum }, function(error, rooms) {
+//     if (error) {
+//       res.send(error);
+//     } else {
+//       res.send(rooms);
+//     }
+//   });
+// });
+
 router.get("/rooms", async function(req, res) {
   let roomNum = req.query.size;
   // console.log(roomNum);
-  Room.findRandom({}, {}, { limit: roomNum }, function(error, rooms) {
+  let filter = {
+    "settings.privacy": false,
+    "subscribers.4": { $exists: false }
+  };
+  Room.findRandom(filter, {}, { limit: roomNum }, function(error, rooms) {
     if (error) {
       res.send(error);
     } else {
