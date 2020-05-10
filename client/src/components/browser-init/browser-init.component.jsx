@@ -7,7 +7,13 @@ import "./browser-init.style.scss";
 export default function BrowserInit(props) {
   return (
     <div className="browser-init-container">
-      <PlayCircleFilledIcon onClick={props.closeInit} />
+      <PlayCircleFilledIcon
+        onClick={() => {
+          console.log("hello");
+          props.closeInit();
+          props.requestVb();
+        }}
+      />
     </div>
   );
 }
