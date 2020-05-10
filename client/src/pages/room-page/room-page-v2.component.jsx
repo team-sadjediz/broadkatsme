@@ -49,6 +49,7 @@ const RoomPage = ({
   const [isMouseMoving, setIsMouseMoving] = useState(false);
   const [volume, setVolume] = useState(50);
   const [showControlOverlay, setShowControlOverlay] = useState(false);
+  const [vbPort, setVbPort] = useState(null);
 
   let timer = null;
 
@@ -59,6 +60,12 @@ const RoomPage = ({
     if (socket.id) {
       socket.on("pushBlockControl", (message) => {
         setBlockControl(true);
+      });
+
+      socket.on("receiveVbPort", (vbInfo) => {
+        setShowInitial(false);
+        console.log("you can connect to", vbInfo.vbPort);
+        setVbPort(vbInfo.vbPort);
       });
     }
   }, [socket.id]);
@@ -96,6 +103,7 @@ const RoomPage = ({
   }, [match.params.id]);
 
   useEffect(() => {
+    setShowInitial(true);
     if (socket.id) {
       const roomObj = {
         id: userAuth.uid,
@@ -192,6 +200,10 @@ const RoomPage = ({
     timer = setTimeout(toggleControlOverlay(), 1000);
   };
 
+  const requestVb = () => {
+    socket.emit("requestVirtualBrowser");
+  };
+
   return (
     <React.Fragment>
       {access ? (
@@ -223,6 +235,7 @@ const RoomPage = ({
                 <div className="room-screen-init">
                   <BrowserInit
                     closeInit={closeInit}
+                    requestVb={requestVb}
                     roomName={selectedRoom.name} // needs change
                   ></BrowserInit>
                 </div>
@@ -238,8 +251,9 @@ const RoomPage = ({
                 }}
               >
                 <iframe
-                  src="http://3.22.254.199:5800/"
-                  allowfullscreen
+                  // src="http://3.22.254.199:5800/"
+                  src={vbPort ? `http://3.22.254.199:${vbPort}/` : null}
+                  allowFullscreen
                 ></iframe>
 
                 {/* {isMouseMoving ? (

@@ -274,6 +274,54 @@ io.on("connection", (socket) => {
     }
     // console.log(getAllUsers());
   });
+
+  socket.on("requestVirtualBrowser", () => {
+    console.log("------------------------------------------");
+    console.log("requestVirtualBroswer");
+
+    const user = getUser(socket.id);
+
+    if (user) {
+      io.emit("givemevb", {
+        socketId: socket.id,
+        uid: user.id,
+        roomRequested: user.room,
+      });
+      // io.to(user.room).emit("roomData", {
+      //   room: user.room,
+      //   users: getUsersInRoom(user.room)
+      // });
+    }
+    // console.log(getAllUsers());
+    console.log("------------------------------------------");
+  });
+
+  socket.on("portAllocated", (portAllocationInfo) => {
+    console.log("------------------------------------------");
+    console.log("portAllocated");
+
+    console.log(portAllocationInfo);
+
+    io.to(portAllocationInfo.roomRequested).emit("receiveVbPort", {
+      vbPort: portAllocationInfo.port,
+    });
+
+    // const user = getUser(socket.id);
+
+    // if (user) {
+    //   io.emit("givemevb", {
+    //     socketId: socket.id,
+    //     uid: user.id,
+    //     roomRequested: user.room,
+    //   });
+    // io.to(user.room).emit("roomData", {
+    //   room: user.room,
+    //   users: getUsersInRoom(user.room)
+    // });
+    // }
+    // console.log(getAllUsers());
+    console.log("------------------------------------------");
+  });
 });
 
 server.listen(port, () => {
