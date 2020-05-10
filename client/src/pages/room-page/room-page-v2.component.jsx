@@ -33,6 +33,7 @@ import "./room-page-v2.styles.scss";
 const RoomPage = ({
   socket,
   userAuth,
+  currentUser,
   selectedRoom,
   setSelectedRoom,
   match,
@@ -94,9 +95,29 @@ const RoomPage = ({
     };
   }, [match.params.id]);
 
+  useEffect(() => {
+    if (socket.id) {
+      const roomObj = {
+        id: userAuth.uid,
+        name: currentUser.username,
+        chatColor: currentUser.chatColor,
+        room: selectedRoom.roomID,
+        date: new Date(),
+      };
+
+      socket.emit("join", roomObj, (error) => {
+        if (error) {
+          console.log("ERROR", error);
+        }
+      });
+    }
+
+    return () => {
+      socket.emit("leaveRoom");
+    };
+  }, [socket, selectedRoom.roomID]);
+
   const toggleSettingsModal = () => {
-    // const currentSettingsState = this.state.showSettings;
-    // this.setState({ showSettings: !currentSettingsState });
     setShowSettings(!showSettings);
   };
 

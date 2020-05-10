@@ -134,9 +134,12 @@ io.on("connection", (socket) => {
   console.log(`New connection: ${socket.id}`);
 
   socket.on("join", ({ id, name, chatColor, room, date }, callback) => {
+    console.log("------------------------------------------");
+    console.log("JOINING ROOM", getUser(socket.id));
     console.log(
       `SERVER: socket: ${socket.id} / user (${name}) -> room [${room}]`
     );
+    console.log("------------------------------------------");
 
     const { error, user } = addUser({
       socketID: socket.id,
@@ -161,9 +164,10 @@ io.on("connection", (socket) => {
     socket.broadcast.to(user.room).emit("message", msg);
 
     socket.join(user.room);
-    // console.log(getAllUsers());
 
-    //
+    // console.log("joining room:");
+    // console.log(getAllUsers());
+    // console.log("------------------------------------------");
 
     callback();
   });
@@ -210,16 +214,6 @@ io.on("connection", (socket) => {
     const user = getUser(socket.id);
     console.log("attempting udpateBlockControl");
 
-    // console.log("user:", user);
-    // updateUser({
-    //   socketID: socket.id,
-    //   id: user.id,
-    //   name: user.name,
-    //   blockControl, // only thing updated
-    //   room: user.room,
-    // });
-    // console.log("user after update:", getUser(socket.id));
-
     io.to(user.room).emit("pushBlockControl", "pushBlockControlSent");
 
     socket.emit("pushBlockControl", "pushBlockControlSent");
@@ -227,7 +221,36 @@ io.on("connection", (socket) => {
     callback();
   });
 
+  socket.on("leaveRoom", () => {
+    console.log("------------------------------------------");
+    console.log("LEAVING ROOM", getUser(socket.id), socket.id);
+    console.log("------------------------------------------");
+
+    const user = removeUser(socket.id);
+
+    if (user) {
+      socket.leave(user.room);
+      io.to(user.room).emit("message", [
+        ...getMessagesFromRoom(user.room),
+        addMessageToRoom(user.room, {
+          user: "admin",
+          text: `${user.name} has left.`,
+          date: new Date(),
+        }),
+      ]);
+
+      // io.to(user.room).emit("roomData", {
+      //   room: user.room,
+      //   users: getUsersInRoom(user.room)
+      // });
+    }
+    // console.log("leaving room:");
+    // console.log(getAllUsers());
+    // console.log("------------------------------------------");
+  });
+
   socket.on("disconnect", () => {
+    console.log("------------------------------------------");
     console.log(
       `SERVER: disconnected socket: ${socket.id} / user has LEFT room`
     );

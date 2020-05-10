@@ -41,7 +41,7 @@ export const setSelectedRoom = (roomID) => {
       axios
         .get(`${BASE_API_URL}/room/find/${roomID}`)
         .then((res) => {
-          console.log("h", { roomID: roomID, ...res.data });
+          // console.log("h", { roomID: roomID, ...res.data });
           dispatch(setSelectedRoomInfo({ roomID: roomID, ...res.data }));
         })
         .catch((err) => {

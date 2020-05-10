@@ -51,59 +51,13 @@ const Chat = ({
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
-  // const endpoint = CHAT_SERVER;
-
   useEffect(() => {
-    // console.log("---------------------------------------------------------");
-    // console.log("MOUNT", messages);
-    // socket = io(endpoint);
-
-    // setSocket(socket);
-
-    socket.emit(
-      "join",
-      {
-        id: userAuth.uid,
-        name: currentUser.username,
-        chatColor: currentUser.chatColor,
-        room: selectedRoom.roomID,
-        date: new Date(),
-      },
-      (error) => {
-        console.log("someone joined");
-        if (error) {
-          console.log("ERROR", error);
-        }
-      }
-    );
-
-    socket.on("message", (message) => {
-      // console.log("on rec", messages);
-      // console.log("Array of messsages from this room:", message);
-      // setMessages([...message]);
-      setMessages(message);
-      // console.log("from useEffect", message.text);
-      // setMessages([...messages, message]);
-    });
-
-    return () => {
-      // setMessages([]);
-      setSocket({ id: null });
-      socket.disconnect();
-      // console.log("DISMOUNT", messages);
-      // console.log("**************************************************");
-    };
-    // }, [ENDPOINT, currentUser.uid, selectedRoom]);
-  }, [CHAT_SERVER, selectedRoom.roomID]);
-
-  // second use effect not working as intended:
-  // useEffect(() => {
-  //   console.log("UPDATE MSGS:", messages);
-  //   socket.on("message", message => {
-  //     // console.log("from useEffect", message);
-  //     setMessages([...messages, message]);
-  //   });
-  // });
+    if (socket.id) {
+      socket.on("message", (message) => {
+        setMessages(message);
+      });
+    }
+  }, [socket, selectedRoom.roomID]);
 
   const sendMessage = (event) => {
     event.preventDefault();
@@ -128,9 +82,6 @@ const Chat = ({
     <div className="chat-container">
       {selectedRoom.roomID ? (
         <React.Fragment>
-          {/* <div className="chat-header-container">
-            {drawerOpen ? selectedRoom.roomID : ""}
-          </div> */}
           <ScrollToBottom className="message-list-container">
             {messages.map((message, i) => {
               return (
