@@ -1,2 +1,52 @@
 @import "../../assets/colors";
 @import "../../assets/dimensions";
+
+.about-page {
+    width: 100%;
+    height: 100%;
+    // display: flex;
+    // flex-direction: column;
+    align-items: center;
+    // background-color: white;
+    justify-content: center;
+
+    .about-page-container {
+      display: flex;
+      // display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    
+      .purpose-container {
+        display: flex;
+        flex-direction: row;
+        width: 80rem;
+        background-color: white;
+        margin: 2rem;
+        padding: 3rem;
+        .about-picture {
+          width: 30rem;
+          height: 30rem;
+        }
+
+        .about-content {
+          display: flex;
+          flex-direction: column;
+          .about-header {
+            font-weight: bold;
+            font-size: 4rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+          }
+          .codes {
+            .code-header {
+                font-weight: bold;
+                font-size: 2rem;
+                font-style: italic;
+            }
+            width: 40rem;
+          }
+        }
+      }
+    }
+  }

@@ -4,12 +4,44 @@
 .about-page {
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    // justify-content: center;
+    // display: flex;
+    // flex-direction: column;
     align-items: center;
-    background-color: white;
+    // background-color: white;
+    justify-content: center;
+
     .about-page-container {
-        
+      display: flex;
+      // display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .purpose-container {
+        display: flex;
+        flex-direction: row;
+        width: 70rem;
+        background-color: white;
+        margin: 2rem;
+        .about-picture {
+          width: 30rem;
+          height: 30rem;
+        }
+
+        .about-content {
+          display: flex;
+          flex-direction: column;
+          .about-header {
+            font-weight: bold;
+            font-size: 5rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+          }
+          .about-goal {
+            
+            width: 40rem;
+          }
+        }
+      }
     }
   }

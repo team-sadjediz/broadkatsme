@@ -55,9 +55,9 @@ class UserProfilePage extends React.Component {
   }
 
   componentDidMount() {
-    console.log("propstata", this.props.match);
+    // console.log("propstata", this.props.match);
 
-    console.log("propstata", this.props.match.params.id);
+    // console.log("propstata", this.props.match.params.id);
 
     this.validateView(this.props.match.params.id);
     // console.log('private', this.state.isPrivate);

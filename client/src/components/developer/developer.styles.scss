@@ -1,0 +1,98 @@
+@import "../../assets/_colors";
+
+
+.developer-container {
+    display: flex;
+    flex-direction: column;
+    width: 20rem;
+    height: 100%;
+    // justify-items: center;
+    // justify-content: center;
+    align-items: center;
+    .developer {
+    display: flex;
+    flex-direction: column;
+    // justify-items: center;
+    // justify-content: center;
+    justify-content: center;
+    align-items: center;
+
+        .developer-picture {
+            // grid-area: profpic;
+            // position: absolute;
+
+            // justify-self: center;
+            height: 200px;
+            width: 200px;
+            position: relative;
+            // margin: 1rem;
+            // margin-left: 75px;
+            .dev-pic {
+            // margin: 1rem;
+            border: 2px solid $highlight1;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            // justify-self: center;
+            
+            }
+            .links {
+                transition: .5s ease;
+                opacity: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                -ms-transform: translate(-50%, -50%);
+                text-align: center;
+                .github {
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    margin: 0.10rem;
+                }
+                .linkedin {
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    // margin: 0.10rem;
+                }
+            }
+        }
+
+        .developer-picture:hover .dev-pic {
+            opacity: 0.3;
+          }
+          
+        .developer-picture:hover .links {
+            opacity: 1;
+          }
+
+        .developer-name {
+            font-size: 36px;
+            font-weight: bold;
+            color: $highlight1;
+            align-self: center;
+            text-align: center;
+        }
+
+        .developer-location {
+            font-size: 20px;
+            font-style: italic;
+            color: $highlight1;
+            align-self: center;
+            text-align: center;
+        }
+
+        .developer-content {
+            font-size: 16px;
+            color: black;
+            align-self: center;
+            text-align: center;
+        }
+
+    }
+}
