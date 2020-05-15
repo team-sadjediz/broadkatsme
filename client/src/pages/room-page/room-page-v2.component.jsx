@@ -256,7 +256,7 @@ const RoomPage = ({
                   // src="http://3.22.254.199:5800/"
                   key={refresh}
                   src={vbPort ? `http://3.22.254.199:${vbPort}/` : null}
-                  allowFullscreen
+                  allowFullScreen
                 ></iframe>
 
                 {/* {isMouseMoving ? (

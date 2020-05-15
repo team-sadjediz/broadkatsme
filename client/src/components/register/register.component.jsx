@@ -43,7 +43,7 @@ class Register extends React.Component {
       alert("Passwords do not match!");
       return;
     }
-
+    console.log(BASE_API_URL);
     // 1. Validate username:
     await axios
       .get(`${BASE_API_URL}/userprofile/validate-username`, {

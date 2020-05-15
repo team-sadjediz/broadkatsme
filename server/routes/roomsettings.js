@@ -10,7 +10,8 @@ const UserProps = require("../models/userprops.model");
 // How To Use
 // axios.put(`${BASE_API_URL}/roomsettings/change-name/${roomID}/${uid}`, null, { params: { name: STRING }})
 // returns modified resource (as per convention)
-router.put("/change-name/:roomID/:uid", async function(req, res) {
+router.put("/change-name/:roomID/:uid", async function (req, res) {
+  console.log("called");
   let roomID = req.params.roomID;
   let uid = req.params.uid;
   let name = req.query.name;
@@ -19,8 +20,8 @@ router.put("/change-name/:roomID/:uid", async function(req, res) {
     { $set: { name: name } },
     { runValidators: true, new: true }
   )
-    .then(document => res.send(document.name))
-    .catch(error => {
+    .then((document) => res.send(document.name))
+    .catch((error) => {
       error.additional =
         "Error has occured in /roomsettings/change-name/:roomID/:uid";
       res.status(400).send(error);
@@ -36,7 +37,7 @@ router.put("/change-name/:roomID/:uid", async function(req, res) {
 // MODIFY SO IT ONLY ALLOWS ROOM SIZE CHANGES BEYOND? actually tbvh i think room size
 // is an unnecessary feature so I will most likely remove it in the future
 // so I'm not going to edit this function
-router.put("/change-roomsize/:roomID/:uid", async function(req, res) {
+router.put("/change-roomsize/:roomID/:uid", async function (req, res) {
   let roomID = req.params.roomID;
   let uid = req.params.uid;
   let size = req.query.size;
@@ -45,10 +46,10 @@ router.put("/change-roomsize/:roomID/:uid", async function(req, res) {
     { $set: { "settings.roomSize": size } },
     { runValidators: true, new: true }
   )
-    .then(document => {
+    .then((document) => {
       res.send("" + document.settings.roomSize);
     })
-    .catch(error => {
+    .catch((error) => {
       error.additional =
         "Error has occured in /roomsettings/change-roomsize/:roomID/:uid";
       res.status(400).send(error);
@@ -60,7 +61,7 @@ router.put("/change-roomsize/:roomID/:uid", async function(req, res) {
 // How To Use
 // axios.put(`${BASE_API_URL}/roomsettings/change-privacy/${roomID}/${uid}`, null, { params: { privacy: true || false}})
 // returns modified resource (as per convention)
-router.put("/change-privacy/:roomID/:uid", async function(req, res) {
+router.put("/change-privacy/:roomID/:uid", async function (req, res) {
   let roomID = req.params.roomID;
   let uid = req.params.uid;
   let privacy = req.query.privacy;
@@ -69,8 +70,8 @@ router.put("/change-privacy/:roomID/:uid", async function(req, res) {
     { $set: { "settings.privacy": privacy } },
     { runValidators: true, new: true }
   )
-    .then(document => res.send(document.settings.privacy))
-    .catch(error => {
+    .then((document) => res.send(document.settings.privacy))
+    .catch((error) => {
       error.additional =
         "Error had occured in /roomsettings/change-privacy/:roomID/:uid";
       res.status(400).send(error);
@@ -82,7 +83,7 @@ router.put("/change-privacy/:roomID/:uid", async function(req, res) {
 // How To Use
 // axios.put(`${BASE_API_URL}/roomsettings/admins/${roomID}/${adminID}/${uid}`, null, { params: {action: "delete" || "add"}})
 // returns modified resource (as per convention)
-router.put("/admins/:roomID/:admin/:uid", async function(req, res) {
+router.put("/admins/:roomID/:admin/:uid", async function (req, res) {
   let roomID = req.params.roomID;
   let uid = req.params.uid;
   let admin = req.params.admin;
@@ -94,39 +95,39 @@ router.put("/admins/:roomID/:admin/:uid", async function(req, res) {
         _id: roomID,
         ownerID: uid,
         ownerID: { $ne: admin },
-        "settings.access.roomAdmins": admin
+        "settings.access.roomAdmins": admin,
       },
       { $pull: { "settings.access.roomAdmins": admin } },
       { runValidators: true, new: true }
     )
-      .then(document => res.send(document.settings.access.roomAdmins))
-      .catch(error => {
+      .then((document) => res.send(document.settings.access.roomAdmins))
+      .catch((error) => {
         error.additional =
           "Error has occured in /roomsettings/admins/:roomID/:admin/:uid under action = 'delete'";
         res.status(400).send(error);
       });
   } else if (action == "add") {
     await UserProps.exists({ userID: admin })
-      .then(exists => {
+      .then((exists) => {
         return Room.findOneAndUpdate(
           {
             _id: roomID,
             ownerID: uid,
             subscribers: admin,
-            "settings.access.bans": { $nin: admin }
+            "settings.access.bans": { $nin: admin },
           },
           {
             $addToSet: {
               "settings.access.roomAdmins": admin,
               "settings.access.operators": admin,
-              "settings.access.invitations": admin
-            }
+              "settings.access.invitations": admin,
+            },
           },
           { runValidators: true, new: true }
         );
       })
-      .then(document => res.send(document.settings.access))
-      .catch(error => {
+      .then((document) => res.send(document.settings.access))
+      .catch((error) => {
         error.additional =
           "Error has occured in /roomsettings/admins/:roomID/:admin/:uid under action = 'add'";
         res.status(400).send(error);
@@ -145,7 +146,7 @@ router.put("/admins/:roomID/:admin/:uid", async function(req, res) {
 // How To Use
 // axios.put(`${BASE_API_URL}/roomsettings/operators/${roomID}/${operatorID}/${uid}`, null, { params: {action: "delete" || "add"}})
 // returns modified resource (as per convention)
-router.put("/operators/:roomID/:operator/:uid", async function(req, res) {
+router.put("/operators/:roomID/:operator/:uid", async function (req, res) {
   let roomID = req.params.roomID;
   let uid = req.params.uid;
   let operator = req.params.operator;
@@ -156,33 +157,33 @@ router.put("/operators/:roomID/:operator/:uid", async function(req, res) {
       {
         _id: roomID,
         "settings.access.roomAdmins": uid,
-        ownerID: { $ne: operator }
+        ownerID: { $ne: operator },
       },
       { $pull: { "settings.access.operators": operator } },
       { runValidators: true, new: true }
     )
-      .then(document => res.send(document.settings.access.operators))
-      .catch(error => {
+      .then((document) => res.send(document.settings.access.operators))
+      .catch((error) => {
         error.additional =
           "Error has occured in /roomsettings/operators/:roomID/:operator/:uid under action = 'delete'";
         res.status(400).send(error);
       });
   } else if (action == "add") {
     await UserProps.exists({ userID: operator })
-      .then(exists => {
+      .then((exists) => {
         return Room.findOneAndUpdate(
           {
             _id: roomID,
             "settings.access.roomAdmins": uid,
             subscribers: operator,
-            "settings.access.bans": { $nin: operator }
+            "settings.access.bans": { $nin: operator },
           },
           { $addToSet: { "settings.access.operators": operator } },
           { runValidators: true, new: true }
         );
       })
-      .then(document => res.send(document.settings.access.operators))
-      .catch(error => {
+      .then((document) => res.send(document.settings.access.operators))
+      .catch((error) => {
         error.additional =
           "Error has occured in /roomsettings/operators/:roomID/:operator/:uid under action = 'add'";
         res.status(400).send(error);
@@ -201,7 +202,7 @@ router.put("/operators/:roomID/:operator/:uid", async function(req, res) {
 // How To Use
 // axios.put(`${BASE_API_URL}/roomsettings/inviters/${roomID}/${inviterID}/${uid}`, null, { params: {action: "delete" || "add"}})
 // returns modified resource (as per convention)
-router.put("/inviters/:roomID/:inviter/:uid", async function(req, res) {
+router.put("/inviters/:roomID/:inviter/:uid", async function (req, res) {
   let roomID = req.params.roomID;
   let uid = req.params.uid;
   let inviter = req.params.inviter;
@@ -212,33 +213,33 @@ router.put("/inviters/:roomID/:inviter/:uid", async function(req, res) {
       {
         _id: roomID,
         "settings.access.roomAdmins": uid,
-        ownerID: { $ne: inviter }
+        ownerID: { $ne: inviter },
       },
       { $pull: { "settings.access.invitations": inviter } },
       { runValidators: true, new: true }
     )
-      .then(document => res.send(document.settings.access.invitations))
-      .catch(error => {
+      .then((document) => res.send(document.settings.access.invitations))
+      .catch((error) => {
         error.additional =
           "Error has occured in /roomsettings/inviters/:roomID/:inviter/:uid under action = 'delete'";
         res.status(400).send(error);
       });
   } else if (action == "add") {
     await UserProps.exists({ userID: inviter })
-      .then(exists => {
+      .then((exists) => {
         return Room.findOneAndUpdate(
           {
             _id: roomID,
             "settings.access.roomAdmins": uid,
             subscribers: inviter,
-            "settings.access.bans": { $nin: inviter }
+            "settings.access.bans": { $nin: inviter },
           },
           { $addToSet: { "settings.access.invitations": inviter } },
           { runValidators: true, new: true }
         );
       })
-      .then(document => res.send(document.settings.access.invitations))
-      .catch(error => {
+      .then((document) => res.send(document.settings.access.invitations))
+      .catch((error) => {
         error.additional =
           "Error has occured in /roomsettings/inviters/:roomID/:inviter/:uid under action = 'add'";
         res.status(400).send(error);
@@ -258,7 +259,7 @@ router.put("/inviters/:roomID/:inviter/:uid", async function(req, res) {
 // axios.put(`${BASE_API_URL}/roomsettings/ban/${roomID}/${bannedID}/${uid}`, null, { params: {action: "unban" || "ban"}})
 // returns modified resource (as per convention)
 
-router.put("/ban/:roomID/:banned/:uid", async function(req, res) {
+router.put("/ban/:roomID/:banned/:uid", async function (req, res) {
   let roomID = req.params.roomID;
   let userID = req.params.uid;
   let bannedID = req.params.banned;
@@ -298,7 +299,7 @@ async function ban(roomID, userID, bannedID) {
         {
           _id: roomID,
           "settings.access.roomAdmins": userID,
-          ownerID: { $ne: bannedID }
+          ownerID: { $ne: bannedID },
           // subscribers: bannedID
         },
         {
@@ -307,8 +308,8 @@ async function ban(roomID, userID, bannedID) {
             "settings.access.roomAdmins": bannedID,
             "settings.access.operators": bannedID,
             "settings.access.invitations": bannedID,
-            subscribers: bannedID
-          }
+            subscribers: bannedID,
+          },
         },
         opts
       );
@@ -322,10 +323,10 @@ async function ban(roomID, userID, bannedID) {
       response = {
         bannedUser: {
           subscribedRooms: updatedUserProps.subscribedRooms,
-          favoritedRooms: updatedUserProps.favoritedRooms
+          favoritedRooms: updatedUserProps.favoritedRooms,
         },
         updatedRoomAccess: updatedRoom.settings.access,
-        updatedSubscribers: updatedRoom.subscribers
+        updatedSubscribers: updatedRoom.subscribers,
       };
 
       await session.commitTransaction();
@@ -349,7 +350,7 @@ async function unban(roomID, userID, bannedID) {
     let updatedRoom = await Room.findOneAndUpdate(
       {
         _id: roomID,
-        "settings.access.roomAdmins": userID
+        "settings.access.roomAdmins": userID,
       },
       { $pull: { "settings.access.bans": bannedID } },
       opts

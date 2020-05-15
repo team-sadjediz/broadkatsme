@@ -73,7 +73,8 @@ const UserProps = require("../models/userprops.model");
 
 router.post("/new-user", async function (req, res) {
   // console.log(req);
-
+  console.log("called here");
+  console.log(req.body);
   const userID = req.body.uid;
   const username = req.body.username;
   const defaulPhotoUrl = "default1.png";
