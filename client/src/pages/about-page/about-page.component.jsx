@@ -6,11 +6,9 @@ import { ReactComponent as AboutUsVector } from "../../assets/graphics/undraw_on
 const AboutPage = () => 
 (
 <div className="about-page">
-    {/* <div className="about-page-container"> */}
     <div className="about-page-container">
         <div className="purpose-container">
             <AboutUsVector className="about-picture"/>
-
             <div className="about-content">
                 <div className="about-header">
                 about us
@@ -22,7 +20,6 @@ const AboutPage = () =>
             </div>
         </div>
     </div>
-    {/* </div> */}
 </div>
 );
 
