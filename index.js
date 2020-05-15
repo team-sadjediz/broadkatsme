@@ -287,10 +287,6 @@ io.on("connection", (socket) => {
         uid: user.id,
         roomRequested: user.room,
       });
-      // io.to(user.room).emit("roomData", {
-      //   room: user.room,
-      //   users: getUsersInRoom(user.room)
-      // });
     }
     // console.log(getAllUsers());
     console.log("------------------------------------------");
@@ -306,20 +302,6 @@ io.on("connection", (socket) => {
       vbPort: portAllocationInfo.port,
     });
 
-    // const user = getUser(socket.id);
-
-    // if (user) {
-    //   io.emit("givemevb", {
-    //     socketId: socket.id,
-    //     uid: user.id,
-    //     roomRequested: user.room,
-    //   });
-    // io.to(user.room).emit("roomData", {
-    //   room: user.room,
-    //   users: getUsersInRoom(user.room)
-    // });
-    // }
-    // console.log(getAllUsers());
     console.log("------------------------------------------");
   });
 });

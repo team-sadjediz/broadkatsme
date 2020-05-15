@@ -49,14 +49,14 @@ const tabNavComponents = [
     componentHeader: <FriendslistSidebarHeader />,
     title: "Friends List",
     icon: <SupervisedUserCircleIcon />,
-    index: 1,
+    index: 0,
   },
   {
     component: <Chat />,
     componentHeader: <ChatSidebarHeader />,
     title: "Chat",
     icon: <ChatIcon />,
-    index: 2,
+    index: 1,
   },
 ];
 
@@ -117,7 +117,7 @@ const Sidebar = ({
             <RoomListNav
               clickThis={() => {
                 enableSidebar();
-                setItemSelected(2);
+                setItemSelected(1);
               }}
               className="room-list-nav-z"
             />
