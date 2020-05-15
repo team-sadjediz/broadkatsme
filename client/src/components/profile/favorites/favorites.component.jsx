@@ -1,31 +1,28 @@
-
-
 //Styles
 import "./favorites.style.scss";
 
 import React, { Component } from "react";
-import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
-import TheatersIcon from '@material-ui/icons/Theaters';
-import LibraryMusicIcon from '@material-ui/icons/LibraryMusic';
-import WebAssetIcon from '@material-ui/icons/WebAsset';
-import Divider from '@material-ui/core/Divider';
-import Fab from '@material-ui/core/Fab';
+import { makeStyles } from "@material-ui/core/styles";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Avatar from "@material-ui/core/Avatar";
+import TheatersIcon from "@material-ui/icons/Theaters";
+import LibraryMusicIcon from "@material-ui/icons/LibraryMusic";
+import WebAssetIcon from "@material-ui/icons/WebAsset";
+import Divider from "@material-ui/core/Divider";
+import Fab from "@material-ui/core/Fab";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
+    width: "100%",
     maxWidth: 500,
     maxHeight: 500,
-
   },
 }));
 
-const Favorites = ({movies, music, website}) => {
+const Favorites = ({ movies, music, website }) => {
   const classes = useStyles();
 
   return (
@@ -58,6 +55,6 @@ const Favorites = ({movies, music, website}) => {
       </ListItem>
     </List>
   );
-}
+};
 
 export default Favorites;

@@ -1,68 +1,72 @@
 @import "../../../assets/colors";
 
 // .search-container {
-  .search-card {
-    // outline: 2px $greenmain solid;
-    transition: all 0.3s linear;
-    cursor: pointer;
-    background-color: $foreground;
-    width: 800px;
-    min-width: 800px;
-    height: 180px;
-    min-height: 180px;
+.search-card {
+  // outline: 2px $greenmain solid;
+  transition: all 0.3s linear;
+  cursor: pointer;
+  background-color: $foreground;
+  width: 800px;
+  min-width: 800px;
+  height: 180px;
+  min-height: 180px;
 
-    text-align: center;
-    margin: 10px;
-    overflow: hidden;
-    position: relative;
-    // border-radius: 5px;
+  text-align: center;
+  margin: 10px;
 
-    display: grid;
-    grid-template-columns: min-content;
-    grid-auto-rows: minmax(25px, auto);
-    grid-template-areas: "thumbnail content";
-    grid-gap: 20px;
+  overflow: hidden;
+  position: relative;
+  // border-radius: 5px;
 
-    &:hover {
-      // background-color: $highlight2;
-      // transform: scale(1.005);
-      // webkit-filter: blur(1px); /* Chrome, Safari, Opera */
-      // filter: blur(1px);
-      opacity: 0.50;
-    }
-    
-    .buttons-container {
-      position: absolute;
-      z-index: 2;
-      // padding-left: 85%;
-      margin-left: 95%;
-      opacity: 1;
-      .room-card-buttons {
-        width: 2rem;
-        height: 2rem;
-        // color: green;
-        // color: #d0f4de;
-        color: #98c9a3;
-        // margin: 1rem;
-      }
-      .svg {
-        width: 200px;
-        height: 200px;
-      }
-    }
+  display: grid;
+  grid-template-columns: min-content;
+  grid-auto-rows: minmax(25px, auto);
+  grid-template-areas: "thumbnail content";
+  grid-gap: 20px;
 
+  padding: 10px;
+  border-radius: 3px;
+  box-sizing: border-box;
+
+  &:hover {
+    // background-color: $highlight2;
+    // transform: scale(1.005);
+    // webkit-filter: blur(1px); /* Chrome, Safari, Opera */
+    // filter: blur(1px);
+    opacity: 0.5;
   }
 
-  // .enter-button {
-  //   position: absolute;
-  //   width: 10rem;
-  //   margin-left: 22%;
-  //   margin-top: 5%;
-  //   color: green;
-  //   outline-color: green;
-  //   // margin: 10rem;
-  //   z-index: 10;
-  // }
+  .buttons-container {
+    position: absolute;
+    z-index: 2;
+    // padding-left: 85%;
+    margin-left: 95%;
+    opacity: 1;
+    .room-card-buttons {
+      width: 2rem;
+      height: 2rem;
+      // color: green;
+      // color: #d0f4de;
+      color: #98c9a3;
+      // margin: 1rem;
+    }
+    .svg {
+      width: 200px;
+      height: 200px;
+    }
+  }
+}
+
+// .enter-button {
+//   position: absolute;
+//   width: 10rem;
+//   margin-left: 22%;
+//   margin-top: 5%;
+//   color: green;
+//   outline-color: green;
+//   // margin: 10rem;
+//   z-index: 10;
+// }
 // }
 
 .room-thumbnail {
@@ -75,6 +79,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 3px;
   }
   svg {
     position: absolute;
@@ -89,14 +94,18 @@
   grid-area: content;
   position: relative;
   box-sizing: border-box;
-  grid-template-rows: min-content min-content min-content min-content;
+  display: grid;
+  grid-template-columns: auto min-content;
+  grid-template-rows: min-content min-content auto min-content;
   grid-template-areas:
-    "title"
-    "owner"
-    "occupancy"
-    "tags";
-  height: 180px;
-  min-height: 180px;
+    "title owner"
+    "occupancy occupany"
+    " . . "
+    "tags tags";
+  height: 100%;
+  width: 100%;
+  // height: 180px;
+  // min-height: 180px;
 }
 
 .room-name-title {
@@ -104,23 +113,29 @@
   font-size: 30px;
   font-weight: bold;
   text-align: left;
+  margin-bottom: 0.5rem;
 }
 
 .owner {
   grid-area: owner;
-  display: grid;
-  grid-template-columns: min-content min-content;
-  grid-template-areas: "avatar username";
-  grid-gap: 30px;
+  // display: grid;
+  // grid-template-columns: min-content min-content;
+  // grid-template-areas: "avatar username";
+  // grid-gap: 30px;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  margin-bottom: 0.5rem;
 }
 
 .user-thumbnail {
-  grid-area: avatar;
-  position: absolute;
-  height: 20px;
-  width: 100%;
-  text-align: left;
+  // grid-area: avatar;
+  // position: absolute;
+  // height: 20px;
+  // width: 100%;
+  // text-align: left;
   // margin-left: 25px;
+  margin-right: 5px;
   img {
     width: 30px;
     height: 30px;
@@ -130,18 +145,22 @@
 }
 
 .username {
+  margin-bottom: 0.5rem;
+  align-self: center;
+  font-weight: bolder;
   grid-area: username;
   text-align: left;
 }
 
 .people {
+  margin-bottom: 0.5rem;
   grid-area: occupancy;
   text-align: left;
+  text-transform: uppercase;
 }
 
 .tags {
+  margin-top: auto;
   grid-area: tags;
   text-align: left;
 }
-
-

@@ -61,7 +61,6 @@ const SearchPage = ({ searchbarValue, userAuth }) => {
   useEffect(() => {}, [filter]);
 
   return (
-
     <div
       className={`search-page-container`}
       onClick={() => {
@@ -71,11 +70,11 @@ const SearchPage = ({ searchbarValue, userAuth }) => {
     >
       {/* FILTER SELECTOR: PLEASE RESTYLE / REORGANIZE */}
       <div className="filter-selector-container">
-        <FilterListIcon 
-          className="filter-icon"
-        />
+        <FilterListIcon className="filter-icon" />
         <CustomButton
-          className={filter === "none" ? "filter-selector" : "filter-selector-off"}
+          className={
+            filter === "none" ? "filter-selector" : "filter-selector-off"
+          }
           onClick={() => {
             setFilter("none");
           }}
@@ -83,7 +82,9 @@ const SearchPage = ({ searchbarValue, userAuth }) => {
           none
         </CustomButton>
         <CustomButton
-          className={filter === "room" ? "filter-selector" : "filter-selector-off"}
+          className={
+            filter === "room" ? "filter-selector" : "filter-selector-off"
+          }
           onClick={() => {
             setFilter("room");
           }}
@@ -92,7 +93,9 @@ const SearchPage = ({ searchbarValue, userAuth }) => {
         </CustomButton>
 
         <CustomButton
-          className={filter === "user" ? "filter-selector" : "filter-selector-off"}
+          className={
+            filter === "user" ? "filter-selector" : "filter-selector-off"
+          }
           onClick={() => {
             setFilter("user");
           }}
@@ -101,7 +104,9 @@ const SearchPage = ({ searchbarValue, userAuth }) => {
         </CustomButton>
 
         <CustomButton
-          className={filter === "tags" ? "filter-selector" : "filter-selector-off"}
+          className={
+            filter === "tags" ? "filter-selector" : "filter-selector-off"
+          }
           onClick={() => {
             setFilter("tags");
           }}
@@ -111,11 +116,11 @@ const SearchPage = ({ searchbarValue, userAuth }) => {
       </div>
 
       {loading && (
-          <div className="filter-selector">
-            <CircularProgress className="loader" />
-            <div>LOADING...</div>
-          </div>
-        )}
+        <div className="filter-selector">
+          <CircularProgress className="loader" />
+          <div>LOADING...</div>
+        </div>
+      )}
 
       {(filter === "room" || filter === "none") && !loading
         ? results.rooms.map((room, i) => (
@@ -169,17 +174,21 @@ const SearchPage = ({ searchbarValue, userAuth }) => {
           ))
         : null}
 
-        {(results.tags.length === 0  && results.rooms.length === 0 && results.users.length === 0 && !loading)
-          || (filter === "room" && results.rooms.length === 0 && !loading) 
-          || (filter === "tags" && results.tags.length === 0 && !loading) 
-          || (filter === "user" && results.users.length === 0 && !loading)
-          ? 
-          <div className="no-results-container">
-            <img className="no-results-image" src={NoResults} />
-            <div className="no-results">We couldn't find what you're looking for :(</div>
-              {/* <div className="no-results">No Search Results</div> */}
+      {(results.tags.length === 0 &&
+        results.rooms.length === 0 &&
+        results.users.length === 0 &&
+        !loading) ||
+      (filter === "room" && results.rooms.length === 0 && !loading) ||
+      (filter === "tags" && results.tags.length === 0 && !loading) ||
+      (filter === "user" && results.users.length === 0 && !loading) ? (
+        <div className="no-results-container">
+          <img className="no-results-image" src={NoResults} />
+          <div className="no-results">
+            We couldn't find what you're looking for :(
           </div>
-         : null}
+          {/* <div className="no-results">No Search Results</div> */}
+        </div>
+      ) : null}
     </div>
   );
 };

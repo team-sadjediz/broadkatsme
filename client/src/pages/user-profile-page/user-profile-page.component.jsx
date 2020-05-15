@@ -27,6 +27,7 @@ import Favorites from "../../components/profile/favorites/favorites.component";
 import EditProfile from "../../components/profile/edit-profile/edit-profile.component";
 import Carousel from "../../components/carousel/carousel.component";
 import MessagePop from "../../components/message-pop/message-pop.component";
+import Divider from "@material-ui/core/Divider";
 
 class UserProfilePage extends React.Component {
   constructor(props) {
@@ -229,101 +230,81 @@ class UserProfilePage extends React.Component {
     return (
       <div className="profile">
         <MessagePop
+          className="profile-message-pop"
           pop={this.state.feedback}
           message={this.state.feedbackMessage}
         />
-        <div className="general-container">
-          {/* <div className="profile-container"> */}
-
-
-        </div>
         {!this.state.isEditing && (this.state.isUser || !this.state.isPrivate) && (
           <div className="profile-show">
-            <div className="profile-picture">
+            <div className="profile-user-information">
+              {/* <div className="profile-picture"> */}
               <img
                 src={`${BASE_API_URL}/userprofile/get-photo?photoUrl=${this.state.photoURL}`}
                 //  src={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=default1.png`}
               />
-            </div>
-            {!this.state.isEditing && (
-              <div className="username-title">
-                {this.state.username}
+              {/* </div> */}
+              <div className="profile-user-information-header">
+                {!this.state.isEditing && (
+                  <div className="username-title">{this.state.username}</div>
+                )}
+                <div className="bio">{this.state.biography}</div>
+                <div className="profile-buttons">
+                  {!this.state.isEditing && !this.state.isUser && (
+                    <Tooltip title="Send Friend Request" placement="right">
+                      <Fab
+                        className="friend-button"
+                        color="primary"
+                        aria-label="edit"
+                        onClick={this.handleAddFriend}
+                      >
+                        <PersonAddIcon />
+                      </Fab>
+                    </Tooltip>
+                  )}
+                  {!this.state.isEditing && this.state.isUser && (
+                    <Tooltip title="Edit Profile" placement="right">
+                      <Fab
+                        className="edit-button"
+                        color="primary"
+                        aria-label="edit"
+                        onClick={this.handleEditClick}
+                      >
+                        <EditIcon />
+                      </Fab>
+                    </Tooltip>
+                  )}
+                </div>
+                <div className="profile-favorites">
+                  <Favorites
+                    movies={this.state.movies}
+                    music={this.state.music}
+                    website={this.state.websites}
+                  />
+                </div>
+                <div className="profile-tags">
+                  {this.state.tags.length !== 0 &&
+                    this.state.tags.map((value, index) => {
+                      return <Tag type="label" text={value} />;
+                    })}
+                </div>
               </div>
-            )}
-            <div className="bio">{this.state.biography}</div>
-            <div className="profile-buttons">
-              {!this.state.isEditing && !this.state.isUser && (
-                <Tooltip title="Send Friend Request" placement="right">
-                  <Fab
-                    className="friend-button"
-                    color="primary"
-                    aria-label="edit"
-                    onClick={this.handleAddFriend}
-                  >
-                    <PersonAddIcon />
-                  </Fab>
-                </Tooltip>
-              )}
-            {!this.state.isEditing && this.state.isUser && (
-              <Tooltip title="Edit Profile" placement="right">
-                <Fab
-                  className="edit-button"
-                  color="primary"
-                  aria-label="edit"
-                  onClick={this.handleEditClick}
-                >
-                  <EditIcon />
-                </Fab>
-              </Tooltip>
-            )}
-            {this.state.isEditing && (
-              <div>
-                <label htmlFor="upload" for="upload">
-                  <Fab className="upload-button" color="primary" component="span">
-                    <AddAPhotoIcon />
-                  </Fab>
-                </label>
-                <input
-                  type="file"
-                  id="upload"
-                  name="profile_picture"
-                  accept="image/png, image/jpeg"
-                  onChange={this.handleUpload}
-                />
-              </div>
-            )}
             </div>
-            <div className="profile-favorites">
-              <Favorites
-                movies={this.state.movies}
-                music={this.state.music}
-                website={this.state.websites}
-              />
-            </div>
-            <div className="profile-tags">
-              {this.state.tags.length !== 0 &&
-                this.state.tags.map((value, index) => {
-                  return <Tag type="label" text={value} />;
-                })}
-            </div>
-            <div className="subscribed-rooms">
+            <div className="profile-user-carousels">
               <div className="subscribed-title">Subscribed Rooms</div>
               <Carousel properties={this.state.subscribedRooms} />
-            </div>
-            <div className="owned-rooms">
+              <Divider />
               <div className="owned-title">Owned Rooms</div>
               <Carousel properties={this.state.ownedRooms} />
+              <Divider />
             </div>
             {/* </div> */}
           </div>
         )}
         {!this.state.isEditing &&
           !(this.state.isUser || !this.state.isPrivate) && (
-            <div className="profile-hide">
-              <div className="private-user">
-                <LockIcon className="private-icon" />
-                <div className="private-text">This User is Private.</div>
-              </div>
+            <div className="private-user">
+              <LockIcon className="private-icon" />
+              <div className="private-text">Sorry! This User is Private!</div>
             </div>
           )}
         {this.state.isEditing && (
@@ -336,7 +317,35 @@ class UserProfilePage extends React.Component {
           //     handleCancel={this.handleCancel}
           // />
           <form class="profile-details-form">
+            <div className="profile-details-picture-preview">
+              Current Profile Image
+              <img
+                src={`${BASE_API_URL}/userprofile/get-photo?photoUrl=${this.state.photoURL}`}
+              />
+              <span id="note">
+                ** Note: This image upload will be saved irregardless if update
+                has been confirmed. **
+              </span>
+            </div>
+
+            <label
+              htmlFor="upload"
+              for="upload"
+              className="profile-details-form-upload"
+            >
+              {/* <AddAPhotoIcon /> */}
+              <span>Upload Your New File:</span>
+              <input
+                type="file"
+                id="upload"
+                name="profile_picture"
+                accept="image/png, image/jpeg"
+                onChange={this.handleUpload}
+              />
+            </label>
+
             <FormInput
+              className="profile-details-form-input"
               label="Username"
               name="username"
               value={this.state.username}
@@ -344,6 +353,7 @@ class UserProfilePage extends React.Component {
             />
 
             <FormInput
+              className="profile-details-form-input"
               label="Biography"
               name="biography"
               value={this.state.biography}
@@ -354,6 +364,7 @@ class UserProfilePage extends React.Component {
                 {tags} */}
 
             <FormInput
+              className="profile-details-form-input"
               label="Movies"
               name="movies"
               value={this.state.movies}
@@ -361,6 +372,7 @@ class UserProfilePage extends React.Component {
             />
 
             <FormInput
+              className="profile-details-form-input"
               label="Music"
               name="music"
               value={this.state.music}
@@ -368,6 +380,7 @@ class UserProfilePage extends React.Component {
             />
 
             <FormInput
+              className="profile-details-form-input"
               label="Websites"
               name="websites"
               value={this.state.websites}

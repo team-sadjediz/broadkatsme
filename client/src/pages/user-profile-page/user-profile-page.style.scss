@@ -2,164 +2,346 @@
 @import "../../assets/dimensions";
 
 .profile {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  // background-color: red;
-
   display: flex;
-  flex-direction: column;
-  // justify-content: center;
-  align-items: center;
+  justify-content: center;
 
-  .general-container {
+  .profile-message-pop {
+    position: absolute;
+  }
+
+  .profile-show {
+    .profile-user-information {
+      border-bottom: none;
+      padding-top: 5rem;
+      padding-bottom: 2rem;
+
+      display: flex;
+      position: relative;
+
+      img {
+        object-fit: cover;
+        border-radius: 100%;
+        // align-self: center;
+
+        height: 15rem;
+        width: 15rem;
+      }
+
+      .profile-user-information-header {
+        margin-left: 3rem;
+
+        .username-title {
+          font-size: 2rem;
+          font-weight: bold;
+          width: 100%;
+        }
+
+        .bio {
+          margin-top: 0.2rem;
+          width: 100%;
+          font-style: italic;
+        }
+
+        .profile-favorites {
+          div.MuiAvatar-colorDefault {
+            background-color: $french_laundry_blue;
+          }
+        }
+      }
+
+      .profile-buttons {
+        position: absolute;
+        top: 5rem;
+        // right: 0;
+        left: 0;
+
+        height: 2rem !important;
+        width: 2rem;
+      }
+    }
+
+    .profile-user-carousels {
+      display: flex;
+      flex-direction: column;
+
+      align-self: center;
+      justify-content: center;
+
+      border-top: 1px solid $french_laundry_blue;
+
+      .subscribed-title,
+      .owned-title {
+        margin-top: 1.5rem;
+        font-size: 2rem;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .profile-details-form {
     display: flex;
-    flex-direction: row;
-    position: absolute;
-  }
+    justify-content: center;
+    flex-direction: column;
+    margin: 5rem 1rem 0 1rem;
 
-  .profile-picture {
-    grid-area: profpic;
-    // position: absolute;
+    width: 40rem;
+    min-width: 15rem;
 
-    justify-self: center;
-    height: 200px;
-    width: 100%;
-    margin-left: 75px;
-    img {
-      border: 2px solid $highlight1;
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      object-fit: cover;
-      justify-self: center;
+    .profile-details-form-input {
+      margin-bottom: 1rem;
     }
-  
-    // background-color: white;
-  }
 
-  .username-title {
-    grid-area: username;
-    // position: absolute;
-    // margin-left: 250px;
-    // margin-top: 30px;
-    // justify-content: center;
-    justify-self: center;
-    font-weight: bold;
-    font-size: 50px;
+    .profile-details-picture-preview {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1rem;
+      img {
+        margin-top: 0.5rem;
+        width: 100%;
+        height: 20rem;
+        object-fit: cover;
+      }
 
-  }
-  .bio {
-    grid-area: bio;
-    font-size: 25px;
-    font-weight: normal;
-    // display: inline;
-    justify-self: center;
-    // margin-left: 20px;
-  }
-  .profile-buttons {
-    position: absolute;
-    z-index: 3;
-    margin-left: 175px;
-    margin-top: 10px;
-    display: inline-block;
-    input[type="file"] {
-      display: none;
+      #note {
+        font-size: 1rem;
+      }
+    }
+
+    .profile-details-form-upload {
+      margin-bottom: 1rem;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      width: 100%;
+
+      #upload {
+        width: min-content;
+      }
+    }
+
+    button {
+      margin-bottom: 1rem;
     }
   }
-}
 
-.profile-show {
-  display: grid;
-  grid-template-columns: 0.5fr 0.5fr 0.5fr;
-  // grid-template-rows: minmax(5em, 1fr) auto minmax(5em, 1fr);
-  grid-template-rows: minmax(0.25fr, 0.5fr) minmax(0.25fr, 0.5fr) minmax(0.25fr, 0.5fr) repeat(3, auto);
-  grid-template-areas:
-    "profpic username fav"
-    "profpic bio fav"
-    "profpic tags fav"
-    ". . ."
-    "subs subs subs"
-    "owned owned owned";
-  // grid-gap: 1rem;
-  margin-top: 25px;
-  align-items: center;
-  // justify-items: center;
+  .private-user {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 5rem;
 
-  // width: 1200px;
-  // height: 800px;
-}
+    .private-icon {
+      margin: 0 auto;
+      height: 10rem;
+      width: 10rem;
+      animation: shake 1s;
+      animation-iteration-count: 4;
+    }
 
-.profile-show {
-  grid-column: 1 / end;
-  grid-row: 2 / end;
-  background-color: white;
-}
-
-.profile-hide {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  grid-template-rows: minmax(5em, 1fr) auto minmax(5em, 1fr);
-  grid-template-areas:
-    ". . ."
-    ". private ."
-    ". . .";
-  margin-top: 100px;
-  width: 1200px;
-  height: 600px;
-  // justify-content: center;
-  align-items: center;
-  justify-items: center;
-
-  .private-icon {
-    width: 200px;
-    height: 200px;
-  }
-  .private-text {
-    text-align: center;
+    .private-text {
+      margin-top: 1rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
   }
 }
 
-.private-user {
-  grid-area: private;
+@keyframes shake {
+  0% {
+    transform: translate(1px, 1px) rotate(0deg);
+  }
+  10% {
+    transform: translate(-1px, -2px) rotate(-1deg);
+  }
+  20% {
+    transform: translate(-3px, 0px) rotate(1deg);
+  }
+  30% {
+    transform: translate(3px, 2px) rotate(0deg);
+  }
+  40% {
+    transform: translate(1px, -1px) rotate(1deg);
+  }
+  50% {
+    transform: translate(-1px, 2px) rotate(-1deg);
+  }
+  60% {
+    transform: translate(-3px, 1px) rotate(0deg);
+  }
+  70% {
+    transform: translate(3px, 1px) rotate(-1deg);
+  }
+  80% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
+  90% {
+    transform: translate(1px, 2px) rotate(0deg);
+  }
+  100% {
+    transform: translate(1px, -2px) rotate(-1deg);
+  }
 }
 
+// .profile {
+//   position: relative;
+//   width: 100%;
+//   height: 100%;
+//   // background-color: red;
 
+//   display: flex;
+//   flex-direction: column;
+//   // justify-content: center;
+//   align-items: center;
 
+//   .general-container {
+//     display: flex;
+//     flex-direction: row;
+//     position: absolute;
+//   }
 
-.profile-tags {
-  grid-area: tags;
-  justify-self: center;
-  // margin-top: 10px;
-  font-size: 25px;
-}
+//   .profile-picture {
+//     grid-area: profpic;
+//     // position: absolute;
 
-.subscribed-rooms {
-  grid-area: subs;
-}
-.subscribed-title {
-  font-size: 25px;
-  margin-left: 38%;
-}
-.owned-title {
-  font-size: 25px;
-  margin-left: 38%;
-}
-.owned-rooms {
-  grid-area: owned;
-}
-.profile-biography {
-  grid-area: bio;
-}
-.profile-favorites {
-  grid-area: fav;
-  // margin-top: 100px;
-}
-// .message-bubble {
-//   grid-area: bio;
-//   width: 300px;
-//   height: 100px;
+//     justify-self: center;
+//     height: 200px;
+//     width: 100%;
+//     margin-left: 75px;
+//     img {
+//       border: 2px solid $highlight1;
+//       width: 200px;
+//       height: 200px;
+//       border-radius: 50%;
+//       object-fit: cover;
+//       justify-self: center;
+//     }
+
+//     // background-color: white;
+//   }
+
+//   .username-title {
+//     grid-area: username;
+//     // position: absolute;
+//     // margin-left: 250px;
+//     // margin-top: 30px;
+//     // justify-content: center;
+//     justify-self: center;
+//     font-weight: bold;
+//     font-size: 50px;
+
+//   }
+//   .bio {
+//     grid-area: bio;
+//     font-size: 25px;
+//     font-weight: normal;
+//     // display: inline;
+//     justify-self: center;
+//     // margin-left: 20px;
+//   }
+//   .profile-buttons {
+//     position: absolute;
+//     z-index: 3;
+//     margin-left: 175px;
+//     margin-top: 10px;
+//     display: inline-block;
+//     input[type="file"] {
+//       display: none;
+//     }
+//   }
 // }
-.profile-details-form {
-  margin-top: 250px;
-}
+
+// .profile-show {
+//   display: grid;
+//   grid-template-columns: 0.5fr 0.5fr 0.5fr;
+//   // grid-template-rows: minmax(5em, 1fr) auto minmax(5em, 1fr);
+//   grid-template-rows: minmax(0.25fr, 0.5fr) minmax(0.25fr, 0.5fr) minmax(0.25fr, 0.5fr) repeat(3, auto);
+//   grid-template-areas:
+//     "profpic username fav"
+//     "profpic bio fav"
+//     "profpic tags fav"
+//     ". . ."
+//     "subs subs subs"
+//     "owned owned owned";
+//   // grid-gap: 1rem;
+//   margin-top: 25px;
+//   align-items: center;
+//   // justify-items: center;
+
+//   // width: 1200px;
+//   // height: 800px;
+// }
+
+// .profile-show {
+//   grid-column: 1 / end;
+//   grid-row: 2 / end;
+//   background-color: white;
+// }
+
+// .profile-hide {
+//   display: grid;
+//   grid-template-columns: 1fr 2fr 1fr;
+//   grid-template-rows: minmax(5em, 1fr) auto minmax(5em, 1fr);
+//   grid-template-areas:
+//     ". . ."
+//     ". private ."
+//     ". . .";
+//   margin-top: 100px;
+//   width: 1200px;
+//   height: 600px;
+//   // justify-content: center;
+//   align-items: center;
+//   justify-items: center;
+
+//   .private-icon {
+//     width: 200px;
+//     height: 200px;
+//   }
+//   .private-text {
+//     text-align: center;
+//   }
+// }
+
+// .private-user {
+//   grid-area: private;
+// }
+
+// .profile-tags {
+//   grid-area: tags;
+//   justify-self: center;
+//   // margin-top: 10px;
+//   font-size: 25px;
+// }
+
+// .subscribed-rooms {
+//   grid-area: subs;
+// }
+// .subscribed-title {
+//   font-size: 25px;
+//   margin-left: 38%;
+// }
+// .owned-title {
+//   font-size: 25px;
+//   margin-left: 38%;
+// }
+// .owned-rooms {
+//   grid-area: owned;
+// }
+// .profile-biography {
+//   grid-area: bio;
+// }
+// .profile-favorites {
+//   grid-area: fav;
+//   // margin-top: 100px;
+// }
+// // .message-bubble {
+// //   grid-area: bio;
+// //   width: 300px;
+// //   height: 100px;
+// // }
+// .profile-details-form {
+//   margin-top: 250px;
+// }
