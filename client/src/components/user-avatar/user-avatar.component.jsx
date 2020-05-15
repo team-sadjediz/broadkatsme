@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./user-avatar.styles.scss";
 
-const defaultImageUrl =
-  "https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80";
+const defaultImageUrl = "";
+// "https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80";
 
 const UserAvatar = ({
   className,

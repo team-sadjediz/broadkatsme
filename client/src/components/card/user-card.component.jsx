@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
     height: "180px",
     minHeight: "180px",
+    width: "800px",
     // height: "180px",
     // width: "800px",
     padding: "0 auto",
@@ -30,16 +31,20 @@ const useStyles = makeStyles((theme) => ({
     width: 150,
   },
   username: {
-    fontSize: 50,
+    fontSize: "3rem",
     fontFamily: "Alatsi",
     // fontWeight: 'bold',
   },
   bio: {
-    fontSize: 30,
+    fontSize: "1.3rem",
   },
   personAdd: {
-    height: 50,
-    width: 50,
+    height: 36,
+    width: 36,
+    backgroundColor: "#3a4660",
+    fill: "white",
+    borderRadius: 30,
+    padding: 10,
   },
 }));
 

@@ -113,6 +113,7 @@ class RoomSettings extends Component {
       value: 0,
       open: true,
       owned: false,
+      owner: "",
     };
     this.cancelToken = axios.CancelToken;
     this.source = this.cancelToken.source();
@@ -127,32 +128,6 @@ class RoomSettings extends Component {
   }
 
   fetchData = async () => {
-    // await axios
-    //   .get(`${BASE_API_URL}/room/find/${this.props.roomID}`, {
-    //     cancelToken: this.source.token,
-    //   })
-    //   .then((room) => {
-    //     // console.log(room);
-    //     let owned = room.data.ownerID == this.props.userAuth.uid;
-    //     let roomAdmin = room.data.subscribers.includes(this.props.userAuth.uid);
-    //     this.setState({ thumbnailUrl: room.data.thumbnailUrl });
-    //     this.setState({ ownerID: room.data.ownerID });
-    //     this.setState({ owned: owned });
-    //     this.setState({ roomAdmin: roomAdmin });
-    //     this.setState({ roomName: room.data.name });
-    //     this.setState({ tags: room.data.tags });
-    //     this.setState({ privacy: room.data.settings.privacy });
-    //     this.setState({ roomSize: room.data.settings.roomSize });
-    //     this.setState({ subscribers: room.data.subscribers });
-    //     this.setState(room.data.settings.access);
-    //   })
-    //   .catch((error) => {
-    //     this.setState({ error: true });
-    //     console.log(error);
-    //   });
-    // this.setState({ loading: false });
-    // console.log(this.state);
-
     let owned = this.props.selectedRoom.ownerID == this.props.userAuth.uid;
     let roomAdmin = this.props.selectedRoom.settings.access.roomAdmins.includes(
       this.props.userAuth.uid
@@ -160,9 +135,17 @@ class RoomSettings extends Component {
 
     await this.getUserNames(this.props.roomID)
       .then((accesses) => {
+        console.log(accesses);
+        let owner = accesses.roomAdmins.find((object) => {
+          if (object.userID === this.props.selectedRoom.ownerID) {
+            return object.username;
+          }
+        });
+
         this.setState({
           thumbnailUrl: this.props.selectedRoom.thumbnailUrl,
           ownerID: this.props.selectedRoom.ownerID,
+          owner,
           owned: owned,
           roomAdmin: roomAdmin,
           roomName: this.props.selectedRoom.name,
@@ -376,7 +359,7 @@ class RoomSettings extends Component {
                     name={this.state.roomName}
                     onChangeTitle={this.onChangeTitle}
                     onBlurTitle={this.onBlurTitle}
-                    owner={this.props.selectedRoom.ownerID}
+                    owner={this.state.owner.username}
                     ownerID={this.props.userAuth.uid}
                     tags={tags}
                     roomID={this.props.roomID}

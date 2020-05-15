@@ -50,10 +50,10 @@ const Navbar = ({
           triggerType="click"
           triggerComponent={
             <UserAvatar
-            // square
-            // className="avatar-properties"
-            // onlineStatus
-            // imgUrl={`${BASE_API_URL}/userprofile/get-photo?photoUrl=${currentUser.photoURL}`}
+              // square
+              // className="avatar-properties"
+              // onlineStatus
+              imgUrl={`${BASE_API_URL}/userprofile/get-photo?photoUrl=${currentUser.photoURL}`}
             />
           }
           // spacingTop="1rem"

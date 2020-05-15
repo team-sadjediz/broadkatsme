@@ -37,13 +37,13 @@ import "./sidebar.styles.scss";
 import { BASE_API_URL } from "../../utils";
 
 const tabNavComponents = [
-  {
-    component: <HeaderInfo />,
-    componentHeader: null,
-    title: "Debug",
-    icon: <BugReportIcon />,
-    index: 0,
-  },
+  // {
+  //   component: <HeaderInfo />,
+  //   componentHeader: null,
+  //   title: "Debug",
+  //   icon: <BugReportIcon />,
+  //   index: 0,
+  // },
   {
     component: <FriendsList />,
     componentHeader: <FriendslistSidebarHeader />,

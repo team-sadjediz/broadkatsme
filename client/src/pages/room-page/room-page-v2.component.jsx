@@ -27,6 +27,7 @@ import FullscreenIcon from "@material-ui/icons/Fullscreen";
 import SettingsRemoteIcon from "@material-ui/icons/SettingsRemote";
 import CancelIcon from "@material-ui/icons/Cancel";
 import RefreshIcon from "@material-ui/icons/Refresh";
+import LockIcon from "@material-ui/icons/Lock";
 
 // custom style sheet:
 import "./room-page-v2.styles.scss";
@@ -256,7 +257,7 @@ const RoomPage = ({
                   // src="http://3.22.254.199:5800/"
                   key={refresh}
                   src={vbPort ? `http://3.22.254.199:${vbPort}/` : null}
-                  allowFullscreen
+                  allowFullScreen
                 ></iframe>
 
                 {/* {isMouseMoving ? (
@@ -337,7 +338,10 @@ const RoomPage = ({
         //   {blockControl && <div className="remote-control-blocked"></div>}
         //   <CircleButton onClick={takeControl} />
         // </div>
-        "you do not have access"
+        <div className="unavailable-room">
+          <LockIcon className="locked-room" />
+          <div>Sorry! This Room is Unvailable or Private!</div>
+        </div>
       )}
     </React.Fragment>
   );
