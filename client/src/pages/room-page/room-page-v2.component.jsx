@@ -26,6 +26,7 @@ import PopUpFade from "../../components/pop-up-fade/pop-up-fade.component";
 import FullscreenIcon from "@material-ui/icons/Fullscreen";
 import SettingsRemoteIcon from "@material-ui/icons/SettingsRemote";
 import CancelIcon from "@material-ui/icons/Cancel";
+import RefreshIcon from "@material-ui/icons/Refresh";
 
 // custom style sheet:
 import "./room-page-v2.styles.scss";
@@ -50,6 +51,7 @@ const RoomPage = ({
   const [volume, setVolume] = useState(50);
   const [showControlOverlay, setShowControlOverlay] = useState(false);
   const [vbPort, setVbPort] = useState(null);
+  const [refresh, setRefresh] = useState(false);
 
   let timer = null;
 
@@ -252,6 +254,7 @@ const RoomPage = ({
               >
                 <iframe
                   // src="http://3.22.254.199:5800/"
+                  key={refresh}
                   src={vbPort ? `http://3.22.254.199:${vbPort}/` : null}
                   allowFullscreen
                 ></iframe>
@@ -299,6 +302,12 @@ const RoomPage = ({
                         setShowControlOverlay(false);
                       }}
                       icon={<CancelIcon />}
+                    />
+                    <CircleButton
+                      icon={<RefreshIcon />}
+                      onClick={(e) => {
+                        setRefresh(!refresh);
+                      }}
                     />
                   </div>
                 )}
