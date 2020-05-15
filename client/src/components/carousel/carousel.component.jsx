@@ -67,13 +67,14 @@ class Carousel extends React.Component {
             rightChevron={'>'}
             leftChevron={'<'}
         >
-
+{/* BASE_API_URL + "/userprofile/get-photo?photoUrl=" + props.avatar */}
         {this.props.properties ? Array.from(this.props.properties).map((property, index) =>
                 <CardTwo
                 key={index}
                 roomID={property._id} 
                 name={property.name} 
-                thumbnailUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}`}
+                thumbnailUrl={`${BASE_API_URL}/userprofile/get-photo?photoUrl=${property.thumbnailUrl}`}
+                avatar={`${BASE_API_URL}/userprofile/get-photo?photoUrl=default1.png`}
                 ownerID={property.ownerID}
                 tags={property.tags}
                 // subscribe
@@ -86,6 +87,7 @@ class Carousel extends React.Component {
                 roomID={property._id} 
                 name={property.name} 
                 thumbnailUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}`}
+                avatar={`${BASE_API_URL}/userprofile/get-photo?photoUrl=default1.png`}
                 ownerID={property.ownerID}
                 tags={property.tags}
                 // subscribe

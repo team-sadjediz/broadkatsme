@@ -87,8 +87,10 @@ const CardTwo = ({
   name,
   thumbnailUrl,
   tags,
+  ownerID,
   uid,
   subscribedRooms,
+  avatar,
   ...otherProps
 }) => {
   const classes = useStyles();
@@ -98,6 +100,8 @@ const CardTwo = ({
   const [hover, setHover] = React.useState(false);
   const [active, setActive] = React.useState(false);
   const [isSubscribed, setIsSubscribed] = React.useState(false);
+
+  const [owner, setOwner] = React.useState([]);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -190,6 +194,16 @@ const CardTwo = ({
         setIsSubscribed(true);
       }
     });
+    // axios
+    // .get(`${BASE_API_URL}/userprofile/details/${ownerID}`)
+    // .then((result) => {
+    //   // console.log("owner: ", result.data);
+    //   setOwner(result.data);
+    //   // return result.data
+    // })
+    // .catch((error) => {
+    //   console.log("error getting owner: " + error);
+    // });
   });
 
   if (isSubscribed) {
@@ -365,7 +379,7 @@ const CardTwo = ({
             <CardContent style={{ padding: "5px" }}>
               <ListItem style={{ "padding": "0", "zIndex": "5" }}>
                 <ListItemAvatar>
-                  <Avatar src={thumbnailUrl} />
+                  <Avatar src={avatar} />
                 </ListItemAvatar>
                 <ListItemText
                   primary={<Typography noWrap>{name}</Typography>}
