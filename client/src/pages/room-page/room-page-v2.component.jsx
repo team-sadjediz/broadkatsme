@@ -26,6 +26,7 @@ import PopUpFade from "../../components/pop-up-fade/pop-up-fade.component";
 import FullscreenIcon from "@material-ui/icons/Fullscreen";
 import SettingsRemoteIcon from "@material-ui/icons/SettingsRemote";
 import CancelIcon from "@material-ui/icons/Cancel";
+import RefreshIcon from "@material-ui/icons/Refresh";
 
 // custom style sheet:
 import "./room-page-v2.styles.scss";
@@ -33,6 +34,7 @@ import "./room-page-v2.styles.scss";
 const RoomPage = ({
   socket,
   userAuth,
+  currentUser,
   selectedRoom,
   setSelectedRoom,
   match,
@@ -48,6 +50,8 @@ const RoomPage = ({
   const [isMouseMoving, setIsMouseMoving] = useState(false);
   const [volume, setVolume] = useState(50);
   const [showControlOverlay, setShowControlOverlay] = useState(false);
+  const [vbPort, setVbPort] = useState(null);
+  const [refresh, setRefresh] = useState(false);
 
   let timer = null;
 
@@ -58,6 +62,12 @@ const RoomPage = ({
     if (socket.id) {
       socket.on("pushBlockControl", (message) => {
         setBlockControl(true);
+      });
+
+      socket.on("receiveVbPort", (vbInfo) => {
+        setShowInitial(false);
+        console.log("you can connect to", vbInfo.vbPort);
+        setVbPort(vbInfo.vbPort);
       });
     }
   }, [socket.id]);
@@ -94,9 +104,30 @@ const RoomPage = ({
     };
   }, [match.params.id]);
 
+  useEffect(() => {
+    setShowInitial(true);
+    if (socket.id) {
+      const roomObj = {
+        id: userAuth.uid,
+        name: currentUser.username,
+        chatColor: currentUser.chatColor,
+        room: selectedRoom.roomID,
+        date: new Date(),
+      };
+
+      socket.emit("join", roomObj, (error) => {
+        if (error) {
+          console.log("ERROR", error);
+        }
+      });
+    }
+
+    return () => {
+      socket.emit("leaveRoom");
+    };
+  }, [socket, selectedRoom.roomID]);
+
   const toggleSettingsModal = () => {
-    // const currentSettingsState = this.state.showSettings;
-    // this.setState({ showSettings: !currentSettingsState });
     setShowSettings(!showSettings);
   };
 
@@ -171,6 +202,10 @@ const RoomPage = ({
     timer = setTimeout(toggleControlOverlay(), 1000);
   };
 
+  const requestVb = () => {
+    socket.emit("requestVirtualBrowser");
+  };
+
   return (
     <React.Fragment>
       {access ? (
@@ -202,6 +237,7 @@ const RoomPage = ({
                 <div className="room-screen-init">
                   <BrowserInit
                     closeInit={closeInit}
+                    requestVb={requestVb}
                     roomName={selectedRoom.name} // needs change
                   ></BrowserInit>
                 </div>
@@ -217,8 +253,10 @@ const RoomPage = ({
                 }}
               >
                 <iframe
-                  src="http://3.22.254.199:5800/"
-                  allowfullscreen
+                  // src="http://3.22.254.199:5800/"
+                  key={refresh}
+                  src={vbPort ? `http://3.22.254.199:${vbPort}/` : null}
+                  allowFullscreen
                 ></iframe>
 
                 {/* {isMouseMoving ? (
@@ -258,6 +296,12 @@ const RoomPage = ({
                     <CircleButton
                       // onClick={takeControl}
                       icon={<FullscreenIcon />}
+                    />
+                    <CircleButton
+                      icon={<RefreshIcon />}
+                      onClick={(e) => {
+                        setRefresh(!refresh);
+                      }}
                     />
                     <CircleButton
                       onClick={(e) => {
