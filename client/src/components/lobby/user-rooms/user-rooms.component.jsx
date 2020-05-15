@@ -59,6 +59,7 @@ const UserRoomsPage = ({userAuth, subscribedRooms}) => {
                     name={property.name}
                     tags={property.tags}
                     thumbnailUrl={`${BASE_API_URL}/room/get-thumbnail?thumbnailUrl=${property.thumbnailUrl}`}
+                    avatar={`${BASE_API_URL}/userprofile/get-photo?photoUrl=default1.png`}
                     unsubscribe
                     // invite
                     // chat

@@ -46,6 +46,7 @@ class UserProfilePage extends React.Component {
       ownedRooms: "",
       isEditing: false,
       isUser: false,
+      userAuth: this.props.userAuth.uid,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleChangePhoto = this.handleChangePhoto.bind(this);
@@ -102,21 +103,22 @@ class UserProfilePage extends React.Component {
       await axios
         .get(`${BASE_API_URL}/userprops/rooms/${this.state.uid}`)
         .then((rooms) => {
-          this.setState({ subscribedRooms: rooms.data });
+          this.setState({ subscribedRooms: rooms.data.filter((room) => room.ownerID !== this.state.userAuth) });
+          this.setState({ ownedRooms: rooms.data.filter((room) => room.ownerID === this.state.userAuth) });
           console.log(rooms.data);
         })
         .catch((error) => {
           console.error(error);
         });
 
-      await axios
-        .get(`${BASE_API_URL}/home/rooms/?size=8`)
-        .then((rooms) => {
-          this.setState({ ownedRooms: rooms.data });
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      // await axios
+      //   .get(`${BASE_API_URL}/home/rooms/?size=8`)
+      //   .then((rooms) => {
+      //     this.setState({ ownedRooms: rooms.data });
+      //   })
+      //   .catch((error) => {
+      //     console.error(error);
+      //   });
     }
     // console.log('private', this.state.isPrivate);
     // console.log('is user', this.state.isUser);
