@@ -298,16 +298,16 @@ const RoomPage = ({
                       icon={<FullscreenIcon />}
                     />
                     <CircleButton
-                      onClick={(e) => {
-                        setShowControlOverlay(false);
-                      }}
-                      icon={<CancelIcon />}
-                    />
-                    <CircleButton
                       icon={<RefreshIcon />}
                       onClick={(e) => {
                         setRefresh(!refresh);
                       }}
+                    />
+                    <CircleButton
+                      onClick={(e) => {
+                        setShowControlOverlay(false);
+                      }}
+                      icon={<CancelIcon />}
                     />
                   </div>
                 )}
