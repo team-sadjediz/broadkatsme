@@ -15,7 +15,7 @@
     "firebase": "^7.13.2",
     "form-data": "^3.0.0",
     "material-ui-popup-state": "^1.5.4",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "react": "^16.13.1",
     "react-color": "^2.18.0",
     "react-dom": "^16.13.1",
